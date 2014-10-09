@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<servlet>
+		<servlet-name>StoreReport</servlet-name>
+		<servlet-class>com.gene.app.server.StoreReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StoreReport</servlet-name>
+		<url-pattern>/storereport</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GetReport</servlet-name>
+		<servlet-class>com.gene.app.server.GetReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetReport</servlet-name>
+		<url-pattern>/getreport</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ListProject</servlet-name>
+		<jsp-file>/projects.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ListProject</servlet-name>
+		<url-pattern>/listProjects</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DisplayReport</servlet-name>
+		<jsp-file>/reports.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DisplayReport</servlet-name>
+		<url-pattern>/displayReports</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Developer</servlet-name>
+		<jsp-file>/developer.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Developer</servlet-name>
+		<url-pattern>/developer</url-pattern>
+	</servlet-mapping>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/listProjects</url-pattern>
+			<url-pattern>/displayReports</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/developer</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<welcome-file-list>
+		<welcome-file>homepage.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
