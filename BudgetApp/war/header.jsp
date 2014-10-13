@@ -6,7 +6,10 @@
 
 <head>
 <title>Budget App</title>
-<link rel="stylesheet" type="text/css" href="css/mystyle.css"></link>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/menustyles.css">
+   <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+   <script src="scripts/menuscript.js"></script>
 </head>
 <html>
 
@@ -33,38 +36,35 @@
 		</tr>
 	</table>
 
-	<p class="topnav">
+	<div id='cssmenu'>
+	<ul>
 		<%
 			UserService userService = UserServiceFactory.getUserService();
 			String requestUri = request.getRequestURI();
 			Principal userPrincipal = request.getUserPrincipal();
 			if (userPrincipal != null) {
 		%>
-		<span class="nav-item"> <a href="/">Home</a>
-		</span> <span class="nav-item"> <a href="/getreport"> Projects
-		</a>
-		</span> <span class="nav-item"> <a href="/displayReports"> Reports</a>
-		</span>
+		<li><a href='/'><span>Home</span></a></li>
+		<li class='last'><a href='/getreport'><span>Projects</span></a></li>
+		<li class='last'><a href='/displayReports'><span>Reports</span></a></li>
 		<%
 			}
 			if (userPrincipal == null) {
 				String loginLink = userService.createLoginURL(requestUri);
 		%>
-		<span class="nav-item"> <a href=<%=loginLink%>>Login</a>
-		</span>
+		<li class='last'><a href=<%=loginLink%>><span>Login</span></a></li>
 		<%
 			} else {
 				if (userPrincipal != null && userService.isUserAdmin()) {
 		%>
-		<span class="nav-item"> <a href="/developer">Developer</a>
-		</span>
+		<li class='last'><a href='/developer'><span>Admin</span></a></li>
 		<%
 			}
 				String logoutLink = userService.createLogoutURL(requestUri);
 		%>
-		<span class="nav-item"> <a href=<%=logoutLink%>>Logout</a>
-		</span>
+		<li class='last'><a href=<%=logoutLink%>><span>Logout</span></a></li>
 		<%
 			}
 		%>
-	</p>
+	</ul>
+	</div>

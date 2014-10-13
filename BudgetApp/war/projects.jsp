@@ -99,28 +99,20 @@ var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
 var dataView;
 var grid;
 var data = [];
- /* var columns = [
-  {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: TaskNameFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
-  {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
-  {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
-  {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
-  {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date},
-  {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true}
-];  */
+var columnNames = [ "Unique Identifier", 
+                    "Requestor", 
+                    "Project WBS",
+                    "WBS Name", 
+                    "SubActivity", 
+                    "Brand", 
+                    "Allocation %", 
+                    "PO Number",
+					"PO Desc", 
+					"Vendor", 
+					"JAN", "FEB", "MAR", "APR", "MAY",	"JUN", "JUL", 
+					"AUG", "SEP", "OCT", "NOV",	"DEC", "Total" ];
 
-/* var columns = [ {
-	id : "selector",
-	name : "",
-	field : "num",
-	width : 1
-} ]; */
-var columnNames = [ "Unique Identifier", "Requestor", "Project WBS",
-		"WBS Name", "SubActivity", "Brand", "Allocation %", "PO Number",
-		"PO Desc", "Vendor", "JAN", "Feb", " 	 MAR", "  	 APR", "  	 MAY ",
-		" 	 JUN", "  	 JUL", "  	 AUG ", " 	 SEP ", " 	 OCT", "  	 NOV",
-		"  	 DEC ", " 	 Total " ];
-/* for (var i = 0; i < columnNames.length; i++) { */
-	var columns = [
+var columns = [
 	{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
 	{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text , formatter: TaskNameFormatter},
 	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
@@ -145,7 +137,6 @@ var columnNames = [ "Unique Identifier", "Requestor", "Project WBS",
 	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text},
 	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text}
 	];
-/* } */
 
 
 var options = {
@@ -195,8 +186,7 @@ $(function () {
     } else if (Math.random() < 0.3 && indent > 0) {
       indent--;
       parents.pop();
-    } 
-	
+    } 	
      */
     if ("<%=i%>"==6 && "<%=i%>">0) {
         indent++;

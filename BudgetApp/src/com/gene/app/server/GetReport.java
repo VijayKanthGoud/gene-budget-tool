@@ -19,8 +19,6 @@ public class GetReport extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("text/plain");
-		System.out.println("Hello world");
-		resp.getWriter().println("Hello, world");
 		List<GtfReport> gtfReports = getReport();
 		req.setAttribute("gtfreports", gtfReports);
 		RequestDispatcher rd = req.getRequestDispatcher("/listProjects");
