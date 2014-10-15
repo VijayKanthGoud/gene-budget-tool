@@ -49,6 +49,24 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/developer</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>GetProjectData</servlet-name>
+		<servlet-class>com.gene.app.server.GetProjectData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetProjectData</servlet-name>
+		<url-pattern>/getprojectdata</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>com.gene.app.server.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/loginServlet</url-pattern>
+	</servlet-mapping>
+	
 	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>/listProjects</url-pattern>
