@@ -3,10 +3,10 @@
 <%@ include file="header.jsp"%>
 
 <%
-      List<GtfReport> gtfReports = (List<GtfReport>)request.getAttribute("gtfreports");
+	List<GtfReport> gtfReports = (List<GtfReport>)request.getAttribute("gtfreports");
 	for(GtfReport report : gtfReports){
 		System.out.println(report.getBrand());
-	} 
+	}
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"
@@ -42,25 +42,26 @@
 }
 </style>
 <center>
-<table>
-	<tr>
-		<td valign="top" width="100%">
-			<div
-				style="border: 1px solid gray; background: #E3E8F3; padding: 6px;">
-				<label>WBS Name:</label> <input type=text id="txtSearch">
-			</div> <br />
-		</td>
-	</tr>
-</table>
+	<table>
+		<tr>
+			<td valign="top" width="100%">
+				<div
+					style="border: 1px solid gray; background: #E3E8F3; padding: 6px;">
+					<label>WBS Name:</label> <input type=text id="txtSearch">
+				</div> <br />
+			</td>
+		</tr>
+	</table>
 </center>
 
 <div id="displayGrid" style="width: 1323px; height: 400px;"></div>
+
+
 
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
 <script src="SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
-<script src="SlickGrid-master/slick.core.js"></script>
 <script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
 <script src="SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
 <script src="SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
@@ -71,6 +72,7 @@
 <script src="SlickGrid-master/slick.grid.js"></script>
 <script src="SlickGrid-master/slick.dataview.js"></script>
 <script src="SlickGrid-master/slick.core.js"></script>
+<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 <script>
 function requiredFieldValidator(value) {
   if (value == null || value == undefined || !value.length) {
@@ -81,7 +83,7 @@ function requiredFieldValidator(value) {
 }
 
 
-var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
+/* var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
   value = value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
   var idx = dataView.getIdxById(dataContext.id);
@@ -94,7 +96,7 @@ var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
   } else {
     return spacer + " <span class='toggle'></span>&nbsp;" + value;
   }
-};
+}; */
 
 var dataView;
 var grid;
@@ -114,31 +116,81 @@ var columnNames = [ "Unique Identifier",
 
 var columns = [
 	{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
-	{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text , formatter: TaskNameFormatter},
+	{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },
 	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
-	{	id : 3,name : columnNames[3],field : 3,width : 120,	editor : Slick.Editors.Text},
+	{	id : 3,name : columnNames[3],field : 3,width : 120,	editor : Slick.Editors.Auto, groupTotalsFormatter: sumTotalsFormatter},
 	{	id : 4,name : columnNames[4],field : 4,width : 120,	editor : Slick.Editors.Text},
 	{	id : 5,name : columnNames[5],field : 5,width : 120,	editor : Slick.Editors.Text},
 	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
 	{	id : 7,name : columnNames[7],field : 7,width : 120,	editor : Slick.Editors.Text},
 	{	id : 8,name : columnNames[8],field : 8,width : 120,	editor : Slick.Editors.Text},
 	{	id : 9,name : columnNames[9],field : 9,width : 120,	editor : Slick.Editors.Text},
-	{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text},
-	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
-	{	id : 12,name : columnNames[12],field : 12,width : 120,	editor : Slick.Editors.Text},
-	{	id : 13,name : columnNames[13],field : 13,width : 120,	editor : Slick.Editors.Text},
-	{	id : 14,name : columnNames[14],field : 14,width : 120,	editor : Slick.Editors.Text},
-	{	id : 15,name : columnNames[15],field : 15,width : 120,	editor : Slick.Editors.Text},
-	{	id : 16,name : columnNames[16],field : 16,width : 120,	editor : Slick.Editors.Text},
-	{	id : 17,name : columnNames[17],field : 17,width : 120,	editor : Slick.Editors.Text},
-	{	id : 18,name : columnNames[18],field : 18,width : 120,	editor : Slick.Editors.Text},
-	{	id : 19,name : columnNames[19],field : 19,width : 120,	editor : Slick.Editors.Text},
-	{	id : 20,name : columnNames[20],field : 20,width : 120,	editor : Slick.Editors.Text},
-	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text},
-	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text}
+	{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 12,name : columnNames[12],field : 12,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 13,name : columnNames[13],field : 13,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 14,name : columnNames[14],field : 14,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 15,name : columnNames[15],field : 15,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 16,name : columnNames[16],field : 16,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 17,name : columnNames[17],field : 17,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 18,name : columnNames[18],field : 18,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 19,name : columnNames[19],field : 19,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 20,name : columnNames[20],field : 20,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter}
 	];
 
-
+function sumTotalsFormatter(totals, columnDef) {
+	  var val = totals.sum && totals.sum[columnDef.field];
+	  if (val != null) {
+	    return "Total: " + ((Math.round(parseFloat(val)*100)/100));
+	  }
+	  return "";
+	}
+	
+function groupByProjectWBS() {
+	  dataView.setGrouping({
+	  getter: 3,
+	    formatter: function (g) {
+	      return "Project WBS:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
+	    },
+	    aggregators: [
+	      new Slick.Data.Aggregators.Sum(10),
+	      new Slick.Data.Aggregators.Sum(11),
+	      new Slick.Data.Aggregators.Sum(12),
+	      new Slick.Data.Aggregators.Sum(13),
+	      new Slick.Data.Aggregators.Sum(14),
+	      new Slick.Data.Aggregators.Sum(15),
+	      new Slick.Data.Aggregators.Sum(16),
+	      new Slick.Data.Aggregators.Sum(17),
+	      new Slick.Data.Aggregators.Sum(18),
+	      new Slick.Data.Aggregators.Sum(19),
+	      new Slick.Data.Aggregators.Sum(20),
+	      new Slick.Data.Aggregators.Sum(21),
+	      new Slick.Data.Aggregators.Sum(22)
+	    ],
+	    aggregateCollapsed: false,
+	    lazyTotalsCalculation: true
+	  });
+	}
+var availableTags = [ "Rituxan Heme/Onc",
+                      "Kadcyla",
+                      "Actemra",
+                      "Rituxan RA",
+                      "Lucentis",
+                      "Bitopertin",
+                      "Ocrelizumab",
+					  "Onart",
+					  "Avastin",
+					  "BioOnc Pipeline",
+					  "Lebrikizumab",
+					  "Pulmozyme",
+					  "Xolair",
+					  "Oral Octreotide",
+					  "Etrolizumab",
+					  "GDC-0199",
+					  "Neuroscience Pipeline",
+					  "Tarceva" ];
 var options = {
   editable: true,
   enableAddRow: true,
@@ -171,6 +223,11 @@ function myFilter(item) {
 }
 
 $(function () {
+  var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
+  dataView = new Slick.Data.DataView({
+	    groupItemMetadataProvider: groupItemMetadataProvider,
+	    inlineFilters: true
+	  });
   var indent = 0;
   var parents = [];
 
@@ -188,7 +245,7 @@ $(function () {
       parents.pop();
     } 	
      */
-    if ("<%=i%>"==6 && "<%=i%>">0) {
+   <%--  if ("<%=i%>"==6 && "<%=i%>">0) {
         indent++;
         parents.push("<%=i%>" - 1);
       }
@@ -197,7 +254,7 @@ $(function () {
          parent = parents[parents.length - 1];
        } else {
          parent = null;
-       }
+       } --%>
      d["id"] = "id_" + "<%=i%>";
      d["indent"] = indent;
      d["parent"] = parent;
@@ -233,51 +290,9 @@ $(function () {
     		gtfReports.get(i).getForecastMap().get("SEP") + 
     		gtfReports.get(i).getForecastMap().get("OCT") + 
     		gtfReports.get(i).getForecastMap().get("NOV") + 
-    		gtfReports.get(i).getForecastMap().get("DEC")
-    %>";
-   /*  d[0]="1";
-    d[1]="2";
-    d[2]="3";
-    d[3]="4";
-    d[4]="5";
-    d[5]="6";
-    d[6]="";
-    d[7]="";
-    d[8]="";
-    d[9]="";
-    d[10]="";
-    d[11]="";
-    d[12]="";
-    d[13]="";
-    d[14]="";
-     d[15]="";
-    d[16]="";
-    d[17]="";
-    d[18]="";
-    d[19]="";
-    d[20]="";
-    d[21]="";
-    d[22]="";  */
-   <%--   alert("gtfReports"+<%=gtfReports.size()%> +columnNames[0]);  --%>
-     
-     /* alert("d is "+d[i]) */
-  /*   d["indent"] = indent;
-    d["parent"] = parent;
-    d["title"] = "Task " + i;
-    d["duration"] = "5 days";
-    d["percentComplete"] = Math.round(Math.random() * 100);
-    d["start"] = "01/01/2009";
-    d["finish"] = "01/05/2009";
-    d["effortDriven"] = (i % 5 == 0);  */
-  <% }%>
+    		gtfReports.get(i).getForecastMap().get("DEC")%>";
  
- /* 
-		for (var i = 0; i < 10; i++) {
-			var d = (data[i] = {});
-			d["num"] = "";
-			for (var j = 0; j < 10; j++) {
-				d[j] = "";
-			} */
+  <%}%>
 
   // initialize the model
   dataView = new Slick.Data.DataView({ inlineFilters: true });
@@ -285,11 +300,13 @@ $(function () {
   dataView.setItems(data);
   dataView.setFilter(myFilter);
   dataView.endUpdate();
-
-
+  groupByProjectWBS();
   // initialize the grid
   grid = new Slick.Grid("#displayGrid", dataView, columns, options);
-
+  //register the group item metadata provider to add expand/collapse group handlers
+  grid.registerPlugin(groupItemMetadataProvider);
+  grid.setSelectionModel(new Slick.CellSelectionModel());
+  
   grid.onCellChange.subscribe(function (e, args) {
     dataView.updateItem(args.item.id, args.item);
   });
@@ -323,6 +340,22 @@ $(function () {
       e.stopImmediatePropagation();
     }
   });
+  
+  grid.onKeyDown.subscribe(function(e, args) {
+	  alert(args.cell);
+	  alert(args.row);
+	  alert(e.which);
+		var cell = args.cell;
+		var row = args.row;
+		if (e.which == 46) {
+			data[row][cell] = "";
+			if (!grid.getEditorLock().commitCurrentEdit()) {
+				return;
+			}
+			grid.updateRow(row);
+			e.stopPropagation();
+		}
+	});
 
 
   // wire up model events to drive the grid
