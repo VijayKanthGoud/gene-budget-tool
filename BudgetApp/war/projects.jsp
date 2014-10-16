@@ -112,32 +112,33 @@ var columnNames = [ "Unique Identifier",
 					"PO Desc", 
 					"Vendor", 
 					"JAN", "FEB", "MAR", "APR", "MAY",	"JUN", "JUL", 
-					"AUG", "SEP", "OCT", "NOV",	"DEC", "Total" ];
+					"AUG", "SEP", "OCT", "NOV",	"DEC", "Total" ,"Remark"];
 
 var columns = [
 	{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
 	{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },
 	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
-	{	id : 3,name : columnNames[3],field : 3,width : 120,	editor : Slick.Editors.Auto, groupTotalsFormatter: sumTotalsFormatter},
+	{	id : 3,name : columnNames[3],field : 3,width : 120,	editor : Slick.Editors.Auto},
 	{	id : 4,name : columnNames[4],field : 4,width : 120,	editor : Slick.Editors.Text},
 	{	id : 5,name : columnNames[5],field : 5,width : 120,	editor : Slick.Editors.Text},
 	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
 	{	id : 7,name : columnNames[7],field : 7,width : 120,	editor : Slick.Editors.Text},
 	{	id : 8,name : columnNames[8],field : 8,width : 120,	editor : Slick.Editors.Text},
 	{	id : 9,name : columnNames[9],field : 9,width : 120,	editor : Slick.Editors.Text},
-	{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 12,name : columnNames[12],field : 12,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 13,name : columnNames[13],field : 13,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 14,name : columnNames[14],field : 14,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 15,name : columnNames[15],field : 15,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 16,name : columnNames[16],field : 16,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 17,name : columnNames[17],field : 17,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 18,name : columnNames[18],field : 18,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 19,name : columnNames[19],field : 19,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 20,name : columnNames[20],field : 20,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter},
-	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text, groupTotalsFormatter: sumTotalsFormatter}
+	{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text},
+	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
+	{	id : 12,name : columnNames[12],field : 12,width : 120,	editor : Slick.Editors.Text},
+	{	id : 13,name : columnNames[13],field : 13,width : 120,	editor : Slick.Editors.Text},
+	{	id : 14,name : columnNames[14],field : 14,width : 120,	editor : Slick.Editors.Text},
+	{	id : 15,name : columnNames[15],field : 15,width : 120,	editor : Slick.Editors.Text},
+	{	id : 16,name : columnNames[16],field : 16,width : 120,	editor : Slick.Editors.Text},
+	{	id : 17,name : columnNames[17],field : 17,width : 120,	editor : Slick.Editors.Text},
+	{	id : 18,name : columnNames[18],field : 18,width : 120,	editor : Slick.Editors.Text},
+	{	id : 19,name : columnNames[19],field : 19,width : 120,	editor : Slick.Editors.Text},
+	{	id : 20,name : columnNames[20],field : 20,width : 120,	editor : Slick.Editors.Text},
+	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text},
+	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text} ,
+	{	id : 23,name : columnNames[23],field : 23,width : 160,	editor : Slick.Editors.Text} 
 	];
 
 function sumTotalsFormatter(totals, columnDef) {
@@ -150,11 +151,15 @@ function sumTotalsFormatter(totals, columnDef) {
 	
 function groupByProjectWBS() {
 	  dataView.setGrouping({
-	  getter: 3,
+	  getter: 24,
 	    formatter: function (g) {
-	      return "Project WBS:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
+	    	if(g.value=="Total"){
+	      return " " + g.value +" "  ;
+	    	}else{
+	    		return "" + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
+	    	}
 	    },
-	    aggregators: [
+	  /*   aggregators: [
 	      new Slick.Data.Aggregators.Sum(10),
 	      new Slick.Data.Aggregators.Sum(11),
 	      new Slick.Data.Aggregators.Sum(12),
@@ -168,7 +173,7 @@ function groupByProjectWBS() {
 	      new Slick.Data.Aggregators.Sum(20),
 	      new Slick.Data.Aggregators.Sum(21),
 	      new Slick.Data.Aggregators.Sum(22)
-	    ],
+	    ], */
 	    aggregateCollapsed: false,
 	    lazyTotalsCalculation: true
 	  });
@@ -203,7 +208,7 @@ var percentCompleteThreshold = 0;
 var searchString = "";
 
 function myFilter(item) {
-  if (searchString != "" && item[3].indexOf(searchString) == -1) {
+  if (searchString != "" && item[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) {
     return false;
   }
 
@@ -211,7 +216,7 @@ function myFilter(item) {
     var parent = data[item.parent];
 
     while (parent) {
-      if (parent._collapsed || (searchString != "" && parent[3].indexOf(searchString) == -1)) {
+      if (parent._collapsed || (searchString != "" && parent[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1)) {
         return false;
       }
 
@@ -232,11 +237,9 @@ $(function () {
   var parents = [];
 
   // prepare the data
-
-    <%for (int i = 0; i < gtfReports.size() ; i++) {%>
+    <%for (int i = 0; i < gtfReports.size(); i++) {%>
     var d = (data["<%=i%>"] = {});
     var parent;
-
    /*  if (Math.random() > 0.8 && i > 0) {
       indent++;
       parents.push(i - 1);
@@ -291,9 +294,37 @@ $(function () {
     		gtfReports.get(i).getForecastMap().get("OCT") + 
     		gtfReports.get(i).getForecastMap().get("NOV") + 
     		gtfReports.get(i).getForecastMap().get("DEC")%>";
- 
+    d[24]="<%=gtfReports.get(i).getStatus()%>";
+     
   <%}%>
 
+  var d = (data["<%=gtfReports.size()%>"] = {});
+  d["id"] = "id_" + "<%=gtfReports.size()%>";
+  d["indent"] = indent;
+  d["parent"] = parent;
+  for (var j = 0; j < 10 ; j++) {
+	  d[j]="";
+  }
+  for (var j = 10; j < 23 ; j++) {
+	  d[j]=0.0;
+  }
+  for (var j = 0; j < "<%=gtfReports.size()%>" ; j++) {
+	 d[10]= parseFloat(d[10])+parseFloat(data[j][10]);
+	 d[11]= parseFloat(d[11])+parseFloat(data[j][11]);
+	 d[12]= parseFloat(d[12])+parseFloat(data[j][12]);
+	 d[13]= parseFloat(d[13])+parseFloat(data[j][13]);
+	 d[14]= parseFloat(d[14])+parseFloat(data[j][14]);
+	 d[15]= parseFloat(d[15])+parseFloat(data[j][15]);
+	 d[16]= parseFloat(d[16])+parseFloat(data[j][16]);
+	 d[17]= parseFloat(d[17])+parseFloat(data[j][17]);
+	 d[18]= parseFloat(d[18])+parseFloat(data[j][18]);
+	 d[19]= parseFloat(d[19])+parseFloat(data[j][19]);
+	 d[20]= parseFloat(d[20])+parseFloat(data[j][20]);
+	 d[21]= parseFloat(d[21])+parseFloat(data[j][21]);
+	 d[22]= parseFloat(d[22])+parseFloat(data[j][22]);
+ 	
+  }
+  d[24]="Total";
   // initialize the model
   dataView = new Slick.Data.DataView({ inlineFilters: true });
   dataView.beginUpdate();
@@ -342,9 +373,9 @@ $(function () {
   });
   
   grid.onKeyDown.subscribe(function(e, args) {
-	  alert(args.cell);
+	 /*  alert(args.cell);
 	  alert(args.row);
-	  alert(e.which);
+	  alert(e.which); */
 		var cell = args.cell;
 		var row = args.row;
 		if (e.which == 46) {
