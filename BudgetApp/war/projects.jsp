@@ -101,6 +101,7 @@ function requiredFieldValidator(value) {
 var dataView;
 var grid;
 var data = [];
+var totalSize=0;
 var columnNames = [ "Unique Identifier", 
                     "Requestor", 
                     "Project WBS",
@@ -324,6 +325,7 @@ $(function () {
 	 d[22]= parseFloat(d[22])+parseFloat(data[j][22]);
  	
   }
+  totalSize="<%=gtfReports.size()%>";
   d[24]="Total";
   // initialize the model
   dataView = new Slick.Data.DataView({ inlineFilters: true });
@@ -339,7 +341,36 @@ $(function () {
   grid.setSelectionModel(new Slick.CellSelectionModel());
   
   grid.onCellChange.subscribe(function (e, args) {
-    dataView.updateItem(args.item.id, args.item);
+	  var cell = args.cell;
+	  var row = args.row;
+//	  grid.invalidate(); 
+	  data[totalSize][cell]=0.0;
+	  for (var j = 0; j < totalSize ; j++) {
+		 // alert("vertical sum data["+j+"]["+cell+"] = "+data[j][cell]);
+	    data[totalSize][cell] = parseFloat(data[totalSize][cell]) + parseFloat(data[j][cell]) ;
+	  }
+	 var temp=0;
+	  for (var j=0; j<data.length-1; j++ ) {
+		  if(data[j]["id"]==args.item.id){
+			 // alert("j is "+j+":::::"+JSON.stringify( data[j], null, 100));
+			  temp=j;
+			  break;
+		  }
+	  }
+	  grid.invalidate();  
+	  data[temp][22] = 0.0;
+	  for(var j=10; j<22; j++ ){
+		  data[temp][22] = parseFloat(data[temp][22]) + parseFloat(data[temp][j]);
+	  }
+	  data[data.length-1][22]=0.0;
+	  for(var j=10; j<22; j++ ){
+		  data[data.length-1][22] = parseFloat(data[data.length-1][22]) + parseFloat(data[data.length-1][j]);
+	  }
+	  
+	  dataView.updateItem(args.item.id, args.item);
+      
+      
+      
   });
 
   grid.onAddNewRow.subscribe(function (e, args) {
