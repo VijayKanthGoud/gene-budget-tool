@@ -69,8 +69,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	<security-constraint>
 		<web-resource-collection>
+		    <url-pattern>/</url-pattern>
 			<url-pattern>/listProjects</url-pattern>
 			<url-pattern>/displayReports</url-pattern>
+			<url-pattern>/getreport</url-pattern>
+			<url-pattern>/storereport</url-pattern>
+			<url-pattern>/getprojectdata</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
