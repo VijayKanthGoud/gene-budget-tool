@@ -25,6 +25,9 @@
 	text-align: center;
 }
 
+.slick-row-total-class{
+background:green !important;
+}
 .toggle {
 	height: 9px;
 	width: 9px;
@@ -43,13 +46,14 @@
 </style>
 <center>
 	<div
-		style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%;">
+		style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%; font-weight: normal;font-size: 14px;
+		color: #005691;font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
 
 		<label>Search string:</label> <input type=text id="txtSearch">
 
 
 		<input type="radio" name="selectionmode" value="planned">Planned
-		<input type="radio" name="selectionmode" value="unplanned">Unplanned
+		<input type="radio" name="selectionmode" value="All" checked="checked">All
 
 	</div>
 </center>
@@ -101,6 +105,7 @@ function requiredFieldValidator(value) {
 var dataView;
 var grid;
 var data = [];
+var radioString="All";
 var totalSize=0;
 var columnNames = [ "Unique Identifier", 
                     "Requestor", 
@@ -148,18 +153,7 @@ var columns = [
 radio = $('input[name="selectionmode"]'),
     choice = '';
 
-radio.change(function(e) {
-    choice = this.value;
-   if (choice == 'planned') {
-    	 for (var i = 0, length = data.length; i < length; i++) {
-    		alert(JSON.stringify(data[i]["10"], null, 4)); 
-    		alert(JSON.stringify(data, null, 4));
-    		data.remove(i);
-    }
-   }else {
-    	alert(JSON.stringify(data, null, 4));
-    } 
-});
+
 
 function sumTotalsFormatter(totals, columnDef) {
 	  var val = totals.sum && totals.sum[columnDef.field];
@@ -173,7 +167,7 @@ function groupByProjectWBS() {
 	  dataView.setGrouping({
 	  getter: 25,
 	    formatter: function (g) {
-	    	return " " + g.value +" "  ;
+	    	return " "+ g.value +" "  ;
 	    },
 	    aggregateCollapsed: false,
 	    lazyTotalsCalculation: true
@@ -209,7 +203,10 @@ var percentCompleteThreshold = 0;
 var searchString = "";
 
 function myFilter(item) {
-  if (searchString != "" && item[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) {
+	
+  if (((searchString != "" && item[1].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
+		  (searchString != "" && item[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )|| 
+		  (radioString!= "All" && item[10].toLowerCase().indexOf(radioString.toLowerCase())==-1) ) {
     return false;
   }
 
@@ -217,7 +214,9 @@ function myFilter(item) {
     var parent = data[item.parent];
 
     while (parent) {
-      if (parent._collapsed || (searchString != "" && parent[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1)) {
+      if (parent._collapsed ||( (searchString != "" && parent[1].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+    		  (searchString != "" && parent[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )||
+    		      		  (radioString!= "All" && item[10].toLowerCase().indexOf(radioString.toLowerCase())==-1)) {
         return false;
       }
 
@@ -390,9 +389,10 @@ $(function () {
 		d["id"] = "id_" + totalSize;
 		d["indent"] = indent;
 		d["parent"] = parent;
-		for (var j = 0; j < 11; j++) {
+		for (var j = 0; j < 10; j++) {
 			d[j] = "";
 		}
+		d[10] = "Planned";
 		for (var j = 11; j < 24; j++) {
 			d[j] = 0.0;
 		}
@@ -543,7 +543,20 @@ $(function () {
 
 			searchString = this.value;
 			dataView.refresh();
-		})
+		});
+		
+		radio.change(function(e) {
+			Slick.GlobalEditorLock.cancelCurrentEdit();
+		    choice = this.value;
+		   if (choice == 'planned') {
+			   radioString='Planned'
+		   }else {
+			   radioString="All";
+		    } 
+		   dataView.refresh();
+		});
+		
+		
 	})
 </script>
 
