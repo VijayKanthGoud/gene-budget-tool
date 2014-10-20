@@ -42,18 +42,17 @@
 }
 </style>
 <center>
-	<table>
-		<tr>
-			<td valign="top" width="100%">
-				<div
-					style="border: 1px solid gray; background: #E3E8F3; padding: 6px;">
-					<label>WBS Name:</label> <input type=text id="txtSearch">
-				</div> <br />
-			</td>
-		</tr>
-	</table>
-</center>
+	<div
+		style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%;">
 
+		<label>Search string:</label> <input type=text id="txtSearch">
+
+
+		<input type="radio" name="selectionmode" value="planned">Planned
+		<input type="radio" name="selectionmode" value="unplanned">Unplanned
+
+	</div>
+</center>
 <div id="displayGrid" style="width: 1323px; height: 400px;"></div>
 
 
@@ -74,6 +73,7 @@
 <script src="SlickGrid-master/slick.core.js"></script>
 <script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 <script>
+
 function requiredFieldValidator(value) {
   if (value == null || value == undefined || !value.length) {
     return {valid: false, msg: "This is a required field"};
@@ -111,7 +111,8 @@ var columnNames = [ "Unique Identifier",
                     "Allocation %", 
                     "PO Number",
 					"PO Desc", 
-					"Vendor", 
+					"Vendor",
+					"$ in 1000s", 
 					"JAN", "FEB", "MAR", "APR", "MAY",	"JUN", "JUL", 
 					"AUG", "SEP", "OCT", "NOV",	"DEC", "Total" ,"Remark"];
 
@@ -139,8 +140,26 @@ var columns = [
 	{	id : 20,name : columnNames[20],field : 20,width : 120,	editor : Slick.Editors.Text},
 	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text},
 	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text} ,
-	{	id : 23,name : columnNames[23],field : 23,width : 160,	editor : Slick.Editors.Text} 
+	{	id : 23,name : columnNames[23],field : 23,width : 120,	editor : Slick.Editors.Text},
+	{	id : 24,name : columnNames[24],field : 24,width : 160,	editor : Slick.Editors.Text} 
 	];
+
+//code for radio button
+radio = $('input[name="selectionmode"]'),
+    choice = '';
+
+radio.change(function(e) {
+    choice = this.value;
+   if (choice == 'planned') {
+    	 for (var i = 0, length = data.length; i < length; i++) {
+    		alert(JSON.stringify(data[i]["10"], null, 4)); 
+    		alert(JSON.stringify(data, null, 4));
+    		data.remove(i);
+    }
+   }else {
+    	alert(JSON.stringify(data, null, 4));
+    } 
+});
 
 function sumTotalsFormatter(totals, columnDef) {
 	  var val = totals.sum && totals.sum[columnDef.field];
@@ -152,29 +171,10 @@ function sumTotalsFormatter(totals, columnDef) {
 	
 function groupByProjectWBS() {
 	  dataView.setGrouping({
-	  getter: 24,
+	  getter: 25,
 	    formatter: function (g) {
-	    	if(g.value=="Total"){
-	      return " " + g.value +" "  ;
-	    	}else{
-	    		return "" + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
-	    	}
+	    	return " " + g.value +" "  ;
 	    },
-	  /*   aggregators: [
-	      new Slick.Data.Aggregators.Sum(10),
-	      new Slick.Data.Aggregators.Sum(11),
-	      new Slick.Data.Aggregators.Sum(12),
-	      new Slick.Data.Aggregators.Sum(13),
-	      new Slick.Data.Aggregators.Sum(14),
-	      new Slick.Data.Aggregators.Sum(15),
-	      new Slick.Data.Aggregators.Sum(16),
-	      new Slick.Data.Aggregators.Sum(17),
-	      new Slick.Data.Aggregators.Sum(18),
-	      new Slick.Data.Aggregators.Sum(19),
-	      new Slick.Data.Aggregators.Sum(20),
-	      new Slick.Data.Aggregators.Sum(21),
-	      new Slick.Data.Aggregators.Sum(22)
-	    ], */
 	    aggregateCollapsed: false,
 	    lazyTotalsCalculation: true
 	  });
@@ -234,34 +234,24 @@ $(function () {
 	    groupItemMetadataProvider: groupItemMetadataProvider,
 	    inlineFilters: true
 	  });
+
   var indent = 0;
   var parents = [];
 
   // prepare the data
-    <%for (int i = 0; i < gtfReports.size(); i++) {%>
-    var d = (data["<%=i%>"] = {});
+    <%int idCounter = -1;
+    for (int i = 0; i < gtfReports.size(); i++) {
+    	 boolean isFirst = true;
+    	for (int count = 0; count < 4; count++) {
+    if(isFirst){
+    isFirst = false;%>
+  
+    // start looping for four different maps
+    var d = (data["<%=++idCounter%>"] = {});
     var parent;
-   /*  if (Math.random() > 0.8 && i > 0) {
-      indent++;
-      parents.push(i - 1);
-    } else if (Math.random() < 0.3 && indent > 0) {
-      indent--;
-      parents.pop();
-    } 	
-     */
-   <%--  if ("<%=i%>"==6 && "<%=i%>">0) {
-        indent++;
-        parents.push("<%=i%>" - 1);
-      }
-     
-     if (parents.length > 0) {
-         parent = parents[parents.length - 1];
-       } else {
-         parent = null;
-       } --%>
-     d["id"] = "id_" + "<%=i%>";
-     d["indent"] = indent;
-     d["parent"] = parent;
+    d["id"] = "id_" + "<%=idCounter%>";
+    d["indent"] = indent;
+    d["parent"] = parent;
     d[1]="<%=gtfReports.get(i).getRequestor()%>";
     d[2]="<%=gtfReports.get(i).getProject_WBS()%>";
     d[3]="<%=gtfReports.get(i).getWBS_Name()%>";
@@ -271,197 +261,290 @@ $(function () {
     d[7]="<%=gtfReports.get(i).getPoNumber()%>";
     d[8]="<%=gtfReports.get(i).getPoDesc()%>";
     d[9]="<%=gtfReports.get(i).getVendor()%>";
-    d[10]="<%=gtfReports.get(i).getForecastMap().get("JAN")%>";
-    d[11]="<%=gtfReports.get(i).getForecastMap().get("FEB")%>";
-    d[12]="<%=gtfReports.get(i).getForecastMap().get("MAR")%>";
-    d[13]="<%=gtfReports.get(i).getForecastMap().get("APR")%>";
-    d[14]="<%=gtfReports.get(i).getForecastMap().get("MAY")%>";
-    d[15]="<%=gtfReports.get(i).getForecastMap().get("JUN")%>";
-    d[16]="<%=gtfReports.get(i).getForecastMap().get("JUL")%>";
-    d[17]="<%=gtfReports.get(i).getForecastMap().get("AUG")%>";
-    d[18]="<%=gtfReports.get(i).getForecastMap().get("SEP")%>";
-    d[19]="<%=gtfReports.get(i).getForecastMap().get("OCT")%>";
-    d[20]="<%=gtfReports.get(i).getForecastMap().get("NOV")%>";
-    d[21]="<%=gtfReports.get(i).getForecastMap().get("DEC")%>";
-    d[22]="<%=gtfReports.get(i).getForecastMap().get("JAN") + 
-    		gtfReports.get(i).getForecastMap().get("FEB") + 
-    		gtfReports.get(i).getForecastMap().get("MAR") + 
-    		gtfReports.get(i).getForecastMap().get("APR") + 
-    		gtfReports.get(i).getForecastMap().get("MAY") + 
-    		gtfReports.get(i).getForecastMap().get("JUN") + 
-    		gtfReports.get(i).getForecastMap().get("JUL") + 
-    		gtfReports.get(i).getForecastMap().get("AUG") + 
-    		gtfReports.get(i).getForecastMap().get("SEP") + 
-    		gtfReports.get(i).getForecastMap().get("OCT") + 
-    		gtfReports.get(i).getForecastMap().get("NOV") + 
-    		gtfReports.get(i).getForecastMap().get("DEC")%>";
-    d[24]="<%=gtfReports.get(i).getStatus()%>";
-     
-  <%}%>
+    d[10]="Planned";
+    d[11]="<%=gtfReports.get(i).getPlannedMap().get("JAN")%>";
+    d[12]="<%=gtfReports.get(i).getPlannedMap().get("FEB")%>";
+    d[13]="<%=gtfReports.get(i).getPlannedMap().get("MAR")%>";
+    d[14]="<%=gtfReports.get(i).getPlannedMap().get("APR")%>";
+    d[15]="<%=gtfReports.get(i).getPlannedMap().get("MAY")%>";
+    d[16]="<%=gtfReports.get(i).getPlannedMap().get("JUN")%>";
+    d[17]="<%=gtfReports.get(i).getPlannedMap().get("JUL")%>";
+    d[18]="<%=gtfReports.get(i).getPlannedMap().get("AUG")%>";
+    d[19]="<%=gtfReports.get(i).getPlannedMap().get("SEP")%>";
+    d[20]="<%=gtfReports.get(i).getPlannedMap().get("OCT")%>";
+    d[21]="<%=gtfReports.get(i).getPlannedMap().get("NOV")%>";
+    d[22]="<%=gtfReports.get(i).getPlannedMap().get("DEC")%>";
+    d[23]="<%=gtfReports.get(i).getPlannedMap().get("JAN") + 
+    		gtfReports.get(i).getPlannedMap().get("FEB") + 
+    		gtfReports.get(i).getPlannedMap().get("MAR") + 
+    		gtfReports.get(i).getPlannedMap().get("APR") + 
+    		gtfReports.get(i).getPlannedMap().get("MAY") + 
+    		gtfReports.get(i).getPlannedMap().get("JUN") + 
+    		gtfReports.get(i).getPlannedMap().get("JUL") + 
+    		gtfReports.get(i).getPlannedMap().get("AUG") + 
+    		gtfReports.get(i).getPlannedMap().get("SEP") + 
+    		gtfReports.get(i).getPlannedMap().get("OCT") + 
+    		gtfReports.get(i).getPlannedMap().get("NOV") + 
+    		gtfReports.get(i).getPlannedMap().get("DEC")%>";
+    d[25]="<%=gtfReports.get(i).getStatus()%>";
 
-  var d = (data["<%=gtfReports.size()%>"] = {});
-  d["id"] = "id_" + "<%=gtfReports.size()%>";
-  d["indent"] = indent;
-  d["parent"] = parent;
-  for (var j = 0; j < 10 ; j++) {
-	  d[j]="";
-  }
-  for (var j = 10; j < 23 ; j++) {
-	  d[j]=0.0;
-  }
-  for (var j = 0; j < "<%=gtfReports.size()%>" ; j++) {
-	 d[10]= parseFloat(d[10])+parseFloat(data[j][10]);
-	 d[11]= parseFloat(d[11])+parseFloat(data[j][11]);
-	 d[12]= parseFloat(d[12])+parseFloat(data[j][12]);
-	 d[13]= parseFloat(d[13])+parseFloat(data[j][13]);
-	 d[14]= parseFloat(d[14])+parseFloat(data[j][14]);
-	 d[15]= parseFloat(d[15])+parseFloat(data[j][15]);
-	 d[16]= parseFloat(d[16])+parseFloat(data[j][16]);
-	 d[17]= parseFloat(d[17])+parseFloat(data[j][17]);
-	 d[18]= parseFloat(d[18])+parseFloat(data[j][18]);
-	 d[19]= parseFloat(d[19])+parseFloat(data[j][19]);
-	 d[20]= parseFloat(d[20])+parseFloat(data[j][20]);
-	 d[21]= parseFloat(d[21])+parseFloat(data[j][21]);
-	 d[22]= parseFloat(d[22])+parseFloat(data[j][22]);
- 	
-  }
-  totalSize="<%=gtfReports.size()%>";
-  d[24]="Total";
-  // initialize the model
-  dataView = new Slick.Data.DataView({ inlineFilters: true });
-  dataView.beginUpdate();
-  dataView.setItems(data);
-  dataView.setFilter(myFilter);
-  dataView.endUpdate();
-  groupByProjectWBS();
-  // initialize the grid
-  grid = new Slick.Grid("#displayGrid", dataView, columns, options);
-  //register the group item metadata provider to add expand/collapse group handlers
-  grid.registerPlugin(groupItemMetadataProvider);
-  grid.setSelectionModel(new Slick.CellSelectionModel());
-  
-  grid.onCellChange.subscribe(function (e, args) {
-	  var cell = args.cell;
-	  var row = args.row;
-//	  grid.invalidate(); 
-	  data[totalSize][cell]=0.0;
-	  for (var j = 0; j < totalSize ; j++) {
-		 // alert("vertical sum data["+j+"]["+cell+"] = "+data[j][cell]);
-	    data[totalSize][cell] = parseFloat(data[totalSize][cell]) + parseFloat(data[j][cell]) ;
-	  }
-	 var temp=0;
-	  for (var j=0; j<data.length-1; j++ ) {
-		  if(data[j]["id"]==args.item.id){
-			 // alert("j is "+j+":::::"+JSON.stringify( data[j], null, 100));
-			  temp=j;
-			  break;
-		  }
-	  }
-	  grid.invalidate();  
-	  data[temp][22] = 0.0;
-	  for(var j=10; j<22; j++ ){
-		  data[temp][22] = parseFloat(data[temp][22]) + parseFloat(data[temp][j]);
-	  }
-	  data[data.length-1][22]=0.0;
-	  for(var j=10; j<22; j++ ){
-		  data[data.length-1][22] = parseFloat(data[data.length-1][22]) + parseFloat(data[data.length-1][j]);
-	  }
+  <%} else{%>  
+	    var d = (data["<%=++idCounter%>"] = {});
+	    var parent;
+	    d["id"] = "id_" + "<%=idCounter%>";
+	    d["indent"] = indent;
+	    d["parent"] = parent;
+	    d[1]=""; d[2]=""; d[3]=""; d[4]=""; 
+	    d[5]=""; d[6]="";  d[7]=""; d[8]=""; d[9]="";
+	    
+	    <%if(idCounter%4 == 1){%>
+	    d[10]="Benchmark";
+	    d[11]="<%=gtfReports.get(i).getBenchmarkMap().get("JAN")%>";
+	    d[12]="<%=gtfReports.get(i).getBenchmarkMap().get("FEB")%>";
+	    d[13]="<%=gtfReports.get(i).getBenchmarkMap().get("MAR")%>";
+	    d[14]="<%=gtfReports.get(i).getBenchmarkMap().get("APR")%>";
+	    d[15]="<%=gtfReports.get(i).getBenchmarkMap().get("MAY")%>";
+	    d[16]="<%=gtfReports.get(i).getBenchmarkMap().get("JUN")%>";
+	    d[17]="<%=gtfReports.get(i).getBenchmarkMap().get("JUL")%>";
+	    d[18]="<%=gtfReports.get(i).getBenchmarkMap().get("AUG")%>";
+	    d[19]="<%=gtfReports.get(i).getBenchmarkMap().get("SEP")%>";
+	    d[20]="<%=gtfReports.get(i).getBenchmarkMap().get("OCT")%>";
+	    d[21]="<%=gtfReports.get(i).getBenchmarkMap().get("NOV")%>";
+	    d[22]="<%=gtfReports.get(i).getBenchmarkMap().get("DEC")%>";
+	    d[23]="<%=gtfReports.get(i).getBenchmarkMap().get("JAN") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("FEB") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("MAR") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("APR") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("MAY") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("JUN") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("JUL") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("AUG") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("SEP") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("OCT") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("NOV") + 
+	    		gtfReports.get(i).getBenchmarkMap().get("DEC")%>";
+	    d[25]="<%=gtfReports.get(i).getStatus()%>";
 	  
-	  dataView.updateItem(args.item.id, args.item);
-      
-      
-      
-  });
-
-  grid.onAddNewRow.subscribe(function (e, args) {
-    var item = {
-      "id": "new_" + (Math.round(Math.random() * 10000)),
-      "indent": 0,
-      "title": "New task",
-      "duration": "1 day",
-      "percentComplete": 0,
-      "start": "01/01/2009",
-      "finish": "01/01/2009",
-      "effortDriven": false};
-    $.extend(item, args.item);
-    dataView.addItem(item);
-  });
-
-  grid.onClick.subscribe(function (e, args) {
-    if ($(e.target).hasClass("toggle")) {
-      var item = dataView.getItem(args.row);
-      if (item) {
-        if (!item._collapsed) {
-          item._collapsed = true;
-        } else {
-          item._collapsed = false;
-        }
-
-        dataView.updateItem(item.id, item);
-      }
-      e.stopImmediatePropagation();
+	    <%} if(idCounter%4 == 2){%>
+	    d[10]="Accruals";
+	    d[11]="<%=gtfReports.get(i).getAccrualsMap().get("JAN")%>";
+	    d[12]="<%=gtfReports.get(i).getAccrualsMap().get("FEB")%>";
+	    d[13]="<%=gtfReports.get(i).getAccrualsMap().get("MAR")%>";
+	    d[14]="<%=gtfReports.get(i).getAccrualsMap().get("APR")%>";
+	    d[15]="<%=gtfReports.get(i).getAccrualsMap().get("MAY")%>";
+	    d[16]="<%=gtfReports.get(i).getAccrualsMap().get("JUN")%>";
+	    d[17]="<%=gtfReports.get(i).getAccrualsMap().get("JUL")%>";
+	    d[18]="<%=gtfReports.get(i).getAccrualsMap().get("AUG")%>";
+	    d[19]="<%=gtfReports.get(i).getAccrualsMap().get("SEP")%>";
+	    d[20]="<%=gtfReports.get(i).getAccrualsMap().get("OCT")%>";
+	    d[21]="<%=gtfReports.get(i).getAccrualsMap().get("NOV")%>";
+	    d[22]="<%=gtfReports.get(i).getAccrualsMap().get("DEC")%>";
+	    d[23]="<%=gtfReports.get(i).getAccrualsMap().get("JAN") + 
+	    		gtfReports.get(i).getAccrualsMap().get("FEB") + 
+	    		gtfReports.get(i).getAccrualsMap().get("MAR") + 
+	    		gtfReports.get(i).getAccrualsMap().get("APR") + 
+	    		gtfReports.get(i).getAccrualsMap().get("MAY") + 
+	    		gtfReports.get(i).getAccrualsMap().get("JUN") + 
+	    		gtfReports.get(i).getAccrualsMap().get("JUL") + 
+	    		gtfReports.get(i).getAccrualsMap().get("AUG") + 
+	    		gtfReports.get(i).getAccrualsMap().get("SEP") + 
+	    		gtfReports.get(i).getAccrualsMap().get("OCT") + 
+	    		gtfReports.get(i).getAccrualsMap().get("NOV") + 
+	    		gtfReports.get(i).getAccrualsMap().get("DEC")%>";
+	    d[25]="<%=gtfReports.get(i).getStatus()%>";
+	    
+	    <%} if(idCounter%4 == 3){%>
+	    d[10]="Variances";
+	    d[11]="<%=gtfReports.get(i).getVariancesMap().get("JAN")%>";
+	    d[12]="<%=gtfReports.get(i).getVariancesMap().get("FEB")%>";
+	    d[13]="<%=gtfReports.get(i).getVariancesMap().get("MAR")%>";
+	    d[14]="<%=gtfReports.get(i).getVariancesMap().get("APR")%>";
+	    d[15]="<%=gtfReports.get(i).getVariancesMap().get("MAY")%>";
+	    d[16]="<%=gtfReports.get(i).getVariancesMap().get("JUN")%>";
+	    d[17]="<%=gtfReports.get(i).getVariancesMap().get("JUL")%>";
+	    d[18]="<%=gtfReports.get(i).getVariancesMap().get("AUG")%>";
+	    d[19]="<%=gtfReports.get(i).getVariancesMap().get("SEP")%>";
+	    d[20]="<%=gtfReports.get(i).getVariancesMap().get("OCT")%>";
+	    d[21]="<%=gtfReports.get(i).getVariancesMap().get("NOV")%>";
+	    d[22]="<%=gtfReports.get(i).getVariancesMap().get("DEC")%>";
+	    d[23]="<%=gtfReports.get(i).getVariancesMap().get("JAN") + 
+	    		gtfReports.get(i).getVariancesMap().get("FEB") + 
+	    		gtfReports.get(i).getVariancesMap().get("MAR") + 
+	    		gtfReports.get(i).getVariancesMap().get("APR") + 
+	    		gtfReports.get(i).getVariancesMap().get("MAY") + 
+	    		gtfReports.get(i).getVariancesMap().get("JUN") + 
+	    		gtfReports.get(i).getVariancesMap().get("JUL") + 
+	    		gtfReports.get(i).getVariancesMap().get("AUG") + 
+	    		gtfReports.get(i).getVariancesMap().get("SEP") + 
+	    		gtfReports.get(i).getVariancesMap().get("OCT") + 
+	    		gtfReports.get(i).getVariancesMap().get("NOV") + 
+	    		gtfReports.get(i).getVariancesMap().get("DEC")%>";
+	    d[25]="<%=gtfReports.get(i).getStatus()%>";
+	    <%}%>
+    
+    	<%}
     }
-  });
-  
-  grid.onKeyDown.subscribe(function(e, args) {
-	 /*  alert(args.cell);
-	  alert(args.row);
-	  alert(e.which); */
-		var cell = args.cell;
-		var row = args.row;
-		if (e.which == 46) {
-			data[row][cell] = "";
-			if (!grid.getEditorLock().commitCurrentEdit()) {
-				return;
-			}
-			grid.updateRow(row);
-			e.stopPropagation();
+  }%>
+  totalSize="<%=gtfReports.size()%>" * 4;
+		var d = (data[totalSize] = {});
+		d["id"] = "id_" + totalSize;
+		d["indent"] = indent;
+		d["parent"] = parent;
+		for (var j = 0; j < 11; j++) {
+			d[j] = "";
 		}
-	});
+		for (var j = 11; j < 24; j++) {
+			d[j] = 0.0;
+		}
+		for (var j = 0; j < totalSize; j++) {
+			d[11] = parseFloat(d[11]) + parseFloat(data[j][11]);
+			d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
+			d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
+			d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
+			d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
+			d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
+			d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
+			d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
+			d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
+			d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
+			d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
+			d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
+			d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
+		}
 
+		d[25] = "Total";
+		
+		// initialize the model
+		dataView = new Slick.Data.DataView({
+			inlineFilters : true
+		});
+		dataView.beginUpdate();
+		dataView.setItems(data);
+		dataView.setFilter(myFilter);
+		dataView.endUpdate();
+		groupByProjectWBS();
+		// initialize the grid
+		grid = new Slick.Grid("#displayGrid", dataView, columns, options);
+		//register the group item metadata provider to add expand/collapse group handlers
+		grid.registerPlugin(groupItemMetadataProvider);
+		grid.setSelectionModel(new Slick.CellSelectionModel());
 
-  // wire up model events to drive the grid
-  dataView.onRowCountChanged.subscribe(function (e, args) {
-    grid.updateRowCount();
-    grid.render();
-  });
+		grid.onCellChange
+				.subscribe(function(e, args) {
+					var cell = args.cell;
+					var row = args.row;
+					data[totalSize][cell] = 0.0;
+					for (var j = 0; j < totalSize; j++) {
+						data[totalSize][cell] = parseFloat(data[totalSize][cell])
+								+ parseFloat(data[j][cell]);
+					}
+					var temp = 0;
+					for (var j = 0; j < data.length - 1; j++) {
+						if (data[j]["id"] == args.item.id) {
+							temp = j;
+							break;
+						}
+					}
+					grid.invalidate();
+					data[temp][23] = 0.0;
+					for (var j = 11; j < 23; j++) {
+						data[temp][23] = parseFloat(data[temp][23])
+								+ parseFloat(data[temp][j]);
+					}
+					data[data.length - 1][23] = 0.0;
+					for (var j = 11; j < 23; j++) {
+						data[data.length - 1][23] = parseFloat(data[data.length - 1][23])
+								+ parseFloat(data[data.length - 1][j]);
+					}
 
-  dataView.onRowsChanged.subscribe(function (e, args) {
-    grid.invalidateRows(args.rows);
-    grid.render();
-  });
+					dataView.updateItem(args.item.id, args.item);
 
+				});
 
-  var h_runfilters = null;
+		 	grid.onAddNewRow.subscribe(function(e, args) {
+				var item = {
+					"id" : "new_" + (Math.round(Math.random() * 10000)),
+					"indent" : 0,
+					"title" : "New task",
+					"duration" : "1 day",
+					"percentComplete" : 0,
+					"start" : "01/01/2009",
+					"finish" : "01/01/2009",
+					"effortDriven" : false
+				};
+				$.extend(item, args.item);
+				dataView.addItem(item);
+			}); 
 
-  // wire up the slider to apply the filter to the model
-  $("#pcSlider").slider({
-    "range": "min",
-    "slide": function (event, ui) {
-      Slick.GlobalEditorLock.cancelCurrentEdit();
+		grid.onClick.subscribe(function(e, args) {
+			if ($(e.target).hasClass("toggle")) {
+				var item = dataView.getItem(args.row);
+				if (item) {
+					if (!item._collapsed) {
+						item._collapsed = true;
+					} else {
+						item._collapsed = false;
+					}
 
-      if (percentCompleteThreshold != ui.value) {
-        window.clearTimeout(h_runfilters);
-        h_runfilters = window.setTimeout(dataView.refresh, 10);
-        percentCompleteThreshold = ui.value;
-      }
-    }
-  });
+					dataView.updateItem(item.id, item);
+				}
+				e.stopImmediatePropagation();
+			}
+		});
 
+		grid.onKeyDown.subscribe(function(e, args) {
+			var cell = args.cell;
+			var row = args.row;
+			if (e.which == 46) {
+				data[row - 1][cell] = "";
+				if (!grid.getEditorLock().commitCurrentEdit()) {
+					return;
+				}
+				grid.invalidate();
+				e.stopPropagation();
+			}
+		});
 
-  // wire up the search textbox to apply the filter to the model
-  $("#txtSearch").keyup(function (e) {
-    Slick.GlobalEditorLock.cancelCurrentEdit();
+		// wire up model events to drive the grid
+		dataView.onRowCountChanged.subscribe(function(e, args) {
+			grid.updateRowCount();
+			grid.render();
+		});
 
-    // clear on Esc
-    if (e.which == 27) {
-      this.value = "";
-    }
+		dataView.onRowsChanged.subscribe(function(e, args) {
+			grid.invalidateRows(args.rows);
+			grid.render();
+		});
 
-    searchString = this.value;
-    dataView.refresh();
-  })
-})
+		var h_runfilters = null;
+
+		// wire up the slider to apply the filter to the model
+		$("#pcSlider").slider({
+			"range" : "min",
+			"slide" : function(event, ui) {
+				Slick.GlobalEditorLock.cancelCurrentEdit();
+
+				if (percentCompleteThreshold != ui.value) {
+					window.clearTimeout(h_runfilters);
+					h_runfilters = window.setTimeout(dataView.refresh, 10);
+					percentCompleteThreshold = ui.value;
+				}
+			}
+		});
+
+		// wire up the search textbox to apply the filter to the model
+		$("#txtSearch").keyup(function(e) {
+			Slick.GlobalEditorLock.cancelCurrentEdit();
+
+			// clear on Esc
+			if (e.which == 27) {
+				this.value = "";
+			}
+
+			searchString = this.value;
+			dataView.refresh();
+		})
+	})
 </script>
 
 
