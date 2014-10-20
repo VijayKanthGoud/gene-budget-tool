@@ -1,57 +1,80 @@
 package com.gene.app.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gene.app.bean.GtfReport;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
-import com.google.appengine.labs.repackaged.org.json.XML;
 
 @SuppressWarnings("serial")
 public class StoreReport extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("text/plain");
-		System.out.println("Hello world");
-		resp.getWriter().println("Hello, world");
-		
 		String objarray = req.getParameter("objarray").toString();
-		System.out.println(objarray);
+		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		try {
-		        JSONObject jsonObj = new JSONObject(objarray);          
+			JSONArray jsonArray = new JSONArray(objarray);
+			for (int count = 0; count < jsonArray.length(); count++) {
+				GtfReport gtfReport = new GtfReport();
+				JSONObject rprtObject = jsonArray.getJSONObject(count);
+				String projectWBS = rprtObject.getString("2");
+				if(projectWBS == null || projectWBS.isEmpty() || projectWBS.length() == 0){
+					break;
+				}
+				System.out.println("rprtObject : " + rprtObject);
+				gtfReport.setRequestor(rprtObject.getString("1"));
+				gtfReport.setProject_WBS(rprtObject.getString("2"));
+				gtfReport.setWBS_Name(rprtObject.getString("3"));
+				gtfReport.setSubActivity(rprtObject.getString("4"));
+				gtfReport.setBrand(rprtObject.getString("5"));
+				try {
+					gtfReport.setPercent_Allocation(Integer.parseInt(rprtObject
+							.getString("6")));
+				} catch (NumberFormatException e) {
+					gtfReport.setPercent_Allocation(0);
+				}
+				gtfReport.setPoNumber(rprtObject.getString("7"));
+				gtfReport.setPoDesc(rprtObject.getString("8"));
+				gtfReport.setVendor(rprtObject.getString("9"));
+				Map<String, Double> forecastMap = new HashMap<String, Double>();
+				for (int cnt = 10; cnt <= 21; cnt++) {
+					try {
+						forecastMap.put(GtfReport.months[cnt - 10],
+								Double.parseDouble(rprtObject.getString("10")));
+					} catch (NumberFormatException e ) {
+						forecastMap.put(GtfReport.months[0], 0.0);
+					}
+				}
+				gtfReport.setForecastMap(forecastMap);
+				gtfReports.add(gtfReport);
+			}
 
-		        String xmlString= XML.toString(jsonObj);
-		        System.out.println("JSON to XML: " + xmlString);
-		    } catch (JSONException e1) {
-		        // TODO Auto-generated catch block
-		        e1.printStackTrace();
-		    }
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+		generateProjectIdUsingJDOTxn(gtfReports);
 	}
-	
-	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReport){
-		
-		System.out.println("gtfReport"+gtfReport);
-        final PersistenceManagerFactory pmfInstance =
-                JDOHelper.getPersistenceManagerFactory("transactions-optional");
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        
-        try{
-               pm.makePersistentAll(gtfReport);
-        }catch(Exception e){
-               e.printStackTrace();
-        }
-        finally{
-               pm.close();
-        }
-        
- }
+
+	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistentAll(gtfReports);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pm.close();
+		}
+	}
 
 }

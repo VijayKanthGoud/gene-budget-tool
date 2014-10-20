@@ -12,6 +12,8 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class GtfReport implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")

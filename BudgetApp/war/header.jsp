@@ -33,9 +33,9 @@
 			isAdmin = userService.isUserAdmin();
 			//Set username message
 			if (isAdmin) {
-				userName = "Welcome, " + user.getNickname() + "!";
-			} else {
 				userName = "Welcome, " + user.getNickname() + "(Admin) !";
+			} else {
+				userName = "Welcome, " + user.getNickname() + "!";
 			}
 	%>
 
@@ -50,8 +50,10 @@
 			<td style="width: 50%; align: center">
 				<div style="text-align: center; vertical-align: middle;">
 					<h1
-						style="color: #105596; font-family: 'trebuchet ms'; font-size: 18px; font-variant: small-caps; letter-spacing: 5px; padding-top: 8px;">Gmemory Budget
-						Management Tool</h1>
+						style="color: #105596; font-family: 'trebuchet ms'; font-size: 25px; letter-spacing: 5px; padding-top: 8px;">
+						g<span style="font-variant: small-caps;">Memori Budgeting
+							Tool</span>
+					</h1>
 
 				</div>
 			</td>
@@ -67,7 +69,7 @@
 			<td colspan="5" style="background-color: #e1e2e2; width: 100%"></td>
 		</tr>
 	</table>
-<div style="height:5px;"></div>
+	<div style="height: 5px;"></div>
 	<div id='cssmenu'>
 		<ul>
 			<li><a href='/'><span>Home</span></a></li>

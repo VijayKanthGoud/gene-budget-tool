@@ -327,12 +327,12 @@
 
 	function submitData() {
 		var param = 'objarray=' + JSON.stringify(data);
-		//alert("param .." + param);
+		alert("param .." + param);
 		$.ajax({
 			url : '/storereport',
 			type : 'POST',
 			dataType : 'json',
-			data : param,
+			data : {objarray: JSON.stringify(data)},
 			success : function(result) {
 				alert('SUCCESS');
 			}
@@ -346,7 +346,7 @@
 <center>
 	<button class="myButton" value="Submit" onclick="return submitData();">
 		Submit</button>
-	<button class="myButton" value="Reset" onclick="return submitData();">
+	<button class="myButton" value="Reset" ">
 		Reset</button>
 </center>
 <%
