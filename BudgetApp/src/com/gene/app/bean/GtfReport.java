@@ -58,7 +58,16 @@ public class GtfReport implements Serializable {
 	}
 
 	@Persistent
-	private Map<String, Double> forecastMap;
+	private Map<String, Double> benchmarkMap;
+	
+	@Persistent
+	private Map<String, Double> plannedMap;
+	
+	@Persistent
+	private Map<String, Double> accrualsMap;
+	
+	@Persistent
+	private Map<String, Double> variancesMap;
 
 	public static String[] months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 			"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
@@ -143,11 +152,35 @@ public class GtfReport implements Serializable {
 		this.vendor = vendor;
 	}
 
-	public Map<String, Double> getForecastMap() {
-		return forecastMap;
+	public Map<String, Double> getBenchmarkMap() {
+		return benchmarkMap;
 	}
 
-	public void setForecastMap(Map<String, Double> forecastMap) {
-		this.forecastMap = forecastMap;
+	public void setBenchmarkMap(Map<String, Double> benchmarkMap) {
+		this.benchmarkMap = benchmarkMap;
+	}
+
+	public Map<String, Double> getPlannedMap() {
+		return plannedMap;
+	}
+
+	public void setPlannedMap(Map<String, Double> plannedMap) {
+		this.plannedMap = plannedMap;
+	}
+
+	public Map<String, Double> getAccrualsMap() {
+		return accrualsMap;
+	}
+
+	public void setAccrualsMap(Map<String, Double> accrualsMap) {
+		this.accrualsMap = accrualsMap;
+	}
+
+	public Map<String, Double> getVariancesMap() {
+		return variancesMap;
+	}
+
+	public void setVariancesMap(Map<String, Double> variancesMap) {
+		this.variancesMap = variancesMap;
 	}
 }

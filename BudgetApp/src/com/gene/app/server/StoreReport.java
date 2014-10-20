@@ -47,16 +47,22 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setPoNumber(rprtObject.getString("7"));
 				gtfReport.setPoDesc(rprtObject.getString("8"));
 				gtfReport.setVendor(rprtObject.getString("9"));
-				Map<String, Double> forecastMap = new HashMap<String, Double>();
+				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
+				Map<String, Double> setZeroMap = new HashMap<String, Double>();
 				for (int cnt = 10; cnt <= 21; cnt++) {
+					setZeroMap.put(GtfReport.months[cnt - 10], 0.0);
 					try {
-						forecastMap.put(GtfReport.months[cnt - 10],
-								Double.parseDouble(rprtObject.getString("10")));
+						benchmarkMap.put(GtfReport.months[cnt - 10],
+								Double.parseDouble(rprtObject.getString(Integer.toString(cnt))));
 					} catch (NumberFormatException e ) {
-						forecastMap.put(GtfReport.months[0], 0.0);
+						benchmarkMap.put(GtfReport.months[0], 0.0);
 					}
 				}
-				gtfReport.setForecastMap(forecastMap);
+				gtfReport.setBenchmarkMap(benchmarkMap);
+				gtfReport.setPlannedMap(setZeroMap);
+				gtfReport.setAccrualsMap(setZeroMap);
+				gtfReport.setVariancesMap(setZeroMap);
+				//gtfReport.setStatus("Active");
 				gtfReports.add(gtfReport);
 			}
 
