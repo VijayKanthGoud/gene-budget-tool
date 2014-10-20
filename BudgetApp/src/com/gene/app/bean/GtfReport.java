@@ -21,6 +21,9 @@ public class GtfReport implements Serializable {
 
 	@Persistent
 	private String requestor;
+	
+	@Persistent
+	private String projectName;
 
 	@Persistent
 	private String project_WBS;
@@ -182,5 +185,13 @@ public class GtfReport implements Serializable {
 
 	public void setVariancesMap(Map<String, Double> variancesMap) {
 		this.variancesMap = variancesMap;
+	}
+	
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 }

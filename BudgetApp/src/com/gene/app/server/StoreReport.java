@@ -33,26 +33,28 @@ public class StoreReport extends HttpServlet {
 					break;
 				}
 				System.out.println("rprtObject : " + rprtObject);
-				gtfReport.setRequestor(rprtObject.getString("1"));
-				gtfReport.setProject_WBS(rprtObject.getString("2"));
-				gtfReport.setWBS_Name(rprtObject.getString("3"));
-				gtfReport.setSubActivity(rprtObject.getString("4"));
-				gtfReport.setBrand(rprtObject.getString("5"));
+				gtfReport.setProjectName(rprtObject.getString("1"));
+				gtfReport.setStatus(rprtObject.getString("2"));
+				gtfReport.setRequestor(rprtObject.getString("3"));
+				gtfReport.setProject_WBS(rprtObject.getString("4"));
+				gtfReport.setWBS_Name(rprtObject.getString("5"));
+				gtfReport.setSubActivity(rprtObject.getString("6"));
+				gtfReport.setBrand(rprtObject.getString("7"));
 				try {
 					gtfReport.setPercent_Allocation(Integer.parseInt(rprtObject
-							.getString("6")));
+							.getString("8")));
 				} catch (NumberFormatException e) {
 					gtfReport.setPercent_Allocation(0);
 				}
-				gtfReport.setPoNumber(rprtObject.getString("7"));
-				gtfReport.setPoDesc(rprtObject.getString("8"));
-				gtfReport.setVendor(rprtObject.getString("9"));
+				gtfReport.setPoNumber(rprtObject.getString("9"));
+				gtfReport.setPoDesc(rprtObject.getString("10"));
+				gtfReport.setVendor(rprtObject.getString("11"));
 				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
 				Map<String, Double> setZeroMap = new HashMap<String, Double>();
-				for (int cnt = 10; cnt <= 21; cnt++) {
-					setZeroMap.put(GtfReport.months[cnt - 10], 0.0);
+				for (int cnt = 12; cnt <= 23; cnt++) {
+					setZeroMap.put(GtfReport.months[cnt - 12], 0.0);
 					try {
-						benchmarkMap.put(GtfReport.months[cnt - 10],
+						benchmarkMap.put(GtfReport.months[cnt - 12],
 								Double.parseDouble(rprtObject.getString(Integer.toString(cnt))));
 					} catch (NumberFormatException e ) {
 						benchmarkMap.put(GtfReport.months[0], 0.0);
@@ -62,7 +64,6 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setPlannedMap(setZeroMap);
 				gtfReport.setAccrualsMap(setZeroMap);
 				gtfReport.setVariancesMap(setZeroMap);
-				//gtfReport.setStatus("Active");
 				gtfReports.add(gtfReport);
 			}
 

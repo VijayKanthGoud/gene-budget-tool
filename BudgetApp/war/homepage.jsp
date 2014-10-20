@@ -138,7 +138,7 @@
 		includeHeaderWhenCopying : false
 	};
 
-	var columnNames = [ "Unique Identifier", "Requestor", "Project WBS",
+	var columnNames = [ "Unique Identifier", "Project Name", "Status", "Requestor", "Project WBS",
 			"WBS Name", "SubActivity", "Brand", "Allocation %", "PO Number",
 			"PO Desc", "Vendor", "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 			"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "Total" ];
@@ -281,6 +281,18 @@
 		field : 22,
 		width : 120,
 		editor : Slick.Editors.Text
+	}, {
+		id : 23,
+		name : columnNames[23],
+		field : 23,
+		width : 120,
+		editor : Slick.Editors.Text
+	}, {
+		id : 24,
+		name : columnNames[24],
+		field : 24,
+		width : 120,
+		editor : Slick.Editors.Text
 	} ];
 
 	$(function() {
@@ -288,7 +300,7 @@
 			var d = (data[i] = {});
 			d["num"] = "";
 			d["id"] = "id_" + i;
-			for (var j = 0; j < 23; j++) {
+			for (var j = 0; j < 25; j++) {
 				d[j] = "";
 			}
 			
