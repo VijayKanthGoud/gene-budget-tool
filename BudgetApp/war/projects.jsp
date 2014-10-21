@@ -54,6 +54,7 @@ background:green !important;
 
 		<input type="radio" name="selectionmode" value="planned">Planned
 		<input type="radio" name="selectionmode" value="All" checked="checked">All
+		<span style="padding-left:68px;"></span>
 		<input type="checkbox" name="HideColumns" value="Hide" checked>Hide columns
 
 	</div>
@@ -87,7 +88,9 @@ function requiredFieldValidator(value) {
   }
 }
 
-
+//code for radio button
+radio = $('input[name="selectionmode"]'),
+    choice = '';
 /* var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
   value = value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
@@ -232,8 +235,11 @@ var searchString = "";
 function myFilter(item) {
 	
   if (((searchString != "" && item[1].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
-		  (searchString != "" && item[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )|| 
-		  (radioString!= "All" && item[10].toLowerCase().indexOf(radioString.toLowerCase())==-1) ) {
+		  (searchString != "" && item[2].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+		  (searchString != "" && item[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+		  (searchString != "" && item[4].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+		  (searchString != "" && item[6].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )|| 
+		  (radioString!= "All" && item[11].toLowerCase().indexOf(radioString.toLowerCase())==-1) ) {
     return false;
   }
 
@@ -242,8 +248,11 @@ function myFilter(item) {
 
     while (parent) {
       if (parent._collapsed ||( (searchString != "" && parent[1].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
-    		  (searchString != "" && parent[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )||
-    		      		  (radioString!= "All" && item[10].toLowerCase().indexOf(radioString.toLowerCase())==-1)) {
+    		  (searchString != "" && parent[2].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+    		  (searchString != "" && parent[3].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+    		  (searchString != "" && parent[4].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+    		  (searchString != "" && parent[6].toLowerCase().indexOf(searchString.toLowerCase()) == -1))||
+    		      		  (radioString!= "All" && item[11].toLowerCase().indexOf(radioString.toLowerCase())==-1)) {
         return false;
       }
 
@@ -425,19 +434,19 @@ $(function () {
 			d[j] = 0.0;
 		}
 		for (var j = 0; j < totalSize; j++) {
-			d[12] = parseFloat(d[11]) + parseFloat(data[j][11]);
-			d[13] = parseFloat(d[12]) + parseFloat(data[j][12]);
-			d[14] = parseFloat(d[13]) + parseFloat(data[j][13]);
-			d[15] = parseFloat(d[14]) + parseFloat(data[j][14]);
-			d[16] = parseFloat(d[15]) + parseFloat(data[j][15]);
-			d[17] = parseFloat(d[16]) + parseFloat(data[j][16]);
-			d[18] = parseFloat(d[17]) + parseFloat(data[j][17]);
-			d[19] = parseFloat(d[18]) + parseFloat(data[j][18]);
-			d[20] = parseFloat(d[19]) + parseFloat(data[j][19]);
-			d[21] = parseFloat(d[20]) + parseFloat(data[j][20]);
-			d[22] = parseFloat(d[21]) + parseFloat(data[j][21]);
-			d[23] = parseFloat(d[22]) + parseFloat(data[j][22]);
-			d[24] = parseFloat(d[23]) + parseFloat(data[j][23]);
+			d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
+			d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
+			d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
+			d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
+			d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
+			d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
+			d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
+			d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
+			d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
+			d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
+			d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
+			d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
+			d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
 		}
 
 		d[26] = "Total";
@@ -573,9 +582,7 @@ $(function () {
 			dataView.refresh();
 		});
 		
-		//code for radio button
-		radio = $('input[name="selectionmode"]'),
-		    choice = '';
+
 		radio.change(function(e) {
 			Slick.GlobalEditorLock.cancelCurrentEdit();
 		    choice = this.value;
