@@ -1,5 +1,6 @@
 <%@page import="com.gene.app.bean.*"%>
 <%@page import="java.util.*"%>
+<%@page import="java.text.*"%>
 <%@ include file="header.jsp"%>
 
 <%
@@ -49,23 +50,72 @@ background:green !important;
 }
 </style>
 <center>
-	<div
-		style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%; font-weight: normal;font-size: 14px;
-		color: #005691;font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
+	<div>
+<table
+			style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #005691; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
+			<tr>
+			
+				<td style="width: 35%; height: 55px;padding-left:43%" colspan="3">
 
-		<label>Search string:</label> <input type=text id="txtSearch">
-
-
-		<input type="radio" name="selectionmode" value="planned">Planned
-		<input type="radio" name="selectionmode" value="All" checked="checked">All
-		<span style="padding-left:68px;"></span>
-		<input type="checkbox" name="HideColumns" value="Hide" checked>Hide columns
+					<span style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold;letter-spacing: 5px;padding-top: 8px;">My Projects</span> 
+			
+				</td>
+				
+				<td style="width: 20%;" rowspan="2">
+					<table class="summarytable" width=100%
+						style="color: #005691; white-space: nowrap;">
+						
+						<tr>
+							<td>2017</td>
+							<td>Total budget:</td>
+							<td>$60000</td>
+						</tr>
+						<tr>
+							<td>2017</td>
+							<td>Budget left to spend:    </td>
+							<td>$50000</td>
+						</tr>
+						<tr>
+							<td>2017</td>
+							<td>Benchmark Total:    </td>
+							<td>$2032</td>
+						</tr>
+						<tr>
+							<td>2017</td>
+							<td>Planned Total:    </td>
+							<td>$2000</td>
+						</tr>
+						<tr style="color: red;">
+							<td>2017</td>
+							<td>Variance Total:</td>
+							<td>$32</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr style="">
+			<td style="width: 25%;  padding-left:6%">
+			Search String:
+			<input type=text
+					id="txtSearch" style="width:120px;"> 
+			</td>
+				<td style="width: 35%;padding-left:13% ">
+				<center>
+					<input type="radio" name="selectionmode"
+					value="planned">Planned &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"
+					name="selectionmode" value="All" checked="checked">All
+				</center>
+				</td>
+				<td style="width: 20%; padding-left:6%"><input type="checkbox" name="HideColumns" value="Hide" checked>Hide columns</td>
+			</tr>
+		</table>
+		
 
 	</div>
 </center>
 <div id="displayGrid" style="width: 1323px; height: 400px;"></div>
 
-
+	
 
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
@@ -116,7 +166,7 @@ var data = [];
 var radioString="All";
 var totalSize=0;
 var columnNames = [ "Unique Identifier", 
-                    "Requestor", 
+                    "Project Owner", 
                     "Project Name",
                     "Project WBS",
                     "WBS Name", 
@@ -302,19 +352,19 @@ $(function () {
     d[9]="<%=gtfReports.get(i).getPoDesc()%>";
     d[10]="<%=gtfReports.get(i).getVendor()%>";
     d[11]="Planned";
-    d[12]="<%=gtfReports.get(i).getPlannedMap().get("JAN")%>";
-    d[13]="<%=gtfReports.get(i).getPlannedMap().get("FEB")%>";
-    d[14]="<%=gtfReports.get(i).getPlannedMap().get("MAR")%>";
-    d[15]="<%=gtfReports.get(i).getPlannedMap().get("APR")%>";
-    d[16]="<%=gtfReports.get(i).getPlannedMap().get("MAY")%>";
-    d[17]="<%=gtfReports.get(i).getPlannedMap().get("JUN")%>";
-    d[18]="<%=gtfReports.get(i).getPlannedMap().get("JUL")%>";
-    d[19]="<%=gtfReports.get(i).getPlannedMap().get("AUG")%>";
-    d[20]="<%=gtfReports.get(i).getPlannedMap().get("SEP")%>";
-    d[21]="<%=gtfReports.get(i).getPlannedMap().get("OCT")%>";
-    d[22]="<%=gtfReports.get(i).getPlannedMap().get("NOV")%>";
-    d[23]="<%=gtfReports.get(i).getPlannedMap().get("DEC")%>";
-    d[24]="<%=gtfReports.get(i).getPlannedMap().get("JAN") + 
+    d[12]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
+    d[13]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
+    d[14]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
+    d[15]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
+    d[16]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
+    d[17]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
+    d[18]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
+    d[19]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
+    d[20]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
+    d[21]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
+    d[22]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
+    d[23]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    d[24]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
     		gtfReports.get(i).getPlannedMap().get("FEB") + 
     		gtfReports.get(i).getPlannedMap().get("MAR") + 
     		gtfReports.get(i).getPlannedMap().get("APR") + 
@@ -325,7 +375,7 @@ $(function () {
     		gtfReports.get(i).getPlannedMap().get("SEP") + 
     		gtfReports.get(i).getPlannedMap().get("OCT") + 
     		gtfReports.get(i).getPlannedMap().get("NOV") + 
-    		gtfReports.get(i).getPlannedMap().get("DEC")%>";
+    		gtfReports.get(i).getPlannedMap().get("DEC"))%>";
     d[26]="<%=gtfReports.get(i).getStatus()%>";
 
   <%} else{%>  
@@ -339,19 +389,19 @@ $(function () {
 	    
 	    <%if(idCounter%4 == 1){%>
 	    d[11]="Benchmark";
-	    d[12]="<%=gtfReports.get(i).getBenchmarkMap().get("JAN")%>";
-	    d[13]="<%=gtfReports.get(i).getBenchmarkMap().get("FEB")%>";
-	    d[14]="<%=gtfReports.get(i).getBenchmarkMap().get("MAR")%>";
-	    d[15]="<%=gtfReports.get(i).getBenchmarkMap().get("APR")%>";
-	    d[16]="<%=gtfReports.get(i).getBenchmarkMap().get("MAY")%>";
-	    d[17]="<%=gtfReports.get(i).getBenchmarkMap().get("JUN")%>";
-	    d[18]="<%=gtfReports.get(i).getBenchmarkMap().get("JUL")%>";
-	    d[19]="<%=gtfReports.get(i).getBenchmarkMap().get("AUG")%>";
-	    d[20]="<%=gtfReports.get(i).getBenchmarkMap().get("SEP")%>";
-	    d[21]="<%=gtfReports.get(i).getBenchmarkMap().get("OCT")%>";
-	    d[22]="<%=gtfReports.get(i).getBenchmarkMap().get("NOV")%>";
-	    d[23]="<%=gtfReports.get(i).getBenchmarkMap().get("DEC")%>";
-	    d[24]="<%=gtfReports.get(i).getBenchmarkMap().get("JAN") + 
+	    d[12]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
+	    d[13]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
+	    d[14]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
+	    d[15]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
+	    d[16]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
+	    d[17]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
+	    d[18]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
+	    d[19]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
+	    d[20]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
+	    d[21]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
+	    d[22]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
+	    d[23]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+	    d[24]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("FEB") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("MAR") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("APR") + 
@@ -362,24 +412,24 @@ $(function () {
 	    		gtfReports.get(i).getBenchmarkMap().get("SEP") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("OCT") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("NOV") + 
-	    		gtfReports.get(i).getBenchmarkMap().get("DEC")%>";
+	    		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
 	    d[26]="<%=gtfReports.get(i).getStatus()%>";
 	  
 	    <%} if(idCounter%4 == 2){%>
 	    d[11]="Accruals";
-	    d[12]="<%=gtfReports.get(i).getAccrualsMap().get("JAN")%>";
-	    d[13]="<%=gtfReports.get(i).getAccrualsMap().get("FEB")%>";
-	    d[14]="<%=gtfReports.get(i).getAccrualsMap().get("MAR")%>";
-	    d[15]="<%=gtfReports.get(i).getAccrualsMap().get("APR")%>";
-	    d[16]="<%=gtfReports.get(i).getAccrualsMap().get("MAY")%>";
-	    d[17]="<%=gtfReports.get(i).getAccrualsMap().get("JUN")%>";
-	    d[18]="<%=gtfReports.get(i).getAccrualsMap().get("JUL")%>";
-	    d[19]="<%=gtfReports.get(i).getAccrualsMap().get("AUG")%>";
-	    d[20]="<%=gtfReports.get(i).getAccrualsMap().get("SEP")%>";
-	    d[21]="<%=gtfReports.get(i).getAccrualsMap().get("OCT")%>";
-	    d[22]="<%=gtfReports.get(i).getAccrualsMap().get("NOV")%>";
-	    d[23]="<%=gtfReports.get(i).getAccrualsMap().get("DEC")%>";
-	    d[24]="<%=gtfReports.get(i).getAccrualsMap().get("JAN") + 
+	    d[12]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
+	    d[13]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
+	    d[14]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
+	    d[15]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
+	    d[16]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
+	    d[17]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
+	    d[18]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
+	    d[19]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
+	    d[20]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
+	    d[21]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
+	    d[22]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
+	    d[23]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+	    d[24]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
 	    		gtfReports.get(i).getAccrualsMap().get("FEB") + 
 	    		gtfReports.get(i).getAccrualsMap().get("MAR") + 
 	    		gtfReports.get(i).getAccrualsMap().get("APR") + 
@@ -390,24 +440,24 @@ $(function () {
 	    		gtfReports.get(i).getAccrualsMap().get("SEP") + 
 	    		gtfReports.get(i).getAccrualsMap().get("OCT") + 
 	    		gtfReports.get(i).getAccrualsMap().get("NOV") + 
-	    		gtfReports.get(i).getAccrualsMap().get("DEC")%>";
+	    		gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
 	    d[26]="<%=gtfReports.get(i).getStatus()%>";
 	    
 	    <%} if(idCounter%4 == 3){%>
 	    d[11]="Variances";
-	    d[12]="<%=gtfReports.get(i).getVariancesMap().get("JAN")%>";
-	    d[13]="<%=gtfReports.get(i).getVariancesMap().get("FEB")%>";
-	    d[14]="<%=gtfReports.get(i).getVariancesMap().get("MAR")%>";
-	    d[15]="<%=gtfReports.get(i).getVariancesMap().get("APR")%>";
-	    d[16]="<%=gtfReports.get(i).getVariancesMap().get("MAY")%>";
-	    d[17]="<%=gtfReports.get(i).getVariancesMap().get("JUN")%>";
-	    d[18]="<%=gtfReports.get(i).getVariancesMap().get("JUL")%>";
-	    d[19]="<%=gtfReports.get(i).getVariancesMap().get("AUG")%>";
-	    d[20]="<%=gtfReports.get(i).getVariancesMap().get("SEP")%>";
-	    d[21]="<%=gtfReports.get(i).getVariancesMap().get("OCT")%>";
-	    d[22]="<%=gtfReports.get(i).getVariancesMap().get("NOV")%>";
-	    d[23]="<%=gtfReports.get(i).getVariancesMap().get("DEC")%>";
-	    d[24]="<%=gtfReports.get(i).getVariancesMap().get("JAN") + 
+	    d[12]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
+	    d[13]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
+	    d[14]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
+	    d[15]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
+	    d[16]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
+	    d[17]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
+	    d[18]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
+	    d[19]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
+	    d[20]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
+	    d[21]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
+	    d[22]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
+	    d[23]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+	    d[24]="<%=new DecimalFormat("#.###").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
 	    		gtfReports.get(i).getVariancesMap().get("FEB") + 
 	    		gtfReports.get(i).getVariancesMap().get("MAR") + 
 	    		gtfReports.get(i).getVariancesMap().get("APR") + 
@@ -418,7 +468,7 @@ $(function () {
 	    		gtfReports.get(i).getVariancesMap().get("SEP") + 
 	    		gtfReports.get(i).getVariancesMap().get("OCT") + 
 	    		gtfReports.get(i).getVariancesMap().get("NOV") + 
-	    		gtfReports.get(i).getVariancesMap().get("DEC")%>";
+	    		gtfReports.get(i).getVariancesMap().get("DEC"))%>";
 	    d[26]="<%=gtfReports.get(i).getStatus()%>";
 	    <%}%>
     
@@ -452,7 +502,9 @@ $(function () {
 			d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
 			d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
 		}
-
+		for (var j = 12; j < 25; j++) {
+			d[j] = d[j].toFixed(3);
+		}
 		d[26] = "Total";
 		
 		// initialize the model
