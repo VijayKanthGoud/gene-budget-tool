@@ -307,7 +307,7 @@ $(function () {
     d[18]="<%=gtfReports.get(i).getPlannedMap().get("JUL")%>";
     d[19]="<%=gtfReports.get(i).getPlannedMap().get("AUG")%>";
     d[20]="<%=gtfReports.get(i).getPlannedMap().get("SEP")%>";
-    d[22]="<%=gtfReports.get(i).getPlannedMap().get("OCT")%>";
+    d[21]="<%=gtfReports.get(i).getPlannedMap().get("OCT")%>";
     d[22]="<%=gtfReports.get(i).getPlannedMap().get("NOV")%>";
     d[23]="<%=gtfReports.get(i).getPlannedMap().get("DEC")%>";
     d[24]="<%=gtfReports.get(i).getPlannedMap().get("JAN") + 
@@ -471,7 +471,8 @@ $(function () {
 					var cell = args.cell;
 					var row = args.row;
 					data[totalSize][cell] = 0.0;
-					for (var j = 0; j < totalSize; j++) {
+					grid.invalidate();
+					for (var j = 0; j < totalSize; j=j+4) {
 						data[totalSize][cell] = parseFloat(data[totalSize][cell])
 								+ parseFloat(data[j][cell]);
 					}
@@ -483,14 +484,14 @@ $(function () {
 						}
 					}
 					grid.invalidate();
-					data[temp][23] = 0.0;
-					for (var j = 11; j < 23; j++) {
-						data[temp][23] = parseFloat(data[temp][23])
+					data[temp][24] = 0.0;
+					for (var j = 12; j < 24; j++) {
+						data[temp][24] = parseFloat(data[temp][24])
 								+ parseFloat(data[temp][j]);
 					}
-					data[data.length - 1][23] = 0.0;
-					for (var j = 11; j < 23; j++) {
-						data[data.length - 1][23] = parseFloat(data[data.length - 1][23])
+					data[data.length - 1][24] = 0.0;
+					for (var j = 12; j < 24; j++) {
+						data[data.length - 1][24] = parseFloat(data[data.length - 1][24])
 								+ parseFloat(data[data.length - 1][j]);
 					}
 
