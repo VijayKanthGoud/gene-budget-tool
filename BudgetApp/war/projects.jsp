@@ -54,6 +54,7 @@ background:green !important;
 
 		<input type="radio" name="selectionmode" value="planned">Planned
 		<input type="radio" name="selectionmode" value="All" checked="checked">All
+		<input type="checkbox" name="HideColumns" value="Hide" checked>Hide columns
 
 	</div>
 </center>
@@ -148,6 +149,35 @@ var columns = [
 	{	id : 23,name : columnNames[23],field : 23,width : 120,	editor : Slick.Editors.Text},
 	{	id : 24,name : columnNames[24],field : 24,width : 160,	editor : Slick.Editors.Text} 
 	];
+
+
+var hidecolumns = [
+           	{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
+           	{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },
+           	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
+        /*    	{	id : 3,name : columnNames[3],field : 3,width : 120,	editor : Slick.Editors.Auto},
+           	{	id : 4,name : columnNames[4],field : 4,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 5,name : columnNames[5],field : 5,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 7,name : columnNames[7],field : 7,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 8,name : columnNames[8],field : 8,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 9,name : columnNames[9],field : 9,width : 120,	editor : Slick.Editors.Text}, */
+           	{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 12,name : columnNames[12],field : 12,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 13,name : columnNames[13],field : 13,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 14,name : columnNames[14],field : 14,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 15,name : columnNames[15],field : 15,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 16,name : columnNames[16],field : 16,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 17,name : columnNames[17],field : 17,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 18,name : columnNames[18],field : 18,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 19,name : columnNames[19],field : 19,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 20,name : columnNames[20],field : 20,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 21,name : columnNames[21],field : 21,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 22,name : columnNames[22],field : 22,width : 120,	editor : Slick.Editors.Text} ,
+           	{	id : 23,name : columnNames[23],field : 23,width : 120,	editor : Slick.Editors.Text},
+           	{	id : 24,name : columnNames[24],field : 24,width : 160,	editor : Slick.Editors.Text} 
+           	];
 
 //code for radio button
 radio = $('input[name="selectionmode"]'),
@@ -424,7 +454,7 @@ $(function () {
 		dataView.endUpdate();
 		groupByProjectWBS();
 		// initialize the grid
-		grid = new Slick.Grid("#displayGrid", dataView, columns, options);
+		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
 		//register the group item metadata provider to add expand/collapse group handlers
 		grid.registerPlugin(groupItemMetadataProvider);
 		grid.setSelectionModel(new Slick.CellSelectionModel());
@@ -555,7 +585,26 @@ $(function () {
 		    } 
 		   dataView.refresh();
 		});
+		chkBox = $('input[name="HideColumns"]')
 		
+		chkBox.change(function(e) {
+			Slick.GlobalEditorLock.cancelCurrentEdit();
+		    if(this.checked){
+		    	grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
+				//register the group item metadata provider to add expand/collapse group handlers
+				grid.registerPlugin(groupItemMetadataProvider);
+				grid.setSelectionModel(new Slick.CellSelectionModel());
+
+		    }else{
+		    	grid = new Slick.Grid("#displayGrid", dataView, columns, options);
+				//register the group item metadata provider to add expand/collapse group handlers
+				grid.registerPlugin(groupItemMetadataProvider);
+				grid.setSelectionModel(new Slick.CellSelectionModel());
+
+		    }
+		
+		   dataView.refresh();
+		});
 		
 	})
 </script>
