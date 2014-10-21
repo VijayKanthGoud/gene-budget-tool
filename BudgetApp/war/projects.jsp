@@ -68,7 +68,7 @@ background:green !important;
 						<tr>
 							<td>2017</td>
 							<td>Total budget:</td>
-							<td>$60000</td>
+							<td>$<input style="color: #005691" type=text name=type maxlength="8" size="8" value=60000></td>
 						</tr>
 						<tr>
 							<td>2017</td>
