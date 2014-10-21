@@ -7,6 +7,10 @@
 	for(GtfReport report : gtfReports){
 		System.out.println(report.getBrand());
 	}
+	Calendar cal = Calendar.getInstance();
+	int year = cal.get(Calendar.YEAR);
+	int month = cal.get(Calendar.MONTH);
+	int qtr = month/3;
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"
@@ -543,6 +547,52 @@ $(function () {
 			}
 		});
 
+		grid.onBeforeEditCell.subscribe(function(e,args) {
+			var newYear = <%= year+1%>;
+			var quarter = <%= qtr%>;
+			var month = <%= month%>;
+			
+			var monthArray =  [{"m0":"JAN"},{"m0":"FEB"},{"m0":"MAR"},{"m0":"APR"} ,{"m0":"MAY"} ,{"m0":"JUN"} ,{"m0":"JUL"} ,{"m0":"AUG"} ,{"m0":"SEP"},{"m0":"OCT"},{"m0":"NOV"},{"m0":"DEC"}];
+			
+			//alert("quarter = "+quarter+ " val ="+monthArray[9].m0);
+			alert(JSON.stringify(args, null, 4));
+			var cell = args.cell;
+			var row = args.row;
+			//alert("row = "+row);
+			//alert("cell = "+cell);
+			//var id1 = args.item["10"];
+			var cols = grid.getColumns();
+//alert("id1 = "+id1);
+			/* for(var i in args)
+			{
+			    var id = data[i].id;
+			    var name = data[i].name;
+			} */
+			//alert("data[row][10] = "+data[row-1][10]);
+			var result=false;
+			for(var i=month;i<12;i++){
+				if((cols[cell].name == monthArray[i].m0) && (args.item["11"]=="Planned")){
+					result = true;
+					break;
+				}
+			else{
+			   result = false;
+			}
+			}
+			if(result){
+				return true;
+			}else{
+				return false;
+			}
+			
+			/* if((cols[cell].name == monthArray[9].m0 || cols[cell].name== monthArray[10].m0 || cols[cell].name== monthArray[11].m0) && (args.item["10"]=="Planned")){
+					return true;
+				}
+			else{
+			   return false;
+			} */
+		}); 
+		
 		// wire up model events to drive the grid
 		dataView.onRowCountChanged.subscribe(function(e, args) {
 			grid.updateRowCount();
