@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,45 +32,23 @@ public class GetReport extends HttpServlet {
 	}
 
 	public List<GtfReport> getReport() {
-				PersistenceManager pm = PMF.get().getPersistenceManager();
-				//Query q = pm.newQuery(GtfReport.class);
-				List<GtfReport> results = new ArrayList<GtfReport>();
-				Extent<GtfReport> extent = pm.getExtent(GtfReport.class, false);
-				for (GtfReport p : extent) {
-					results.add(p);
-					//System.out.println("results = "+p.getBrand());				
-				}
-				extent.closeAll();
-				return results;
-				}
-		/*List<GtfReport> gtfList = new ArrayList<GtfReport>();
-		Iterable<Entity> gtfReports = Util.listEntities("GtfReport", null, null);
-		
-		for(Entity gtfReportEntity : gtfReports){
-			GtfReport gtfReport = new GtfReport();
-			List<Object> d = new ArrayList<>();
-			d=(List<Object>) gtfReportEntity.getProperty("forecastMap");
-			
-			System.out.println("d is"+d);
-			Map<String, Double> forecastMap = new LinkedHashMap<>();
-			for(int i=0; i< d.size(); i++){
-				forecastMap.put((String) d.get(i), Double.parseDouble(d.get(++i).toString()));
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(GtfReport.class);
+		q.setOrdering("flag asc");
+		List<GtfReport> gtfList = new ArrayList<GtfReport>();
+		try{
+			List<GtfReport> results = (List<GtfReport>) q.execute();
+			if(!results.isEmpty()){
+			for(GtfReport p : results){
+				gtfList.add(p);
 			}
-			gtfReport.setForecastMap(forecastMap);
-			gtfReport.setgMemoryId((int)gtfReportEntity.getProperty("gMemoryId"));
-			gtfReport.setPercent_Allocation((int)gtfReportEntity.getProperty("brand"));
-			gtfReport.setPoDesc(gtfReportEntity.getProperty("poDesc").toString());
-			gtfReport.setPoNumber(gtfReportEntity.getProperty("poNumber").toString());
-			gtfReport.setProject_WBS(gtfReportEntity.getProperty("project_WBS").toString());
-			gtfReport.setRequestor(gtfReportEntity.getProperty("requestor").toString());
-			gtfReport.setSubActivity(gtfReportEntity.getProperty("subActivity").toString());
-			gtfReport.setVendor(gtfReportEntity.getProperty("vendor").toString());
-			gtfReport.setWBS_Name(gtfReportEntity.getProperty("WBS_Name").toString());
-			
-			gtfList.add(gtfReport);
-			
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
 		}
-		System.out.println(gtfList);
-	}*/
+		return gtfList;
+	}
 
 }
