@@ -18,6 +18,28 @@ public class GtfReport implements Serializable {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
 	private String gMemoryId;
+	
+	@Persistent
+	private int flag;
+	
+	@Persistent
+	private String remarks;
+	
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
 
 	@Persistent
 	private String requestor;
