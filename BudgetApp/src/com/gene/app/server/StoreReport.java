@@ -34,7 +34,18 @@ public class StoreReport extends HttpServlet {
 				}
 				System.out.println("rprtObject : " + rprtObject);
 				gtfReport.setProjectName(rprtObject.getString("1"));
-				gtfReport.setStatus(rprtObject.getString("2"));
+				String status = rprtObject.getString("2");
+				int flag = 0;
+				if("New".equalsIgnoreCase(status.trim())){
+					flag = 1;
+				}else if("Active".equalsIgnoreCase(status.trim())){
+					flag = 2;
+				}else{
+					flag = 3;
+				}
+				gtfReport.setFlag(flag);
+				gtfReport.setStatus(status);
+				//gtfReport.setStatus(rprtObject.getString("2"));
 				gtfReport.setRequestor(rprtObject.getString("3"));
 				gtfReport.setProject_WBS(rprtObject.getString("4"));
 				gtfReport.setWBS_Name(rprtObject.getString("5"));
@@ -49,6 +60,8 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setPoNumber(rprtObject.getString("9"));
 				gtfReport.setPoDesc(rprtObject.getString("10"));
 				gtfReport.setVendor(rprtObject.getString("11"));
+				String remarks = ((rprtObject.getString("25")!=null) && (!"".equalsIgnoreCase(rprtObject.getString("25").trim())))?(rprtObject.getString("25")):"";
+				gtfReport.setRemarks(remarks);
 				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
 				Map<String, Double> setZeroMap = new HashMap<String, Double>();
 				for (int cnt = 12; cnt <= 23; cnt++) {
