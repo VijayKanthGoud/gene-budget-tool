@@ -247,15 +247,23 @@ function sumTotalsFormatter(totals, columnDef) {
 	  return "";
 	}
 	
-function groupByProjectWBS() {
+function groupByStatus() {
 	  dataView.setGrouping({
 	  getter: 26,
 	    formatter: function (g) {
-	    	return " "+ g.value +" "  ;
+		    if(g.value !="Total"){
+	    	return " "+ g.value +"  <span style='color:green'>(" + (g.count/4) + " items)</span>"  ;
+		    }else{
+		    	return " "+ g.value +" ";
+			}
 	    },
 	    aggregateCollapsed: false,
 	    lazyTotalsCalculation: true
 	  });
+	  dataView.collapseGroup("Active");
+	  dataView.collapseGroup("Closed");
+	  
+	  
 	}
 var availableTags = [ "Rituxan Heme/Onc",
                       "Kadcyla",
@@ -376,6 +384,7 @@ $(function () {
     		gtfReports.get(i).getPlannedMap().get("OCT") + 
     		gtfReports.get(i).getPlannedMap().get("NOV") + 
     		gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    		 d[25]="";<%-- "<%=gtfReports.get(i).getRemarks()%>"; --%>
     d[26]="<%=gtfReports.get(i).getStatus()%>";
 
   <%} else{%>  
@@ -413,6 +422,7 @@ $(function () {
 	    		gtfReports.get(i).getBenchmarkMap().get("OCT") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("NOV") + 
 	    		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+	    		 d[25]="";
 	    d[26]="<%=gtfReports.get(i).getStatus()%>";
 	  
 	    <%} if(idCounter%4 == 2){%>
@@ -441,6 +451,7 @@ $(function () {
 	    		gtfReports.get(i).getAccrualsMap().get("OCT") + 
 	    		gtfReports.get(i).getAccrualsMap().get("NOV") + 
 	    		gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+	    		 d[25]="";
 	    d[26]="<%=gtfReports.get(i).getStatus()%>";
 	    
 	    <%} if(idCounter%4 == 3){%>
@@ -469,6 +480,7 @@ $(function () {
 	    		gtfReports.get(i).getVariancesMap().get("OCT") + 
 	    		gtfReports.get(i).getVariancesMap().get("NOV") + 
 	    		gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+	    		 d[25]="";
 	    d[26]="<%=gtfReports.get(i).getStatus()%>";
 	    <%}%>
     
@@ -515,7 +527,7 @@ $(function () {
 		dataView.setItems(data);
 		dataView.setFilter(myFilter);
 		dataView.endUpdate();
-		groupByProjectWBS();
+		groupByStatus();
 		// initialize the grid
 		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
 		//register the group item metadata provider to add expand/collapse group handlers
@@ -603,13 +615,14 @@ $(function () {
 			var newYear = <%= year+1%>;
 			var quarter = <%= qtr%>;
 			var month = <%= month%>;
-			
+			//alert("val = "+JSON.stringify(args, null, 4));
 			var monthArray =  [{"m0":"JAN"},{"m0":"FEB"},{"m0":"MAR"},{"m0":"APR"} ,{"m0":"MAY"} ,{"m0":"JUN"} ,{"m0":"JUL"} ,{"m0":"AUG"} ,{"m0":"SEP"},{"m0":"OCT"},{"m0":"NOV"},{"m0":"DEC"}];
 			
 			var cell = args.cell;
 			var row = args.row;
 			var cols = grid.getColumns();
 			var result=false;
+			var result1=false;
 			for(var i=month;i<12;i++){
 				if((cols[cell].name == monthArray[i].m0) && (args.item["11"]=="Planned")){
 					result = true;
@@ -619,12 +632,16 @@ $(function () {
 			   result = false;
 			}
 			}
-			if(result){
+			if((args.item["11"]=="Planned") && (cols[cell].name=="Remark")){
+				result1 = true;
+			}else{
+				result1 = false;
+			}
+			if(result || result1){
 				return true;
 			}else{
 				return false;
 			}
-			
 		}); 
 		
 		// wire up model events to drive the grid
@@ -683,16 +700,10 @@ $(function () {
 		chkBox.change(function(e) {
 			Slick.GlobalEditorLock.cancelCurrentEdit();
 		    if(this.checked){
-		    	grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
-				//register the group item metadata provider to add expand/collapse group handlers
-				grid.registerPlugin(groupItemMetadataProvider);
-				grid.setSelectionModel(new Slick.CellSelectionModel());
+		    	grid.setColumns(hidecolumns);
 
 		    }else{
-		    	grid = new Slick.Grid("#displayGrid", dataView, columns, options);
-				//register the group item metadata provider to add expand/collapse group handlers
-				grid.registerPlugin(groupItemMetadataProvider);
-				grid.setSelectionModel(new Slick.CellSelectionModel());
+		    	grid.setColumns(columns);
 
 		    }
 		
