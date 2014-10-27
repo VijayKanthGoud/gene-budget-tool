@@ -26,13 +26,12 @@ classes should alter those!
   text-overflow: ellipsis;
   height: 30px;
   line-height: 30px;
+  padding-left: 10px;
   margin: 0;
-  padding: 4px;
   border-right: 1px solid silver;
   border-left: 0px;
   border-top: 0px;
   border-bottom: 0px;
-  float: left;
   background-color: #e3e8f3 !important;
 }
 

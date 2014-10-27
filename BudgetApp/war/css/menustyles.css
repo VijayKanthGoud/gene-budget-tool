@@ -1,13 +1,11 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
 #cssmenu {
   background: #005691;
   margin: 0;
-  width: auto;
   padding: 0;
-  line-height: 1;
   display: block;
   position: relative;
-  font-family: 'PT Sans', sans-serif;
+  font-family: 'trebuchet ms';
+  font-weight: bolder;
 }
 #cssmenu ul {
   list-style: none;
@@ -361,4 +359,3 @@
     right: 20px;
     top: 26px;
   }
-}

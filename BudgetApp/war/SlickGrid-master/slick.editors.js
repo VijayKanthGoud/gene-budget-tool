@@ -503,7 +503,7 @@
       $input.bind("keydown", this.handleKeyDown);
 
       scope.position(args.position);
-      $input.focus().select();
+     // $input.focus().select();
     };
 
     this.handleKeyDown = function (e) {
@@ -554,7 +554,7 @@
 
     this.loadValue = function (item) {
       $input.val(defaultValue = item[args.column.field]);
-      $input.select();
+     // $input.select();
     };
 
     this.serializeValue = function () {
@@ -584,7 +584,7 @@
 	      var scope = this;
 	  
 	      this.init = function () {
-	        $input = $("<INPUT type=text class='editor-text' />");
+	        $input = $("<INPUT type=text class='editor-text' size='11' maxlength='11'/>");
 	  
 	        $input.bind("keydown.nav", function (e) {
 	          if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {

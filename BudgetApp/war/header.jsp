@@ -9,7 +9,7 @@
 <title>Budget App</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/menustyles.css">
-<script src="http://code.jquery.com/jquery-latest.min.js"
+<script src="SlickGrid-master/lib/jquery-1.7.min.js"
 	type="text/javascript"></script>
 <script src="scripts/menuscript.js"></script>
 </head>
