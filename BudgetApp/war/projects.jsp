@@ -81,32 +81,35 @@ int qtr = month/3;
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
 						style="color: #005691; white-space: nowrap;">
-
+						<%
+						BudgetSummary summary = (BudgetSummary)request.getAttribute("summary");
+						
+						%>
 						<tr>
 							<td style="padding-left:20px;">2017</td>
 							<td>Total budget:</td>
 							<td>$<input style="color: #005691" type=text name=type
-								maxlength="8" size="8" value=60000></td>
+								maxlength="8" size="8" value="<%= summary.getTotalBudget() %>"></td>
 						</tr>
 						<tr>
 							<td style="padding-left:20px;">2017</td>
 							<td>Budget left to spend:</td>
-							<td>$50000</td>
+							<td>$<%= summary.getBudgetLeftToSpend() %></td>
 						</tr>
 						<tr>
 							<td style="padding-left:20px;">2017</td>
 							<td>Benchmark Total:</td>
-							<td>$2032</td>
+							<td>$<%= summary.getBenchmarkTotal() %></td>
 						</tr>
 						<tr>
 							<td style="padding-left:20px;">2017</td>
 							<td>Planned Total:</td>
-							<td>$2000</td>
+							<td>$<%= summary.getPlannedTotal() %></td>
 						</tr>
 						<tr style="color: red;">
 							<td style="padding-left:20px;">2017</td>
 							<td>Variance Total:</td>
-							<td>$32</td>
+							<td>$<%= summary.getVarianceTotal() %></td>
 						</tr>
 					</table>
 				</td>
