@@ -60,7 +60,12 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setPoNumber(rprtObject.getString("9"));
 				gtfReport.setPoDesc(rprtObject.getString("10"));
 				gtfReport.setVendor(rprtObject.getString("11"));
-				String remarks = ((rprtObject.getString("25")!=null) && (!"".equalsIgnoreCase(rprtObject.getString("25").trim())))?(rprtObject.getString("25")):"";
+				String remarks = null;
+				try{
+					remarks = ((rprtObject.getString("25")!=null) && (!"".equalsIgnoreCase(rprtObject.getString("25").trim())))?(rprtObject.getString("25")):"";
+				}catch(com.google.appengine.labs.repackaged.org.json.JSONException exception){
+					remarks = "";
+				}
 				gtfReport.setRemarks(remarks);
 				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
 				Map<String, Double> setZeroMap = new HashMap<String, Double>();
