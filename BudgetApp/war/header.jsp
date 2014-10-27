@@ -23,6 +23,8 @@
 		String requestUri = request.getRequestURI();
 		Principal userPrincipal = request.getUserPrincipal();
 		String loginLink = userService.createLoginURL(requestUri);
+		String email = userService.getCurrentUser().getEmail();
+		request.setAttribute("email", email);
 		Boolean isAdmin = false;
 		String userName = "";
 		String logoutLink = "";
