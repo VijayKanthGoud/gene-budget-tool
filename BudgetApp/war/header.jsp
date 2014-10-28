@@ -4,6 +4,7 @@
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="java.util.logging.*"%>
 <%@ page import="com.google.appengine.api.memcache.*"%>
+<%@ page import="com.gene.app.util.*" %>
 
 <head>
 <title>Budget App</title>
@@ -28,17 +29,21 @@
 		Boolean isAdmin = false;
 		String userName = "";
 		String logoutLink = "";
-
+		DBUtil util = new DBUtil();
 		if (userPrincipal != null) {
 			logoutLink = userService.createLogoutURL(requestUri);
 			User user = userService.getCurrentUser();
 			isAdmin = userService.isUserAdmin();
+			boolean isGeneUser = util.readUserRoleInfo(email);
 			//Set username message
-			if (isAdmin) {
+			if (isAdmin && isGeneUser) {
 				userName = "Welcome, " + user.getNickname() + "(Admin) !";
-			} else {
+			} else if(!isAdmin && isGeneUser) {
 				userName = "Welcome, " + user.getNickname() + "!";
-			}
+			} else{%>
+				alert("You are not authorised to access the application !!");
+			<%	response.sendRedirect(userService.createLogoutURL(requestUri));
+			} 
 	%>
 
 	<table style="width: 100%;">
