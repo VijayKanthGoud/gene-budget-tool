@@ -115,17 +115,17 @@ public class DBUtil {
 		}
 		BudgetSummary summary = new BudgetSummary();
 		double variancePercentage = 0.0;
-		if(summaryFromDB == null){
+		/*if(summaryFromDB == null){
 			summary.setTotalBudget(60000.0);
 			summary.setProjectOwnerEmail(email);
-		}else{
+		}else{*/
 		summary.setTotalBudget(summaryFromDB.getTotalBudget());
 		summary.setProjectOwnerEmail(summaryFromDB.getProjectOwnerEmail());
-		}
+		//}
 		summary.setPlannedTotal(plannedTotal);
 		summary.setBenchmarkTotal(benchMarkTotal);
 		summary.setVarianceTotal(varianceTotal);
-		summary.setBudgetLeftToSpend(60000-accrualsTotal);
+		summary.setBudgetLeftToSpend(summaryFromDB.getTotalBudget()-accrualsTotal);
 		if(benchMarkTotal == 0){
 			benchMarkTotal = 1;
 			variancePercentage = 0;
