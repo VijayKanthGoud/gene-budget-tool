@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.GtfReport;
 import com.gene.app.util.DBUtil;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class GetReport extends HttpServlet {
@@ -27,7 +29,9 @@ public class GetReport extends HttpServlet {
 		gtfReports = calculateVarianceMap(gtfReports);
 		req.setAttribute("gtfreports", gtfReports);
 		DBUtil util = new DBUtil();
-		String email = (String)req.getAttribute("email");
+		UserService user = UserServiceFactory.getUserService();
+		String email = user.getCurrentUser().getEmail();
+		//String email = (String)req.getAttribute("email");
 		BudgetSummary summary = util.readBudgetSummary(email,gtfReports);
 		
 		req.setAttribute("summary", summary);
