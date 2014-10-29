@@ -1,7 +1,12 @@
 @CHARSET "ISO-8859-1";
 
-.slick-cell,.ui-menu-item {
-	font-size: 14px;
+body{
+	font-size: 11px !important;
+	font: Arial !important;
+}
+
+.ui-menu-item {
+	font-size: 13px;
 }
 
 #footer {

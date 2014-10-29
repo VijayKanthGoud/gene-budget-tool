@@ -34,7 +34,7 @@
 			logoutLink = userService.createLogoutURL(requestUri);
 			User user = userService.getCurrentUser();
 			isAdmin = userService.isUserAdmin();
-			boolean isGeneUser = util.readUserRoleInfo(email);
+			boolean isGeneUser = true;/* util.readUserRoleInfo(email); */
 			//Set username message
 			if (isAdmin && isGeneUser) {
 				userName = "Welcome, " + user.getNickname() + "(Admin) !";

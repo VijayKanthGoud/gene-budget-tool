@@ -584,7 +584,7 @@
 	      var scope = this;
 	  
 	      this.init = function () {
-	        $input = $("<INPUT type=text class='editor-text' size='11' maxlength='11'/>");
+	        $input = $("<INPUT type=text class='editor-text' size='6' maxlength='7'/>");
 	  
 	        $input.bind("keydown.nav", function (e) {
 	          if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {

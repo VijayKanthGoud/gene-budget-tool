@@ -19,7 +19,7 @@ classes should alter those!
  /*  background: white url('images/header-columns-over-bg.gif') repeat-x center bottom; */
 }
 .slick-column-name{
-	 background: #e3e8f3;
+	 /* background: #e3e8f3; */
 }
 .slick-headerrow {
   background: #e3e8f3;

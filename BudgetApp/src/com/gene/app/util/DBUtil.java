@@ -122,15 +122,15 @@ public class DBUtil {
 		summary.setTotalBudget(summaryFromDB.getTotalBudget());
 		summary.setProjectOwnerEmail(summaryFromDB.getProjectOwnerEmail());
 		//}
-		summary.setPlannedTotal(plannedTotal);
-		summary.setBenchmarkTotal(benchMarkTotal);
-		summary.setVarianceTotal(varianceTotal);
-		summary.setBudgetLeftToSpend(summaryFromDB.getTotalBudget()-accrualsTotal);
+		summary.setPlannedTotal(plannedTotal * 1000);
+		summary.setBenchmarkTotal(benchMarkTotal * 1000);
+		summary.setVarianceTotal(varianceTotal * 1000);
+		summary.setBudgetLeftToSpend(summaryFromDB.getTotalBudget()-accrualsTotal *1000);
 		if(benchMarkTotal == 0){
 			benchMarkTotal = 1;
 			variancePercentage = 0;
 		}else{
-			variancePercentage = (benchMarkTotal-accrualsTotal)/benchMarkTotal;
+			variancePercentage = ((benchMarkTotal-accrualsTotal)/benchMarkTotal) * 100;
 		}
 		summary.setPercentageVarianceTotal(variancePercentage);
 		return summary;

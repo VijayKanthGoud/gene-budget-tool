@@ -138,7 +138,7 @@
 		includeHeaderWhenCopying : false
 	};
 
-	var columnNames = [ "Unique Identifier", "Project Name", "Status", "Requestor", "Project WBS",
+	var columnNames = [ "Unique Identifier", "Project Name", "Status", "Project Owner", "Project WBS",
 			"WBS Name", "SubActivity", "Brand", "Allocation %", "PO Number",
 			"PO Desc", "Vendor", "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 			"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "Total" ];
@@ -149,6 +149,12 @@
 		field : 0,
 		width : 120,
 		editor : Slick.Editors.Text
+	}, {
+		id : 3,
+		name : columnNames[3],
+		field : 3,
+		width : 120,
+		editor : Slick.Editors.Auto
 	}, {
 		id : 1,
 		name : columnNames[1],
@@ -161,12 +167,6 @@
 		field : 2,
 		width : 120,
 		editor : Slick.Editors.Text
-	}, {
-		id : 3,
-		name : columnNames[3],
-		field : 3,
-		width : 120,
-		editor : Slick.Editors.Auto
 	}, {
 		id : 4,
 		name : columnNames[4],
