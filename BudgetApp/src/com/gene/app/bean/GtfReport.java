@@ -17,6 +17,9 @@ public class GtfReport implements Serializable {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String Id;
+	
+	@Persistent
 	private String gMemoryId;
 	
 	@Persistent
@@ -25,22 +28,6 @@ public class GtfReport implements Serializable {
 	@Persistent
 	private String remarks;
 	
-	public String getRemarks() {
-		return remarks;
-	}
-
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-
-	public int getFlag() {
-		return flag;
-	}
-
-	public void setFlag(int flag) {
-		this.flag = flag;
-	}
-
 	@Persistent
 	private String requestor;
 	
@@ -73,14 +60,6 @@ public class GtfReport implements Serializable {
 	
 	@Persistent
 	private String status;
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
 
 	@Persistent
 	private Map<String, Double> benchmarkMap;
@@ -215,5 +194,37 @@ public class GtfReport implements Serializable {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	public String getId() {
+		return Id;
+	}
+
+	public void setId(String id) {
+		Id = id;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
 	}
 }

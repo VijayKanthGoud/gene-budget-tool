@@ -58,7 +58,9 @@ public class StoreReport extends HttpServlet {
 					gtfReport.setPercent_Allocation(0);
 				}
 				gtfReport.setPoNumber(rprtObject.getString("9"));
-				gtfReport.setPoDesc(rprtObject.getString("10"));
+				String poDesc = rprtObject.getString("10");
+				gtfReport.setgMemoryId(poDesc.substring(0, 6));
+				gtfReport.setPoDesc(poDesc.substring(7, poDesc.length()));
 				gtfReport.setVendor(rprtObject.getString("11"));
 				String remarks = null;
 				try{

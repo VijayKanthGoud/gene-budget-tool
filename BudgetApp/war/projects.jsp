@@ -58,15 +58,22 @@ int qtr = month/3;
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable"
 						style="color: #005691; white-space: nowrap; height: 117px; width: 220px;">
-						<th>Display controls:</th>
 						<tr>
-							<td style="padding-left:20px;"><input type="radio" name="selectedmode"		
-						value="planned">Planned &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"		
-						name="selectedmode" value="All" checked="checked">All</td>
+							<td style="padding-left: 20px;"><input type="radio"
+								name="selectedmode" value="planned">Planned <input
+								type="radio" name="selectedmode" value="All" checked="checked">All</td>
 						</tr>
 						<tr>
-							<td style="padding-left:20px;"><input type="checkbox" id="hideColumns" name="hideColumns" value="hide"
-								checked>Hide Columns</td>
+							<td style="padding-left: 20px;"><input type="checkbox"
+								id="hideColumns" name="hideColumns" value="hide" checked>Hide
+								Columns</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 24px;">Search: &nbsp; &nbsp;<input type=text id="txtSearch"
+								style="width: 120px;">
+
+							</td>
+
 						</tr>
 					</table>
 				</td>
@@ -78,7 +85,7 @@ int qtr = month/3;
 					</center>
 
 				</td>
-
+				
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
 						style="color: #005691; white-space: nowrap;">
@@ -119,12 +126,7 @@ int qtr = month/3;
 				</td>
 			</tr>
 			<tr style="">
-				<td>
-					<center>
-						Search String: <input type=text id="txtSearch"
-							style="width: 120px;">
-					</center>
-				</td>
+				
 			</tr>
 		</table>
 	</div>
@@ -167,7 +169,7 @@ var data = [];
 var radioString="All";
 var totalSize=0;
 var numHideColumns=6;
-var columnNames = [ "Unique Identifier", 
+var columnNames = [ "gMemoriId", 
                     "Project Owner", 
                     "Project Name",
                     "Project WBS",
@@ -183,7 +185,7 @@ var columnNames = [ "Unique Identifier",
 					"AUG", "SEP", "OCT", "NOV", "DEC", "Total" ,"Remark"];
 
 var columns = [
-            	{   id : 30,name : "Status",field : 0,width : 120,	editor : Slick.Editors.Text },
+            	{   id : 30,name : "Status",field : 30,width : 120,	editor : Slick.Editors.Text },
             	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
             	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
             	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
@@ -212,7 +214,7 @@ var columns = [
 
 
 var hidecolumns = [
-            	{   id : 30,name : "Status",field : 0,width : 120,	editor : Slick.Editors.Text },
+            	{   id : 30,name : "Status",field : 30,width : 120,	editor : Slick.Editors.Text },
             	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
             	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
             	 {	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
@@ -249,11 +251,11 @@ function groupByStatus() {
 	getter: 26,
   	formatter: function (g) {
    	if(g.value !="Total"){ 
-   		if(radioString == 'Planned' || searchString != ""){
+   	/* 	if(radioString == 'Planned' || searchString != ""){
     		return " "+ g.value +"  <span style='color:green'>(" + (g.count) + " items)</span>"  ;
-   		}else{
+   		}else{ */
    			return " "+ g.value +"  <span style='color:green'>(" + (g.count)/4 + " items)</span>"  ; 
-   		}
+   	/* 	} */
    	
    	}else{
     		return "<span style='color:green'> "+ g.value +"</span> ";
@@ -285,9 +287,13 @@ var options = {
 
 
 function myFilter(item) {
-  if (((searchString != "" && item[6].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
- (searchString != "" && item[2].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
- (searchString != "" && item[25].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )|| 
+	/* alert(searchString);
+	alert(JSON.stringify(item)); */
+	
+  if (((searchString != "" && item[27].toLowerCase().indexOf(searchString.toLowerCase()) == -1)   &&
+ (searchString != "" && item[28].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+ (searchString != "" && item[29].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
+ (searchString != "" && item[30].toLowerCase().indexOf(searchString.toLowerCase()) == -1) && item[26]!="Total")|| 
  (radioString!= "All" && item[11].toLowerCase().indexOf(radioString.toLowerCase())==-1) ) {
     return false;
   }
@@ -295,9 +301,10 @@ function myFilter(item) {
   if (item.parent != null) {
     var parent = data[item.parent];
     while (parent) {
-      if (parent._collapsed ||( (searchString != "" && parent[6].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
-     (searchString != "" && parent[2].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
-     (searchString != "" && parent[25].toLowerCase().indexOf(searchString.toLowerCase()) == -1) )||
+      if (parent._collapsed ||( (searchString != "" && parent[27].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
+     (searchString != "" && parent[28].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
+     (searchString != "" && parent[29].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
+     (searchString != "" && parent[30].toLowerCase().indexOf(searchString.toLowerCase()) == -1) && (parent[26]!="Total"))||
            (radioString!= "All" && item[11].toLowerCase().indexOf(radioString.toLowerCase())==-1)) {
         return false;
       }
@@ -321,16 +328,26 @@ $(function () {
     <%int idCounter = -1;
     for (int i = 0; i < gtfReports.size(); i++) {
     boolean isFirst = true;
-    for (int count = 0; count < 4; count++) {
-    if(isFirst){
+    for (int count = 0; count < 4; count++) {%>
+    	   var d = (data["<%=++idCounter%>"] = {});
+    	   var parent;
+    	   d["id"] = "id_" + "<%=idCounter%>";
+    	    d["indent"] = indent;
+    	    d["parent"] = parent;
+    	 
+        d[25]=" ";/*<%-- "<%=gtfReports.get(i).getRemarks()%>"; --%>*/
+        d[26]="<%=gtfReports.get(i).getStatus()%>";
+        d[27]="<%=gtfReports.get(i).getgMemoryId()%>";
+        d[28]="<%=gtfReports.get(i).getBrand()%>";
+        d[29]="<%=gtfReports.get(i).getProjectName()%>";
+        d[30]=" ";	
+        d[31]="<%=gtfReports.get(i).getId()%>";
+        <%if(isFirst){
     isFirst = false;%>
   
     // start looping for four different maps
-    var d = (data["<%=++idCounter%>"] = {});
-    var parent;
-    d["id"] = "id_" + "<%=idCounter%>";
-    d["indent"] = indent;
-    d["parent"] = parent;
+    
+    d[0]="<%=gtfReports.get(i).getgMemoryId()%>";
     d[1]="<%=gtfReports.get(i).getRequestor()%>";
     d[2]="<%=gtfReports.get(i).getProjectName()%>";
     d[3]="<%=gtfReports.get(i).getProject_WBS()%>";
@@ -342,19 +359,19 @@ $(function () {
     d[9]="<%=gtfReports.get(i).getPoDesc()%>";
     d[10]="<%=gtfReports.get(i).getVendor()%>";
     d[11]="Planned";
-    d[12]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
-    d[13]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
-    d[14]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
-    d[15]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
-    d[16]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
-    d[17]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
-    d[18]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
-    d[19]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
-    d[20]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
-    d[21]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
-    d[22]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
-    d[23]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
-    d[24]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
+    d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
+    d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
+    d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
+    d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
+    d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
+    d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
+    d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
+    d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
+    d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
+    d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
+    d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
+    d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
     gtfReports.get(i).getPlannedMap().get("FEB") + 
     gtfReports.get(i).getPlannedMap().get("MAR") + 
     gtfReports.get(i).getPlannedMap().get("APR") + 
@@ -366,33 +383,28 @@ $(function () {
     gtfReports.get(i).getPlannedMap().get("OCT") + 
     gtfReports.get(i).getPlannedMap().get("NOV") + 
     gtfReports.get(i).getPlannedMap().get("DEC"))%>";
-    d[25]="";<%-- "<%=gtfReports.get(i).getRemarks()%>"; --%>
-    d[26]="<%=gtfReports.get(i).getStatus()%>";
+
 
   <%} else{%>  
-   var d = (data["<%=++idCounter%>"] = {});
-   var parent;
-   d["id"] = "id_" + "<%=idCounter%>";
-   d["indent"] = indent;
-   d["parent"] = parent;
-   d[1]=""; d[2]=""; d[3]=""; d[4]=""; 
-   d[5]=""; d[6]="";  d[7]=""; d[8]=""; d[9]="";d[10]="";
-   
+
+  for(var cnt=1;cnt<11;cnt++){
+   d[cnt]=" "; 
+  }
    <%if(idCounter%4 == 1){%>
    d[11]="Benchmark";
-   d[12]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
-   d[13]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
-   d[14]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
-   d[15]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
-   d[16]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
-   d[17]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
-   d[18]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
-   d[19]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
-   d[20]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
-   d[21]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
-   d[22]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
-   d[23]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
-   d[24]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
+   d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
+   d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
+   d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
+   d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
+   d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
+   d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
+   d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
+   d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
+   d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
+   d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
+   d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
+   d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+   d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
     gtfReports.get(i).getBenchmarkMap().get("FEB") + 
     gtfReports.get(i).getBenchmarkMap().get("MAR") + 
     gtfReports.get(i).getBenchmarkMap().get("APR") + 
@@ -404,24 +416,22 @@ $(function () {
     gtfReports.get(i).getBenchmarkMap().get("OCT") + 
     gtfReports.get(i).getBenchmarkMap().get("NOV") + 
     gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
-    d[25]="";
-   d[26]="<%=gtfReports.get(i).getStatus()%>";
  
    <%} if(idCounter%4 == 2){%>
    d[11]="Accruals";
-   d[12]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
-   d[13]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
-   d[14]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
-   d[15]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
-   d[16]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
-   d[17]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
-   d[18]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
-   d[19]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
-   d[20]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
-   d[21]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
-   d[22]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
-   d[23]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
-   d[24]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
+   d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
+   d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
+   d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
+   d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
+   d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
+   d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
+   d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
+   d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
+   d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
+   d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
+   d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
+   d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+   d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
     gtfReports.get(i).getAccrualsMap().get("FEB") + 
     gtfReports.get(i).getAccrualsMap().get("MAR") + 
     gtfReports.get(i).getAccrualsMap().get("APR") + 
@@ -433,24 +443,22 @@ $(function () {
     gtfReports.get(i).getAccrualsMap().get("OCT") + 
     gtfReports.get(i).getAccrualsMap().get("NOV") + 
     gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
-    d[25]="";
-   d[26]="<%=gtfReports.get(i).getStatus()%>";
    
    <%} if(idCounter%4 == 3){%>
    d[11]="Variances";
-   d[12]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
-   d[13]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
-   d[14]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
-   d[15]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
-   d[16]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
-   d[17]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
-   d[18]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
-   d[19]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
-   d[20]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
-   d[21]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
-   d[22]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
-   d[23]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
-   d[24]="<%=new DecimalFormat("#.#").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
+   d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
+   d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
+   d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
+   d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
+   d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
+   d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
+   d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
+   d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
+   d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
+   d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
+   d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
+   d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+   d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
     gtfReports.get(i).getVariancesMap().get("FEB") + 
     gtfReports.get(i).getVariancesMap().get("MAR") + 
     gtfReports.get(i).getVariancesMap().get("APR") + 
@@ -462,26 +470,36 @@ $(function () {
     gtfReports.get(i).getVariancesMap().get("OCT") + 
     gtfReports.get(i).getVariancesMap().get("NOV") + 
     gtfReports.get(i).getVariancesMap().get("DEC"))%>";
-    d[25]="";
-   d[26]="<%=gtfReports.get(i).getStatus()%>";
    <%}%>
     
     <%}
     }
   }%>
   totalSize="<%=gtfReports.size()%>" * 4;
-  var d = (data[totalSize] = {});
-  d["id"] = "id_" + totalSize;
+  for(var cntTotal=0;cntTotal<4;cntTotal++){
+	var rowNum=cntTotal+  totalSize;
+  var d = (data[rowNum] = {});
+  d["id"] = "id_" + rowNum;
   d["indent"] = indent;
   d["parent"] = parent;
   for (var j = 0; j < 11; j++) {
   	d[j] = "";
   }
-  d[11] = "Planned";
+  
   for (var j = 12; j < 25; j++) {
   	d[j] = 0.0;
   }
-  for (var j = 0; j < totalSize; j=j+4) {
+  var trowNum =rowNum%4;
+  if(trowNum ==0){
+	  d[11] = "Planned"; 
+  }else if(trowNum==1){
+	  d[11] = "Benchmark";
+  }else if(trowNum==2){
+	  d[11] = "Accurals";
+  }else {
+	  d[11] = "Variance";
+  }
+  for (var j = trowNum; j < totalSize; j=j+4) {
 	d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 	d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
 	d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
@@ -498,9 +516,16 @@ $(function () {
   }
   
   for (var j = 12; j < 25; j++) {
-	d[j] = d[j].toFixed(3);
+	d[j] = d[j].toFixed(2);
   }
   d[26] = "Total";
+  d[27]=" ";
+  d[28]=" ";
+  d[29]=" ";
+  d[30]=" ";
+  d[31]=" ";
+ 
+}
   
   for (var j = 0; j < totalSize; ) {
 		var plannedAmt = data[j++]["24"];
@@ -515,9 +540,9 @@ $(function () {
 		}
 		data[j-4]["25"] = percentage + "%";
 	  }
-  for (var j = totalSize-4; j <= totalSize; j++) {
+for (var j = totalSize-4; j <= totalSize; j++) {
 		
-		data[j]["25"] = "";
+		data[j]["25"] = " ";
 	  }
   // initialize the model
 	dataView = new Slick.Data.DataView({
@@ -548,6 +573,11 @@ $(function () {
 		if ($('#hideColumns').is(":checked")){
 			delCell= cell+numHideColumns;
 		}
+		/* alert(JSON.stringify(data[row]));
+		if(data[row-1][delCell]>999999){
+			alert(data[row-1][delCell].tofixed(2));
+			data[row-1][delCell] = parseFloat(data[row-1][delCell]).tofixed(2);
+		} */
 		data[totalSize][delCell] = 0.0;
 		for (var j = 0; j < totalSize; j=j+4) {
 			data[totalSize][delCell] = parseFloat(data[totalSize][delCell])
@@ -578,6 +608,7 @@ $(function () {
 	dataView.updateItem(args.item.id, args.item);
 		  }
 
+	
 grid.onClick.subscribe(function(e, args) {
 if ($(e.target).hasClass("toggle")) {
 	var item = dataView.getItem(args.row);

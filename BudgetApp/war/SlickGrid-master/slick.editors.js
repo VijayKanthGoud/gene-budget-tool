@@ -492,7 +492,7 @@
       $wrapper = $("<DIV style='z-index:10000;position:absolute;background:white;padding:5px;border:3px solid gray; -moz-border-radius:10px; border-radius:10px;'/>")
           .appendTo($container);
 
-      $input = $("<TEXTAREA hidefocus rows=5 style='backround:white;width:250px;height:80px;border:0;outline:0'>")
+      $input = $("<TEXTAREA hidefocus rows=5 maxlength=140 style='backround:white;width:250px;height:80px;border:0;outline:0'>")
           .appendTo($wrapper);
 
       $("<DIV style='text-align:right'><BUTTON>Save</BUTTON><BUTTON>Cancel</BUTTON></DIV>")
@@ -584,7 +584,7 @@
 	      var scope = this;
 	  
 	      this.init = function () {
-	        $input = $("<INPUT type=text class='editor-text' size='6' maxlength='7'/>");
+	        $input = $("<INPUT type=text class='editor-text' size='9' maxlength='9'/>");
 	  
 	        $input.bind("keydown.nav", function (e) {
 	          if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {

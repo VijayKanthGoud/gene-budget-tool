@@ -138,7 +138,7 @@
 		includeHeaderWhenCopying : false
 	};
 
-	var columnNames = [ "Unique Identifier", "Project Name", "Status", "Project Owner", "Project WBS",
+	var columnNames = [ "gMemoriId", "Project Name", "Status", "Project Owner", "Project WBS",
 			"WBS Name", "SubActivity", "Brand", "Allocation %", "PO Number",
 			"PO Desc", "Vendor", "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 			"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "Total" ];
