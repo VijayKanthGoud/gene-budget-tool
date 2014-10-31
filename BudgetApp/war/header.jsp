@@ -33,17 +33,16 @@
 		if (userPrincipal != null) {
 			logoutLink = userService.createLogoutURL(requestUri);
 			User user = userService.getCurrentUser();
+			session.setAttribute("loggedInUser",user);
 			isAdmin = userService.isUserAdmin();
-			boolean isGeneUser = true;/* util.readUserRoleInfo(email); */
+			boolean isGeneUser = util.readUserRoleInfo(email);
 			//Set username message
-			if (isAdmin && isGeneUser) {
+		
+			if (isAdmin) {
 				userName = "Welcome, " + user.getNickname() + "(Admin) !";
-			} else if(!isAdmin && isGeneUser) {
+			} else if(!isAdmin) {
 				userName = "Welcome, " + user.getNickname() + "!";
-			} else{%>
-				alert("You are not authorised to access the application !!");
-			<%	response.sendRedirect(userService.createLogoutURL(requestUri));
-			} 
+			}
 	%>
 
 	<table style="width: 100%;">

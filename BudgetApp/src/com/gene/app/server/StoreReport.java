@@ -10,8 +10,10 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.GtfReport;
+import com.google.appengine.api.users.User;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -23,17 +25,22 @@ public class StoreReport extends HttpServlet {
 		resp.setContentType("text/plain");
 		String objarray = req.getParameter("objarray").toString();
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
+		String email = "";
+		HttpSession session = req.getSession();
+		User user = (User)session.getAttribute("loggedInUser");
+		email = user.getEmail();
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
 				GtfReport gtfReport = new GtfReport();
 				JSONObject rprtObject = jsonArray.getJSONObject(count);
-				String projectWBS = rprtObject.getString("2");
+				String projectWBS = rprtObject.getString("4");
 				if(projectWBS == null || projectWBS.isEmpty() || projectWBS.length() == 0){
-					break;
+					continue;
 				}
 				System.out.println("rprtObject : " + rprtObject);
 				gtfReport.setProjectName(rprtObject.getString("1"));
+				gtfReport.setEmail(email);
 				String status = rprtObject.getString("2");
 				int flag = 0;
 				if("New".equalsIgnoreCase(status.trim())){
@@ -59,6 +66,7 @@ public class StoreReport extends HttpServlet {
 				}
 				gtfReport.setPoNumber(rprtObject.getString("9"));
 				String poDesc = rprtObject.getString("10");
+				System.out.println("poDesc"+poDesc);
 				gtfReport.setgMemoryId(poDesc.substring(0, 6));
 				gtfReport.setPoDesc(poDesc.substring(7, poDesc.length()));
 				gtfReport.setVendor(rprtObject.getString("11"));

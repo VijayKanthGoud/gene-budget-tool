@@ -12,6 +12,11 @@ Calendar cal = Calendar.getInstance();
 int year = cal.get(Calendar.YEAR);
 int month = cal.get(Calendar.MONTH);
 int qtr = month/3;
+session = request.getSession();
+String key=(String)session.getAttribute("key");
+if(key==null){
+	key="";
+}
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"
@@ -59,21 +64,13 @@ int qtr = month/3;
 					<table class="summarytable"
 						style="color: #005691; white-space: nowrap; height: 117px; width: 220px;">
 						<tr>
-							<td style="padding-left: 20px;"><input type="radio"
+							<td style="padding-left:20px;"><input type="radio"
 								name="selectedmode" value="planned">Planned <input
 								type="radio" name="selectedmode" value="All" checked="checked">All</td>
 						</tr>
 						<tr>
-							<td style="padding-left: 20px;"><input type="checkbox"
-								id="hideColumns" name="hideColumns" value="hide" checked>Hide
-								Columns</td>
-						</tr>
-						<tr>
-							<td style="padding-left: 24px;">Search: &nbsp; &nbsp;<input type=text id="txtSearch"
-								style="width: 120px;">
-
-							</td>
-
+							<td style="padding-left:20px;"><input type="checkbox" id="hideColumns" name="hideColumns" value="hide"
+								checked>Hide Columns</td>
 						</tr>
 					</table>
 				</td>
@@ -126,7 +123,18 @@ int qtr = month/3;
 				</td>
 			</tr>
 			<tr style="">
-				
+				<td>
+					<!-- <center>
+					<img src="images/search.png" height="25" width="25">
+						Search : <input type=text id="txtSearch"
+							style="width: 120px;">
+					</center> -->
+					<center>
+					<img src="images/search.png" height="25" width="25" align="bottom" style="float:left; padding-left:38%">
+						<input style="float:left;" type=text id="txtSearch"
+							style="width: 120px;">
+					</center>
+				</td>
 			</tr>
 		</table>
 	</div>
@@ -169,7 +177,7 @@ var data = [];
 var radioString="All";
 var totalSize=0;
 var numHideColumns=6;
-var columnNames = [ "gMemoriId", 
+var columnNames = [ "gMemori Id", 
                     "Project Owner", 
                     "Project Name",
                     "Project WBS",
@@ -194,7 +202,7 @@ var columns = [
            		{	id : 5,name : columnNames[5],field : 5,width : 120,	editor : Slick.Editors.Text},
            		{	id : 7,name : columnNames[7],field : 7,width : 120,	editor : Slick.Editors.Text},
            		{	id : 8,name : columnNames[8],field : 8,width : 120,	editor : Slick.Editors.Text},
-           		{	id : 9,name : columnNames[9],field : 9,width : 120,	editor : Slick.Editors.Text},
+           		/* {	id : 9,name : columnNames[9],field : 9,width : 120,	editor : Slick.Editors.Text}, */
            		{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text},
            		{	id : 12,name : columnNames[12],field : 12,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
            		{	id : 13,name : columnNames[13],field : 13,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
@@ -217,10 +225,9 @@ var hidecolumns = [
             	{   id : 30,name : "Status",field : 30,width : 120,	editor : Slick.Editors.Text },
             	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
             	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
-            	 {	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
+            	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
            		{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
-           		{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },
-               
+           		{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },          
                 {	id : 12,name : columnNames[12],field : 12,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
                 {	id : 13,name : columnNames[13],field : 13,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
                 {	id : 14,name : columnNames[14],field : 14,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
@@ -284,11 +291,7 @@ var options = {
 };
 
 
-
-
 function myFilter(item) {
-	/* alert(searchString);
-	alert(JSON.stringify(item)); */
 	
   if (((searchString != "" && item[27].toLowerCase().indexOf(searchString.toLowerCase()) == -1)   &&
  (searchString != "" && item[28].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
@@ -313,6 +316,40 @@ function myFilter(item) {
   }
   return true;
 }
+var myRequest;
+var text;
+
+var key1 = "<%= key%>";
+function updateMemCache(e,args,tempKey){
+	
+	var cell = args.cell;
+	var item = args.item;
+	var delCell=cell+1;
+	
+		if ($('#hideColumns').is(":checked")){
+			delCell= cell+numHideColumns;
+		}else{
+			delCell = cell+2;
+		}
+	
+		var cellValue = item[delCell];
+		var cellNum = delCell-12;
+	
+	
+	console.log(args.item); 
+	key = item[31];
+	
+	  $.ajax({
+		url : '/AutoSaveData',
+		type : 'POST',
+		dataType : 'text',
+		data : {key: key,cellValue:cellValue,celNum : cellNum},
+		success : function(result) {
+			alert('Data saved successfully !!!');
+		}
+	});  
+}
+
 
 $(function () {
   var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
@@ -335,7 +372,7 @@ $(function () {
     	    d["indent"] = indent;
     	    d["parent"] = parent;
     	 
-        d[25]=" ";/*<%-- "<%=gtfReports.get(i).getRemarks()%>"; --%>*/
+        d[25]="<%=gtfReports.get(i).getRemarks()%>";
         d[26]="<%=gtfReports.get(i).getStatus()%>";
         d[27]="<%=gtfReports.get(i).getgMemoryId()%>";
         d[28]="<%=gtfReports.get(i).getBrand()%>";
@@ -540,10 +577,10 @@ $(function () {
 		}
 		data[j-4]["25"] = percentage + "%";
 	  }
-for (var j = totalSize-4; j <= totalSize; j++) {
+ /* for (var j = totalSize-4; j <= totalSize; j++) {
 		
 		data[j]["25"] = " ";
-	  }
+	  }  */
   // initialize the model
 	dataView = new Slick.Data.DataView({
 		inlineFilters : true
@@ -561,29 +598,18 @@ for (var j = totalSize-4; j <= totalSize; j++) {
 	
 	grid.onCellChange
 	.subscribe(function(e, args) {
+		var item = args.item;
+		
+		var tempKey = item[27];
+		updateMemCache(e,args,tempKey);
 		var cell = args.cell;
 		var row = args.row;
-		var delCell=cell+1;
-		updateTotals(cell,row,delCell,args);
-
-});
-	
-	function updateTotals(cell,row,delCell,args) {
+		data[totalSize][cell] = 0.0;
 		grid.invalidate();
-		if ($('#hideColumns').is(":checked")){
-			delCell= cell+numHideColumns;
-		}
-		/* alert(JSON.stringify(data[row]));
-		if(data[row-1][delCell]>999999){
-			alert(data[row-1][delCell].tofixed(2));
-			data[row-1][delCell] = parseFloat(data[row-1][delCell]).tofixed(2);
-		} */
-		data[totalSize][delCell] = 0.0;
 		for (var j = 0; j < totalSize; j=j+4) {
-			data[totalSize][delCell] = parseFloat(data[totalSize][delCell])
-			+ parseFloat(data[j][delCell]);
+			data[totalSize][cell] = parseFloat(data[totalSize][cell])
+			+ parseFloat(data[j][cell]);
 		}
-		grid.invalidate();
 		var temp = 0;
 		for (var j = 0; j < data.length - 1; j++) {
 			if (data[j]["id"] == args.item.id) {
@@ -591,24 +617,22 @@ for (var j = totalSize-4; j <= totalSize; j++) {
 			break;
 			}
 		}
-		grid.invalidate();
-	
-		data[temp][24] = 0.0;
+	grid.invalidate();
+	data[temp][24] = 0.0;
 	for (var j = 12; j < 24; j++) {
 		data[temp][24] = parseFloat(data[temp][24])
 		+ parseFloat(data[temp][j]);
 	}
-	grid.invalidate();
 	data[data.length - 1][24] = 0.0;
 	for (var j = 12; j < 24; j++) {
 		data[data.length - 1][24] = parseFloat(data[data.length - 1][24])
 		+ parseFloat(data[data.length - 1][j]);
 	}
-	grid.invalidate();
-	dataView.updateItem(args.item.id, args.item);
-		  }
 
-	
+	dataView.updateItem(args.item.id, args.item);
+
+});
+
 grid.onClick.subscribe(function(e, args) {
 if ($(e.target).hasClass("toggle")) {
 	var item = dataView.getItem(args.row);
@@ -723,6 +747,22 @@ grid.registerPlugin( new Slick.AutoTooltips({ enableForHeaderCells: true }) );
 grid.render();
  
 })
+
+
+$(window).bind('beforeunload', function(e) {
+   // return "ATTENZIONE!!";
+	$.ajax({
+		url : '/AutoSaveData',
+		type : 'POST',
+		dataType : 'text',
+		data : {key: "",cellValue:"",celNum : ""},
+		success : function(result) {
+			alert('SUCCESS');
+		}
+	}); 
+});
+
+
 </script>
 
 

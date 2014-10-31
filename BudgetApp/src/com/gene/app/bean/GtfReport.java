@@ -72,6 +72,17 @@ public class GtfReport implements Serializable {
 	
 	@Persistent
 	private Map<String, Double> variancesMap;
+	
+	@Persistent
+	private String email;
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public static String[] months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 			"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
