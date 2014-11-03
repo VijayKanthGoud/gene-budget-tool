@@ -63,7 +63,7 @@
 	if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 		return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'>"+ Number(value).toFixed(2) +"</span>" 
 	}else{
-		return "<span style='color:#005691'>"+ Number(value).toFixed(1) +"</span>" 
+		return "<span style='color:#005691'>"+ Number(value).toFixed(2) +"</span>" 
 	}
   }
   

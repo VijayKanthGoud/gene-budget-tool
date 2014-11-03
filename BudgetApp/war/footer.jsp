@@ -1,5 +1,5 @@
 <!-- Add whatever you like to the footer -->
-<div style="height: 60px;">
+<div style="height: 45px;">
 </div>
 <div id="footer" style="position: fixed; bottom: 0px; width: 100%; height: 50px; z-index: 2;">
 	<table width="100%">
