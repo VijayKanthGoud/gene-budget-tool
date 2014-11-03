@@ -130,7 +130,7 @@ id="txtSearch" >
 	</div>
 	<div id="sattusMessage"></div>
 </center>
-<div id="displayGrid" style="width: 100%; height: 57.6%;"></div>
+<div id="displayGrid" style="width: 100%; height: 55.5%;"></div>
  
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
@@ -344,7 +344,11 @@ function groupByStatus() {
 
 </span>"  ;
    		}else{ */
-   			return " "+ g.value +"  <span style='color:green'>(" + (g.count)/4 + " items)</span>"  ; 
+   			var div=4;
+   			if(g.value =="New"){
+   			div=2;
+   			}
+   			return " "+ g.value +"  <span style='color:green'>(" + (g.count)/div + " items)</span>"  ; 
    	/* 	} */
    	
    	}else{

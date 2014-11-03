@@ -80,7 +80,7 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 
 #sattusMessage {
 	font: Arial;
-	font-weight: normal;
+	font-weight: bold;
 	font-size: 14px;
 	color: #005691;
 	display: none;
