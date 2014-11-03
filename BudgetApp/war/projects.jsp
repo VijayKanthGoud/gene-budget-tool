@@ -26,35 +26,7 @@ if(key==null){
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-<style>
-.cell-title {
-	font-weight: bold;
-}
 
-.cell-effort-driven {
-	text-align: center;
-}
-
-.slick-row-total-class {
-	background: green !important;
-}
-
-.toggle {
-	height: 9px;
-	width: 9px;
-	display: inline-block;
-}
-
-.toggle.expand {
-	background: url(SlickGrid-master/images/expand.gif) no-repeat center
-		center;
-}
-
-.toggle.collapse {
-	background: url(SlickGrid-master/images/collapse.gif) no-repeat center
-		center;
-}
-</style>
 <center>
 	<div>
 		<table
@@ -124,20 +96,14 @@ if(key==null){
 			</tr>
 			<tr style="">
 				<td>
-					<!-- <center>
-					<img src="images/search.png" height="25" width="25">
-						Search : <input type=text id="txtSearch"
-							style="width: 120px;">
-					</center> -->
-					<center>
-					<img src="images/search.png" height="25" width="25" align="bottom" style="float:left; padding-left:38%">
-						<input style="float:left;" type=text id="txtSearch"
-							style="width: 120px;">
-					</center>
+						<img src="images/search.png" height="25" width="25" align="bottom"
+							style="float: left; padding-left: 40%"> <input type=text
+							style="float: left; width: 120px;"   id="txtSearch" >
 				</td>
 			</tr>
 		</table>
 	</div>
+	<div id="sattusMessage"></div>
 </center>
 <div id="displayGrid" style="width: 100%; height: 400px;"></div>
  
@@ -296,6 +262,7 @@ function myFilter(item) {
   if (((searchString != "" && item[27].toLowerCase().indexOf(searchString.toLowerCase()) == -1)   &&
  (searchString != "" && item[28].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
  (searchString != "" && item[29].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
+ (searchString != "" && item[32].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
  (searchString != "" && item[30].toLowerCase().indexOf(searchString.toLowerCase()) == -1) && item[26]!="Total")|| 
  (radioString!= "All" && item[11].toLowerCase().indexOf(radioString.toLowerCase())==-1) ) {
     return false;
@@ -307,6 +274,7 @@ function myFilter(item) {
       if (parent._collapsed ||( (searchString != "" && parent[27].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
      (searchString != "" && parent[28].toLowerCase().indexOf(searchString.toLowerCase()) == -1) &&
      (searchString != "" && parent[29].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
+     (searchString != "" && parent[32].toLowerCase().indexOf(searchString.toLowerCase()) == -1)  &&
      (searchString != "" && parent[30].toLowerCase().indexOf(searchString.toLowerCase()) == -1) && (parent[26]!="Total"))||
            (radioString!= "All" && item[11].toLowerCase().indexOf(radioString.toLowerCase())==-1)) {
         return false;
@@ -322,6 +290,7 @@ var text;
 var key1 = "<%= key%>";
 function updateMemCache(e,args,tempKey){
 	
+	$('#sattusMessage').text("Saving data...").fadeIn( 200 );
 	var cell = args.cell;
 	var item = args.item;
 	var delCell=cell+1;
@@ -345,7 +314,8 @@ function updateMemCache(e,args,tempKey){
 		dataType : 'text',
 		data : {key: key,cellValue:cellValue,celNum : cellNum},
 		success : function(result) {
-			alert('Data saved successfully !!!');
+			$('#sattusMessage').text("All changes saved successfully!").fadeIn( 200 );
+			$( "#sattusMessage" );
 		}
 	});  
 }
@@ -372,13 +342,14 @@ $(function () {
     	    d["indent"] = indent;
     	    d["parent"] = parent;
     	 
-        d[25]="<%=gtfReports.get(i).getRemarks()%>";
+        d[25]=" ";
         d[26]="<%=gtfReports.get(i).getStatus()%>";
         d[27]="<%=gtfReports.get(i).getgMemoryId()%>";
         d[28]="<%=gtfReports.get(i).getBrand()%>";
         d[29]="<%=gtfReports.get(i).getProjectName()%>";
         d[30]=" ";	
         d[31]="<%=gtfReports.get(i).getId()%>";
+        d[32]="<%=gtfReports.get(i).getRemarks()%>";
         <%if(isFirst){
     isFirst = false;%>
   
@@ -420,7 +391,7 @@ $(function () {
     gtfReports.get(i).getPlannedMap().get("OCT") + 
     gtfReports.get(i).getPlannedMap().get("NOV") + 
     gtfReports.get(i).getPlannedMap().get("DEC"))%>";
-
+    d[25]="<%=gtfReports.get(i).getRemarks()%>";
 
   <%} else{%>  
 
@@ -455,7 +426,7 @@ $(function () {
     gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
  
    <%} if(idCounter%4 == 2){%>
-   d[11]="Accruals";
+   d[11]="Accrual";
    d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
    d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
    d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
@@ -482,7 +453,7 @@ $(function () {
     gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
    
    <%} if(idCounter%4 == 3){%>
-   d[11]="Variances";
+   d[11]="Variance";
    d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
    d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
    d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
@@ -561,6 +532,7 @@ $(function () {
   d[29]=" ";
   d[30]=" ";
   d[31]=" ";
+  d[32]=" ";
  
 }
   
@@ -575,7 +547,10 @@ $(function () {
 		}else{
 			percentage = 0;
 		}
-		data[j-4]["25"] = percentage + "%";
+		var remarks = data[j-4]["25"];
+		if(remarks.trim().length<=0){
+			data[j-4]["25"] = percentage + "%";
+		}
 	  }
  /* for (var j = totalSize-4; j <= totalSize; j++) {
 		
@@ -750,14 +725,15 @@ grid.render();
 
 
 $(window).bind('beforeunload', function(e) {
-   // return "ATTENZIONE!!";
+	$('#sattusMessage').text("Saving data...").fadeIn( 200 );
 	$.ajax({
 		url : '/AutoSaveData',
 		type : 'POST',
 		dataType : 'text',
 		data : {key: "",cellValue:"",celNum : ""},
 		success : function(result) {
-			alert('SUCCESS');
+			$('#sattusMessage').delay( 600 ).text("Data saved successfully!").fadeIn( 200 );
+			$( "#sattusMessage" ).delay( 1000 ).fadeOut( 400 );
 		}
 	}); 
 });
