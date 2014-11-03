@@ -1,6 +1,6 @@
 @CHARSET "ISO-8859-1";
 
-body{
+body {
 	font-size: 11px !important;
 	font: Arial !important;
 }
@@ -76,4 +76,49 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 .myButton:active {
 	position: relative;
 	top: 1px;
+}
+
+#sattusMessage {
+	font: Arial;
+	font-weight: normal;
+	font-size: 14px;
+	color: #005691;
+	display: none;
+	position: absolute;
+	top: 215px;
+	left: 60%;
+	width: 200px;
+	align: center;
+	padding: 1px;
+	/* border: 1px solid #005691; */
+	/* background-color: white; */
+	z-index: 1002;
+	overflow: auto;
+}
+.cell-title {
+	font-weight: bold;
+}
+
+.cell-effort-driven {
+	text-align: center;
+}
+
+.slick-row-total-class {
+	background: green !important;
+}
+
+.toggle {
+	height: 9px;
+	width: 9px;
+	display: inline-block;
+}
+
+.toggle.expand {
+	background: url(SlickGrid-master/images/expand.gif) no-repeat center
+		center;
+}
+
+.toggle.collapse {
+	background: url(SlickGrid-master/images/collapse.gif) no-repeat center
+		center;
 }
