@@ -314,8 +314,7 @@ function updateMemCache(e,args,tempKey){
 		dataType : 'text',
 		data : {key: key,cellValue:cellValue,celNum : cellNum},
 		success : function(result) {
-			$('#sattusMessage').text("All changes saved successfully!").fadeIn( 200 );
-			$( "#sattusMessage" );
+			$('#sattusMessage').text("All changes a saved successfully!").fadeIn( 200 );
 		}
 	});  
 }

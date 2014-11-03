@@ -339,14 +339,13 @@
 
 	function submitData() {
 		var param = 'objarray=' + JSON.stringify(data);
-		alert("param .." + param);
 		$.ajax({
 			url : '/storereport',
 			type : 'POST',
 			dataType : 'json',
 			data : {objarray: JSON.stringify(data)},
 			success : function(result) {
-				alert('SUCCESS');
+				alert('Data saved successfully');
 			}
 		});
 	}

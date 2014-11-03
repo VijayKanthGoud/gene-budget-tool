@@ -222,7 +222,7 @@ public class DBUtil {
 	public Map<String,GtfReport> getReport(String costCenter) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);
-		q.setOrdering("flag asc");
+		q.setOrdering("flag asc, projectName asc");
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
 			List<GtfReport> results = (List<GtfReport>) q.execute();
