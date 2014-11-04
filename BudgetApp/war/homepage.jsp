@@ -1,7 +1,7 @@
 <%@page import="java.util.ArrayList"%>
-<%@ include file="header.jsp"%>
 <%@ page import="com.gene.app.bean.GtfReport"%>
 <%@ page import="java.util.*"%>
+<%@ include file="header.jsp"%>
 <%
 	if (userPrincipal != null) {
 %>
