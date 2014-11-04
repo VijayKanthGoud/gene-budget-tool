@@ -310,7 +310,6 @@ function myFilter(item) {
 var myRequest;
 var text;
 
-var key1 = "<%=key%>";
 function updateMemCache(e,args,tempKey){
 	$('#sattusMessage').text("Saving data...").fadeIn( 200 );
 	var cell = args.cell;
@@ -324,8 +323,10 @@ function updateMemCache(e,args,tempKey){
 		}
 		
 		if(delCell==25){
-			for(var i=row;i< row+4;i++){
-			data[i][32] = item[delCell];
+			for(var i=0;i< totalSize;i++){
+				if(data[i][31] == item[31]){
+		     	data[i][32] = item[delCell];
+				}
 		}
 		}
 	var cellValue = item[delCell];
@@ -646,8 +647,6 @@ $(function () {
 				});
 
 		grid.onClick.subscribe(function(e, args) {
-			//alert(e.toSource());
-			//alert("HIII" +JSON.stringify(args));
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
