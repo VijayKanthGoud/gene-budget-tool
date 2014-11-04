@@ -99,8 +99,9 @@ if(key==null){
 			</tr>
 			<tr style="">
 				<td style="padding-left: 21.5%"><input 
-					type=text style="float: left; align:center; width: 140px;" id="txtSearch"><img src="images/search.png" height="25" width="25"
-					align="bottom" style="float: left;"> 
+					type=text style="float: left; align:center; width: 140px;" id="txtSearch">
+					<img src="images/search.png" height="25" width="25"
+					align="bottom" style="float: left;" title="Search in Project name, gMemori Id, Brand and Remarks."> 
 				</td>
 			</tr>
 		</table>
@@ -244,7 +245,7 @@ function groupByStatus() {
 
 var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra", "Rituxan RA", "Lucentis", 
 "Bitopertin", "Ocrelizumab", "Onart", "Avastin", "BioOnc Pipeline", "Lebrikizumab", 
-"Pulmozyme", "Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199", "Neuroscience Pipeline", "Tarceva" ];
+"Pulmozyme", "Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199", "Neuroscience Pipeline", "Tarceva"];
                       
 var options = {
   editable: true,
@@ -296,20 +297,17 @@ var text;
 
 var key1 = "<%=key%>";
 function updateMemCache(e,args,tempKey){
-	
 	$('#sattusMessage').text("Saving data...").fadeIn( 200 );
 	var cell = args.cell;
 	var item = args.item;
 	var delCell=cell+1;
-	
 		if ($('#hideColumns').is(":checked")){
 			delCell= cell+numHideColumns;
 		}else{
 			delCell = cell+2;
 		}
-	
-		var cellValue = item[delCell];
-		var cellNum = delCell-12;
+	var cellValue = item[delCell];
+	var cellNum = delCell-12;
 	
 	
 	console.log(args.item); 
@@ -321,9 +319,7 @@ function updateMemCache(e,args,tempKey){
 		dataType : 'text',
 		data : {key: key,cellValue:cellValue,celNum : cellNum},
 		success : function(result) {
-			$('#sattusMessage').text("All changes saved successfully!").fadeIn( 200 
-
-);
+			$('#sattusMessage').text("All changes saved successfully!").fadeIn( 200 );
 			$( "#sattusMessage" );
 		}
 	});  
@@ -350,32 +346,33 @@ $(function () {
     	   d["id"] = "id_" + "<%=idCounter%>";
     	    d["indent"] = indent;
     	    d["parent"] = parent;
+    	    <%GtfReport gReport = gtfReports.get(i);%>
     	 
         d[25]=" ";
-        d[26]="<%=gtfReports.get(i).getStatus()%>";
-        d[27]="<%=gtfReports.get(i).getgMemoryId()%>";
-        d[28]="<%=gtfReports.get(i).getBrand()%>";
-        d[29]="<%=gtfReports.get(i).getProjectName()%>";
+        d[26]="<%=gReport.getStatus()%>";
+        d[27]="<%=gReport.getgMemoryId()%>";
+        d[28]="<%=gReport.getBrand()%>";
+        d[29]="<%=gReport.getProjectName()%>";
         d[30]=" ";	
-        d[31]="<%=gtfReports.get(i).getId()%>";
-        d[32]="<%=gtfReports.get(i).getRemarks()%>";
+        d[31]="<%=gReport.getId()%>";
+        d[32]="<%=gReport.getRemarks()%>";
         d[33]="New";
-        <%if(isFirst){
-    isFirst = false;%>
-  
+        
+    <%if(isFirst){
+    	isFirst = false;%>
     // start looping for four different maps
     
-    d[0]="<%=gtfReports.get(i).getgMemoryId()%>";
-    d[1]="<%=gtfReports.get(i).getRequestor()%>";
-    d[2]="<%=gtfReports.get(i).getProjectName()%>";
-    d[3]="<%=gtfReports.get(i).getProject_WBS()%>";
-    d[4]="<%=gtfReports.get(i).getWBS_Name()%>";
-    d[5]="<%=gtfReports.get(i).getSubActivity()%>";
-    d[6]="<%=gtfReports.get(i).getBrand()%>";
-    d[7]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-    d[8]="<%=gtfReports.get(i).getPoNumber()%>";
-    d[9]="<%=gtfReports.get(i).getPoDesc()%>";
-    d[10]="<%=gtfReports.get(i).getVendor()%>";
+    d[0]="<%=gReport.getgMemoryId()%>";
+    d[1]="<%=gReport.getRequestor()%>";
+    d[2]="<%=gReport.getProjectName()%>";
+    d[3]="<%=gReport.getProject_WBS()%>";
+    d[4]="<%=gReport.getWBS_Name()%>";
+    d[5]="<%=gReport.getSubActivity()%>";
+    d[6]="<%=gReport.getBrand()%>";
+    d[7]="<%=gReport.getPercent_Allocation()%>";
+    d[8]="<%=gReport.getPoNumber()%>";
+    d[9]="<%=gReport.getPoDesc()%>";
+    d[10]="<%=gReport.getVendor()%>";
     d[11]="Planned";
     d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
     d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
@@ -664,25 +661,23 @@ $(function () {
 					var newYear = <%=year+1%>;
 					var quarter = <%=qtr%>;
 					var month = <%=month%>;
-					var monthArray = [ {"m0" : "JAN"}, {"m0" : "FEB"}, {"m0" : "MAR"}, {"m0" : "APR"}, {"m0" : "MAY"},
-					                   {"m0" : "JUN"}, {"m0" : "JUL"}, {"m0" : "AUG"}, {"m0" : "SEP"}, {"m0" : "OCT"}, 
-					                   {"m0" : "NOV"}, {"m0" : "DEC"} ];
+					var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
 					var cell = args.cell;
 					var row = args.row;
 					var cols = grid.getColumns();
 					var result = false;
 					var result1 = false;
 					for (var i = month; i < 12; i++) {
-						if ((cols[cell].name == monthArray[i].m0)
-								&& (args.item["11"] == "Planned")) {
+						if (cols[cell].name == monthArray[i]
+								&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
 							result = true;
 							break;
 						} else {
 							result = false;
 						}
 					}
-					if ((args.item["11"] == "Planned")
-							&& (cols[cell].name == "Remark")) {
+					if (args.item["11"] == "Planned"
+							&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
 						result1 = true;
 					} else {
 						result1 = false;
