@@ -24,7 +24,6 @@ public class DBUtil {
 	public UserRoleInfo readUserRoleInfo(String email,String costCenter) {
 		boolean isGeneUser = false;
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
-		//System.out.println("costCenter = "+costCenter);
 		userMap = readAllUserInfo(costCenter);
 		UserRoleInfo user = new UserRoleInfo();
 		if(userMap!=null && !userMap.isEmpty()){
@@ -44,11 +43,9 @@ public class DBUtil {
 		Query q = pm.newQuery(UserRoleInfo.class);
 		List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute();
 		if (results!=null && !results.isEmpty()) {
-			//System.out.println("results = "+results);
 			for(UserRoleInfo role : results)
 			{ 
 				userInfo = role; 
-				System.out.println("userInfo.getEmail() = "+userInfo.getEmail());
 				userMap.put(userInfo.getEmail(), userInfo);
 			}
 		}
@@ -98,81 +95,29 @@ public class DBUtil {
 		double varianceTotal = 0.0;
 		double plannedTotal = 0.0;
 		double accrualsTotal = 0.0;
-		double percentageVarianceTotal = 0.0;
-		double budgetLeftToSpend = 0.0;
 		BudgetSummary summaryFromDB = null;
 		summaryFromDB = readBudgetSummaryFromDB(email,costCenter);
 		GtfReport report = null;
+		String month = "";
 		if (gtfReports != null && !gtfReports.isEmpty()) {
 			for (int i = 0; i < gtfReports.size(); i++) {
 				report = (GtfReport) gtfReports.get(i);
+				for(int j=0;j<GtfReport.months.length-1;j++){
+					month = GtfReport.months[j];
 				if(report.getBenchmarkMap()!=null){
-				benchMarkTotal = benchMarkTotal
-						+ report.getBenchmarkMap().get("JAN")
-						+ report.getBenchmarkMap().get("FEB")
-						+ report.getBenchmarkMap().get("MAR")
-						+ report.getBenchmarkMap().get("APR")
-						+ report.getBenchmarkMap().get("MAY")
-						+ report.getBenchmarkMap().get("JUN")
-						+ report.getBenchmarkMap().get("JUL")
-						+ report.getBenchmarkMap().get("AUG")
-						+ report.getBenchmarkMap().get("SEP")
-						+ report.getBenchmarkMap().get("OCT")
-						+ report.getBenchmarkMap().get("NOV")
-						+ report.getBenchmarkMap().get("DEC");
+				benchMarkTotal = benchMarkTotal	+ report.getBenchmarkMap().get(month);
 				}if(report.getPlannedMap()!=null){
-				plannedTotal = plannedTotal
-						+ report.getPlannedMap().get("JAN")
-						+ report.getPlannedMap().get("FEB")
-						+ report.getPlannedMap().get("MAR")
-						+ report.getPlannedMap().get("APR")
-						+ report.getPlannedMap().get("MAY")
-						+ report.getPlannedMap().get("JUN")
-						+ report.getPlannedMap().get("JUL")
-						+ report.getPlannedMap().get("AUG")
-						+ report.getPlannedMap().get("SEP")
-						+ report.getPlannedMap().get("OCT")
-						+ report.getPlannedMap().get("NOV")
-						+ report.getPlannedMap().get("DEC");
+				plannedTotal = plannedTotal	+ report.getPlannedMap().get(month);
 				}if(report.getVariancesMap()!=null){
-				varianceTotal = varianceTotal
-						+ report.getVariancesMap().get("JAN")
-						+ report.getVariancesMap().get("FEB")
-						+ report.getVariancesMap().get("MAR")
-						+ report.getVariancesMap().get("APR")
-						+ report.getVariancesMap().get("MAY")
-						+ report.getVariancesMap().get("JUN")
-						+ report.getVariancesMap().get("JUL")
-						+ report.getVariancesMap().get("AUG")
-						+ report.getVariancesMap().get("SEP")
-						+ report.getVariancesMap().get("OCT")
-						+ report.getVariancesMap().get("NOV")
-						+ report.getVariancesMap().get("DEC");
+				varianceTotal = varianceTotal + report.getVariancesMap().get(month);
 				}if(report.getAccrualsMap()!=null){
-				accrualsTotal = accrualsTotal
-						+ report.getAccrualsMap().get("JAN")
-						+ report.getAccrualsMap().get("FEB")
-						+ report.getAccrualsMap().get("MAR")
-						+ report.getAccrualsMap().get("APR")
-						+ report.getAccrualsMap().get("MAY")
-						+ report.getAccrualsMap().get("JUN")
-						+ report.getAccrualsMap().get("JUL")
-						+ report.getAccrualsMap().get("AUG")
-						+ report.getAccrualsMap().get("SEP")
-						+ report.getAccrualsMap().get("OCT")
-						+ report.getAccrualsMap().get("NOV")
-						+ report.getAccrualsMap().get("DEC");
-			}}
+				accrualsTotal = accrualsTotal + report.getAccrualsMap().get(month);
+			}}}
 		}
 		BudgetSummary summary = new BudgetSummary();
 		double variancePercentage = 0.0;
-		/*if(summaryFromDB == null){
-			summary.setTotalBudget(60000.0);
-			summary.setProjectOwnerEmail(email);
-		}else{*/
 		summary.setTotalBudget(summaryFromDB.getTotalBudget());
 		summary.setProjectOwnerEmail(summaryFromDB.getProjectOwnerEmail());
-		//}
 		summary.setPlannedTotal(plannedTotal);
 		summary.setBenchmarkTotal(benchMarkTotal);
 		summary.setVarianceTotal(varianceTotal);
@@ -188,16 +133,13 @@ public class DBUtil {
 	}
 	
 	public void saveReportDataToCache(GtfReport gtfReport){
-		//MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		String key = gtfReport.getId().toString();
 		cache.put(key, gtfReport);
 	}
 	
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
-		//MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-		//String key = email;
 		cache.put(costCenter, gtfReportList);
 	}
 	
@@ -301,8 +243,6 @@ public class DBUtil {
 				}
 			variance = benchMark-accrual;
 			if(varianceMap!=null){
-				//varianceMap = new HashMap<String, Double>();
-			
 			varianceMap.put(GtfReport.months[j], variance);
 			}}
 			report.setVariancesMap(varianceMap);
