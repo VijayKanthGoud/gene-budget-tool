@@ -267,7 +267,7 @@ var donotShowTotals=0;
 function sumTotalsFormatter(totals, columnDef) {
 	  var val = totals.sum && totals.sum[columnDef.field];
 	  if (val != null ) {
-	    return  ((Math.round(parseFloat(val)*100)/100)).toFixed(2);
+	    return  "<span style='color:rgb(168, 39, 241)'>" + ((Math.round(parseFloat(val)*100)/100)).toFixed(2)+"</span> ";;
 	  }
 	  return "";
 	}
