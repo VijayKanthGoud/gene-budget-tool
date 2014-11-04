@@ -260,7 +260,7 @@ var options = {
 function myFilter(item) {
 	
   var status=true;
-  
+
   if (item[33]!="New"){
 		status=false;
   }
@@ -301,10 +301,17 @@ function updateMemCache(e,args,tempKey){
 	var cell = args.cell;
 	var item = args.item;
 	var delCell=cell+1;
+	var row = args.row;
 		if ($('#hideColumns').is(":checked")){
 			delCell= cell+numHideColumns;
 		}else{
 			delCell = cell+2;
+		}
+		
+		if(delCell==25){
+			for(var i=row;i< row+4;i++){
+			data[i][32] = item[delCell];
+		}
 		}
 	var cellValue = item[delCell];
 	var cellNum = delCell-12;
