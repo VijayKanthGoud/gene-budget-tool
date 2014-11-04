@@ -265,12 +265,8 @@ var options = {
 };
 var donotShowTotals=0;
 function sumTotalsFormatter(totals, columnDef) {
-	if(donotShowTotals>52){
-		donotShowTotals=0;
-	}
-	donotShowTotals++;
 	  var val = totals.sum && totals.sum[columnDef.field];
-	  if (val != null && donotShowTotals<39) {
+	  if (val != null ) {
 	    return  ((Math.round(parseFloat(val)*100)/100)).toFixed(2);
 	  }
 	  return "";
