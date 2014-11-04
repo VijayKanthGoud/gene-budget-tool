@@ -196,29 +196,22 @@ var hidecolumns = [
             	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
            		{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
            		{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },          
-                {	id : 12,name : columnNames[12],field : 12,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 13,name : columnNames[13],field : 13,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 14,name : columnNames[14],field : 14,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 15,name : columnNames[15],field : 15,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 16,name : columnNames[16],field : 16,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 17,name : columnNames[17],field : 17,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 18,name : columnNames[18],field : 18,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 19,name : columnNames[19],field : 19,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 20,name : columnNames[20],field : 20,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 21,name : columnNames[21],field : 21,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 22,name : columnNames[22],field : 22,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 23,name : columnNames[23],field : 23,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-                {	id : 24,name : columnNames[24],field : 24,width : 100,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
+                {	id : 12,name : columnNames[12],field : 12,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 13,name : columnNames[13],field : 13,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 14,name : columnNames[14],field : 14,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 15,name : columnNames[15],field : 15,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 16,name : columnNames[16],field : 16,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 17,name : columnNames[17],field : 17,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 18,name : columnNames[18],field : 18,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 19,name : columnNames[19],field : 19,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 20,name : columnNames[20],field : 20,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 21,name : columnNames[21],field : 21,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 22,name : columnNames[22],field : 22,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 23,name : columnNames[23],field : 23,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 24,name : columnNames[24],field : 24,width : 100,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
                 {	id : 25,name : columnNames[25],field : 25,width : 200,	editor : Slick.Editors.LongText, formatter: Slick.Formatters.Remark} 
                 ];
 
-function sumTotalsFormatter(totals, columnDef) {
- 	var val = totals.sum && totals.sum[columnDef.field];
- 	if (val != null) {
-  		 return "Total: " + ((Math.round(parseFloat(val)*100)/100));
-	}
- 	return "";
-}
 var searchString = "";
 function groupByStatus() {
  	dataView.setGrouping({
@@ -234,7 +227,22 @@ function groupByStatus() {
     		return "<span style='color:green'> "+ g.value +"</span> ";
 		}
    	},
-  	aggregateCollapsed: false,
+   	aggregators: [
+   	           new Slick.Data.Aggregators.Sum("12"),
+   	           new Slick.Data.Aggregators.Sum("13"),
+   	           new Slick.Data.Aggregators.Sum("14"),
+   	           new Slick.Data.Aggregators.Sum("15"),
+   	           new Slick.Data.Aggregators.Sum("16"),
+   	           new Slick.Data.Aggregators.Sum("17"),
+   	           new Slick.Data.Aggregators.Sum("18"),
+   	           new Slick.Data.Aggregators.Sum("19"),
+   	           new Slick.Data.Aggregators.Sum("20"),
+   	           new Slick.Data.Aggregators.Sum("21"),
+   	           new Slick.Data.Aggregators.Sum("22"),
+   	           new Slick.Data.Aggregators.Sum("23"),
+   	           new Slick.Data.Aggregators.Sum("24"),
+   	         ],
+  	aggregateCollapsed: true,
    	lazyTotalsCalculation: true
  	});
  	
@@ -255,7 +263,18 @@ var options = {
   autoEdit : false,
   frozenColumn: 3
 };
-
+var donotShowTotals=0;
+function sumTotalsFormatter(totals, columnDef) {
+	if(donotShowTotals>52){
+		donotShowTotals=0;
+	}
+	donotShowTotals++;
+	  var val = totals.sum && totals.sum[columnDef.field];
+	  if (val != null && donotShowTotals<39) {
+	    return  ((Math.round(parseFloat(val)*100)/100)).toFixed(2);
+	  }
+	  return "";
+	}
 
 function myFilter(item) {
 	
@@ -631,6 +650,8 @@ $(function () {
 				});
 
 		grid.onClick.subscribe(function(e, args) {
+			//alert(e.toSource());
+			//alert("HIII" +JSON.stringify(args));
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
