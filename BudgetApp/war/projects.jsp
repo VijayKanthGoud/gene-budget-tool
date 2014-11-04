@@ -163,16 +163,16 @@ var columnNames = [ "gMemori Id",
 
 var columns = [
             	{   id : 30,name : "Status",field : 30,width : 120,	editor : Slick.Editors.Text },
-            	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor :Slick.Editors.Text},
-            	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor :Slick.Editors.Text},
-            	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor :Slick.Editors.Text},
-           		{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
-           		{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },
-           		{	id : 5,name : columnNames[5],field : 5,width : 120,	editor : Slick.Editors.Text},
-           		{	id : 7,name : columnNames[7],field : 7,width : 120,	editor : Slick.Editors.Text},
-           		{	id : 8,name : columnNames[8],field : 8,width : 120,	editor : Slick.Editors.Text},
+            	{	id : 2,name : columnNames[2],field : 2,width : 150,	editor :Slick.Editors.Text},
+            	{	id : 6,name : columnNames[6],field : 6,width : 90,	editor :Slick.Editors.Text},
+            	{	id : 11,name : columnNames[11],field : 11,width : 90,	editor :Slick.Editors.Text},
+           		{   id : 0,name : columnNames[0],field : 0,width : 90,	editor : Slick.Editors.Text },
+           		{	id : 1,name : columnNames[1],field : 1,width : 90,	editor : Slick.Editors.Text },
+           		{	id : 5,name : columnNames[5],field : 5,width : 90,	editor : Slick.Editors.Text},
+           		{	id : 7,name : columnNames[7],field : 7,width : 90,	editor : Slick.Editors.Text},
+           		{	id : 8,name : columnNames[8],field : 8,width : 90,	editor : Slick.Editors.Text},
            		/* {	id : 9,name : columnNames[9],field : 9,width : 120,	editor :Slick.Editors.Text}, */
-           		{	id : 10,name : columnNames[10],field : 10,width : 120,	editor : Slick.Editors.Text},
+           		{	id : 10,name : columnNames[10],field : 10,width : 90,	editor : Slick.Editors.Text},
            		{	id : 12,name : columnNames[12],field : 12,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
            		{	id : 13,name : columnNames[13],field : 13,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
            		{	id : 14,name : columnNames[14],field : 14,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
@@ -185,17 +185,17 @@ var columns = [
            		{	id : 21,name : columnNames[21],field : 21,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
            		{	id : 22,name : columnNames[22],field : 22,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
            		{	id : 23,name : columnNames[23],field : 23,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
-           		{	id : 24,name : columnNames[24],field : 24,width : 100,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
+           		{	id : 24,name : columnNames[24],field : 24,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol},
            		{	id : 25,name : columnNames[25],field : 25,width : 200,	editor : Slick.Editors.LongText, formatter: Slick.Formatters.Remark}
            		];
 
 var hidecolumns = [
             	{   id : 30,name : "Status",field : 30,width : 120,	editor : Slick.Editors.Text },
-            	{	id : 2,name : columnNames[2],field : 2,width : 120,	editor : Slick.Editors.Text},
-            	{	id : 6,name : columnNames[6],field : 6,width : 120,	editor : Slick.Editors.Text},
-            	{	id : 11,name : columnNames[11],field : 11,width : 120,	editor : Slick.Editors.Text},
-           		{   id : 0,name : columnNames[0],field : 0,width : 120,	editor : Slick.Editors.Text },
-           		{	id : 1,name : columnNames[1],field : 1,width : 120,	editor : Slick.Editors.Text },          
+            	{	id : 2,name : columnNames[2],field : 2,width : 150,	editor : Slick.Editors.Text},
+            	{	id : 6,name : columnNames[6],field : 6,width : 90,	editor : Slick.Editors.Text},
+            	{	id : 11,name : columnNames[11],field : 11,width : 90,	editor : Slick.Editors.Text},
+           		{   id : 0,name : columnNames[0],field : 0,width : 90,	editor : Slick.Editors.Text },
+           		{	id : 1,name : columnNames[1],field : 1,width : 90,	editor : Slick.Editors.Text },          
                 {	id : 12,name : columnNames[12],field : 12,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
                 {	id : 13,name : columnNames[13],field : 13,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
                 {	id : 14,name : columnNames[14],field : 14,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
@@ -208,7 +208,7 @@ var hidecolumns = [
                 {	id : 21,name : columnNames[21],field : 21,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
                 {	id : 22,name : columnNames[22],field : 22,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
                 {	id : 23,name : columnNames[23],field : 23,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
-                {	id : 24,name : columnNames[24],field : 24,width : 100,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
+                {	id : 24,name : columnNames[24],field : 24,width : 90,	editor : Slick.Editors.FloatText, formatter: Slick.Formatters.DollarSymbol,groupTotalsFormatter: sumTotalsFormatter},
                 {	id : 25,name : columnNames[25],field : 25,width : 200,	editor : Slick.Editors.LongText, formatter: Slick.Formatters.Remark} 
                 ];
 
