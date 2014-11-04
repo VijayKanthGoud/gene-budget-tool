@@ -37,6 +37,7 @@
 			User user = userService.getCurrentUser();
 			session.setAttribute("loggedInUser",user);
 			isAdmin = userService.isUserAdmin();
+			
 			boolean isGeneUser = false;//util.readUserRoleInfo(email,costCenter);
 			UserRoleInfo userInfo = util.readUserRoleInfo(email, costCenter);
 			String role = "";
@@ -54,7 +55,7 @@
 			} else if(!isAdmin) {
 				userName = "Welcome, " + user.getNickname() + "!";
 			} */
-			if (isAdmin && isGeneUser) {
+			if (userService!= null && userService.isUserLoggedIn()    && isGeneUser  ) {
 				userName = "Welcome, " + user.getNickname() + " (" + role +") !";
 			} else{%>
 				alert("You are not authorised to access the application !!");
