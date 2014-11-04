@@ -1,3 +1,4 @@
+<%@page import="com.gene.app.bean.UserRoleInfo"%>
 <%@ page import="java.security.Principal"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -30,12 +31,18 @@
 		String userName = "";
 		String logoutLink = "";
 		DBUtil util = new DBUtil();
+		String costCenter="307673";
 		if (userPrincipal != null) {
 			logoutLink = userService.createLogoutURL(requestUri);
 			User user = userService.getCurrentUser();
 			session.setAttribute("loggedInUser",user);
 			isAdmin = userService.isUserAdmin();
-			boolean isGeneUser = util.readUserRoleInfo(email);
+			boolean isGeneUser = false;//util.readUserRoleInfo(email,costCenter);
+			UserRoleInfo userInfo = util.readUserRoleInfo(email, costCenter);
+			if(userInfo!=null){
+				isGeneUser = true;
+				session.setAttribute("userInfo", userInfo);
+			}
 			//Set username message
 		
 			if (isAdmin) {

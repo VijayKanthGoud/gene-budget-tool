@@ -49,7 +49,7 @@ public class GetReport extends HttpServlet {
 		//UserService user = UserServiceFactory.getUserService();
 		
 		//String email = (String)req.getAttribute("email");
-		BudgetSummary summary = util.readBudgetSummary(email,gtfReportList);
+		BudgetSummary summary = util.readBudgetSummary(email,costCenter,gtfReportList);
 		
 		req.setAttribute("summary", summary);
 		RequestDispatcher rd = req.getRequestDispatcher("/listProjects");
@@ -67,6 +67,7 @@ public class GetReport extends HttpServlet {
 		GtfReport gtfReport = null;
 		
 		if(gtfReports!=null){
+			
 			for(Map.Entry<String, GtfReport> gtfEntry:gtfReports.entrySet()){
 				gtfReport = gtfEntry.getValue();
 				if((email !=null && !"".equals(email.trim())) && email.equalsIgnoreCase(gtfReport.getEmail())){

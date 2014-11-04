@@ -21,40 +21,78 @@ import com.sun.org.apache.xpath.internal.operations.Gte;
 
 public class DBUtil {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
-	public boolean readUserRoleInfo(String email) {
+	public UserRoleInfo readUserRoleInfo(String email,String costCenter) {
 		boolean isGeneUser = false;
+		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
+		//System.out.println("costCenter = "+costCenter);
+		userMap = readAllUserInfo(costCenter);
+		UserRoleInfo user = new UserRoleInfo();
+		if(userMap!=null && !userMap.isEmpty()){
+		user = userMap.get(email);
+		}
+		return user;
+	}
+	
+	public Map<String,UserRoleInfo> readAllUserInfo(String costCenter){
+		String key = costCenter+" - "+UserRoleInfo.class.getName();
+		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
+		userMap = (Map<String,UserRoleInfo>)cache.get(key);
+		if(userMap==null || userMap.isEmpty()){
+		userMap =  new LinkedHashMap<String,UserRoleInfo>();
 		UserRoleInfo userInfo = new UserRoleInfo();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(UserRoleInfo.class);
-		q.setFilter("email == emailParam");
-		q.declareParameters("String emailParam");
-		List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute(email);
-		if (!results.isEmpty()) {
-			/*
-			 * for(UserRoleInfo role : results){ userInfo = role; }
-			 */
-			isGeneUser = true;
+		List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute();
+		if (results!=null && !results.isEmpty()) {
+			//System.out.println("results = "+results);
+			for(UserRoleInfo role : results)
+			{ 
+				userInfo = role; 
+				System.out.println("userInfo.getEmail() = "+userInfo.getEmail());
+				userMap.put(userInfo.getEmail(), userInfo);
+			}
 		}
-		return isGeneUser;
+		cache.put(key, userMap);
+		}
+		return userMap;
+		
 	}
 	
-	public BudgetSummary readBudgetSummaryFromDB(String email) {
-		boolean isGeneUser = false;
-		BudgetSummary summary = new BudgetSummary();
+	public Map<String,BudgetSummary> readAllBudgetSummary(String costCenter){
+		String key = costCenter+" - "+BudgetSummary.class.getName();
+		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
+		budgetMap = (Map<String,BudgetSummary>)cache.get(key);
+		if(budgetMap==null || budgetMap.isEmpty()){
+			budgetMap = new LinkedHashMap<String,BudgetSummary>();
+			BudgetSummary budgetInfo = new BudgetSummary();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(BudgetSummary.class);
-		q.setFilter("projectOwnerEmail == emailParam");
-		q.declareParameters("String emailParam");
-		List<BudgetSummary> results = (List<BudgetSummary>) q.execute(email);
+		List<BudgetSummary> results = (List<BudgetSummary>) q.execute();
 		if (!results.isEmpty()) {
-			for(BudgetSummary summary1 : results){ 
-				summary = summary1; 
-			}			
+			for(BudgetSummary budget : results)
+			{ 
+				budgetInfo = budget; 
+				budgetMap.put(budgetInfo.getProjectOwnerEmail(), budgetInfo);
+			}
+		}
+		cache.put(key, budgetMap);
+		}
+		return budgetMap;
+		
+	}
+	public BudgetSummary readBudgetSummaryFromDB(String email,String costCenter) {
+		boolean isGeneUser = false;
+		String key = costCenter+" - "+BudgetSummary.class.getName();
+		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
+		budgetMap = readAllBudgetSummary(costCenter);
+		BudgetSummary summary = new BudgetSummary();
+		if(budgetMap!=null && !budgetMap.isEmpty()){
+		summary = budgetMap.get(email);
 		}
 		return summary;
 	}
 
-	public BudgetSummary readBudgetSummary(String email,
+	public BudgetSummary readBudgetSummary(String email,String costCenter,
 			List<GtfReport> gtfReports) {
 		double benchMarkTotal = 0.0;
 		double varianceTotal = 0.0;
@@ -63,7 +101,7 @@ public class DBUtil {
 		double percentageVarianceTotal = 0.0;
 		double budgetLeftToSpend = 0.0;
 		BudgetSummary summaryFromDB = null;
-		summaryFromDB = readBudgetSummaryFromDB(email);
+		summaryFromDB = readBudgetSummaryFromDB(email,costCenter);
 		GtfReport report = null;
 		if (gtfReports != null && !gtfReports.isEmpty()) {
 			for (int i = 0; i < gtfReports.size(); i++) {
@@ -150,16 +188,16 @@ public class DBUtil {
 	}
 	
 	public void saveReportDataToCache(GtfReport gtfReport){
+		//MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		String key = gtfReport.getId().toString();
 		cache.put(key, gtfReport);
 	}
 	
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
-		for(Map.Entry<String, GtfReport> gtfEntry:gtfReportList.entrySet()){
-			GtfReport gtfReport = gtfEntry.getValue();
-		}
+		//MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+		//String key = email;
 		cache.put(costCenter, gtfReportList);
 	}
 	
@@ -169,6 +207,7 @@ public class DBUtil {
 		gtfReports = getAllReportDataFromCache(costCenter);
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		if(key!=null && !"".equals(key.trim())){
+			
 			gtfReportObj = (GtfReport)gtfReports.get(key);
 		}
 		return gtfReportObj;
