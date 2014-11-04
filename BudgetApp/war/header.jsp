@@ -39,17 +39,27 @@
 			isAdmin = userService.isUserAdmin();
 			boolean isGeneUser = false;//util.readUserRoleInfo(email,costCenter);
 			UserRoleInfo userInfo = util.readUserRoleInfo(email, costCenter);
+			String role = "";
 			if(userInfo!=null){
-				isGeneUser = true;
 				session.setAttribute("userInfo", userInfo);
+				if(email.equalsIgnoreCase(userInfo.getEmail())){
+					isGeneUser = true;
+					role = userInfo.getRole();
+				}
 			}
 			//Set username message
 		
-			if (isAdmin) {
-				userName = "Welcome, " + user.getNickname() + "(Admin) !";
+			/* if (isAdmin && isGeneUser) {
+				userName = "Welcome, " + user.getNickname() + role +" !";
 			} else if(!isAdmin) {
 				userName = "Welcome, " + user.getNickname() + "!";
-			}
+			} */
+			if (isAdmin && isGeneUser) {
+				userName = "Welcome, " + user.getNickname() + " (" + role +") !";
+			} else{%>
+				alert("You are not authorised to access the application !!");
+			<%	response.sendRedirect(userService.createLogoutURL(requestUri));
+			} 
 	%>
 
 	<table style="width: 100%;">
