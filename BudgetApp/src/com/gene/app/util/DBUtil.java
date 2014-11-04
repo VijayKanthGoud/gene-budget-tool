@@ -150,16 +150,16 @@ public class DBUtil {
 	}
 	
 	public void saveReportDataToCache(GtfReport gtfReport){
-		//MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		String key = gtfReport.getId().toString();
 		cache.put(key, gtfReport);
 	}
 	
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
-		//MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
+		for(Map.Entry<String, GtfReport> gtfEntry:gtfReportList.entrySet()){
+			GtfReport gtfReport = gtfEntry.getValue();
+		}
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-		//String key = email;
 		cache.put(costCenter, gtfReportList);
 	}
 	
@@ -169,7 +169,6 @@ public class DBUtil {
 		gtfReports = getAllReportDataFromCache(costCenter);
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		if(key!=null && !"".equals(key.trim())){
-			
 			gtfReportObj = (GtfReport)gtfReports.get(key);
 		}
 		return gtfReportObj;
