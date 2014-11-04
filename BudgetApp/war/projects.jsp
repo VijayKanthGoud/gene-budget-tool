@@ -163,7 +163,7 @@ var columnNames = [ "gMemori Id",
 
 var columns = [
             	{   id : 30,name : "Status",field : 30,width : 120,	editor : Slick.Editors.Text },
-            	{	id : 2,name : columnNames[2],field : 2,width : 150,	editor :Slick.Editors.Text},
+            	{	id : 2,name : columnNames[2],field : 2,width : 150,	 editor :Slick.Editors.Text},
             	{	id : 6,name : columnNames[6],field : 6,width : 90,	editor :Slick.Editors.Text},
             	{	id : 11,name : columnNames[11],field : 11,width : 90,	editor :Slick.Editors.Text},
            		{   id : 0,name : columnNames[0],field : 0,width : 90,	editor : Slick.Editors.Text },
@@ -263,7 +263,7 @@ var options = {
   autoEdit : false,
   frozenColumn: 3
 };
-var donotShowTotals=0;
+var sortcol = "29";
 function sumTotalsFormatter(totals, columnDef) {
 	  var val = totals.sum && totals.sum[columnDef.field];
 	  if (val != null ) {
@@ -307,6 +307,13 @@ function myFilter(item) {
   return status;
   
 }
+
+function comparer(a, b) {
+	  var x = a[sortcol], y = b[sortcol];
+	  return (x == y ? 0 : (x > y ? 1 : -1));
+	}
+	
+	
 var myRequest;
 var text;
 
@@ -661,6 +668,13 @@ $(function () {
 			}
 		});
 
+		grid.onSort.subscribe(function (e, args) {
+		    sortdir = args.sortAsc ? 1 : -1;
+		    sortcol = 29;
+
+		      dataView.sort(comparer, args.sortAsc);
+		  });
+		
 		grid.onKeyDown.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row - 1;
@@ -783,6 +797,9 @@ $(function () {
 					}
 				});
 			});
+			
+
+
 </script>
 
 
