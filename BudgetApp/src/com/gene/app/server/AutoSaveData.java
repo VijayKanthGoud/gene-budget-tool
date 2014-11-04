@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.GtfReport;
+import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -22,26 +23,22 @@ public class AutoSaveData  extends HttpServlet{
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		GtfReport gtfReport = new GtfReport();
-		//String rowItem = req.getParameter("objarray").toString();
-		String keyNum = req.getParameter("key").toString();
-		String cellValue = req.getParameter("cellValue").toString();
-		String cellNum = req.getParameter("celNum").toString();
-		String dsFlag = "";
-		String key = "";
-		String costCenter = "307673";
+		String keyNum = req.getParameter(BudgetConstants.KEY).toString();
+		String cellValue = req.getParameter(BudgetConstants.CELL_VALUE).toString();
+		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
 		GtfReport gtfReportObj = null;
-		Map<String,GtfReport> gtfReportMap = util.getAllReportDataFromCache(costCenter);
+		Map<String,GtfReport> gtfReportMap = util.getAllReportDataFromCache(BudgetConstants.costCenter);
 		if(keyNum!=null && !"".equalsIgnoreCase(keyNum.trim())){
 			gtfReportObj = gtfReportMap.get(keyNum);
 			if(gtfReportObj!=null){
-				if(Integer.parseInt(cellNum)==13){
+				if(Integer.parseInt(cellNum)==BudgetConstants.CELL_REMARKS){
 					String remarks = cellValue;
 					gtfReportObj.setRemarks(remarks);
 					gtfReportMap.put(keyNum, gtfReportObj);
 				}else{
 				Map<String, Double> plannedMap = gtfReportObj.getPlannedMap();
 				if(plannedMap!=null){
-				plannedMap.put(GtfReport.months[Integer.parseInt(cellNum)], Double.parseDouble(cellValue));
+				plannedMap.put(BudgetConstants.months[Integer.parseInt(cellNum)], Double.parseDouble(cellValue));
 				gtfReportObj.setPlannedMap(plannedMap);
 				gtfReportMap.put(keyNum, gtfReportObj);
 				}
@@ -49,9 +46,9 @@ public class AutoSaveData  extends HttpServlet{
 		}
 		
 		
-		String sessionKey = (String)session.getAttribute("key");
-		GtfReport sessionGtfReport = util.readReportDataFromCache(sessionKey,costCenter);
-		util.saveAllReportDataToCache(costCenter, gtfReportMap);//ReportDataToCache(gtfReportObj);
+		String sessionKey = (String)session.getAttribute(BudgetConstants.KEY);
+		GtfReport sessionGtfReport = util.readReportDataFromCache(sessionKey,BudgetConstants.costCenter);
+		util.saveAllReportDataToCache(BudgetConstants.costCenter, gtfReportMap);
 		if(keyNum==null && cellValue==null && cellNum==null && sessionKey !=null){
 			util.saveDataToDataStore(sessionGtfReport);
 		}
@@ -59,7 +56,7 @@ public class AutoSaveData  extends HttpServlet{
 		if((keyNum!=null && sessionKey!=null) && !(keyNum.equals(sessionKey))){
 			util.saveDataToDataStore(sessionGtfReport);
 		}
-		session.setAttribute("key", keyNum);
+		session.setAttribute(BudgetConstants.KEY, keyNum);
 		
 	}
 

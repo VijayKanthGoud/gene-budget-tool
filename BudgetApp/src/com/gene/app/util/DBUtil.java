@@ -33,7 +33,7 @@ public class DBUtil {
 	}
 	
 	public Map<String,UserRoleInfo> readAllUserInfo(String costCenter){
-		String key = costCenter+" - "+UserRoleInfo.class.getName();
+		String key = costCenter+BudgetConstants.seperator+UserRoleInfo.class.getName();
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
 		userMap = (Map<String,UserRoleInfo>)cache.get(key);
 		if(userMap==null || userMap.isEmpty()){
@@ -56,7 +56,7 @@ public class DBUtil {
 	}
 	
 	public Map<String,BudgetSummary> readAllBudgetSummary(String costCenter){
-		String key = costCenter+" - "+BudgetSummary.class.getName();
+		String key = costCenter+BudgetConstants.seperator+BudgetSummary.class.getName();
 		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
 		budgetMap = (Map<String,BudgetSummary>)cache.get(key);
 		if(budgetMap==null || budgetMap.isEmpty()){
@@ -79,7 +79,7 @@ public class DBUtil {
 	}
 	public BudgetSummary readBudgetSummaryFromDB(String email,String costCenter) {
 		boolean isGeneUser = false;
-		String key = costCenter+" - "+BudgetSummary.class.getName();
+		String key = costCenter+BudgetConstants.seperator+BudgetSummary.class.getName();
 		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
 		budgetMap = readAllBudgetSummary(costCenter);
 		BudgetSummary summary = new BudgetSummary();
@@ -102,8 +102,8 @@ public class DBUtil {
 		if (gtfReports != null && !gtfReports.isEmpty()) {
 			for (int i = 0; i < gtfReports.size(); i++) {
 				report = (GtfReport) gtfReports.get(i);
-				for(int j=0;j<GtfReport.months.length-1;j++){
-					month = GtfReport.months[j];
+				for(int j=0;j<BudgetConstants.months.length-1;j++){
+					month = BudgetConstants.months[j];
 				if(report.getBenchmarkMap()!=null){
 				benchMarkTotal = benchMarkTotal	+ report.getBenchmarkMap().get(month);
 				}if(report.getPlannedMap()!=null){
@@ -131,13 +131,7 @@ public class DBUtil {
 		summary.setPercentageVarianceTotal(variancePercentage);
 		return summary;
 	}
-	
-	public void saveReportDataToCache(GtfReport gtfReport){
-		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-		String key = gtfReport.getId().toString();
-		cache.put(key, gtfReport);
-	}
-	
+		
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		cache.put(costCenter, gtfReportList);
@@ -165,44 +159,11 @@ public class DBUtil {
 			pm.close();
 		}
 	}
-	
-	public List<GtfReport> getDataFromDataStore(String key) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query q = pm.newQuery(GtfReport.class);
-		q.setFilter("key == keyParam");
-		q.declareParameters("String keyParam");
-		q.setOrdering("flag asc");
-		List<GtfReport> gtfList = new ArrayList<GtfReport>();
-		try{
-			List<GtfReport> results = (List<GtfReport>) q.execute(key);
-			if(!results.isEmpty()){
-			for(GtfReport p : results){
-				gtfList.add(p);
-			}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			q.closeAll();
-		}
-		return gtfList;
-	}
-	
-	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			pm.makePersistentAll(gtfReports);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			pm.close();
-		}
-	}
-	
+		
 	public Map<String,GtfReport> getReport(String costCenter) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);
-		q.setOrdering("flag asc, projectName asc");
+		q.setOrdering(BudgetConstants.GTFReportOrderingParameters_getReport);
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
 			List<GtfReport> results = (List<GtfReport>) q.execute();
@@ -237,13 +198,13 @@ public class DBUtil {
 			varianceMap = report.getVariancesMap();
 			for(int j=0;j<month;j++){
 				if(benchMarkMap!=null){
-					benchMark = benchMarkMap.get(GtfReport.months[j]);
+					benchMark = benchMarkMap.get(BudgetConstants.months[j]);
 				}if(accrualsMap!=null){
-					accrual = accrualsMap.get(GtfReport.months[j]);
+					accrual = accrualsMap.get(BudgetConstants.months[j]);
 				}
 			variance = benchMark-accrual;
 			if(varianceMap!=null){
-			varianceMap.put(GtfReport.months[j], variance);
+			varianceMap.put(BudgetConstants.months[j], variance);
 			}}
 			report.setVariancesMap(varianceMap);
 			rptList.add(report);

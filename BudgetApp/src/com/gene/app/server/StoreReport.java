@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.GtfReport;
+import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.users.User;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -22,30 +23,29 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 public class StoreReport extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		resp.setContentType("text/plain");
-		String objarray = req.getParameter("objarray").toString();
+		resp.setContentType(BudgetConstants.contentType);
+		String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		String email = "";
 		HttpSession session = req.getSession();
-		User user = (User)session.getAttribute("loggedInUser");
+		User user = (User)session.getAttribute(BudgetConstants.loggedInUser);
 		email = user.getEmail();
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
 				GtfReport gtfReport = new GtfReport();
 				JSONObject rprtObject = jsonArray.getJSONObject(count);
-				String projectWBS = rprtObject.getString("4");
+				String projectWBS = rprtObject.getString(BudgetConstants.GTFReport_ProjectWBS);
 				if(projectWBS == null || projectWBS.isEmpty() || projectWBS.length() == 0){
 					continue;
 				}
-				System.out.println("rprtObject : " + rprtObject);
-				gtfReport.setProjectName(rprtObject.getString("1"));
+				gtfReport.setProjectName(rprtObject.getString(BudgetConstants.GTFReport_ProjectName));
 				gtfReport.setEmail(email);
-				String status = rprtObject.getString("2");
+				String status = rprtObject.getString(BudgetConstants.GTFReport_Status);
 				int flag = 0;
-				if("New".equalsIgnoreCase(status.trim())){
+				if(BudgetConstants.status_New.equalsIgnoreCase(status.trim())){
 					flag = 1;
-				}else if("Active".equalsIgnoreCase(status.trim())){
+				}else if(BudgetConstants.status_Active.equalsIgnoreCase(status.trim())){
 					flag = 2;
 				}else{
 					flag = 3;
@@ -53,39 +53,38 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setFlag(flag);
 				gtfReport.setStatus(status);
 				//gtfReport.setStatus(rprtObject.getString("2"));
-				gtfReport.setRequestor(rprtObject.getString("3"));
-				gtfReport.setProject_WBS(rprtObject.getString("4"));
-				gtfReport.setWBS_Name(rprtObject.getString("5"));
-				gtfReport.setSubActivity(rprtObject.getString("6"));
-				gtfReport.setBrand(rprtObject.getString("7"));
+				gtfReport.setRequestor(rprtObject.getString(BudgetConstants.GTFReport_Requestor));
+				gtfReport.setProject_WBS(rprtObject.getString(BudgetConstants.GTFReport_ProjectWBS));
+				gtfReport.setWBS_Name(rprtObject.getString(BudgetConstants.GTFReport_WBS_Name));
+				gtfReport.setSubActivity(rprtObject.getString(BudgetConstants.GTFReport_SubActivity));
+				gtfReport.setBrand(rprtObject.getString(BudgetConstants.GTFReport_Brand));
 				try {
 					gtfReport.setPercent_Allocation(Integer.parseInt(rprtObject
-							.getString("8")));
+							.getString(BudgetConstants.GTFReport_Percent_Allocation)));
 				} catch (NumberFormatException e) {
 					gtfReport.setPercent_Allocation(0);
 				}
-				gtfReport.setPoNumber(rprtObject.getString("9"));
-				String poDesc = rprtObject.getString("10");
-				System.out.println("poDesc"+poDesc);
+				gtfReport.setPoNumber(rprtObject.getString(BudgetConstants.GTFReport_PoNumber));
+				String poDesc = rprtObject.getString(BudgetConstants.GTFReport_PoDesc);
 				gtfReport.setgMemoryId(poDesc.substring(0, 6));
 				gtfReport.setPoDesc(poDesc.substring(7, poDesc.length()));
-				gtfReport.setVendor(rprtObject.getString("11"));
+				gtfReport.setVendor(rprtObject.getString(BudgetConstants.GTFReport_Vendor));
 				String remarks = null;
 				try{
-					remarks = ((rprtObject.getString("25")!=null) && (!"".equalsIgnoreCase(rprtObject.getString("25").trim())))?(rprtObject.getString("25")):"";
+					remarks = ((rprtObject.getString(BudgetConstants.GTFReport_Remarks)!=null) && (!"".equalsIgnoreCase(rprtObject.getString(BudgetConstants.GTFReport_Remarks).trim())))?(rprtObject.getString(BudgetConstants.GTFReport_Remarks)):"";
 				}catch(com.google.appengine.labs.repackaged.org.json.JSONException exception){
 					remarks = "";
 				}
 				gtfReport.setRemarks(remarks);
 				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
 				Map<String, Double> setZeroMap = new HashMap<String, Double>();
-				for (int cnt = 12; cnt <= 23; cnt++) {
-					setZeroMap.put(GtfReport.months[cnt - 12], 0.0);
+				for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
+					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 					try {
-						benchmarkMap.put(GtfReport.months[cnt - 12],
-								Double.parseDouble(rprtObject.getString(Integer.toString(cnt))));
+						benchmarkMap.put(BudgetConstants.months[cnt],
+								Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))));
 					} catch (NumberFormatException e ) {
-						benchmarkMap.put(GtfReport.months[0], 0.0);
+						benchmarkMap.put(BudgetConstants.months[0], 0.0);
 					}
 				}
 				gtfReport.setBenchmarkMap(benchmarkMap);

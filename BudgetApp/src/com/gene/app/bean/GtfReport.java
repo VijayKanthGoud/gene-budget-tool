@@ -84,9 +84,7 @@ public class GtfReport implements Serializable {
 		this.email = email;
 	}
 
-	public static String[] months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-			"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
-
+	
 	public String getgMemoryId() {
 		return gMemoryId;
 	}

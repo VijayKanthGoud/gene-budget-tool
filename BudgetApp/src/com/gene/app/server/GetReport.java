@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.GtfReport;
+import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
@@ -31,28 +32,21 @@ public class GetReport extends HttpServlet {
 	DBUtil util = new DBUtil();
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		resp.setContentType("text/plain");
-		String costCenter = "307673";
-		HttpSession session = req.getSession();
+		resp.setContentType(BudgetConstants.contentType);
 		UserService userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
 		String email = userService.getCurrentUser().getEmail();
-		/*if(user!=null){
-		email = user.getEmail();
-		}*/
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
-		gtfReports = util.getAllReportDataFromCache(costCenter);
+		gtfReports = util.getAllReportDataFromCache(BudgetConstants.costCenter);
 		
-		List<GtfReport> gtfReportList = getReportList(gtfReports,"prjOwner",email);
+		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
 		gtfReportList = util.calculateVarianceMap(gtfReportList);
-		req.setAttribute("gtfreports", gtfReportList);
+		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, gtfReportList);
 		DBUtil util = new DBUtil();
-		//UserService user = UserServiceFactory.getUserService();
 		
-		//String email = (String)req.getAttribute("email");
-		BudgetSummary summary = util.readBudgetSummary(email,costCenter,gtfReportList);
+		BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList);
 		
-		req.setAttribute("summary", summary);
-		RequestDispatcher rd = req.getRequestDispatcher("/listProjects");
+		req.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
+		RequestDispatcher rd = req.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);
 		try {
 			rd.forward(req, resp);
 		} catch (ServletException e) {
