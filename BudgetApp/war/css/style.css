@@ -78,7 +78,7 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 	top: 1px;
 }
 
-#sattusMessage {
+#statusMessage {
 	font: Arial;
 	font-weight: bold;
 	font-size: 14px;

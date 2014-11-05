@@ -48,12 +48,9 @@
 						</tr>
 					</table>
 				</td>
-				<td style="width: 50%; height: 55px; text-align: center;">
-						<span
-							style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px; ">
-							My Projects</span>
-
-				</td>
+				<td style="width: 50%; height: 55px; text-align: center;"><span
+					style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
+						My Projects</span></td>
 
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
@@ -167,8 +164,9 @@
 		id : 11,
 		name : columnNames[11],
 		field : 11,
-		width : 90,
-		editor : Slick.Editors.Text
+		width : 110,
+		editor : Slick.Editors.Text,
+		groupTotalsFormatter : sumTotalsFormatter 
 	}, {
 		id : 0,
 		name : columnNames[0],
@@ -341,8 +339,9 @@
 		id : 11,
 		name : columnNames[11],
 		field : 11,
-		width : 90,
-		editor : Slick.Editors.Text
+		width : 110,
+		editor : Slick.Editors.Text,
+		groupTotalsFormatter : sumTotalsFormatter 
 	}, {
 		id : 0,
 		name : columnNames[0],
@@ -469,7 +468,6 @@
 	} ];
 
 	var searchString = "";
-
 	// Grouping columns acording to status(New, Active, Closed)
 	function groupByStatus() {
 		dataView
@@ -533,9 +531,15 @@
 	// Display total for active new and closed projects (roll up total)
 	function sumTotalsFormatter(totals, columnDef) {
 		var val = totals.sum && totals.sum[columnDef.field];
+		if(columnDef.field==11 && totals['group']['value'].toLowerCase() != 'Total'
+			.toLowerCase()){
+			return "<span style='color:rgb(168, 39, 241)'>" + "Totals (Planned)"
+			+ "</span> ";
+		}
 		if (val != null
 				&& totals['group']['value'].toLowerCase() != 'Total'
-						.toLowerCase()) {
+						.toLowerCase()
+						) {
 			return "<span style='color:rgb(168, 39, 241)'>"
 					+ ((Math.round(parseFloat(val) * 100) / 100)).toFixed(2)
 					+ "</span> ";
@@ -546,6 +550,7 @@
 
 	// Filter data acording to search field
 	function searchProject(item) {
+		
 		var status = true;
 		if (item[33] != "New") {
 			status = false;
@@ -1034,6 +1039,15 @@
 				this.value = "";
 			}
 			searchString = this.value;
+			
+	if (searchString != "") {
+				dataView.expandGroup("Active");
+				dataView.expandGroup("Closed");
+			} else {
+				dataView.collapseGroup("Active");
+				dataView.collapseGroup("Closed");
+			}
+
 			dataView.refresh();
 		});
 
@@ -1059,7 +1073,7 @@
 			}
 			dataView.refresh();
 		});
-		
+
 		// Display details on mouse over a cell while the details exceeds the cell size
 		grid.registerPlugin(new Slick.AutoTooltips({
 			enableForHeaderCells : true
@@ -1067,7 +1081,6 @@
 		grid.render();
 
 	})
-
 
 	// Persist the data to datastore while moving to other page or closing the application
 	$(window).bind(
