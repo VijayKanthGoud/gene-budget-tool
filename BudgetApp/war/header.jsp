@@ -55,7 +55,7 @@
 			} else if(!isAdmin) {
 				userName = "Welcome, " + user.getNickname() + "!";
 			} */
-			if (userService!= null && userService.isUserLoggedIn()    && isGeneUser  ) {
+			if (userService!= null && userService.isUserLoggedIn()    /* && isGeneUser   */) {
 				userName = "Welcome, " + user.getNickname() + " (" + role +") !";
 			} else{%>
 				alert("You are not authorised to access the application !!");
@@ -97,7 +97,7 @@
 	<div id='cssmenu'>
 		<ul>
 			<li><a href='/'><span>Home</span></a></li>
-			<li class='last'><a href='/getreport'><span>Projects</span></a></li>
+			<li class='last'><a href='/createProjects'><span>New Projects</span></a></li>
 			<li class='last'><a href='/displayReports'><span>Reports</span></a></li>
 			<%
 				if (isAdmin) {

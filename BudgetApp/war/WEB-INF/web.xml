@@ -24,7 +24,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<servlet>
 		<servlet-name>ListProject</servlet-name>
-		<jsp-file>/projects.jsp</jsp-file>
+		<jsp-file>/editProjects.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ListProject</servlet-name>
@@ -48,6 +48,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Developer</servlet-name>
 		<url-pattern>/developer</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>createProjects</servlet-name>
+		<jsp-file>/createProjects.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>createProjects</servlet-name>
+		<url-pattern>/createProjects</url-pattern>
+	</servlet-mapping>
+	
 	
 	<servlet>
 		<servlet-name>GetProjectData</servlet-name>
@@ -84,6 +94,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 			<url-pattern>/getreport</url-pattern>
 			<url-pattern>/storereport</url-pattern>
 			<url-pattern>/getprojectdata</url-pattern>
+			<url-pattern>/createProjects</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
@@ -100,6 +111,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</security-constraint>
 	
 	<welcome-file-list>
-		<welcome-file>homepage.jsp</welcome-file>
+		<welcome-file>getreport</welcome-file>
 	</welcome-file-list>
 </web-app>
