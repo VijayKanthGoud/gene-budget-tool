@@ -890,7 +890,7 @@
 				percentage = 0;
 			}
 			var remarks = data[j - 4]["25"];
-			if (remarks.trim().length <= 0) {
+			if ($.trim(remarks).length <= 0) {
 				data[j - 4]["25"] = percentage + "%";
 			}
 		}
@@ -1040,14 +1040,13 @@
 			}
 			searchString = this.value;
 			
-	if (searchString != "") {
+	    if (searchString != "") {
 				dataView.expandGroup("Active");
 				dataView.expandGroup("Closed");
 			} else {
 				dataView.collapseGroup("Active");
 				dataView.collapseGroup("Closed");
 			}
-
 			dataView.refresh();
 		});
 
