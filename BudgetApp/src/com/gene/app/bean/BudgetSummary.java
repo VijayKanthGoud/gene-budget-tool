@@ -1,6 +1,7 @@
 package com.gene.app.bean;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -21,6 +22,26 @@ public class BudgetSummary  implements Serializable {
 	
 	private double varianceTotal;
 	
+	private double accrualTotal;
+	
+	private Map<String,BudgetSummary> budgetMap;
+	
+	public Map<String, BudgetSummary> getBudgetMap() {
+		return budgetMap;
+	}
+
+	public void setBudgetMap(Map<String, BudgetSummary> budgetMap) {
+		this.budgetMap = budgetMap;
+	}
+
+	public double getAccrualTotal() {
+		return accrualTotal;
+	}
+
+	public void setAccrualTotal(double accrualTotal) {
+		this.accrualTotal = accrualTotal;
+	}
+
 	private double percentageVarianceTotal;
 		
 	public String getProjectOwnerEmail() {
