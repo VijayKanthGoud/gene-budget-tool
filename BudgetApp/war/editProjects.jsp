@@ -27,7 +27,8 @@
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-      
+    <html>
+<body onload="getBrandTotals()">  
    <div id="multibrandDisp">   </div>        
    
 <center>
@@ -59,40 +60,93 @@
 						style="color: #005691; white-space: nowrap;">
 						<%
 							BudgetSummary summary = (BudgetSummary) request.getAttribute("summary");
+															Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
+															BudgetSummary budgetSummary = new BudgetSummary();
+															UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
+															Map<String,Double> brandMap = user.getBrand();
+															Object[] brands = brandMap.keySet().toArray();
 						%>
-						<tr>
-							<td style="padding-left: 20px;">2017</td>
-							<td>Total budget:</td>
-							<td>$<input style="color: #005691" type=text name=type
-								maxlength="8" size="8" value="<%=summary.getTotalBudget()%>"></td>
-						</tr>
-						<tr>
-							<td style="padding-left: 20px;">2017</td>
-							<td>Budget left to spend:</td>
-							<td>$<%=Math.round(summary.getBudgetLeftToSpend() * 10.0) / 10.0%></td>
-						</tr>
-						<tr>
-							<td style="padding-left: 20px;">2017</td>
-							<td>Benchmark Total:</td>
-							<td>$<%=Math.round(summary.getBenchmarkTotal() * 10.0) / 10.0%></td>
-						</tr>
-						<tr>
-							<td style="padding-left: 20px;">2017</td>
-							<td>Planned Total:</td>
-							<td>$<%=Math.round(summary.getPlannedTotal() * 10.0) / 10.0%></td>
-						</tr>
-						<%
-							String color = summary.getPercentageVarianceTotal() < 5 ? "yellow"
-									: "#00FFFF";
-						%>
-						<tr>
-							<td style="padding-left: 20px;"><span
-								style="background: <%=color%>;color:black">2017</span></td>
-							<td><span style="background: <%=color%>;color:black">Variance
-									Total:</span></td>
-							<td><span style="background: <%=color%>;color:black">$<%=Math.round(summary.getVarianceTotal() * 10.0) / 10.0%></span>
-							</td>
-						</tr>
+						 <script>
+						  var selectedValue = "";
+						function getBrandTotals(){
+							alert("hi");
+							selectedValue = document.getElementById("brandType").value; 
+							 <%
+							 System.out.println("budgetMap = "+budgetMap);
+							 
+							for (Map.Entry<String, BudgetSummary> entry : budgetMap.entrySet())
+							{
+								budgetSummary = new BudgetSummary();
+								String keyV = entry.getKey();
+								/* int index = keyV.indexOf(" ");
+								keyV = keyV.substring(0,index-1); */
+								keyV = keyV.replaceAll("\\s+","");
+								%>
+								alert("hi"+selectedValue);
+								if(selectedValue == '<%= keyV.trim()%>'){
+									alert("selectedValue = "+selectedValue);
+									 <%budgetSummary = entry.getValue();%>
+									<%-- document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>; --%>
+									$('#totalBudget').val("<%= budgetSummary.getTotalBudget()%>");
+									$('#plannedTotal').text("<%= Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
+									$('#budgetLeftToSpend').text("<%= Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%>");
+									$('#accrualTotal').text("<%= Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%>");
+									$('#varianceTotal').text("<%= Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%>"); 
+								}else{
+									<%budgetSummary = new BudgetSummary();%>
+								}
+								<%}
+							%> 
+						} 
+						</script> 
+						
+						
+       					<tr>
+                            <!-- td style="padding-left: 20px;">2017</td> -->
+                            <td>Select Brand:</td>
+                            <td><select id="brandType" onchange="getBrandTotals()">
+                            <%String option = "";
+                            for(int i=0;i<brands.length;i++){ 
+                            option = brands[i].toString();
+                            if(i==1){%>
+                            <option value=<%=option %> selected><%=option %></option>
+                            <%}else{ %>
+                            <option value=<%=option %>><%=option %></option>
+                            <%}} %>
+                            </select></td>
+                        </tr>
+						
+						 <tr>
+                                <!-- td style="padding-left: 20px;">2017</td> -->
+                                <td>Budget:</td>
+                                <td>$<input id = "totalBudget" style="color: #005691" type=text name=type
+                                       maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
+                         </tr>
+
+						 <tr>
+                                 <!-- td style="padding-left: 20px;">2017</td> -->
+                                 <td>Planned:</td><td>$<span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+                          </tr>
+                          <tr>
+                                 <!-- td style="padding-left: 20px;">2017</td> -->
+                                 <td>Unplanned Total:</td><td>$<span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
+                          </tr>
+                          <tr>
+                                 <!-- td style="padding-left: 20px;">2017</td> -->
+                                 <td>Accrual:</td><td>$<span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+                          </tr>
+                          
+                          <%
+                                 String color=budgetSummary.getPercentageVarianceTotal() < 5?"yellow":  "#00FFFF";
+                          %>
+                           <tr>
+                                 <!-- td style="padding-left: 20px;"><span
+                                        style="background: <%=color%>;color:black">2017</span></td> -->
+                                 <td><span style="background: <%=color%>;color:black">2017 Variance Total:</span></td>
+                                 <td><span style="background: <%=color%>;color:black">$<span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+                                 </td>
+                          </tr>
+
 					</table>
 				</td>
 			</tr>
@@ -897,7 +951,7 @@
 			var remarks = data[j - 4]["25"];
 			if ($.trim(remarks).length <= 0) {
 				data[j - 4]["25"] = percentage + "%";
-				//data[j - 4][32] = percentage + "%";
+				data[j - 4][32] = percentage + "%";
 			}
 		}
 		// initialize the model
@@ -1119,3 +1173,5 @@
 
 
 <%@ include file="footer.jsp"%>
+</body>
+</html>
