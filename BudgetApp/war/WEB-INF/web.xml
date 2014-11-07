@@ -58,6 +58,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/createProjects</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>multiBrand</servlet-name>
+		<jsp-file>/multiBrand.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>multiBrand</servlet-name>
+		<url-pattern>/multiBrand</url-pattern>
+	</servlet-mapping>
+	
 	
 	<servlet>
 		<servlet-name>GetProjectData</servlet-name>

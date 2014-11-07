@@ -18,7 +18,8 @@
         "YesNo": YesNoFormatter,
         "Checkmark": CheckmarkFormatter,
         "DollarSymbol" : DollarFormatter,
-        "Remark":RemarkFormatter
+        "Remark":RemarkFormatter,
+        "HyperLink":HyperLinkFormatter
       }
     }
   });
@@ -66,6 +67,14 @@
 		return "<span style='color:#005691'>"+ Number(value).toFixed(2) +"</span>" 
 	}
   }
+  
+  function HyperLinkFormatter(row, cell, value, columnDef, dataContext) {
+		if(dataContext["6"]){
+			return "<span ><a href='#' style='color:green'>"+dataContext[6] + "</a></span>" ;		
+		}else{
+			return "";
+		}
+	  }
   
   function RemarkFormatter(row, cell, value, columnDef, dataContext) {
 	 

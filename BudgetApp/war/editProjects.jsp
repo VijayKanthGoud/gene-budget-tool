@@ -27,7 +27,9 @@
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-
+      
+   <div id="multibrandDisp">   </div>        
+   
 <center>
 	<div>
 		<table
@@ -107,7 +109,7 @@
 	<div id="statusMessage"></div>
 </center>
 <div id="displayGrid" style="width: 100%; height: 55.5%;"></div>
-
+   <div id="back"></div>    
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
 <script src="SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
@@ -125,6 +127,7 @@
 <script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
 <script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 <script>
+	
 	rdoSelectedmode = $('input[name="selectedmode"]');
 	chkBoxHideColumns = $('input[name="hideColumns"]');
 
@@ -159,6 +162,7 @@
 		name : columnNames[6],
 		field : 6,
 		width : 90,
+		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 11,
@@ -334,6 +338,7 @@
 		name : columnNames[6],
 		field : 6,
 		width : 90,
+		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 11,
@@ -892,6 +897,7 @@
 			var remarks = data[j - 4]["25"];
 			if ($.trim(remarks).length <= 0) {
 				data[j - 4]["25"] = percentage + "%";
+				//data[j - 4][32] = percentage + "%";
 			}
 		}
 		// initialize the model
@@ -946,6 +952,13 @@
 				});
 
 		grid.onClick.subscribe(function(e, args) {
+			if(args.cell == 2 && dataView.getItem(args.row)["6"] != " " && dataView.getItem(args.row)["6"] != ""){
+				
+				$('#multibrandDisp').load('multiBrand.jsp').fadeIn(100);
+				$('#back').addClass('black_overlay').fadeIn(100);
+				  
+			}
+			
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {

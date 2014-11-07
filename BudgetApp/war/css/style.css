@@ -95,6 +95,40 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 	z-index: 1002;
 	overflow: auto;
 }
+
+#multibrandDisp {
+	font: Arial;
+	font-weight: bold;
+	font-size: 14px;
+	color: #005691;
+	display: none;
+	position: absolute;
+	top: 25%;
+	left: 35%;
+	width: 425px;
+	height: 300px;
+	align: center;
+	padding: 1px;
+	border: 1px solid #005691;
+	background-color: white;
+	z-index: 1002;
+	overflow: auto;
+}
+
+.black_overlay{           
+    display: none;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index:1001;
+        -moz-opacity: 0.8;
+        opacity:.80;
+        filter: alpha(opacity=80);   
+} 
+
 .cell-title {
 	font-weight: bold;
 }
