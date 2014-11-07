@@ -1,6 +1,7 @@
 package com.gene.app.bean;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -17,11 +18,21 @@ public class UserRoleInfo implements Serializable {
 	@Persistent
 	private String UserName;
 
+	// holds brand level budget
 	@Persistent
-	private String brand;
+	private Map<String,Double> brand;
 
+	// holds cost center level budget
 	@Persistent
-	private String cost_center;
+	private Map<String,Double> cost_center;
+
+	public void setBrand(Map<String, Double> brand) {
+		this.brand = brand;
+	}
+
+	public void setCost_center(Map<String, Double> cost_center) {
+		this.cost_center = cost_center;
+	}
 
 	@Persistent
 	private String email;
@@ -37,7 +48,7 @@ public class UserRoleInfo implements Serializable {
 		UserName = userName;
 	}
 
-	public String getBrand() {
+	/*public String getBrand() {
 		return brand;
 	}
 
@@ -51,10 +62,18 @@ public class UserRoleInfo implements Serializable {
 
 	public void setCost_center(String cost_center) {
 		this.cost_center = cost_center;
-	}
+	}*/
 
 	public String getEmail() {
 		return email;
+	}
+
+	public Map<String, Double> getBrand() {
+		return brand;
+	}
+
+	public Map<String, Double> getCost_center() {
+		return cost_center;
 	}
 
 	public void setEmail(String email) {
