@@ -69,7 +69,7 @@
 						 <script>
 						  var selectedValue = "";
 						function getBrandTotals(){
-							alert("hi");
+							
 							selectedValue = document.getElementById("brandType").value; 
 							 <%
 							 System.out.println("budgetMap = "+budgetMap);
@@ -82,9 +82,9 @@
 								keyV = keyV.substring(0,index-1); */
 								keyV = keyV.replaceAll("\\s+","");
 								%>
-								alert("hi"+selectedValue);
+								
 								if(selectedValue == '<%= keyV.trim()%>'){
-									alert("selectedValue = "+selectedValue);
+									
 									 <%budgetSummary = entry.getValue();%>
 									<%-- document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>; --%>
 									$('#totalBudget').val("<%= budgetSummary.getTotalBudget()%>");
