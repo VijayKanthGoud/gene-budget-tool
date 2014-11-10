@@ -29,7 +29,7 @@
 	type="text/css" />
     <html>
 <body onload="getBrandTotals()">  
-   <div id="multibrandDisp">   </div>        
+     
    
 <center>
 	<div>
@@ -162,8 +162,8 @@
 	</div>
 	<div id="statusMessage"></div>
 </center>
-<div id="displayGrid" style="width: 100%; height: 55.5%;"></div>
-   <div id="back"></div>    
+<div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
+  
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
 <script src="SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
@@ -216,7 +216,6 @@
 		name : columnNames[6],
 		field : 6,
 		width : 90,
-		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 11,
@@ -570,11 +569,7 @@
 		dataView.collapseGroup("Closed");
 	}
 
-	var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra",
-			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
-			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
-			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
-			"Neuroscience Pipeline", "Tarceva" ];
+	
 
 	var options = {
 		editable : true,
@@ -1006,13 +1001,6 @@
 				});
 
 		grid.onClick.subscribe(function(e, args) {
-			if(args.cell == 2 && dataView.getItem(args.row)["6"] != " " && dataView.getItem(args.row)["6"] != ""){
-				
-				$('#multibrandDisp').load('multiBrand.jsp').fadeIn(100);
-				$('#back').addClass('black_overlay').fadeIn(100);
-				  
-			}
-			
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
