@@ -18,11 +18,13 @@
   </style>
 </head>
 <body>
-<div id="header" style="width:100%;height:20px;background-color:#005691"></div>
+<div id="header" style="width:100%;height:20px;background-color:#005691">Enter project Multi Brand</div>
 <div id="myGrid" style="width:100%;height:230px;"></div>
 <center>
-<button id= "" class="myButton" value="Submit" onclick="saveAndClose();">
+<button  id="saveClose" class="myButton" value="" onclick="saveAndClose();">
 		Save and close</button>
+<button class="myButton" value="" onclick="saveWithoutClose();">
+		Cancel</button>
  </center>
 
 <script src="SlickGrid-master/lib/firebugx.js"></script>
@@ -43,13 +45,34 @@
 	function saveAndClose(){
 		$('#multibrandDisp').hide();
 		$('#back').removeClass('black_overlay').fadeIn(100);
+		data[0][24]=sum;
+		for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"; count++){
+			data[count+1][7]=m_data[count][1];
+			data[count+1][8]=m_data[count][2];
+			var total =count+1;
+			var row= total;
+			for(var cell=12;cell <24;cell++){
+				total=row;
+				if(data[0][cell]!=0.0){
+					 
+						 data[total][cell] = (parseFloat(data[0][cell])*parseFloat(data[total][8]/100)).toFixed(2);
+					} 
+				else{
+					data[total][cell]=0.00;
+					 }
+				}
+			data[count+1][25]="Added";
+		}
+	grid.invalidate();
+	}
+	
+	function saveWithoutClose(){
+		$('#multibrandDisp').hide();
+		$('#back').removeClass('black_overlay').fadeIn(100);
 	}
 
-
-
-
   var m_grid;
-  var m_data = [];
+  
   var m_options = {
     editable: true,
     enableAddRow: true,
@@ -57,19 +80,19 @@
     asyncEditorLoading: false,
     autoEdit: false
   };
+  var sum = 0.0;
   var m_columns = [
     {
 		id : 1,
 		name : "Brand",
 		field : 1,
 		width : 160,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.Auto
 	}, {
 		id : 2,
 		name : "Allocation %",
 		field : 2,
 		width : 125,
-		editor : Slick.Editors.Text
 	}, {
 		id : 3,
 		name : "Total",
@@ -79,13 +102,14 @@
 	}
   ];
 	
- 
+  var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra",
+            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
+            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
+            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
+            			"Neuroscience Pipeline", "Tarceva" ];
 
   $(function () {
-    for (var i = 0; i < 5; i++) {
-      var d = (m_data[i] = {});
-      d[i] = "";
-    }
+ 
     m_grid = new Slick.Grid("#myGrid", m_data, m_columns, m_options);
     m_grid.setSelectionModel(new Slick.CellSelectionModel());
     m_grid.registerPlugin(new Slick.AutoTooltips());
@@ -97,19 +121,40 @@
     m_grid.onAddNewRow.subscribe(function (e, args) {
       var item = args.item;
       var column = args.column;
+      var row = args.row;
       m_grid.invalidateRow(m_data.length);
       m_data.push(item);
       m_grid.updateRowCount();
       m_grid.render();
     });
     
-    m_grid.onClick.subscribe(function(e, args) {
-    	/*  alert(JSON.stringify(m_data));  */
-    	dataView.addItem({id: "1", name: "", field: "", complete:true});   
-    	dataView.refresh();
-    	/* alert(JSON.stringify(dataView));
-         */
-    });
+    m_grid.onCellChange.subscribe(function(e, args) {
+		
+		var cell = args.cell+1;
+		var row = args.row;
+		sum = 0.0;
+		if(cell == 3){
+		
+		for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			sum = sum + parseFloat(m_data[count]["3"]);
+		}
+		for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+		}
+		m_grid.invalidate();
+		}
+		
+		if(cell == 1 && availableTags.indexOf(m_data[row][1]) == -1){
+			m_data[row][1]="";
+			alert("Enter a valid brand.");
+	        m_grid.gotoCell(row, 0, true);
+			
+		}
+		/* localStorage.setItem("data", JSON.stringify(m_data));
+		alert(JSON.stringify(localStorage.getItem("data"), null, 4)); */
+
+	});
+    
   })
   
 

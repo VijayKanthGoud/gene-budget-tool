@@ -156,3 +156,6 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 	background: url(SlickGrid-master/images/collapse.gif) no-repeat center
 		center;
 }
+.ui-front {
+   z-index: 1003 !important;
+}

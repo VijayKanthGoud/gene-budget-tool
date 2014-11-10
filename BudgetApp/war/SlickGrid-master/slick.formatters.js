@@ -19,7 +19,8 @@
         "Checkmark": CheckmarkFormatter,
         "DollarSymbol" : DollarFormatter,
         "Remark":RemarkFormatter,
-        "HyperLink":HyperLinkFormatter
+        "HyperLink":HyperLinkFormatter,
+        "budget":BudgetFormatter
       }
     }
   });
@@ -69,10 +70,10 @@
   }
   
   function HyperLinkFormatter(row, cell, value, columnDef, dataContext) {
-		if(dataContext["6"]){
-			return "<span ><a href='#' style='color:green'>"+dataContext[6] + "</a></span>" ;		
+		if(value.toLowerCase().indexOf("mb") >= 0){
+			return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
 		}else{
-			return "";
+			return value;
 		}
 	  }
   
@@ -90,5 +91,13 @@
 		  return "<span style='color:"+color+"'>"+ value +"</span>";
 	  }
   }
+  
+  function BudgetFormatter(row, cell, value, columnDef, dataContext) {
+		if(value!=""){
+			return "<span style='color:#005691'>"+ Number(value).toFixed(2) +"</span>" ;
+		}else if(dataContext[25]=="Added"){
+			return "<span style='color:#005691'>" + (0).toFixed(2) +"</span>";
+		}
+	  }
 
 })(jQuery);

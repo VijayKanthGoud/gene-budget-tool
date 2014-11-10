@@ -6,7 +6,8 @@
 	if (userPrincipal != null) {
 %>
 
-
+<div id="multibrandDisp">   </div>   
+   <div id="back">	</div>  
 <style>
 .slick-cell.copied {
 	background: blue;
@@ -63,9 +64,22 @@
 <script src="SlickGrid-master/slick.core.js"></script>
 
 <script>
+	$('#saveClose').click(function() {
+		  alert( "Handler for .click() called." );
+	});
+
 	var grid;
 
 	var data = [];
+	
+	var m_data = [];
+	   for (var i = 0; i < 5; i++) {
+		      var d = (m_data[i] = {});
+		      d[0] = "";
+		      d[1] = "";
+		      d[2] = "";
+		      d[3] = "";
+		    }
 	
 	var availableTags = [ "ActionScript", "AppleScript", "Asp", "BASIC", "C",
 			"C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran",
@@ -190,7 +204,8 @@
 		name : columnNames[7],
 		field : 7,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.Text,
+		formatter : Slick.Formatters.HyperLink
 	}, {
 		id : 8,
 		name : columnNames[8],
@@ -220,79 +235,92 @@
 		name : columnNames[12],
 		field : 12,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 13,
 		name : columnNames[13],
 		field : 13,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 14,
 		name : columnNames[14],
 		field : 14,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 15,
 		name : columnNames[15],
 		field : 15,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 16,
 		name : columnNames[16],
 		field : 16,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 17,
 		name : columnNames[17],
 		field : 17,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 18,
 		name : columnNames[18],
 		field : 18,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 19,
 		name : columnNames[19],
 		field : 19,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 20,
 		name : columnNames[20],
 		field : 20,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 21,
 		name : columnNames[21],
 		field : 21,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 22,
 		name : columnNames[22],
 		field : 22,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 23,
 		name : columnNames[23],
 		field : 23,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	}, {
 		id : 24,
 		name : columnNames[24],
 		field : 24,
 		width : 120,
-		editor : Slick.Editors.Text
+		editor : Slick.Editors.FloatText,
+		formatter : Slick.Formatters.budget
 	} ];
 
 	$(function() {
@@ -335,6 +363,51 @@
 				e.stopPropagation();
 			}
 		});
+			
+		grid.onClick.subscribe(function(e, args) {
+			if(args.cell == 7 && data[args.row]["7"].toLowerCase().indexOf("mb") >= 0){
+				$('#multibrandDisp').load('multiBrand.jsp').fadeIn(100);
+				$('#back').addClass('black_overlay').fadeIn(100);
+				
+				var restoredSession = JSON.parse(localStorage.getItem('data'));
+			}
+		});
+		grid.onCellChange.subscribe(function(e, args) {
+			var cell = args.cell;
+			var row = args.row;
+			var total = row;
+			var sum=0.0;
+			if(data[row][24]!=""){
+				for(var cnt=12;cnt<24;cnt++){
+					sum=parseFloat(sum)+ parseFloat(data[total][cnt]);
+				}
+				
+				if( sum > data[total][24]) {
+					data[row][cell]=0.0;
+					alert("Sum of budget for all months exceeding totals.");
+			        grid.gotoCell(row, cell, true);
+				}
+
+			 }
+		   if(cell>11 && cell<24){
+			while(data[row+1][7]!="" && data[row+1][7]!="undefined" &&
+					data[row+1][8]!="" && data[row+1][8]!="undefined"){
+				data[row+1][cell] = (parseFloat(data[total][cell])*parseFloat(data[row+1][8]/100)).toFixed(2);
+				row++;
+			}
+			grid.invalidate();
+		}
+		});
+		 grid.onBeforeEditCell
+			.subscribe(function(e, args) {
+				var row = args.row;
+				if(data[row][25]=="Added"){
+					return false;
+				}else{
+					return true;
+				}
+			});
+		
 	})
 
 	function submitData() {
