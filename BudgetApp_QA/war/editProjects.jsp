@@ -1096,6 +1096,7 @@
 			searchString = this.value;
 			
 	    if (searchString != "") {
+		    	dataView.expandGroup("New");
 				dataView.expandGroup("Active");
 				dataView.expandGroup("Closed");
 			} else {
