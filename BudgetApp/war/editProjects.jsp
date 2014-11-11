@@ -216,6 +216,7 @@
 		name : columnNames[6],
 		field : 6,
 		width : 90,
+		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 11,
@@ -529,7 +530,7 @@
 	// Grouping columns acording to status(New, Active, Closed)
 	function groupByStatus() {
 		dataView
-				.setGrouping({
+				.setGrouping([{
 					getter : 26,
 					formatter : function(g) {
 						if (g.value != "Total") {
@@ -563,7 +564,17 @@
 							new Slick.Data.Aggregators.Sum("24"), ],
 					aggregateCollapsed : true,
 					lazyTotalsCalculation : true
-				});
+				},
+			    {
+				      getter: 34,
+				      formatter :function (g) {
+				        return g.value;
+				      },
+				      lazyTotalsCalculation: true
+				    }
+				
+				
+				]);
 
 		dataView.collapseGroup("Active");
 		dataView.collapseGroup("Closed");
@@ -713,7 +724,7 @@
 
 		var indent = 0;
 		var parents = [];
-
+		
 		// prepare the data
 		<%int idCounter = -1;
 		for (int i = 0; i < gtfReports.size(); i++) {
@@ -727,17 +738,21 @@
     	    	<%GtfReport gReport = gtfReports.get(i);%>
     	 		d[25]=" ";
        	 		d[26]="<%=gReport.getStatus()%>";
-        		d[27]="<%=gReport.getgMemoryId()%>";
+       	 		var gmemoriID = "<%=gReport.getgMemoryId()%>";
+        		d[27]=gmemoriID;
         		d[28]="<%=gReport.getBrand()%>";
         		d[29]="<%=gReport.getProjectName()%>";
         		d[30]=" ";	
         		d[31]="<%=gReport.getId()%>";
         		d[32]="<%=gReport.getRemarks()%>";
         		d[33]="New";
-	
+        		d[34]=gmemoriID;
+				if(gmemoriID.indexOf(".") > -1){
+					d[34]=gmemoriID.split(".")[0];
+				}
         		<%if(isFirst){
     				isFirst = false;%>    
-   			 		d[0]="<%=gReport.getgMemoryId()%>";
+   			 		d[0]=gmemoriID;
     				d[1]="<%=gReport.getRequestor()%>";
     				d[2]="<%=gReport.getProjectName()%>";
     				d[3]="<%=gReport.getProject_WBS()%>";
@@ -928,6 +943,7 @@
 			d[31] = " ";
 			d[32] = " ";
 			d[33] = "New";
+			d[34] = "";
 
 		}
 
@@ -1001,6 +1017,19 @@
 				});
 
 		grid.onClick.subscribe(function(e, args) {
+			/* var temp = 0;
+			for (var j = 0; j < data.length - 1; j++) {
+				if (data[j]["id"] == args.item.id) {
+					temp = j;
+					break;
+				}
+			} */
+			//alert(e.toSource());
+			//alert(temp);
+			/* if(args.cell == "2" && ){
+				
+			} */
+			
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {

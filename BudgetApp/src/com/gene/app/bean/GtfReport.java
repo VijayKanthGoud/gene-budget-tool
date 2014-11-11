@@ -47,7 +47,7 @@ public class GtfReport implements Serializable {
 	private String brand;
 
 	@Persistent
-	private int percent_Allocation;
+	private double percent_Allocation;
 
 	@Persistent
 	private String poNumber;
@@ -76,6 +76,17 @@ public class GtfReport implements Serializable {
 	@Persistent
 	private String email;
 	
+	@Persistent
+	private Boolean multiBrand;
+	
+	public Boolean getMultiBrand() {
+		return multiBrand;
+	}
+
+	public void setMultiBrand(Boolean multiBrand) {
+		this.multiBrand = multiBrand;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -133,11 +144,11 @@ public class GtfReport implements Serializable {
 		this.brand = brand;
 	}
 
-	public int getPercent_Allocation() {
+	public double getPercent_Allocation() {
 		return percent_Allocation;
 	}
 
-	public void setPercent_Allocation(int percent_Allocation) {
+	public void setPercent_Allocation(double percent_Allocation) {
 		this.percent_Allocation = percent_Allocation;
 	}
 

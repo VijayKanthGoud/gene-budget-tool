@@ -6,8 +6,7 @@
 	if (userPrincipal != null) {
 %>
 
-<div id="multibrandDisp">   </div>   
-   <div id="back">	</div>  
+
 <style>
 .slick-cell.copied {
 	background: blue;
@@ -64,9 +63,7 @@
 <script src="SlickGrid-master/slick.core.js"></script>
 
 <script>
-	$('#saveClose').click(function() {
-		  alert( "Handler for .click() called." );
-	});
+	var isMultiBrand = false;
 
 	var grid;
 
@@ -328,7 +325,7 @@
 			var d = (data[i] = {});
 			d["num"] = "";
 			d["id"] = "id_" + i;
-			for (var j = 0; j < 25; j++) {
+			for (var j = 0; j < 26; j++) {
 				d[j] = "";
 			}
 			
@@ -366,10 +363,11 @@
 			
 		grid.onClick.subscribe(function(e, args) {
 			if(args.cell == 7 && data[args.row]["7"].toLowerCase().indexOf("mb") >= 0){
-				$('#multibrandDisp').load('multiBrand.jsp').fadeIn(100);
+				//$('#multibrandDisp').load('multiBrand.jsp').fadeIn(100);
+				$('#multibrandDisp').show().fadeIn(100);
 				$('#back').addClass('black_overlay').fadeIn(100);
-				
-				var restoredSession = JSON.parse(localStorage.getItem('data'));
+				displayMultibrandGrid();
+				isMultiBrand = true;
 			}
 		});
 		grid.onCellChange.subscribe(function(e, args) {
@@ -401,7 +399,7 @@
 		 grid.onBeforeEditCell
 			.subscribe(function(e, args) {
 				var row = args.row;
-				if(data[row][25]=="Added"){
+				if(data[row][26]=="Added"){
 					return false;
 				}else{
 					return true;
@@ -412,27 +410,177 @@
 
 	function submitData() {
 		var param = 'objarray=' + JSON.stringify(data);
+		alert(JSON.stringify(param, null, 4));
 		$.ajax({
 			url : '/storereport',
 			type : 'POST',
 			dataType : 'json',
-			data : {objarray: JSON.stringify(data)},
+			data : {objarray: JSON.stringify(data), multibrand: isMultiBrand},
 			success : function(result) {
 				alert('Data saved successfully');
+				isMultiBrand = false;
 			}
 		});
 	}
 </script>
 
+<script>
+	function saveAndClose(){
+		$('#multibrandDisp').hide();
+		$('#back').removeClass('black_overlay').fadeIn(100);
+		data[0][24]=sum;
+		for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			data[count+1][7]=m_data[count][1];
+			data[count+1][8]=m_data[count][2];
+			var total =count+1;
+			var row= total;
+			for(var cell=12;cell <24;cell++){
+				total=row;
+				if(data[0][cell]!=0.0){
+					 
+						 data[total][cell] = (parseFloat(data[0][cell])*parseFloat(data[total][8]/100)).toFixed(2);
+					} 
+				else{
+					data[total][cell]=0.00;
+					 }
+				}
+			data[count+1][26]="Added";
+		}
+	grid.invalidate();
+	}
+	
+	function saveWithoutClose(){
+		$('#multibrandDisp').hide();
+		$('#back').removeClass('black_overlay').fadeIn(100);
+	}
+
+  var m_grid;
+  
+  var m_options = {
+    editable: true,
+    enableAddRow: true,
+    enableCellNavigation: true,
+    asyncEditorLoading: false,
+    autoEdit: false
+  };
+  var sum = 0.0;
+  var m_columns = [
+    {
+		id : 1,
+		name : "Brand",
+		field : 1,
+		width : 160,
+		editor : Slick.Editors.Auto
+	}, {
+		id : 2,
+		name : "Allocation %",
+		field : 2,
+		width : 125,
+	}, {
+		id : 3,
+		name : "Total",
+		field : 3,
+		width : 140,
+		editor : Slick.Editors.Text
+	}
+  ];
+	
+  var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra",
+            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
+            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
+            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
+            			"Neuroscience Pipeline", "Tarceva" ];
+
+  function displayMultibrandGrid() {
+ 
+    m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
+    m_grid.setSelectionModel(new Slick.CellSelectionModel());
+    m_grid.registerPlugin(new Slick.AutoTooltips());
+    // set keyboard focus on the grid
+    m_grid.getCanvasNode().focus();
+    //var copyManager = new Slick.CellCopyManager();
+    //m_grid.registerPlugin(copyManager);
+   
+    m_grid.onAddNewRow.subscribe(function (e, args) {
+      var item = args.item;
+      var column = args.column;
+      var row = args.row;
+      m_grid.invalidateRow(m_data.length);
+      m_data.push(item);
+      m_grid.updateRowCount();
+      m_grid.render();
+    });
+    
+    m_grid.onCellChange.subscribe(function(e, args) {
+		
+		var cell = args.cell+1;
+		var row = args.row;
+		sum = 0.0;
+		if(cell == 3){
+		
+		for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			sum = sum + parseFloat(m_data[count]["3"]);
+		}
+		for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+		}
+		m_grid.invalidate();
+		}
+		
+		if(cell == 1 && availableTags.indexOf(m_data[row][1]) == -1){
+			m_data[row][1]="";
+			alert("Enter a valid brand.");
+	        m_grid.gotoCell(row, 0, true);
+			
+		}
+
+	});
+    
+    $('#multibrandGrid').on('blur', function() {
+    	var cell = args.cell+1;
+		var row = args.row;
+		sum = 0.0;
+		if(cell == 3){
+		
+		for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			sum = sum + parseFloat(m_data[count]["3"]);
+		}
+		for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+		}
+		m_grid.invalidate();
+		}
+		
+		if(cell == 1 && availableTags.indexOf(m_data[row][1]) == -1){
+			m_data[row][1]="";
+			alert("Enter a valid brand.");
+	        m_grid.gotoCell(row, 0, true);
+			
+		}
+    });
+    
+  }
+</script>
+
 <div id="gridtable" style="width: 100%; height: 425px;"></div>
-
-
 <center>
-	<button class="myButton" value="Submit" onclick="return submitData();">
+	<button id="submitButton" class="myButton" value="Submit" onclick="return submitData();">
 		Submit</button>
 	<button class="myButton" value="Reset" ">
 		Reset</button>
 </center>
+
+<div id="multibrandDisp"> 
+<div id="header" style="width:100%;height:20px; background-color:#005691; color: white">&nbsp;Multi-brand: </div>
+<div id="multibrandGrid" style="width:100%;height:230px;"></div>
+<center>
+<button  id="saveClose" class="myButton" value="" onclick="saveAndClose();">
+		Save and close</button>
+<button class="myButton" value="" onclick="saveWithoutClose();">
+		Cancel</button>
+ </center>
+ </div>   
+<div id="back">	</div>  
 <%
 	}
 %>
