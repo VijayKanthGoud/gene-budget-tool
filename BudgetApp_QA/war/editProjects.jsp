@@ -194,7 +194,7 @@
 	var numHideColumns = 6;
 	var columnNames = [ "gMemori Id", "Project Owner", "Project Name",
 			"Project WBS", "WBS Name", "SubActivity", "Brand", "Allocation %",
-			"PO Number", "PO Desc", "Vendor", "$ in 1000s", "JAN", "FEB",
+			"PO Number", "PO Desc", "Vendor", "$ in 1000's", "JAN", "FEB",
 			"MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
 			"DEC", "Total", "Remark" ];
 
@@ -1055,7 +1055,7 @@
 					var result1 = false;
 					for (var i = month; i < 12; i++) {
 						if (cols[cell].name == monthArray[i]
-								&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
+								&& args.item["11"] == "Planned" && args.item["26"] !="Total" && args.item["26"]!="Closed") {
 							result = true;
 							break;
 						} else {
@@ -1063,7 +1063,7 @@
 						}
 					}
 					if (args.item["11"] == "Planned"
-							&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
+							&& cols[cell].name == "Remark" &&  args.item["26"] !="Total" && args.item["26"]!="Closed") {
 						result1 = true;
 					} else {
 						result1 = false;
