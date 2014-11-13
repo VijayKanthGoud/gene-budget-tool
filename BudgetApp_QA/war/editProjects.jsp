@@ -627,6 +627,7 @@
 		if (item.parent != null) {
 			var parent = data[item.parent];
 			while (parent) {
+				console.log("parent = "+data[item.parent]);
 				if (parent._collapsed
 						|| ((searchString != "" && parent[27].toLowerCase()
 								.indexOf(searchString.toLowerCase()) == -1)
@@ -804,6 +805,7 @@
     					gtfReports.get(i).getBenchmarkMap().get("OCT") + 
     					gtfReports.get(i).getBenchmarkMap().get("NOV") + 
    				 		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+   				 	
  
    				<%} if(idCounter%4 == 2){%>
 				d[11]="Accrual";
@@ -832,6 +834,7 @@
     				gtfReports.get(i).getAccrualsMap().get("OCT") + 
     				gtfReports.get(i).getAccrualsMap().get("NOV") + 
     				gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+    				
     				} else{
     					for (var j = 12; j < 25; j++) {
     						d[j] = 0.0;
@@ -866,6 +869,7 @@
     					gtfReports.get(i).getVariancesMap().get("OCT") + 
     					gtfReports.get(i).getVariancesMap().get("NOV") + 
     					gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+    				
     					}else{
     						for (var j = 12; j < 25; j++) {
     							d[j] = 0.0;
@@ -944,10 +948,15 @@
 				percentage = 0;
 			}
 			var remarks = data[j - 4]["25"];
+			
 			if ($.trim(remarks).length <= 0) {
 				data[j - 4]["25"] = percentage + "%";
-				data[j - 4][32] = percentage + "%";
+				data[j - 4]["32"] = percentage + "%";
+				data[j - 3]["32"] = percentage + "%";
+				data[j - 2]["32"] = percentage + "%";
+				data[j - 1]["32"] = percentage + "%";
 			}
+			
 		}
 		// initialize the model
 		dataView = new Slick.Data.DataView({
