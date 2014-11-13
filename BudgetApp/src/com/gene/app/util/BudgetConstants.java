@@ -9,7 +9,7 @@ public interface BudgetConstants {
 	public static final String GTFReportFilterString = "key == keyParam";
 	public static final String GTFReportParameters = "String keyParam";
 	public static final String GTFReportOrderingParameters = "flag asc";
-	public static final String GTFReportOrderingParameters_getReport = "flag asc, projectName asc";
+	public static final String GTFReportOrderingParameters_getReport = "flag asc, projectName asc, gMemoryId asc";
 	
 	// This variable is used in UI layer and service layer
 	public static final String costCenter = "307673";

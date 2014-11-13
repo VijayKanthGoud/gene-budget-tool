@@ -1,7 +1,9 @@
 <%@page import="com.gene.app.bean.*"%>
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
+<%@page import="javax.servlet.RequestDispatcher"%>
 <%@ include file="header.jsp"%>
+
 
 <%
 	List<GtfReport> gtfReports = (List<GtfReport>) request
@@ -163,6 +165,20 @@
 	<div id="statusMessage"></div>
 </center>
 <div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
+
+	<div id="multibrandEdit">
+		<div id="header"
+			style="width: 100%; height: 20px; background-color: #005691; color: white">&nbsp;Multi-brand:
+		</div>
+		<div id="multibrandGrid" style="width: 100%; height: 230px;"></div>
+		<center>
+			<button id="saveClose" class="myButton" value=""
+				onclick="saveAndClose();">Save and close</button>
+			<button class="myButton" value="" onclick="saveWithoutClose();">
+				Cancel</button>
+		</center>
+	</div>
+	<div id="back">	</div>  
   
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
@@ -189,6 +205,18 @@
 	var dataView;
 	var grid;
 	var data = [];
+	var m_data = [];
+	var itemClicked;
+	 for (var i = 0; i < 5; i++) {
+		var d = (m_data[i] = {});
+		d[0] = "";
+		d[1] = "";
+		d[2] = "";
+		d[3] = "";
+		d[4] = "";
+		d[5] = "";
+		d[6] = "";
+ 	} 
 	var radioString = "All";
 	var totalSize = 0;
 	var numHideColumns = 6;
@@ -1017,19 +1045,48 @@
 				});
 
 		grid.onClick.subscribe(function(e, args) {
-			/* var temp = 0;
-			for (var j = 0; j < data.length - 1; j++) {
-				if (data[j]["id"] == args.item.id) {
-					temp = j;
-					break;
-				}
-			} */
-			//alert(e.toSource());
-			//alert(temp);
-			/* if(args.cell == "2" && ){
-				
-			} */
+
+			itemClicked = dataView.getItem(args.row);
 			
+			
+			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+				var multiBrandCnt = 0 ;	
+			<% 
+			GtfReport pGtfReport = new GtfReport();
+			
+			for(GtfReport gtfReport : gtfReports){%>
+				var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
+				var gMemoriId='<%=gtfReport.getgMemoryId()%>';
+				
+		   if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
+					var d = (m_data[multiBrandCnt++] = {});
+				 	var parent;
+				 	d["0"] = "<%=gtfReport.getId()%>";
+	    	    	d["1"] = "<%=gtfReport.getBrand()%>";
+	    	    	d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
+	    	    	d["3"] = "<%=new DecimalFormat("#.##").format(Math.abs((gtfReport.getBenchmarkMap().get("JAN") + 
+    						gtfReport.getBenchmarkMap().get("FEB") + 
+    						gtfReport.getBenchmarkMap().get("MAR") + 
+    						gtfReport.getBenchmarkMap().get("APR") + 
+    						gtfReport.getBenchmarkMap().get("MAY") + 
+    						gtfReport.getBenchmarkMap().get("JUN") + 
+    						gtfReport.getBenchmarkMap().get("JUL") + 
+    						gtfReport.getBenchmarkMap().get("AUG") + 
+    						gtfReport.getBenchmarkMap().get("SEP") + 
+    						gtfReport.getBenchmarkMap().get("OCT") + 
+    						gtfReport.getBenchmarkMap().get("NOV") + 
+    						gtfReport.getBenchmarkMap().get("DEC")) * 1000))%>";
+    				d["4"] = "<%=gtfReport.getProjectName()%>";
+    				d["5"] =   itemClicked[0]+"."+multiBrandCnt;
+				}
+				
+			<%}%>
+				$('#multibrandEdit').show().fadeIn(100);
+				//$('#multibrandEdit').load('editMultiBProjects.jsp');
+				displayMultibrandGrid();
+				$('#back').addClass('black_overlay').fadeIn(100);
+		
+			}
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
@@ -1186,6 +1243,177 @@
 					}
 				});
 			});
+	
+	
+	  var m_grid;
+	  
+	  var m_options = {
+	    editable: true,
+	    enableAddRow: true,
+	    enableCellNavigation: true,
+	    asyncEditorLoading: false,
+	    autoEdit: false
+	  };
+	  var sum = 0.0;
+	  var m_columns = [
+		{
+			id : 0,
+			name : "Project name",
+			field : 4,
+			width : 160,
+			editor : Slick.Editors.Auto
+		},
+		{
+			id : 4,
+			name : "gmemori id",
+			field : 5,
+			width : 100,
+			editor : Slick.Editors.Auto
+		},
+	    {
+			id : 1,
+			name : "Brand",
+			field : 1,
+			width : 160,
+			editor : Slick.Editors.Auto
+		}, {
+			id : 2,
+			name : "Allocation %",
+			field : 2,
+			width : 125,
+		}, {
+			id : 3,
+			name : "Total",
+			field : 3,
+			width : 140,
+			editor : Slick.Editors.Text
+		}
+	  ];
+		
+	  var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra",
+	            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
+	            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
+	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
+	            			"Neuroscience Pipeline", "Tarceva" ];
+	  function saveAndClose(){
+		  for(var i=0;i<m_data.length;i++){
+			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
+				  m_data[i][4] = m_data[0][4];
+			  }
+		  }
+			$('#multibrandEdit').hide();
+			$('#back').removeClass('black_overlay').fadeIn(100);
+			/* data[0][24]=sum;
+			for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				data[count+1][7]=m_data[count][1];
+				data[count+1][8]=m_data[count][2];
+				var total =count+1;
+				var row= total;
+				for(var cell=12;cell <24;cell++){
+					total=row;
+					if(data[0][cell]!=0.0){
+						 
+							 data[total][cell] = (parseFloat(data[0][cell])*parseFloat(data[total][8]/100)).toFixed(2);
+						} 
+					else{
+						data[total][cell]=0.00;
+						 }
+					}
+				data[count+1][26]="Added";
+			}
+			 */
+			 $.ajax({
+					url : '/multiBrandServlet',
+					type : 'POST',
+					dataType : 'json',
+					data : {objarray: JSON.stringify(m_data)},
+					success : function(result) {
+						alert('Data saved successfully');
+						isMultiBrand = false;
+						window.location.reload(true);
+					}
+				});
+		grid.invalidate();
+		}
+		
+		function saveWithoutClose(){
+			$('#multibrandEdit').hide();
+			$('#back').removeClass('black_overlay').fadeIn(100);
+		}
+	function displayMultibrandGrid() {
+	    m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
+	    m_grid.setSelectionModel(new Slick.CellSelectionModel());
+	    m_grid.registerPlugin(new Slick.AutoTooltips());
+	    // set keyboard focus on the grid
+	    m_grid.getCanvasNode().focus();
+	    //var copyManager = new Slick.CellCopyManager();
+	    //m_grid.registerPlugin(copyManager);
+	   
+	    m_grid.onAddNewRow.subscribe(function (e, args) {
+	      var item = args.item;
+	      var column = args.column;
+	      var row = args.row;
+	      m_grid.invalidateRow(m_data.length);
+	      m_data.push(item);
+	      m_grid.updateRowCount();
+	      m_grid.render();
+	    });
+	    
+	    m_grid.onCellChange.subscribe(function(e, args) {
+			
+			var cell = args.cell+1;
+			var row = args.row;
+			sum = 0.0;
+			var pRow=row+1;
+			if(m_data[row]["5"] == ""){
+				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
+				m_grid.invalidate();
+			}
+			
+			if(cell == 5){
+				
+			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				sum = sum + parseFloat(m_data[count]["3"]);
+			}
+			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+			}
+			m_grid.invalidate();
+			}
+			
+			if(cell == 3 && availableTags.indexOf(m_data[row][1]) == -1){
+				m_data[row][1]="";
+				alert("Enter a valid brand.");
+		        m_grid.gotoCell(row, 0, true);
+				
+			}
+
+		});
+	    
+	    /* $('#multibrandGrid').on('blur', function() {
+	    	var cell = args.cell+1;
+			var row = args.row;
+			sum = 0.0;
+			if(cell == 3){
+			
+			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				sum = sum + parseFloat(m_data[count]["3"]);
+			}
+			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+			}
+			m_grid.invalidate();
+			}
+			
+			if(cell == 1 && availableTags.indexOf(m_data[row][1]) == -1){
+				m_data[row][1]="";
+				alert("Enter a valid brand.");
+		        m_grid.gotoCell(row, 0, true);
+				
+			}
+	    }); */
+	    
+	  }
 </script>
 
 

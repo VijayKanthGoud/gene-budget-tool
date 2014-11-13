@@ -16,6 +16,9 @@ import javax.servlet.http.HttpSession;
 import com.gene.app.bean.GtfReport;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.DBUtil;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -24,6 +27,8 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 @SuppressWarnings("serial")
 public class StoreReport extends HttpServlet {
 	Map<String,Double> brandMap = new TreeMap<String,Double>();
+	DBUtil util = new DBUtil();
+	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType(BudgetConstants.contentType);
@@ -39,11 +44,16 @@ public class StoreReport extends HttpServlet {
 		}else{
 			storeSingleBrandProject(objarray, email);
 		}
-		
-		
+		brandMap.put(brand, 60000.0);
 		//insertUserRoleInfo((User)session.getAttribute(BudgetConstants.loggedInUser));
 	}
 	
+	/**
+	 * Store single brand project.
+	 *
+	 * @param objarray the objarray
+	 * @param email the email
+	 */
 	public void storeSingleBrandProject(String objarray, String email){
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		try {
@@ -75,7 +85,6 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setSubActivity(rprtObject.getString(BudgetConstants.GTFReport_SubActivity));
 				gtfReport.setBrand(rprtObject.getString(BudgetConstants.GTFReport_Brand));
 				String brand = rprtObject.getString(BudgetConstants.GTFReport_Brand);
-				brandMap.put(brand, 60000.0);
 				try {
 					gtfReport.setPercent_Allocation(Integer.parseInt(rprtObject
 							.getString(BudgetConstants.GTFReport_Percent_Allocation)));
@@ -117,10 +126,16 @@ public class StoreReport extends HttpServlet {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		generateProjectIdUsingJDOTxn(gtfReports);
+		util.generateProjectIdUsingJDOTxn(gtfReports);
 		
 	}
 	
+	/**
+	 * Store multi brand project.
+	 *
+	 * @param objarray the objarray
+	 * @param email the email
+	 */
 	public void storeMultiBrandProject(String objarray, String email){
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		boolean isFirstLoop = true;
@@ -218,23 +233,26 @@ public class StoreReport extends HttpServlet {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		generateProjectIdUsingJDOTxn(gtfReports);
-		//insertUserRoleInfo(user);
+		util.generateProjectIdUsingJDOTxn(gtfReports);
+		MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
+		cache.delete(BudgetConstants.costCenter);
 	}
 
-	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			pm.makePersistentAll(gtfReports);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			pm.close();
-		}
-	}
+	/**
+	 * Generate project id using jdo txn.
+	 *
+	 * @param gtfReports the gtf reports
+	 */
+	
 
 	
-	public void insertUserRoleInfo(User user){/*
+	/**
+	 * Require to manually insert user role info in to datastore.
+	 * Required at the initiation of a new application.
+	 *
+	 * @param user the user
+	 */
+	public void insertUserRoleInfo(User user){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		UserRoleInfo userInfo = new UserRoleInfo();
 		userInfo.setEmail(user.getEmail());
@@ -249,6 +267,6 @@ public class StoreReport extends HttpServlet {
 		}finally{
 			pm.close();
 		}
-	*/}
+	}
 	
 }

@@ -69,6 +69,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	
 	<servlet>
+		<servlet-name>MultiBrandServlet</servlet-name>
+		<servlet-class>com.gene.app.server.MultiBrandServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MultiBrandServlet</servlet-name>
+		<url-pattern>/multiBrandServlet</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
 		<servlet-name>GetProjectData</servlet-name>
 		<servlet-class>com.gene.app.server.GetProjectData</servlet-class>
 	</servlet>

@@ -369,6 +369,7 @@ public class DBUtil {
 			e.printStackTrace();
 		}finally{
 			q.closeAll();
+			pm.close();
 		}
 		return gtfList;
 	}
@@ -412,5 +413,69 @@ public class DBUtil {
 			gtfReportList = getReport(costCenter);
 			}
 		return gtfReportList;
+	}
+	
+	public Map<String,GtfReport> getAllReportsByPrjName(String costCenter,String prjName,String email){
+		Map<String,GtfReport> rptList = (Map<String,GtfReport>)cache.get(BudgetConstants.costCenter);
+		Map<String,GtfReport> newRptList = new LinkedHashMap<String, GtfReport>(); 
+		GtfReport gtfRpt = new GtfReport();
+		for(Map.Entry<String, GtfReport> rptMap: rptList.entrySet()){
+			gtfRpt = rptMap.getValue();
+		if(prjName!=null && !"".equals(prjName) && prjName.equalsIgnoreCase(gtfRpt.getProjectName())){
+			newRptList.put(rptMap.getKey(), gtfRpt);
+		}
+		}
+		return newRptList;
+	}
+	
+	// methods for multibrand
+	public List<GtfReport> readProjectDataByProjectName(String email,String projectName) {
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		Query q = pm.newQuery(GtfReport.class);
+		if("".equals(projectName)){
+			q.setFilter("email==emailParam");
+			q.declareParameters("String emailParam");
+		}else{
+			q.setFilter("projectName == projectNameParam && email==emailParam");
+			q.declareParameters("String projectNameParam,String emailParam");
+		}
+		
+		
+		//try {
+		List<GtfReport> results = (List<GtfReport>) q.execute(projectName,email);
+		if(!results.isEmpty()){
+		for (GtfReport p : results) {
+			gtfReportList.add(p);
+		}
+		}/*}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			q.closeAll();
+			pm.close();
+		}*/
+		pm.close();
+		return gtfReportList;
+	}
+	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistentAll(gtfReports);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pm.close();
+		}
+	}
+	public void removeExistingProject(List<GtfReport> gtfReports) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.deletePersistentAll(gtfReports);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pm.close();
+		}
 	}
 }
