@@ -204,6 +204,7 @@
 	choice = '';
 	var dataView;
 	var grid;
+	var addsave=0;
 	var data = [];
 	var m_data = [];
 	var itemClicked;
@@ -264,6 +265,7 @@
 		name : columnNames[1],
 		field : 1,
 		width : 90,
+		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 5,
@@ -440,6 +442,7 @@
 		name : columnNames[1],
 		field : 1,
 		width : 90,
+		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 12,
@@ -565,13 +568,17 @@
 							var div = 4;
 							if (g.value == "New") {
 								div = 2;
+								return " " + g.value
+								+ "  <span style='color:green'>("
+								+ (g.count) / div + " items)</span>" + "<a href='#'>'      Create Projects'</a>";
 							}
 							if (radioString == 'Planned') {
 								div = 1;
+								return " " + g.value
+								+ "  <span style='color:green'>("
+								+ (g.count) / div + " items)</span>";
 							}
-							return " " + g.value
-									+ "  <span style='color:green'>("
-									+ (g.count) / div + " items)</span>";
+							
 						} else {
 							return "<span style='color:green'> " + g.value
 									+ "</span> ";
@@ -775,6 +782,7 @@
         		d[32]="<%=gReport.getRemarks()%>";
         		d[33]="New";
         		d[34]=gmemoriID;
+        		d[35]=" ";
 				if(gmemoriID.indexOf(".") > -1){
 					d[34]=gmemoriID.split(".")[0];
 				}
@@ -971,7 +979,8 @@
 			d[31] = " ";
 			d[32] = " ";
 			d[33] = "New";
-			d[34] = "";
+			d[34] = " ";
+			d[35]= " ";
 
 		}
 
@@ -1002,6 +1011,7 @@
 		dataView.setFilter(searchProject);
 		dataView.endUpdate();
 		groupByStatus();
+		
 		// initialize the grid
 		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
 		//register the group item metadata provider to add expand/collapse group handlers
@@ -1011,11 +1021,13 @@
 		// Caluculation of total (row and columnwise)
 		grid.onCellChange
 				.subscribe(function(e, args) {
+					if(args.item["34"]!="New projects"){
 					var item = args.item;
 					var tempKey = item[27];
 					updateMemCache(e, args, tempKey);
 					var cell = args.cell;
 					var row = args.row;
+					
 					data[totalSize][cell] = 0.0;
 					grid.invalidate();
 					for (var j = 0; j < totalSize; j = j + 4) {
@@ -1041,15 +1053,48 @@
 								+ parseFloat(data[data.length - 1][j]);
 					}
 					dataView.updateItem(args.item.id, args.item);
-
+					}
 				});
 
 		grid.onClick.subscribe(function(e, args) {
 
+			if(args.cell==0 && args.row==0) {	
+				
+				var length= data.length;
+				
+				var item ={id:"id_"+length,indent:0,0:"",1:"vijay",2:"vijay",3:"vijay",4:"vijay",5:"vijay",6:"vijay",7:"vijay",8:"",9:"",10:""
+					,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+							,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects"};
+				dataView.insertItem(0,item);
+			     if(addsave ==0){
+			    		var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"Cancel",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
+						
+						var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
+						var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
+						dataView.insertItem(1,item3);
+			     dataView.insertItem(2,saveClose);
+			     dataView.insertItem(3,item2);
+			     }
+			     addsave=addsave+1;
+			     dataView.refresh(); 
+			     e.stopImmediatePropagation();
+			     
+			}else{
+			
 			itemClicked = dataView.getItem(args.row);
 			
 			
-			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1 && itemClicked[34]!="New projects"){
 				var multiBrandCnt = 0 ;	
 			<% 
 			GtfReport pGtfReport = new GtfReport();
@@ -1076,6 +1121,11 @@
 				displayMultibrandGrid();
 				$('#back').addClass('black_overlay').fadeIn(100);
 		
+			}else if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1 && itemClicked[34]=="New projects"){
+				$('#multibrandEdit').show().fadeIn(100);
+				//$('#multibrandEdit').load('editMultiBProjects.jsp');
+				displayMultibrandGrid();
+				$('#back').addClass('black_overlay').fadeIn(100);
 			}
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
@@ -1089,6 +1139,7 @@
 				}
 				e.stopImmediatePropagation();
 			}
+		}
 		});
 
 		grid.onSort.subscribe(function (e, args) {
@@ -1120,6 +1171,7 @@
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
+					if(args.item["34"]!="New projects"){
 					var newYear = <%=year+1%>;
 					var quarter = <%=qtr%>;
 					var month = <%=month%>;
@@ -1148,6 +1200,9 @@
 						return true;
 					} else {
 						return false;
+					}
+					}else{
+						return true;
 					}
 				});
 
@@ -1293,7 +1348,6 @@
 		  }
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
-			alert(JSON.stringify(m_data, null, 4));
 			for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				data[count+1][7]=m_data[count][1];
 				data[count+1][8]=m_data[count][2];
@@ -1310,7 +1364,6 @@
 					}
 				data[count+1][26]="Added";
 			}
-			alert(JSON.stringify(m_data, null, 4));
 			 $.ajax({
 					url : '/multiBrandServlet',
 					type : 'POST',
@@ -1352,6 +1405,7 @@
 	    
 	    m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
+			if(args.row!=0){
 			var cell = args.cell+1;
 			var row = args.row;
 			var pRow=row+1;
@@ -1369,7 +1423,7 @@
 			if(cell==3){
 				
 			}
-			
+			}
 			return true;
 			
 		});
