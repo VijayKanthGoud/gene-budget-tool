@@ -385,8 +385,8 @@
 					alert("Sum of budget for all months exceeding totals.");
 			        grid.gotoCell(row, cell, true);
 				}
-
 			 }
+			
 		   if(cell>11 && cell<24){
 			while(data[row+1][7]!="" && data[row+1][7]!="undefined" &&
 					data[row+1][8]!="" && data[row+1][8]!="undefined"){
@@ -419,6 +419,7 @@
 			success : function(result) {
 				alert('Data saved successfully');
 				isMultiBrand = false;
+				window.location.reload(true);
 			}
 		});
 	}
@@ -428,7 +429,7 @@
 	function saveAndClose(){
 		$('#multibrandDisp').hide();
 		$('#back').removeClass('black_overlay').fadeIn(100);
-		data[0][24]=sum;
+		//data[0][24]=sum;
 		for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 			data[count+1][7]=m_data[count][1];
 			data[count+1][8]=m_data[count][2];
@@ -444,12 +445,14 @@
 					data[total][cell]=0.00;
 					 }
 				}
+			data[row][24] = m_data[count][3];
 			data[count+1][26]="Added";
 		}
-	grid.invalidate();
+		alert(JSON.stringify(data, null, 4));
+		grid.invalidate();
 	}
 	
-	function saveWithoutClose(){
+	function closeWithoutSaving(){
 		$('#multibrandDisp').hide();
 		$('#back').removeClass('black_overlay').fadeIn(100);
 	}
@@ -498,8 +501,6 @@
     m_grid.registerPlugin(new Slick.AutoTooltips());
     // set keyboard focus on the grid
     m_grid.getCanvasNode().focus();
-    //var copyManager = new Slick.CellCopyManager();
-    //m_grid.registerPlugin(copyManager);
    
     m_grid.onAddNewRow.subscribe(function (e, args) {
       var item = args.item;
@@ -576,7 +577,7 @@
 <center>
 <button  id="saveClose" class="myButton" value="" onclick="saveAndClose();">
 		Save and close</button>
-<button class="myButton" value="" onclick="saveWithoutClose();">
+<button class="myButton" value="" onclick="closeWithoutSaving();">
 		Cancel</button>
  </center>
  </div>   

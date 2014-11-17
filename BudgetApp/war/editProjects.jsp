@@ -1064,18 +1064,8 @@
 				 	d["0"] = "<%=gtfReport.getId()%>";
 	    	    	d["1"] = "<%=gtfReport.getBrand()%>";
 	    	    	d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
-	    	    	d["3"] = "<%=new DecimalFormat("#.##").format(Math.abs((gtfReport.getBenchmarkMap().get("JAN") + 
-    						gtfReport.getBenchmarkMap().get("FEB") + 
-    						gtfReport.getBenchmarkMap().get("MAR") + 
-    						gtfReport.getBenchmarkMap().get("APR") + 
-    						gtfReport.getBenchmarkMap().get("MAY") + 
-    						gtfReport.getBenchmarkMap().get("JUN") + 
-    						gtfReport.getBenchmarkMap().get("JUL") + 
-    						gtfReport.getBenchmarkMap().get("AUG") + 
-    						gtfReport.getBenchmarkMap().get("SEP") + 
-    						gtfReport.getBenchmarkMap().get("OCT") + 
-    						gtfReport.getBenchmarkMap().get("NOV") + 
-    						gtfReport.getBenchmarkMap().get("DEC")) * 1000))%>";
+	    	    	<%Double total = gtfReport.getBenchmarkMap().get(BudgetConstants.total);%>
+	    	    	d["3"] = "<%=total%>";
     				d["4"] = "<%=gtfReport.getProjectName()%>";
     				d["5"] =   itemClicked[0]+"."+multiBrandCnt;
 				}
@@ -1303,7 +1293,7 @@
 		  }
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
-			/* data[0][24]=sum;
+			alert(JSON.stringify(m_data, null, 4));
 			for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				data[count+1][7]=m_data[count][1];
 				data[count+1][8]=m_data[count][2];
@@ -1312,7 +1302,6 @@
 				for(var cell=12;cell <24;cell++){
 					total=row;
 					if(data[0][cell]!=0.0){
-						 
 							 data[total][cell] = (parseFloat(data[0][cell])*parseFloat(data[total][8]/100)).toFixed(2);
 						} 
 					else{
@@ -1321,7 +1310,7 @@
 					}
 				data[count+1][26]="Added";
 			}
-			 */
+			alert(JSON.stringify(m_data, null, 4));
 			 $.ajax({
 					url : '/multiBrandServlet',
 					type : 'POST',
@@ -1333,6 +1322,7 @@
 						window.location.reload(true);
 					}
 				});
+			 
 		grid.invalidate();
 		}
 		
@@ -1359,16 +1349,50 @@
 	      m_grid.render();
 	    });
 	    
+	    
+	    m_grid.onBeforeEditCell
+		.subscribe(function(e, args) {
+			var cell = args.cell+1;
+			var row = args.row;
+			var pRow=row+1;
+			
+			if(m_data[row]["4"] == "" && cell==1){
+				m_data[row]["4"] = m_data[row-1]["4"];
+				m_grid.invalidate();
+			}
+			
+			if(m_data[row]["5"] == "" && cell==2){
+				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
+				m_grid.invalidate();
+			}
+			
+			if(cell==3){
+				
+			}
+			
+			return true;
+			
+		});
+	    
+	    function removeArrayItem(arr, item) {
+	        var removeCounter = 0;
+
+	        for (var index = 0; index < arr.length; index++) {
+	            if (arr[index] === item) {
+	                arr.splice(index, 1);
+	                removeCounter++;
+	                index--;
+	            }
+	        }
+	        return removeCounter;
+	    }
 	    m_grid.onCellChange.subscribe(function(e, args) {
 			
 			var cell = args.cell+1;
 			var row = args.row;
 			sum = 0.0;
-			var pRow=row+1;
-			if(m_data[row]["5"] == ""){
-				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
-				m_grid.invalidate();
-			}
+			
+			
 			
 			if(cell == 5){
 				
@@ -1378,6 +1402,7 @@
 			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
 			}
+			
 			m_grid.invalidate();
 			}
 			
