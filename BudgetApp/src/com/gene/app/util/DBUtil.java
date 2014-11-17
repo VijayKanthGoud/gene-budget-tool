@@ -361,7 +361,7 @@ public class DBUtil {
 			List<GtfReport> results = (List<GtfReport>) q.execute();
 			if(!results.isEmpty()){
 			for(GtfReport p : results){
-				gtfList.put(p.getId(),p);
+				gtfList.put(p.getgMemoryId(),p);
 			}
 			}
 			saveAllReportDataToCache(costCenter,gtfList);
