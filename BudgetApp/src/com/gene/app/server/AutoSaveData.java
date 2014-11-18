@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.GtfReport;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
@@ -22,7 +23,6 @@ public class AutoSaveData  extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		GtfReport gtfReport = new GtfReport();
 		String keyNum = req.getParameter(BudgetConstants.KEY).toString();
 		String cellValue = req.getParameter(BudgetConstants.CELL_VALUE).toString();
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
@@ -56,8 +56,9 @@ public class AutoSaveData  extends HttpServlet{
 		if((keyNum!=null && sessionKey!=null) && !(keyNum.equals(sessionKey))){
 			util.saveDataToDataStore(sessionGtfReport);
 		}
+		BudgetSummary summary = util.readBudgetSummary(BudgetConstants.costCenter);
 		session.setAttribute(BudgetConstants.KEY, keyNum);
-		
+		req.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 	}
 
 }
