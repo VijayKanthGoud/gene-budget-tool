@@ -10,7 +10,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(detachable="true")
-public class GtfReport implements Serializable {
+public class GtfReport implements Serializable,Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -82,6 +82,20 @@ public class GtfReport implements Serializable {
 	@Persistent
 	private Map<String,MultiBrand> mutliBrandMap;
 	
+	/*public GtfReport(GtfReport gtfReport1) {
+		// TODO Auto-generated constructor stub
+		this.gtfReport = gtfReport1;
+	}
+
+	public GtfReport() {
+		// TODO Auto-generated constructor stub
+		super();
+	}*/
+	
+	public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
 	public Map<String, MultiBrand> getMutliBrandMap() {
 		return mutliBrandMap;
 	}

@@ -43,4 +43,20 @@ public interface BudgetConstants {
 	public static final int CELL_REMARKS = 13;
 	public static final String isMultiBrand = "37";
 	public static final String multiBrandInput = "36";
+	
+	// New Store Report
+	
+	public static final String New_GTFReport_gMemoriId = "0";
+	public static final String New_GTFReport_ProjectName = "1";
+	public static final String New_GTFReport_ProjectOwner = "2";
+	public static final String New_GTFReport_Status = "New";
+	public static final String New_GTFReport_SubActivity = "5";
+	public static final String New_GTFReport_Brand = "6";
+	public static final String New_GTFReport_Percent_Allocation = "7";
+	public static final String New_GTFReport_PoNumber = "8";
+	public static final String New_GTFReport_PoDesc = "9";
+	public static final String New_GTFReport_Vendor = "10";
+	public static final String New_GTFReport_Remarks = "25";
+	public static final String New_isMultiBrand = "37";
+	public static final String New_multiBrandInput = "36";
 }

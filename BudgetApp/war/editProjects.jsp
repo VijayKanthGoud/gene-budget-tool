@@ -1059,28 +1059,25 @@
 		grid.onClick.subscribe(function(e, args) {
 
 			if(args.cell==0 && args.row==0) {	
-				
 				var length= data.length;
-				
 				var item ={id:"id_"+length,indent:0,0:"",1:"vijay",2:"vijay",3:"vijay",4:"vijay",5:"vijay",6:"vijay",7:"vijay",8:"",9:"",10:""
 					,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects"};
+							,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects",37:false};
 				dataView.insertItem(0,item);
 			     if(addsave ==0){
 			    		var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"Cancel",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
-						
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
 						var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
 						var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
 						dataView.insertItem(1,item3);
 			     dataView.insertItem(2,saveClose);
 			     dataView.insertItem(3,item2);
@@ -1090,11 +1087,9 @@
 			     e.stopImmediatePropagation();
 			     
 			}else{
-			
 			itemClicked = dataView.getItem(args.row);
-			
-			
-			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1 && itemClicked[34]!="New projects"){
+			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+			if(itemClicked[34]!="New projects"){
 				var multiBrandCnt = 0 ;	
 			<% 
 			GtfReport pGtfReport = new GtfReport();
@@ -1121,11 +1116,56 @@
 				displayMultibrandGrid();
 				$('#back').addClass('black_overlay').fadeIn(100);
 		
-			}else if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1 && itemClicked[34]=="New projects"){
-				$('#multibrandEdit').show().fadeIn(100);
-				//$('#multibrandEdit').load('editMultiBProjects.jsp');
-				displayMultibrandGrid();
-				$('#back').addClass('black_overlay').fadeIn(100);
+			}else if(itemClicked[34]=="New projects"){
+				var error=0;
+				var errStrng="";
+				
+				if(itemClicked[2]=='' || itemClicked[0]=='' || 
+						itemClicked[2]=='undefined' || itemClicked[0]=='undefined'){
+					
+					if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
+						error=error+1;
+					}
+					if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
+						error=error+3;
+					}
+					alert(error);
+					switch(error) {
+				    case 0:
+				        break;
+				    case 1:
+				    	errStrng="Project name cannot be blank."
+				        break;
+				    case 3:
+				    	errStrng="gMemoriID cannot be blank."
+				        break;
+				    case 4:
+				    	errStrng="gMemoriID or Project name cannot be blank."
+				        break;
+				    default:
+				        break;
+				}
+				}
+					if(error==0){
+						 if(itemClicked[37]){
+							 m_data = JSON.parse(JSON.stringify(itemClicked[36]));
+						 }else{
+							 m_data[0][4]=itemClicked[2];
+							 m_data[0][5]=itemClicked[0]+'.1';
+						 }
+						 $('#multibrandEdit').show().fadeIn(100);
+							displayMultibrandGrid();
+							$('#back').addClass('black_overlay').fadeIn(100);
+					}else{
+						alert(errStrng);
+					}
+					
+				
+			}
+			} 
+			if(itemClicked[6].toLowerCase().indexOf("save")!=-1){
+				submitProjects();
+			}
 			}
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
@@ -1139,9 +1179,26 @@
 				}
 				e.stopImmediatePropagation();
 			}
-		}
 		});
 
+		function submitProjects(){
+			var storeData=[];
+			for(var i=0;i<addsave;i++){
+				storeData[i]=data[i];
+			}
+			alert(JSON.stringify(storeData));
+			 $.ajax({
+				url : '/storereport',
+				type : 'POST',
+				dataType : 'json',
+				data : {objarray: JSON.stringify(storeData) },
+				success : function(result) {
+					alert('Data saved successfully');
+					storeData=[];
+					window.location.reload(true);
+				}
+			});  
+		}
 		grid.onSort.subscribe(function (e, args) {
 		    sortdir = args.sortAsc ? 1 : -1;
 		    sortcol = 29;
@@ -1167,11 +1224,11 @@
 				e.stopPropagation();
 			}
 		});
-
+		
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
-					if(args.item["34"]!="New projects"){
+					if(args.item["34"]!="New projects" ){
 					var newYear = <%=year+1%>;
 					var quarter = <%=qtr%>;
 					var month = <%=month%>;
@@ -1202,7 +1259,11 @@
 						return false;
 					}
 					}else{
+						if( args.item["35"]!="Buttons"){
 						return true;
+						}else{
+							return false;
+						}
 					}
 				});
 
@@ -1236,6 +1297,7 @@
 			dataView.refresh();
 		});
 
+		
 		// Handeling radio button "Planned" and "All"
 		rdoSelectedmode.change(function(e) {
 			Slick.GlobalEditorLock.cancelCurrentEdit();
@@ -1306,14 +1368,14 @@
 			name : "Project name",
 			field : 4,
 			width : 160,
-			editor : Slick.Editors.Auto
+			editor : Slick.Editors.Text
 		},
 		{
 			id : 4,
 			name : "gmemori id",
 			field : 5,
 			width : 100,
-			editor : Slick.Editors.Auto
+			editor : Slick.Editors.Text
 		},
 	    {
 			id : 1,
@@ -1325,7 +1387,7 @@
 			id : 2,
 			name : "Allocation %",
 			field : 2,
-			width : 125,
+			width : 125
 		}, {
 			id : 3,
 			name : "Total",
@@ -1348,7 +1410,29 @@
 		  }
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
-			for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+			for(var i=0;i<data.length;i++){
+				var d = data[i];
+				
+				 if(d["id"]!='undefined' && d["id"]== itemClicked["id"]){
+					 itemClicked[36] = JSON.parse(JSON.stringify(m_data));
+					 itemClicked[37] = true;
+					 for (var j = 0; j < 5; j++) {
+							var d = (m_data[j] = {});
+							d[0] = "";
+							d[1] = "";
+							d[2] = "";
+							d[3] = "";
+							d[4] = "";
+							d[5] = "";
+							d[6] = "";
+					 	} 
+					 break;
+				} 
+			}
+		/* 	alert(JSON.stringify(itemClicked[36]));
+			alert(JSON.stringify(itemClicked[37]));
+			alert(JSON.stringify(m_data));  */
+			/* for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				data[count+1][7]=m_data[count][1];
 				data[count+1][8]=m_data[count][2];
 				var total =count+1;
@@ -1363,8 +1447,9 @@
 						 }
 					}
 				data[count+1][26]="Added";
-			}
-			 $.ajax({
+			} */
+			/* if(itemClicked[34]!="New projects"){
+			  $.ajax({
 					url : '/multiBrandServlet',
 					type : 'POST',
 					dataType : 'json',
@@ -1374,12 +1459,23 @@
 						isMultiBrand = false;
 						window.location.reload(true);
 					}
-				});
+				}); 
+			} */
 			 
 		grid.invalidate();
 		}
 		
 		function saveWithoutClose(){
+			 for (var j = 0; j < 5; j++) {
+					var d = (m_data[j] = {});
+					d[0] = "";
+					d[1] = "";
+					d[2] = "";
+					d[3] = "";
+					d[4] = "";
+					d[5] = "";
+					d[6] = "";
+			 	} 
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
 		}
@@ -1469,7 +1565,7 @@
 
 		});
 	    
-	    /* $('#multibrandGrid').on('blur', function() {
+	     $('#multibrandGrid').on('blur', function() {
 	    	var cell = args.cell+1;
 			var row = args.row;
 			sum = 0.0;
@@ -1490,7 +1586,7 @@
 		        m_grid.gotoCell(row, 0, true);
 				
 			}
-	    }); */
+	    }); 
 	    
 	  }
 </script>
