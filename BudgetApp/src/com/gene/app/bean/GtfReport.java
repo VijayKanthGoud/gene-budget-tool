@@ -79,6 +79,17 @@ public class GtfReport implements Serializable {
 	@Persistent
 	private Boolean multiBrand;
 	
+	@Persistent
+	private Map<String,MultiBrand> mutliBrandMap;
+	
+	public Map<String, MultiBrand> getMutliBrandMap() {
+		return mutliBrandMap;
+	}
+
+	public void setMutliBrandMap(Map<String, MultiBrand> mutliBrandMap) {
+		this.mutliBrandMap = mutliBrandMap;
+	}
+
 	public Boolean getMultiBrand() {
 		return multiBrand;
 	}
