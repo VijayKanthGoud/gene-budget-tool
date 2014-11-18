@@ -9,7 +9,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(detachable="true")
+@PersistenceCapable
 public class GtfReport implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -47,7 +47,7 @@ public class GtfReport implements Serializable {
 	private String brand;
 
 	@Persistent
-	private double percent_Allocation;
+	private int percent_Allocation;
 
 	@Persistent
 	private String poNumber;
@@ -76,17 +76,6 @@ public class GtfReport implements Serializable {
 	@Persistent
 	private String email;
 	
-	@Persistent
-	private Boolean multiBrand;
-	
-	public Boolean getMultiBrand() {
-		return multiBrand;
-	}
-
-	public void setMultiBrand(Boolean multiBrand) {
-		this.multiBrand = multiBrand;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -144,11 +133,11 @@ public class GtfReport implements Serializable {
 		this.brand = brand;
 	}
 
-	public double getPercent_Allocation() {
+	public int getPercent_Allocation() {
 		return percent_Allocation;
 	}
 
-	public void setPercent_Allocation(double percent_Allocation) {
+	public void setPercent_Allocation(int percent_Allocation) {
 		this.percent_Allocation = percent_Allocation;
 	}
 

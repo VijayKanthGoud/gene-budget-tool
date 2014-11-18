@@ -19,7 +19,7 @@ public class GetProjectData extends HttpServlet {
 	}
 	public void readProjectDataByProjectOwner(String projectOwner) {
 		//System.out.println("results = ");
-		//projectOwner = "Chris Sung";
+		projectOwner = "Chris Sung";
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);
 		q.setFilter("requestor == requestorParam");

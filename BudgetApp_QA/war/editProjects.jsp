@@ -1,9 +1,7 @@
 <%@page import="com.gene.app.bean.*"%>
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
-<%@page import="javax.servlet.RequestDispatcher"%>
 <%@ include file="header.jsp"%>
-
 
 <%
 	List<GtfReport> gtfReports = (List<GtfReport>) request
@@ -165,20 +163,6 @@
 	<div id="statusMessage"></div>
 </center>
 <div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
-
-	<div id="multibrandEdit">
-		<div id="header"
-			style="width: 100%; height: 20px; background-color: #005691; color: white">&nbsp;Multi-brand:
-		</div>
-		<div id="multibrandGrid" style="width: 100%; height: 230px;"></div>
-		<center>
-			<button id="saveClose" class="myButton" value=""
-				onclick="saveAndClose();">Save and close</button>
-			<button class="myButton" value="" onclick="saveWithoutClose();">
-				Cancel</button>
-		</center>
-	</div>
-	<div id="back">	</div>  
   
 <script src="SlickGrid-master/lib/firebugx.js"></script>
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
@@ -204,26 +188,13 @@
 	choice = '';
 	var dataView;
 	var grid;
-	var addsave=0;
 	var data = [];
-	var m_data = [];
-	var itemClicked;
-	 for (var i = 0; i < 5; i++) {
-		var d = (m_data[i] = {});
-		d[0] = "";
-		d[1] = "";
-		d[2] = "";
-		d[3] = "";
-		d[4] = "";
-		d[5] = "";
-		d[6] = "";
- 	} 
 	var radioString = "All";
 	var totalSize = 0;
 	var numHideColumns = 6;
 	var columnNames = [ "gMemori Id", "Project Owner", "Project Name",
 			"Project WBS", "WBS Name", "SubActivity", "Brand", "Allocation %",
-			"PO Number", "PO Desc", "Vendor", "$ in 1000s", "JAN", "FEB",
+			"PO Number", "PO Desc", "Vendor", "$ in 1000's", "JAN", "FEB",
 			"MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
 			"DEC", "Total", "Remark" ];
 
@@ -245,7 +216,6 @@
 		name : columnNames[6],
 		field : 6,
 		width : 90,
-		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 11,
@@ -265,7 +235,6 @@
 		name : columnNames[1],
 		field : 1,
 		width : 90,
-		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 5,
@@ -442,7 +411,6 @@
 		name : columnNames[1],
 		field : 1,
 		width : 90,
-		formatter : Slick.Formatters.HyperLink,
 		editor : Slick.Editors.Text
 	}, {
 		id : 12,
@@ -561,24 +529,20 @@
 	// Grouping columns acording to status(New, Active, Closed)
 	function groupByStatus() {
 		dataView
-				.setGrouping([{
+				.setGrouping({
 					getter : 26,
 					formatter : function(g) {
 						if (g.value != "Total") {
 							var div = 4;
 							if (g.value == "New") {
 								div = 2;
-								return " " + g.value
-								+ "  <span style='color:green'>("
-								+ (g.count) / div + " items)</span>" + "<a href='#'>'      Create Projects'</a>";
 							}
 							if (radioString == 'Planned') {
 								div = 1;
-								return " " + g.value
-								+ "  <span style='color:green'>("
-								+ (g.count) / div + " items)</span>";
 							}
-							
+							return " " + g.value
+									+ "  <span style='color:green'>("
+									+ (g.count) / div + " items)</span>";
 						} else {
 							return "<span style='color:green'> " + g.value
 									+ "</span> ";
@@ -599,17 +563,7 @@
 							new Slick.Data.Aggregators.Sum("24"), ],
 					aggregateCollapsed : true,
 					lazyTotalsCalculation : true
-				},
-			    {
-				      getter: 34,
-				      formatter :function (g) {
-				        return g.value;
-				      },
-				      lazyTotalsCalculation: true
-				    }
-				
-				
-				]);
+				});
 
 		dataView.collapseGroup("Active");
 		dataView.collapseGroup("Closed");
@@ -673,6 +627,7 @@
 		if (item.parent != null) {
 			var parent = data[item.parent];
 			while (parent) {
+				console.log("parent = "+data[item.parent]);
 				if (parent._collapsed
 						|| ((searchString != "" && parent[27].toLowerCase()
 								.indexOf(searchString.toLowerCase()) == -1)
@@ -730,7 +685,7 @@
 		var cellNum = delCell - 12;
 
 		console.log(args.item);
-		key = item[34];
+		key = item[31];
 
 		$.ajax({
 			url : '/AutoSaveData',
@@ -759,7 +714,7 @@
 
 		var indent = 0;
 		var parents = [];
-		
+
 		// prepare the data
 		<%int idCounter = -1;
 		for (int i = 0; i < gtfReports.size(); i++) {
@@ -773,22 +728,17 @@
     	    	<%GtfReport gReport = gtfReports.get(i);%>
     	 		d[25]=" ";
        	 		d[26]="<%=gReport.getStatus()%>";
-       	 		var gmemoriID = "<%=gReport.getgMemoryId()%>";
-        		d[27]=gmemoriID;
+        		d[27]="<%=gReport.getgMemoryId()%>";
         		d[28]="<%=gReport.getBrand()%>";
         		d[29]="<%=gReport.getProjectName()%>";
         		d[30]=" ";	
         		d[31]="<%=gReport.getId()%>";
         		d[32]="<%=gReport.getRemarks()%>";
         		d[33]="New";
-        		d[34]=gmemoriID;
-        		d[35]=" ";
-				if(gmemoriID.indexOf(".") > -1){
-					d[34]=gmemoriID.split(".")[0];
-				}
+	
         		<%if(isFirst){
     				isFirst = false;%>    
-   			 		d[0]=gmemoriID;
+   			 		d[0]="<%=gReport.getgMemoryId()%>";
     				d[1]="<%=gReport.getRequestor()%>";
     				d[2]="<%=gReport.getProjectName()%>";
     				d[3]="<%=gReport.getProject_WBS()%>";
@@ -855,6 +805,7 @@
     					gtfReports.get(i).getBenchmarkMap().get("OCT") + 
     					gtfReports.get(i).getBenchmarkMap().get("NOV") + 
    				 		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+   				 	
  
    				<%} if(idCounter%4 == 2){%>
 				d[11]="Accrual";
@@ -883,6 +834,7 @@
     				gtfReports.get(i).getAccrualsMap().get("OCT") + 
     				gtfReports.get(i).getAccrualsMap().get("NOV") + 
     				gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+    				
     				} else{
     					for (var j = 12; j < 25; j++) {
     						d[j] = 0.0;
@@ -917,6 +869,7 @@
     					gtfReports.get(i).getVariancesMap().get("OCT") + 
     					gtfReports.get(i).getVariancesMap().get("NOV") + 
     					gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+    				
     					}else{
     						for (var j = 12; j < 25; j++) {
     							d[j] = 0.0;
@@ -979,8 +932,6 @@
 			d[31] = " ";
 			d[32] = " ";
 			d[33] = "New";
-			d[34] = " ";
-			d[35]= " ";
 
 		}
 
@@ -997,10 +948,15 @@
 				percentage = 0;
 			}
 			var remarks = data[j - 4]["25"];
+			
 			if ($.trim(remarks).length <= 0) {
 				data[j - 4]["25"] = percentage + "%";
-				data[j - 4][32] = percentage + "%";
+				data[j - 4]["32"] = percentage + "%";
+				data[j - 3]["32"] = percentage + "%";
+				data[j - 2]["32"] = percentage + "%";
+				data[j - 1]["32"] = percentage + "%";
 			}
+			
 		}
 		// initialize the model
 		dataView = new Slick.Data.DataView({
@@ -1011,7 +967,6 @@
 		dataView.setFilter(searchProject);
 		dataView.endUpdate();
 		groupByStatus();
-		
 		// initialize the grid
 		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
 		//register the group item metadata provider to add expand/collapse group handlers
@@ -1021,13 +976,11 @@
 		// Caluculation of total (row and columnwise)
 		grid.onCellChange
 				.subscribe(function(e, args) {
-					if(args.item["34"]!="New projects"){
 					var item = args.item;
 					var tempKey = item[27];
 					updateMemCache(e, args, tempKey);
 					var cell = args.cell;
 					var row = args.row;
-					
 					data[totalSize][cell] = 0.0;
 					grid.invalidate();
 					for (var j = 0; j < totalSize; j = j + 4) {
@@ -1053,80 +1006,10 @@
 								+ parseFloat(data[data.length - 1][j]);
 					}
 					dataView.updateItem(args.item.id, args.item);
-					}
+
 				});
 
 		grid.onClick.subscribe(function(e, args) {
-
-			if(args.cell==0 && args.row==0) {	
-				
-				var length= data.length;
-				
-				var item ={id:"id_"+length,indent:0,0:"",1:"vijay",2:"vijay",3:"vijay",4:"vijay",5:"vijay",6:"vijay",7:"vijay",8:"",9:"",10:""
-					,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects"};
-				dataView.insertItem(0,item);
-			     if(addsave ==0){
-			    		var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"Cancel",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
-							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
-						
-						var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
-						var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons"};
-						dataView.insertItem(1,item3);
-			     dataView.insertItem(2,saveClose);
-			     dataView.insertItem(3,item2);
-			     }
-			     addsave=addsave+1;
-			     dataView.refresh(); 
-			     e.stopImmediatePropagation();
-			     
-			}else{
-			
-			itemClicked = dataView.getItem(args.row);
-			
-			
-			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1 && itemClicked[34]!="New projects"){
-				var multiBrandCnt = 0 ;	
-			<% 
-			GtfReport pGtfReport = new GtfReport();
-			
-			for(GtfReport gtfReport : gtfReports){%>
-				var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
-				var gMemoriId='<%=gtfReport.getgMemoryId()%>';
-				
-		   if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
-					var d = (m_data[multiBrandCnt++] = {});
-				 	var parent;
-				 	d["0"] = "<%=gtfReport.getId()%>";
-	    	    	d["1"] = "<%=gtfReport.getBrand()%>";
-	    	    	d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
-	    	    	<%Double total = gtfReport.getBenchmarkMap().get(BudgetConstants.total);%>
-	    	    	d["3"] = "<%=total%>";
-    				d["4"] = "<%=gtfReport.getProjectName()%>";
-    				d["5"] =   itemClicked[0]+"."+multiBrandCnt;
-				}
-				
-			<%}%>
-				$('#multibrandEdit').show().fadeIn(100);
-				//$('#multibrandEdit').load('editMultiBProjects.jsp');
-				displayMultibrandGrid();
-				$('#back').addClass('black_overlay').fadeIn(100);
-		
-			}else if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1 && itemClicked[34]=="New projects"){
-				$('#multibrandEdit').show().fadeIn(100);
-				//$('#multibrandEdit').load('editMultiBProjects.jsp');
-				displayMultibrandGrid();
-				$('#back').addClass('black_overlay').fadeIn(100);
-			}
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
@@ -1139,7 +1022,6 @@
 				}
 				e.stopImmediatePropagation();
 			}
-		}
 		});
 
 		grid.onSort.subscribe(function (e, args) {
@@ -1171,7 +1053,6 @@
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
-					if(args.item["34"]!="New projects"){
 					var newYear = <%=year+1%>;
 					var quarter = <%=qtr%>;
 					var month = <%=month%>;
@@ -1183,7 +1064,7 @@
 					var result1 = false;
 					for (var i = month; i < 12; i++) {
 						if (cols[cell].name == monthArray[i]
-								&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
+								&& args.item["11"] == "Planned" && args.item["26"] !="Total" && args.item["26"]!="Closed") {
 							result = true;
 							break;
 						} else {
@@ -1191,7 +1072,7 @@
 						}
 					}
 					if (args.item["11"] == "Planned"
-							&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
+							&& cols[cell].name == "Remark" &&  args.item["26"] !="Total" && args.item["26"]!="Closed") {
 						result1 = true;
 					} else {
 						result1 = false;
@@ -1200,9 +1081,6 @@
 						return true;
 					} else {
 						return false;
-					}
-					}else{
-						return true;
 					}
 				});
 
@@ -1227,6 +1105,7 @@
 			searchString = this.value;
 			
 	    if (searchString != "") {
+		    	dataView.expandGroup("New");
 				dataView.expandGroup("Active");
 				dataView.expandGroup("Closed");
 			} else {
@@ -1288,211 +1167,6 @@
 					}
 				});
 			});
-	
-	
-	  var m_grid;
-	  
-	  var m_options = {
-	    editable: true,
-	    enableAddRow: true,
-	    enableCellNavigation: true,
-	    asyncEditorLoading: false,
-	    autoEdit: false
-	  };
-	  var sum = 0.0;
-	  var m_columns = [
-		{
-			id : 0,
-			name : "Project name",
-			field : 4,
-			width : 160,
-			editor : Slick.Editors.Auto
-		},
-		{
-			id : 4,
-			name : "gmemori id",
-			field : 5,
-			width : 100,
-			editor : Slick.Editors.Auto
-		},
-	    {
-			id : 1,
-			name : "Brand",
-			field : 1,
-			width : 160,
-			editor : Slick.Editors.Auto
-		}, {
-			id : 2,
-			name : "Allocation %",
-			field : 2,
-			width : 125,
-		}, {
-			id : 3,
-			name : "Total",
-			field : 3,
-			width : 140,
-			editor : Slick.Editors.Text
-		}
-	  ];
-		
-	  var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra",
-	            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
-	            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
-	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
-	            			"Neuroscience Pipeline", "Tarceva" ];
-	  function saveAndClose(){
-		  for(var i=0;i<m_data.length;i++){
-			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
-				  m_data[i][4] = m_data[0][4];
-			  }
-		  }
-			$('#multibrandEdit').hide();
-			$('#back').removeClass('black_overlay').fadeIn(100);
-			for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				data[count+1][7]=m_data[count][1];
-				data[count+1][8]=m_data[count][2];
-				var total =count+1;
-				var row= total;
-				for(var cell=12;cell <24;cell++){
-					total=row;
-					if(data[0][cell]!=0.0){
-							 data[total][cell] = (parseFloat(data[0][cell])*parseFloat(data[total][8]/100)).toFixed(2);
-						} 
-					else{
-						data[total][cell]=0.00;
-						 }
-					}
-				data[count+1][26]="Added";
-			}
-			 $.ajax({
-					url : '/multiBrandServlet',
-					type : 'POST',
-					dataType : 'json',
-					data : {objarray: JSON.stringify(m_data)},
-					success : function(result) {
-						alert('Data saved successfully');
-						isMultiBrand = false;
-						window.location.reload(true);
-					}
-				});
-			 
-		grid.invalidate();
-		}
-		
-		function saveWithoutClose(){
-			$('#multibrandEdit').hide();
-			$('#back').removeClass('black_overlay').fadeIn(100);
-		}
-	function displayMultibrandGrid() {
-	    m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
-	    m_grid.setSelectionModel(new Slick.CellSelectionModel());
-	    m_grid.registerPlugin(new Slick.AutoTooltips());
-	    // set keyboard focus on the grid
-	    m_grid.getCanvasNode().focus();
-	    //var copyManager = new Slick.CellCopyManager();
-	    //m_grid.registerPlugin(copyManager);
-	   
-	    m_grid.onAddNewRow.subscribe(function (e, args) {
-	      var item = args.item;
-	      var column = args.column;
-	      var row = args.row;
-	      m_grid.invalidateRow(m_data.length);
-	      m_data.push(item);
-	      m_grid.updateRowCount();
-	      m_grid.render();
-	    });
-	    
-	    
-	    m_grid.onBeforeEditCell
-		.subscribe(function(e, args) {
-			if(args.row!=0){
-			var cell = args.cell+1;
-			var row = args.row;
-			var pRow=row+1;
-			
-			if(m_data[row]["4"] == "" && cell==1){
-				m_data[row]["4"] = m_data[row-1]["4"];
-				m_grid.invalidate();
-			}
-			
-			if(m_data[row]["5"] == "" && cell==2){
-				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
-				m_grid.invalidate();
-			}
-			
-			if(cell==3){
-				
-			}
-			}
-			return true;
-			
-		});
-	    
-	    function removeArrayItem(arr, item) {
-	        var removeCounter = 0;
-
-	        for (var index = 0; index < arr.length; index++) {
-	            if (arr[index] === item) {
-	                arr.splice(index, 1);
-	                removeCounter++;
-	                index--;
-	            }
-	        }
-	        return removeCounter;
-	    }
-	    m_grid.onCellChange.subscribe(function(e, args) {
-			
-			var cell = args.cell+1;
-			var row = args.row;
-			sum = 0.0;
-			
-			
-			
-			if(cell == 5){
-				
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				sum = sum + parseFloat(m_data[count]["3"]);
-			}
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
-			}
-			
-			m_grid.invalidate();
-			}
-			
-			if(cell == 3 && availableTags.indexOf(m_data[row][1]) == -1){
-				m_data[row][1]="";
-				alert("Enter a valid brand.");
-		        m_grid.gotoCell(row, 0, true);
-				
-			}
-
-		});
-	    
-	    /* $('#multibrandGrid').on('blur', function() {
-	    	var cell = args.cell+1;
-			var row = args.row;
-			sum = 0.0;
-			if(cell == 3){
-			
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				sum = sum + parseFloat(m_data[count]["3"]);
-			}
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
-			}
-			m_grid.invalidate();
-			}
-			
-			if(cell == 1 && availableTags.indexOf(m_data[row][1]) == -1){
-				m_data[row][1]="";
-				alert("Enter a valid brand.");
-		        m_grid.gotoCell(row, 0, true);
-				
-			}
-	    }); */
-	    
-	  }
 </script>
 
 

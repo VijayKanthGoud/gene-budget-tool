@@ -20,8 +20,7 @@
         "DollarSymbol" : DollarFormatter,
         "Remark":RemarkFormatter,
         "HyperLink":HyperLinkFormatter,
-        "budget":BudgetFormatter,
-        "button": ButtonFormatter
+        "budget":BudgetFormatter
       }
     }
   });
@@ -63,29 +62,20 @@
   }
  
   function DollarFormatter(row, cell, value, columnDef, dataContext) {
-	  if(dataContext["35"] != "Buttons"){
 	if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 		return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'>"+ Number(value).toFixed(2) +"</span>" 
 	}else{
 		return "<span style='color:#005691'>"+ Number(value).toFixed(2) +"</span>" 
 	}
-	  }
-  }
-  
-  function ButtonFormatter(row, cell, value, columnDef, dataContext) {
-	  if(value=="Save" && dataContext["35"] == "Buttons"){
-	  return  "<input type='button' value='"+value+"' id='btnForm' value2='"+row+"' value3='"+cell+"/>";
-  }
   }
   
   function HyperLinkFormatter(row, cell, value, columnDef, dataContext) {
-	  if(value.toLowerCase().indexOf("mb") >= 0){
-		  return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
-	  }else if((value=="Save" || value=="Cancel" ) && dataContext["35"] == "Buttons"){
-		  return  "<input type='button' value='"+value+"' id='btnForm' value2='"+row+"' value3='"+cell+"/>";
+		if(value.toLowerCase().indexOf("mb") >= 0){
+			return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
+		}else{
+			return value;
+		}
 	  }
-	  return value;
-  }
   
   function RemarkFormatter(row, cell, value, columnDef, dataContext) {
 	 

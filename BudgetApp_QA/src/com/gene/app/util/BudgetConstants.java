@@ -5,12 +5,11 @@ public interface BudgetConstants {
 	//DBUtil.java
 	public static final String[] months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
-	public static final String total = "TOTAL";
 	public static final String seperator = " - ";
 	public static final String GTFReportFilterString = "key == keyParam";
 	public static final String GTFReportParameters = "String keyParam";
 	public static final String GTFReportOrderingParameters = "flag asc";
-	public static final String GTFReportOrderingParameters_getReport = "flag asc, projectName asc, gMemoryId asc";
+	public static final String GTFReportOrderingParameters_getReport = "flag asc, projectName asc";
 	
 	// This variable is used in UI layer and service layer
 	public static final String costCenter = "307673";
