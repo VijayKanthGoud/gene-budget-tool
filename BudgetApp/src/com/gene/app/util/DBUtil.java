@@ -2,9 +2,11 @@ package com.gene.app.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -13,13 +15,13 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.gene.app.bean.BudgetSummary;
+import com.gene.app.bean.CostCenter_Brand;
 import com.gene.app.bean.GtfReport;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.server.PMF;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.sun.org.apache.xpath.internal.operations.Gte;
 
 public class DBUtil {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
@@ -221,7 +223,7 @@ public class DBUtil {
 	}
 		*/
 	
-	public BudgetSummary readBudgetSummary(String email,String costCenter,
+	/*public BudgetSummary readBudgetSummary(String email,String costCenter,
 			List<GtfReport> gtfReports,UserRoleInfo user) {
 		double benchMarkTotal = 0.0;
 		double varianceTotal = 0.0;
@@ -244,9 +246,9 @@ public class DBUtil {
 		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
 		BudgetSummary summaryByBrand = new BudgetSummary();
 		if (gtfReports != null && !gtfReports.isEmpty()) {
-			/*for(int i=0;i<gtfReports.size();i++){
+			for(int i=0;i<gtfReports.size();i++){
 				brandSet.add(gtfReports.get(i).getBrand());
-			}*/
+			}
 			System.out.println("brandset = "+brandSet);
 			brand = brandSet.toArray();
 			for(int k = 0; k<brand.length; k++){
@@ -322,7 +324,7 @@ public class DBUtil {
 		}
 		summary.setPercentageVarianceTotal(variancePercentage);
 		return summary;
-	}
+	}*/
 	
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
@@ -478,4 +480,154 @@ public class DBUtil {
 			pm.close();
 		}
 	}
+	
+	public BudgetSummary readBudgetSummary(String costCenter){
+		BudgetSummary summary = new BudgetSummary();
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		// read costcenter_brand table data and put it in cache
+		List<CostCenter_Brand> costCenterList = (List<CostCenter_Brand>)cache.get(key);
+		if(costCenterList==null || costCenterList.isEmpty()){
+			costCenterList = readCostCenterBrandMappingData();
+		}
+		// prepare BudgetSummaryData
+		Map<String,Map<String,BudgetSummary>> brandlevelBudgetMap = prepareBrandData(costCenterList);
+		// get project list matching the brand
+		Map<String,GtfReport> gtfRptList = getReport(BudgetConstants.costCenter);
+		Map<String,BudgetSummary> brandMap = null;
+		brandMap = getProjectListByBrand(gtfRptList,brandlevelBudgetMap);
+		if(brandMap == null){
+			brandMap = new LinkedHashMap<String,BudgetSummary>();
+		}
+		summary.setBudgetMap(brandMap);
+		return summary;
+	}
+	// reading costcenter_brand table data and put it in cache
+	
+		public List<CostCenter_Brand> readCostCenterBrandMappingData(){
+			String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+			cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+			CostCenter_Brand cost_brand = new CostCenter_Brand();
+			List<CostCenter_Brand> costCenterList = new ArrayList<CostCenter_Brand>();
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			Query q = pm.newQuery(CostCenter_Brand.class);
+			//q.declareParameters("String emailParam");
+			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
+			if(!results.isEmpty()){
+			for (CostCenter_Brand p : results) {
+				cost_brand = p;
+				costCenterList.add(cost_brand);
+			}
+			}
+			cache.put(key, costCenterList);
+			return costCenterList;
+		}
+		
+		public Map<String,BudgetSummary> prepareBrandMap(String brands){
+			Map<String,BudgetSummary> brandMap = new HashMap<String,BudgetSummary>();
+			//Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;
+			//Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;
+			//Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;
+			//Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;
+			String[] brandsArray = brands.split(";"); 
+			String[] budgetArray = null;
+			String[] valueArray = null;
+			String value = "";
+			BudgetSummary summary = new BudgetSummary();
+			for(int i=0;i<brandsArray.length;i++){
+				 summary = new BudgetSummary();
+				value = brandsArray[i];
+				budgetArray = value.split(":");
+				for(int j=0;j<budgetArray.length;j++){
+					valueArray = budgetArray[j].split("=");
+					if(j==1){
+						summary.setPlannedTotal(Double.parseDouble(valueArray[1]));
+					}else if(j==2){
+						summary.setAccrualTotal(Double.parseDouble(valueArray[1]));
+					}else if(j==3){
+						summary.setBenchmarkTotal(Double.parseDouble(valueArray[1]));
+					}else if(j==4){
+						summary.setVarianceTotal(Double.parseDouble(valueArray[1]));
+					}else if(j==5){
+						summary.setTotalBudget(Double.parseDouble(valueArray[1]));
+					}
+				}
+				brandMap.put(budgetArray[0], summary);
+			}
+			return brandMap;
+		}
+		public Map<String,Map<String,BudgetSummary>> prepareBrandData(List<CostCenter_Brand> costCenterList){
+			CostCenter_Brand costCenter_Brand = null; 
+			Map<String,BudgetSummary> brandMap = null;
+			Map<String,Map<String,BudgetSummary>> costCenterBrandMap = new LinkedHashMap<String,Map<String,BudgetSummary>>();
+			if(costCenterList!=null && !costCenterList.isEmpty()){
+				for(int i=0;i<costCenterList.size();i++){
+					costCenter_Brand = (CostCenter_Brand)costCenterList.get(i);
+					String brands = costCenter_Brand.getBrandFromDB();
+					// prepare brandmap
+					brandMap = prepareBrandMap(brands);
+					costCenterBrandMap.put(costCenter_Brand.getCostCenter(), brandMap);
+				}
+			}
+			return costCenterBrandMap;
+		}
+		public Map<String,BudgetSummary> getProjectListByBrand(Map<String, GtfReport> gtfRptList,Map<String,Map<String,BudgetSummary>> brandDataMap){
+			Map<String,BudgetSummary> brandMap = new LinkedHashMap<String,BudgetSummary>();
+			GtfReport gtfReport = new GtfReport();
+			String brand = "";
+			Double plannedTotal = 0.0;
+			Double benchMarkTotal = 0.0;
+			Double accrualTotal = 0.0;
+			Double varianceTotal = 0.0;
+			
+			BudgetSummary summary = new BudgetSummary();
+			for(Entry<String, Map<String, BudgetSummary>> brandEntry: brandDataMap.entrySet()){
+				if((BudgetConstants.costCenter).equalsIgnoreCase(brandEntry.getKey())){
+				brandMap = brandEntry.getValue();
+				for(Entry<String, BudgetSummary> budgetEntry: brandMap.entrySet()){
+					brand = budgetEntry.getKey();
+					summary = budgetEntry.getValue();
+					plannedTotal = 0.0;
+					benchMarkTotal = 0.0;
+					accrualTotal = 0.0;
+					varianceTotal = 0.0;
+					//for(int i=0;i<gtfRptList.size();i++){
+					for(Entry<String, GtfReport> gtfRptEnty:gtfRptList.entrySet()){
+						gtfReport =gtfRptEnty.getValue();
+						if(brand.equalsIgnoreCase(gtfReport.getBrand())){
+							for(int j=0;j<BudgetConstants.months.length;j++){
+									if (gtfReport.getPlannedMap() != null) {
+										plannedTotal = plannedTotal
+												+ gtfReport.getPlannedMap().get(
+														BudgetConstants.months[j]);
+									}
+									if (gtfReport.getBenchmarkMap() != null) {
+										benchMarkTotal = benchMarkTotal
+												+ gtfReport.getBenchmarkMap().get(
+														BudgetConstants.months[j]);
+									}
+									if (gtfReport.getAccrualsMap() != null) {
+										accrualTotal = accrualTotal
+												+ gtfReport.getAccrualsMap().get(
+														BudgetConstants.months[j]);
+									}
+									if (gtfReport.getVariancesMap() != null) {
+										varianceTotal = varianceTotal
+												+ gtfReport.getVariancesMap().get(
+														BudgetConstants.months[j]);
+									}
+							}
+						}
+					}
+					summary.setAccrualTotal(accrualTotal);
+					summary.setVarianceTotal(varianceTotal);
+					summary.setPlannedTotal(plannedTotal);
+					summary.setBenchmarkTotal(benchMarkTotal);
+					summary.setBudgetLeftToSpend(summary.getTotalBudget()-summary.getPlannedTotal());
+					brandMap.put(brand, summary);
+				}
+				break;
+				}
+			}
+			return brandMap;
+		}
 }
