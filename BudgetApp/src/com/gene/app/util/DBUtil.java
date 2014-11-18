@@ -630,4 +630,14 @@ public class DBUtil {
 			}
 			return brandMap;
 		}
+		
+		public void storeProjectsToCache(List<GtfReport> gtfReports){
+			Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(BudgetConstants.costCenter);
+			GtfReport report = new GtfReport();
+			for(int i=0;i<gtfReports.size();i++){
+				report = gtfReports.get(i);
+			gtfReportFromCache.put(report.getgMemoryId(), report);
+			}
+			cache.put(BudgetConstants.costCenter, gtfReportFromCache);
+		}
 }
