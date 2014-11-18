@@ -44,8 +44,8 @@ public class GetReport extends HttpServlet {
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, gtfReportList);
 		DBUtil util = new DBUtil();
 		UserRoleInfo user = util.readUserRoleInfo(email, BudgetConstants.costCenter);
-		BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
-		
+		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
+		BudgetSummary summary = util.readBudgetSummary(BudgetConstants.costCenter);
 		req.setAttribute("user", user);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		RequestDispatcher rd = req.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);
