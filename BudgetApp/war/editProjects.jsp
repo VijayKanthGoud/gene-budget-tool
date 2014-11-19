@@ -2,6 +2,7 @@
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
 <%@page import="javax.servlet.RequestDispatcher"%>
+
 <%@ include file="header.jsp"%>
 
 
@@ -62,11 +63,11 @@
 						style="color: #005691; white-space: nowrap;">
 						<%
 							BudgetSummary summary = (BudgetSummary) request.getAttribute("summary");
-															Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
-															BudgetSummary budgetSummary = new BudgetSummary();
-															UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
-															Map<String,Double> brandMap = user.getBrand();
-															Object[] brands = brandMap.keySet().toArray();
+							Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
+							BudgetSummary budgetSummary = new BudgetSummary();
+							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
+							Map<String,Double> brandMap = user.getBrand();
+							Object[] brands = brandMap.keySet().toArray();
 						%>
 						 <script>
 						  var selectedValue = "";
@@ -228,335 +229,56 @@
 			"DEC", "Total", "Remark" ];
 
 	// Columns displayed when hide columns is unchecked
-	var columns = [ {
-		id : 30,
-		name : "Status",
-		field : 30,
-		width : 120,
-		editor : Slick.Editors.Text
-	}, {
-		id : 2,
-		name : columnNames[2],
-		field : 2,
-		width : 150,
-		editor : Slick.Editors.Text
-	}, {
-		id : 6,
-		name : columnNames[6],
-		field : 6,
-		width : 90,
-		formatter : Slick.Formatters.HyperLink,
-		editor : Slick.Editors.Text
-	}, {
-		id : 11,
-		name : columnNames[11],
-		field : 11,
-		width : 110,
-		editor : Slick.Editors.Text,
-		groupTotalsFormatter : sumTotalsFormatter 
-	}, {
-		id : 0,
-		name : columnNames[0],
-		field : 0,
-		width : 90,
-		editor : Slick.Editors.Text
-	}, {
-		id : 1,
-		name : columnNames[1],
-		field : 1,
-		width : 90,
-		formatter : Slick.Formatters.HyperLink,
-		editor : Slick.Editors.Text
-	}, {
-		id : 5,
-		name : columnNames[5],
-		field : 5,
-		width : 90,
-		editor : Slick.Editors.Text
-	}, {
-		id : 7,
-		name : columnNames[7],
-		field : 7,
-		width : 90,
-		editor : Slick.Editors.Text
-	}, {
-		id : 8,
-		name : columnNames[8],
-		field : 8,
-		width : 90,
-		editor : Slick.Editors.Text
-	}, {
-		id : 10,
-		name : columnNames[10],
-		field : 10,
-		width : 90,
-		editor : Slick.Editors.Text
-	}, {
-		id : 12,
-		name : columnNames[12],
-		field : 12,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 13,
-		name : columnNames[13],
-		field : 13,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 14,
-		name : columnNames[14],
-		field : 14,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 15,
-		name : columnNames[15],
-		field : 15,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 16,
-		name : columnNames[16],
-		field : 16,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 17,
-		name : columnNames[17],
-		field : 17,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 18,
-		name : columnNames[18],
-		field : 18,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 19,
-		name : columnNames[19],
-		field : 19,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 20,
-		name : columnNames[20],
-		field : 20,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 21,
-		name : columnNames[21],
-		field : 21,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 22,
-		name : columnNames[22],
-		field : 22,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 23,
-		name : columnNames[23],
-		field : 23,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 24,
-		name : columnNames[24],
-		field : 24,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 25,
-		name : columnNames[25],
-		field : 25,
-		width : 200,
-		editor : Slick.Editors.LongText,
-		formatter : Slick.Formatters.Remark
+	var columns = [ 
+		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
+		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Text},
+		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
+		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
+		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
+		{ id : 5, name : columnNames[5], field : 5, width : 90, editor : Slick.Editors.Text},
+		{ id : 7, name : columnNames[7], field : 7, width : 90, editor : Slick.Editors.Text},
+		{ id : 8, name : columnNames[8], field : 8, width : 90, editor : Slick.Editors.Text},
+		{ id : 10, name : columnNames[10], field : 10, width : 90, editor : Slick.Editors.Text},
+		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[14], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[15], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[16], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[17], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[18], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[19], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[20], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[21], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[22], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[23], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[24], field : 24, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[25], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	} ];
 
 	//Columns displayed when hide columns is checked
-	var hidecolumns = [ {
-		id : 30,
-		name : "Status",
-		field : 30,
-		width : 120,
-		editor : Slick.Editors.Text
-	}, {
-		id : 2,
-		name : columnNames[2],
-		field : 2,
-		width : 150,
-		editor : Slick.Editors.Text
-	}, {
-		id : 6,
-		name : columnNames[6],
-		field : 6,
-		width : 90,
-		formatter : Slick.Formatters.HyperLink,
-		editor : Slick.Editors.Text
-	}, {
-		id : 11,
-		name : columnNames[11],
-		field : 11,
-		width : 110,
-		editor : Slick.Editors.Text,
-		groupTotalsFormatter : sumTotalsFormatter 
-	}, {
-		id : 0,
-		name : columnNames[0],
-		field : 0,
-		width : 90,
-		editor : Slick.Editors.Text
-	}, {
-		id : 1,
-		name : columnNames[1],
-		field : 1,
-		width : 90,
-		formatter : Slick.Formatters.HyperLink,
-		editor : Slick.Editors.Text
-	}, {
-		id : 12,
-		name : columnNames[12],
-		field : 12,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 13,
-		name : columnNames[13],
-		field : 13,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 14,
-		name : columnNames[14],
-		field : 14,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 15,
-		name : columnNames[15],
-		field : 15,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 16,
-		name : columnNames[16],
-		field : 16,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 17,
-		name : columnNames[17],
-		field : 17,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 18,
-		name : columnNames[18],
-		field : 18,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 19,
-		name : columnNames[19],
-		field : 19,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 20,
-		name : columnNames[20],
-		field : 20,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 21,
-		name : columnNames[21],
-		field : 21,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 22,
-		name : columnNames[22],
-		field : 22,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 23,
-		name : columnNames[23],
-		field : 23,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 24,
-		name : columnNames[24],
-		field : 24,
-		width : 90,
-		editor : Slick.Editors.FloatText,
-		formatter : Slick.Formatters.DollarSymbol,
-		groupTotalsFormatter : sumTotalsFormatter
-	}, {
-		id : 25,
-		name : columnNames[25],
-		field : 25,
-		width : 200,
-		editor : Slick.Editors.LongText,
-		formatter : Slick.Formatters.Remark
-	} ];
-
+	var hidecolumns = [ 
+		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
+		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Text},
+		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
+		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
+		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
+		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[14], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[15], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[16], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[17], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[18], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[19], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[20], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[21], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[22], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[23], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[24], field : 24, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[25], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	}]
 	var searchString = "";
 	// Grouping columns acording to status(New, Active, Closed)
 	function groupByStatus() {
@@ -570,7 +292,7 @@
 								div = 2;
 								return " " + g.value
 								+ "  <span style='color:green'>("
-								+ (g.count) / div + " items)</span>" + "<a href='#'>'      Create Projects'</a>";
+								+ (g.count) / div + " items)</span>" + "&nbsp;&nbsp;<a href='#'><b>Create Projects</b></a>";
 							}
 							if (radioString == 'Planned') {
 								div = 1;
@@ -698,13 +420,7 @@
 		return status;
 	}
 
-	function comparer(a, b) {
-		var x = a[sortcol], y = b[sortcol];
-		return (x == y ? 0 : (x > y ? 1 : -1));
-	}
 
-	var myRequest;
-	var text;
 
     // Method called to store changed value in to memcache
 	function updateMemCache(e, args, tempKey) {
@@ -830,6 +546,7 @@
   						d[cnt]=" "; 
   					}
    				<%if(idCounter%4 == 1){%>
+   				if(gmemoriID.indexOf(".") == -1){
 				d[11]="Benchmark";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
@@ -855,7 +572,12 @@
     					gtfReports.get(i).getBenchmarkMap().get("OCT") + 
     					gtfReports.get(i).getBenchmarkMap().get("NOV") + 
    				 		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
- 
+   				}else{
+   					for (var j = 12; j < 25; j++) {
+						d[j] = 0.0;
+						}
+					d[33]="";
+   				}
    				<%} if(idCounter%4 == 2){%>
 				d[11]="Accrual";
 				if(d[26]!="New"){
@@ -1021,153 +743,172 @@
 		// Caluculation of total (row and columnwise)
 		grid.onCellChange
 				.subscribe(function(e, args) {
-					if(args.item["34"]!="New projects"){
-					var item = args.item;
-					var tempKey = item[27];
-					updateMemCache(e, args, tempKey);
-					var cell = args.cell;
-					var row = args.row;
-					
-					data[totalSize][cell] = 0.0;
-					grid.invalidate();
-					for (var j = 0; j < totalSize; j = j + 4) {
-						data[totalSize][cell] = parseFloat(data[totalSize][cell])
-								+ parseFloat(data[j][cell]);
+			if(args.item["34"]!="New projects"){
+				updateMemCache(e, args, tempKey);
+			}
+				var item = args.item;
+				var tempKey = item[27];
+				
+				var cell = args.cell;
+				var row = args.row;
+				var dataLength = 0;
+				for(var counter = 0; counter<data.length; counter++ ){
+					if(data[counter][34] != "New projects"){
+						dataLength++;
 					}
-					var temp = 0;
-					for (var j = 0; j < data.length - 1; j++) {
-						if (data[j]["id"] == args.item.id) {
-							temp = j;
-							break;
-						}
+				}
+				data[totalSize][cell] = 0.0;
+				grid.invalidate();
+				
+				var temp = 0;
+				for (var j = 0; j < data.length - 1; j++) {
+					if (data[j]["id"] == args.item.id) {
+						temp = j;
+						break;
 					}
-					grid.invalidate();
-					data[temp][24] = 0.0;
-					for (var j = 12; j < 24; j++) {
-						data[temp][24] = parseFloat(data[temp][24])
+				}
+				data[temp][24] = 0.0;
+				for (var j = 12; j < 24; j++) {
+					if(data[temp][j] == "" || data[temp][j] == "undefined"){
+						data[temp][j] = 0.0;
+					}
+					data[temp][24] = parseFloat(data[temp][24])
 								+ parseFloat(data[temp][j]);
-					}
-					data[data.length - 1][24] = 0.0;
-					for (var j = 12; j < 24; j++) {
-						data[data.length - 1][24] = parseFloat(data[data.length - 1][24])
-								+ parseFloat(data[data.length - 1][j]);
-					}
-					dataView.updateItem(args.item.id, args.item);
-					}
-				});
+				}
+				
+				
+				// CODE FOR COLOUMNAR TOTALS
+				/* for (var j = 12; j < 24; j++) {
+					data[dataLength - 1][24] = parseFloat(data[dataLength - 1][24])
+								+ parseFloat(data[dataLength - 1][j]);
+				}
+				
+				for (var j = 0; j < totalSize; j = j + 4) {
+					data[totalSize][cell] = parseFloat(data[totalSize][cell])
+								+ parseFloat(data[j][cell]);
+				} */
+				grid.invalidate();
+			
+		});
 
 		grid.onClick.subscribe(function(e, args) {
-
+			//Start : Add save and Cancel button and blank rows above and below for adding new projects
 			if(args.cell==0 && args.row==0) {	
 				var length= data.length;
-				var item ={id:"id_"+length,indent:0,0:"",1:"vijay",2:"vijay",3:"vijay",4:"vijay",5:"vijay",6:"vijay",7:"vijay",8:"",9:"",10:""
+				var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:"vijay",4:"",5:"sub_activity",6:"brand",7:"allocation_percentage",8:"",9:"",10:""
 					,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 							,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects",37:false};
 				dataView.insertItem(0,item);
-			     if(addsave ==0){
-			    		var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"Cancel",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+			if(addsave ==0){
+			    var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+							,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+				var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
-						var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+				var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
-						var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
-						dataView.insertItem(1,item3);
-			     dataView.insertItem(2,saveClose);
-			     dataView.insertItem(3,item2);
-			     }
-			     addsave=addsave+1;
-			     dataView.refresh(); 
-			     e.stopImmediatePropagation();
-			     
-			}else{
-			itemClicked = dataView.getItem(args.row);
-			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
-			if(itemClicked[34]!="New projects"){
-				var multiBrandCnt = 0 ;	
-			<% 
-			GtfReport pGtfReport = new GtfReport();
+				dataView.insertItem(1,item3);
+			    dataView.insertItem(2,saveClose);
+			    dataView.insertItem(3,item2);
+			}
+			    addsave=addsave+1;
+			    dataView.refresh(); 
+			    e.stopImmediatePropagation();
+			}
+			//End : Add save and Cancel button and blank rows above and below for adding new projects
 			
-			for(GtfReport gtfReport : gtfReports){%>
-				var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
-				var gMemoriId='<%=gtfReport.getgMemoryId()%>';
+			else{
 				
-		   if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
-					var d = (m_data[multiBrandCnt++] = {});
-				 	var parent;
-				 	d["0"] = "<%=gtfReport.getId()%>";
-	    	    	d["1"] = "<%=gtfReport.getBrand()%>";
-	    	    	d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
-	    	    	<%Double total = gtfReport.getBenchmarkMap().get(BudgetConstants.total);%>
-	    	    	d["3"] = "<%=total%>";
-    				d["4"] = "<%=gtfReport.getProjectName()%>";
-    				d["5"] =   itemClicked[0]+"."+multiBrandCnt;
-				}
-				
-			<%}%>
-				$('#multibrandEdit').show().fadeIn(100);
-				//$('#multibrandEdit').load('editMultiBProjects.jsp');
-				displayMultibrandGrid();
-				$('#back').addClass('black_overlay').fadeIn(100);
-		
-			}else if(itemClicked[34]=="New projects"){
-				var error=0;
-				var errStrng="";
-				
-				if(itemClicked[2]=='' || itemClicked[0]=='' || 
-						itemClicked[2]=='undefined' || itemClicked[0]=='undefined'){
+				itemClicked = dataView.getItem(args.row);
+				// multi brand click
+				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
 					
-					if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
-						error=error+1;
+					if(itemClicked[34]!="New projects"){
+						// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
+						var multiBrandCnt = 0 ;	
+						<% 
+						GtfReport pGtfReport = new GtfReport();
+						for(GtfReport gtfReport : gtfReports){%>
+							var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
+							var gMemoriId='<%=gtfReport.getgMemoryId()%>';
+				
+		   					if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
+								var d = (m_data[multiBrandCnt++] = {});
+				 				var parent;
+				 				d["0"] = "<%=gtfReport.getId()%>";
+	    	    				d["1"] = "<%=gtfReport.getBrand()%>";
+	    	    				d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
+	    	    				<%Double total = gtfReport.getBenchmarkMap().get(BudgetConstants.total);%>
+	    	    				d["3"] = "<%=total%>";
+    							d["4"] = "<%=gtfReport.getProjectName()%>";
+    							d["5"] =   itemClicked[0]+"."+multiBrandCnt;
+							}
+						<%}%>
+						$('#multibrandEdit').show().fadeIn(100);
+						displayMultibrandGrid();
+						$('#back').addClass('black_overlay').fadeIn(100);
+						// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
 					}
-					if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
-						error=error+3;
-					}
-					alert(error);
-					switch(error) {
-				    case 0:
-				        break;
-				    case 1:
-				    	errStrng="Project name cannot be blank."
-				        break;
-				    case 3:
-				    	errStrng="gMemoriID cannot be blank."
-				        break;
-				    case 4:
-				    	errStrng="gMemoriID or Project name cannot be blank."
-				        break;
-				    default:
-				        break;
-				}
-				}
-					if(error==0){
-						 if(itemClicked[37]){
-							 m_data = JSON.parse(JSON.stringify(itemClicked[36]));
-						 }else{
-							 m_data[0][4]=itemClicked[2];
-							 m_data[0][5]=itemClicked[0]+'.1';
-						 }
-						 $('#multibrandEdit').show().fadeIn(100);
+					//code for newly added projects 
+					else if(itemClicked[34]=="New projects"){
+						// Start : Code for newly added projects
+						var error=0;
+						var errStrng="";
+				
+						if(itemClicked[2]=='' || itemClicked[0]=='' || 
+							itemClicked[2]=='undefined' || itemClicked[0]=='undefined'){
+					
+							if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
+								error=error+1;
+							}
+							if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
+								error=error+3;
+							}
+							switch(error) {
+				    			case 0:
+				        			break;
+				    			case 1:
+				    				errStrng="Project name cannot be blank."
+				        			break;
+				    			case 3:
+				    				errStrng="gMemoriID cannot be blank."
+				        			break;
+				    			case 4:
+				    				errStrng="gMemoriID or Project name cannot be blank."
+				        			break;
+				    			default:
+				        		break;
+							}
+						}
+						if(error==0){
+						 	if(itemClicked[37]){
+								 m_data = JSON.parse(JSON.stringify(itemClicked[36]));
+						 	}else{
+							 	m_data[0][4]=itemClicked[2];
+							 	m_data[0][5]=itemClicked[0]+'.1';
+						 	}
+						 	$('#multibrandEdit').show().fadeIn(100);
 							displayMultibrandGrid();
 							$('#back').addClass('black_overlay').fadeIn(100);
-					}else{
-						alert(errStrng);
+						}else{
+							alert(errStrng);
+						}
 					}
-					
-				
-			}
-			} 
-			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("save")!=-1){
-				submitProjects();
-			}else if(itemClicked[1].toLowerCase().indexOf("cancel")!=-1){
-				cancelProjects();
-			}
+				} 
+				// Handele click on Save button
+				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("save")!=-1){
+					submitProjects();
+				}
+				// Handele click on Cancel button
+				if(args.cell==3 && itemClicked[11].toLowerCase().indexOf("cancel")!=-1){
+					cancelProjects();
+				}
 			}
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
@@ -1182,6 +923,7 @@
 				e.stopImmediatePropagation();
 			}
 		});
+		
 		function cancelProjects(){
 			window.location.reload(true);
 		}
@@ -1191,7 +933,7 @@
 			for(var i=0;i<addsave;i++){
 				storeData[i]=data[i];
 			}
-			alert(JSON.stringify(storeData));
+			
 			 $.ajax({
 				url : '/storereport',
 				type : 'POST',
@@ -1204,12 +946,6 @@
 				}
 			});  
 		}
-		grid.onSort.subscribe(function (e, args) {
-		    sortdir = args.sortAsc ? 1 : -1;
-		    sortcol = 29;
-
-		      dataView.sort(comparer, args.sortAsc);
-		  });
 		
 		// delete cell data on press of delete button
 		grid.onKeyDown.subscribe(function(e, args) {
@@ -1434,38 +1170,7 @@
 					 break;
 				} 
 			}
-		/* 	alert(JSON.stringify(itemClicked[36]));
-			alert(JSON.stringify(itemClicked[37]));
-			alert(JSON.stringify(m_data));  */
-			/* for(var count = 0; count < m_data.length && m_data[count]["1"] != "" && m_data[count]["1"] != "undefined"  && m_data[count]["2"] != "" && m_data[count]["2"] != "undefined"  && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				data[count+1][7]=m_data[count][1];
-				data[count+1][8]=m_data[count][2];
-				var total =count+1;
-				var row= total;
-				for(var cell=12;cell <24;cell++){
-					total=row;
-					if(data[0][cell]!=0.0){
-							 data[total][cell] = (parseFloat(data[0][cell])*parseFloat(data[total][8]/100)).toFixed(2);
-						} 
-					else{
-						data[total][cell]=0.00;
-						 }
-					}
-				data[count+1][26]="Added";
-			} */
-			/* if(itemClicked[34]!="New projects"){
-			  $.ajax({
-					url : '/multiBrandServlet',
-					type : 'POST',
-					dataType : 'json',
-					data : {objarray: JSON.stringify(m_data)},
-					success : function(result) {
-						alert('Data saved successfully');
-						isMultiBrand = false;
-						window.location.reload(true);
-					}
-				}); 
-			} */
+	
 			 
 		grid.invalidate();
 		}
