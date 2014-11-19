@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 
 import com.gene.app.bean.BudgetSummary;
+import com.gene.app.bean.CostCenter_Brand;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.server.PMF;
 
@@ -64,6 +65,32 @@ public class UserDataUtil {
 		}
 		try{
 			pm.makePersistentAll(budgetSummaryList);
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			pm.close();
+		}
+	}
+	
+	
+	
+	public void insertCCMapping(){
+		Double[] budgetArray = {7000.0,10000.0,30000.0,60000.0,6000.0,2000.0,7000.0,30000.0,6000.0};
+		//Double[] budgetArray = {7000.0};
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		CostCenter_Brand cc = new CostCenter_Brand();
+		//List<BudgetSummary> budgetSummaryList = new ArrayList<BudgetSummary>();
+		/*BudgetSummary budgetSummary = null;
+		for(int i=0;i<budgetArray.length;i++){
+		budgetSummary = new BudgetSummary();
+		budgetSummary.setProjectOwnerEmail(userEmail[i]);
+		budgetSummary.setTotalBudget(budgetArray[i]);
+		budgetSummaryList.add(budgetSummary);
+		}*/
+		cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
+		cc.setCostCenter("307673");
+		try{
+			pm.makePersistent(cc);
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

@@ -1163,8 +1163,10 @@
 				
 			}
 			} 
-			if(itemClicked[6].toLowerCase().indexOf("save")!=-1){
+			if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("save")!=-1){
 				submitProjects();
+			}else if(itemClicked[1].toLowerCase().indexOf("cancel")!=-1){
+				cancelProjects();
 			}
 			}
 			if ($(e.target).hasClass("toggle")) {
@@ -1180,7 +1182,10 @@
 				e.stopImmediatePropagation();
 			}
 		});
-
+		function cancelProjects(){
+			window.location.reload(true);
+		}
+		
 		function submitProjects(){
 			var storeData=[];
 			for(var i=0;i<addsave;i++){
