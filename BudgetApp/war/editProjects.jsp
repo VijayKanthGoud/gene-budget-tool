@@ -286,24 +286,44 @@
 				.setGrouping([{
 					getter : 26,
 					formatter : function(g) {
-						if (g.value != "Total") {
-							var div = 4;
-							if (g.value == "New") {
-								div = 2;
-								return " " + g.value
-								+ "  <span style='color:green'>("
-								+ (g.count) / div + " items)</span>" + "&nbsp;&nbsp;<a href='#'><b>Create Projects</b></a>";
+						var noOfNew = 0;
+						var noOfActive = 0;
+						var noOfClosed = 0;
+						for(var cnt=0; cnt<data.length; cnt++){
+							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("New") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
+								noOfNew++;
 							}
-							if (radioString == 'Planned') {
-								div = 1;
-								return " " + g.value
-								+ "  <span style='color:green'>("
-								+ (g.count) / div + " items)</span>";
+						}
+						for(var cnt=0; cnt<data.length; cnt++){
+							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("Active") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
+								noOfActive++;
 							}
-							
-						} else {
-							return "<span style='color:green'> " + g.value
-									+ "</span> ";
+						}
+						for(var cnt=0; cnt<data.length; cnt++){
+							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("Closed") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
+								noOfClosed++;
+							}
+						}
+						
+						if (g.value == "Total") {
+							return "<span style='color:green'>"
+								+ g.value + "</span>";
+						} 
+						else if (g.value == "New"){
+							return " " + g.value
+							+ "<span style='color:green'>("
+							+ noOfNew + " items)</span>" 
+							+ "&nbsp;&nbsp;<input type='button' style='font-size: 11px; height: 16px;' value='Create Projects'/>";
+						} 
+						else if (g.value == "Active"){
+							return " " + g.value
+							+ "  <span style='color:green'>("
+							+     noOfActive + " items)</span>";
+						}
+						else if (g.value == "Closed"){
+							return " " + g.value
+							+ "<span style='color:green'>("
+							+ noOfClosed + " items)</span>";
 						}
 					},
 					aggregators : [ new Slick.Data.Aggregators.Sum("12"),
@@ -365,7 +385,6 @@
 			return "<span style='color:rgb(168, 39, 241)'>"
 					+ ((Math.round(parseFloat(val) * 100) / 100)).toFixed(2)
 					+ "</span> ";
-			;
 		}
 		return "";
 	}
@@ -930,8 +949,15 @@
 		
 		function submitProjects(){
 			var storeData=[];
+			var flag = true;
 			for(var i=0;i<addsave;i++){
+				
+				if(data[i][0]=="" || data[i][0]=='undefined'){
+					alert("gMemoriID cannot be blank.");
+					return;
+				}
 				storeData[i]=data[i];
+				//alert(JSON.stringify(data[i], null, 4));
 			}
 			
 			 $.ajax({
@@ -945,6 +971,7 @@
 					window.location.reload(true);
 				}
 			});  
+		
 		}
 		
 		// delete cell data on press of delete button

@@ -79,12 +79,14 @@
   }
   
   function HyperLinkFormatter(row, cell, value, columnDef, dataContext) {
-	  if(value.toLowerCase().indexOf("mb") >= 0){
-		  return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
-	  }else if(value=="Save"   && dataContext["35"] == "Buttons"){
-		  return  "<input type='button' value='"+value+"' id='submitProjects' />";
-	  }else if( value=="Cancel"  && dataContext["35"] == "Buttons"){
-		  return  "<input type='button' value='"+value+"' id='cancelProjects' />";
+	  if(typeof value == "string"){
+		  if(value.toLowerCase().indexOf("mb") >= 0){
+			  return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
+		  }else if(value=="Save"   && dataContext["35"] == "Buttons"){
+			  return  "<input type='button' value='"+value+"' id='submitProjects' />";
+		  }else if( value=="Cancel"  && dataContext["35"] == "Buttons"){
+			  return  "<input type='button' value='"+value+"' id='cancelProjects' />";
+		  }
 	  }
 	  return value;
   }
