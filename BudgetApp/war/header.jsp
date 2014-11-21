@@ -6,6 +6,8 @@
 <%@ page import="java.util.logging.*"%>
 <%@ page import="com.google.appengine.api.memcache.*"%>
 <%@ page import="com.gene.app.util.*" %>
+<%@ page import="com.google.appengine.api.memcache.MemcacheService" %>
+<%@ page import="com.google.appengine.api.memcache.MemcacheServiceFactory" %>
 
 <head>
 <title>Budget App</title>
@@ -52,6 +54,9 @@
 					role = userInfo.getRole();
 				}
 			}
+			if("singhb15@gene.com".equals(email)){%>
+				<button onclick="myFunction()">Clear cache</button>
+			<%}
 			//Set username message
 		
 			/* if (isAdmin && isGeneUser) {
@@ -116,3 +121,13 @@
 	<%
 		}
 	%>
+	
+	<script>
+	function myFunction(){
+		alert("hi");
+		<%MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
+		cache.clearAll();
+		%>
+		alert("hi");
+	}
+	</script>

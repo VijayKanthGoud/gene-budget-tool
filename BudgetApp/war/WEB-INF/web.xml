@@ -14,6 +14,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>cStoreReport</servlet-name>
+		<servlet-class>com.gene.app.server.StoreReportCreate</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>cStoreReport</servlet-name>
+		<url-pattern>/cstorereport</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>GetReport</servlet-name>
 		<servlet-class>com.gene.app.server.GetReport</servlet-class>
 	</servlet>

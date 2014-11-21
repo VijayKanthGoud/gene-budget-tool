@@ -412,7 +412,7 @@
 		var param = 'objarray=' + JSON.stringify(data);
 		alert(JSON.stringify(param, null, 4));
 		$.ajax({
-			url : '/storereport',
+			url : '/cstorereport',
 			type : 'POST',
 			dataType : 'json',
 			data : {objarray: JSON.stringify(data), multibrand: isMultiBrand},

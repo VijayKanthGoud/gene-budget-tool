@@ -53,10 +53,10 @@
 								Columns</td>
 						</tr>
 					</table>
-				</td>
+				</td>				
 				<td style="width: 50%; height: 55px; text-align: center;"><span
-					style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
-						My Projects</span></td>
+						style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
+						My Projects </span><br/>(<%=BudgetConstants.costCenter%>)</td>
 
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
@@ -106,7 +106,7 @@
 						
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
-                            <td>Select Brand:</td>
+                            <td><b>Select Brand:</b></td>
                             <td><select id="brandType" onchange="getBrandTotals()">
                             <%String option = "";
                             for(int i=0;i<brands.length;i++){ 
@@ -121,22 +121,22 @@
 						
 						 <tr>
                                 <!-- td style="padding-left: 20px;">2017</td> -->
-                                <td>Budget:</td>
+                                <td><b>Budget:</b></td>
                                 <td>$<input id = "totalBudget" style="color: #005691" type=text name=type
                                        maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
                          </tr>
 
 						 <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Planned:</td><td>$<span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+                                 <td><b>Planned:</b></td><td>$<span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Unplanned Total:</td><td>$<span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
+                                 <td><b>Unplanned Total:</b></td><td>$<span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Accrual:</td><td>$<span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+                                 <td><b>Accrual:</b></td><td>$<span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           
                           <%
@@ -145,7 +145,7 @@
                            <tr>
                                  <!-- td style="padding-left: 20px;"><span
                                         style="background: <%=color%>;color:black">2017</span></td> -->
-                                 <td><span style="background: <%=color%>;color:black">2017 Variance Total:</span></td>
+                                 <td><span style="background: <%=color%>;color:black"><b>2017 Variance Total:</b></span></td>
                                  <td><span style="background: <%=color%>;color:black">$<span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
                                  </td>
                           </tr>
