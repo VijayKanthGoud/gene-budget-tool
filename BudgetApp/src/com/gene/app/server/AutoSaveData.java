@@ -47,8 +47,11 @@ public class AutoSaveData  extends HttpServlet{
 		
 		
 		String sessionKey = (String)session.getAttribute(BudgetConstants.KEY);
-		GtfReport sessionGtfReport = util.readReportDataFromCache(sessionKey,BudgetConstants.costCenter);
 		util.saveAllReportDataToCache(BudgetConstants.costCenter, gtfReportMap);
+		if(sessionKey != null && sessionKey.isEmpty()){
+			sessionKey = keyNum;
+		}
+		GtfReport sessionGtfReport = util.readReportDataFromCache(sessionKey,BudgetConstants.costCenter);
 		if(keyNum==null && cellValue==null && cellNum==null && sessionKey !=null){
 			util.saveDataToDataStore(sessionGtfReport);
 		}

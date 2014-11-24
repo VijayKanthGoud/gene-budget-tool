@@ -354,7 +354,7 @@ public class DBUtil {
 		}
 	}
 		
-	public Map<String,GtfReport> getReport(String costCenter) {
+	public Map<String,GtfReport> getReport(String costCenter, boolean resetCache) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);
 		q.setOrdering(BudgetConstants.GTFReportOrderingParameters_getReport);
@@ -366,7 +366,9 @@ public class DBUtil {
 				gtfList.put(p.getgMemoryId(),p);
 			}
 			}
-			saveAllReportDataToCache(costCenter,gtfList);
+			if(resetCache){
+				saveAllReportDataToCache(costCenter,gtfList);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -412,7 +414,7 @@ public class DBUtil {
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		gtfReportList = (Map<String,GtfReport>)cache.get(costCenter);
 		if(gtfReportList==null || gtfReportList.size()==0){
-			gtfReportList = getReport(costCenter);
+			gtfReportList = getReport(costCenter, true);
 			}
 		return gtfReportList;
 	}
@@ -492,7 +494,7 @@ public class DBUtil {
 		// prepare BudgetSummaryData
 		Map<String,Map<String,BudgetSummary>> brandlevelBudgetMap = prepareBrandData(costCenterList);
 		// get project list matching the brand
-		Map<String,GtfReport> gtfRptList = getReport(BudgetConstants.costCenter);
+		Map<String,GtfReport> gtfRptList = getReport(BudgetConstants.costCenter, false );
 		Map<String,BudgetSummary> brandMap = null;
 		brandMap = getProjectListByBrand(gtfRptList,brandlevelBudgetMap);
 		if(brandMap == null){

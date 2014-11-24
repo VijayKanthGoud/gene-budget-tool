@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.jdo.PersistenceManager;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.GtfReport;
-import com.gene.app.bean.MultiBrand;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
@@ -39,7 +39,7 @@ public class StoreReport extends HttpServlet {
 		email = user.getEmail();
 		resp.setContentType(BudgetConstants.contentType);
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
-		storeProjectData(objarray, email);
+		storeProjectData(objarray, email, resp);
 		/*boolean isMultiBrand = Boolean.parseBoolean(req.getParameter("multibrand").toString());
 		String email = "";
 		HttpSession session = req.getSession();
@@ -57,7 +57,7 @@ public class StoreReport extends HttpServlet {
 	}
 	
 	
-	public void storeProjectData(String objarray, String email){
+	public void storeProjectData(String objarray, String email, HttpServletResponse resp){
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		JSONArray jsonArray = null;
 		GtfReport gtfReport = null;
@@ -104,6 +104,19 @@ public class StoreReport extends HttpServlet {
 				}
 				gtfReport.setRemarks(remarks);
 				multiBrand = rprtObject.getString(BudgetConstants.isMultiBrand);
+				
+				Map<String,GtfReport> gtfReportMap = util.getAllReportDataFromCache(BudgetConstants.costCenter);
+				Set<String> existingGmemoriIds = gtfReportMap.keySet();
+				if(existingGmemoriIds.contains(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId))){
+					try {
+						resp.sendRedirect("/");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				    break;
+				}
+				
 				if(multiBrand !=null && !"".equalsIgnoreCase(multiBrand.trim()) && "true".equalsIgnoreCase(multiBrand.trim())){
 					prepareMultiBrandProjectData(gtfReports,gtfReport,rprtObject);
 				}else{
@@ -115,13 +128,13 @@ public class StoreReport extends HttpServlet {
 			util.storeProjectsToCache(gtfReports);
 		} catch (JSONException e1) {
 			e1.printStackTrace();
-		}
+		} 
 	}
 	
 	public void prepareSingleBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport,JSONObject rprtObject){
 		try{
 		
-			gtfReport.setgMemoryId(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId));
+		gtfReport.setgMemoryId(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId));
 		gtfReport.setProjectName(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectName));
 		gtfReport.setBrand(rprtObject.getString(BudgetConstants.New_GTFReport_Brand));
 		try {

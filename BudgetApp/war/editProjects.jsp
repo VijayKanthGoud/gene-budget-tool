@@ -10,7 +10,7 @@
 	List<GtfReport> gtfReports = (List<GtfReport>) request
 			.getAttribute("gtfreports");
 	for (GtfReport report : gtfReports) {
-		System.out.println(report.getBrand());
+		System.out.println(report.getgMemoryId());
 	}
 	Calendar cal = Calendar.getInstance();
 	int year = cal.get(Calendar.YEAR);
@@ -60,7 +60,7 @@
 
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
-						style="color: #005691; white-space: nowrap;">
+						style="color: #005691; white-space: nowrap; font-weight: bold;">
 						<%
 							BudgetSummary summary = (BudgetSummary) request.getAttribute("summary");
 							Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
@@ -106,7 +106,7 @@
 						
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
-                            <td><b>Select Brand:</b></td>
+                            <td>Select Brand:</td>
                             <td><select id="brandType" onchange="getBrandTotals()">
                             <%String option = "";
                             for(int i=0;i<brands.length;i++){ 
@@ -121,22 +121,22 @@
 						
 						 <tr>
                                 <!-- td style="padding-left: 20px;">2017</td> -->
-                                <td><b>Budget:</b></td>
+                                <td>Budget:</td>
                                 <td>$<input id = "totalBudget" style="color: #005691" type=text name=type
                                        maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
                          </tr>
 
 						 <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td><b>Planned:</b></td><td>$<span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+                                 <td>Planned:</td><td>$<span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td><b>Unplanned Total:</b></td><td>$<span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
+                                 <td>Unplanned Total:</td><td>$<span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td><b>Accrual:</b></td><td>$<span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+                                 <td>Accrual:</td><td>$<span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           
                           <%
@@ -145,7 +145,7 @@
                            <tr>
                                  <!-- td style="padding-left: 20px;"><span
                                         style="background: <%=color%>;color:black">2017</span></td> -->
-                                 <td><span style="background: <%=color%>;color:black"><b>2017 Variance Total:</b></span></td>
+                                 <td><span style="background: <%=color%>;color:black">2017 Variance Total:</span></td>
                                  <td><span style="background: <%=color%>;color:black">$<span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
                                  </td>
                           </tr>
@@ -966,10 +966,14 @@
 				dataType : 'json',
 				data : {objarray: JSON.stringify(storeData) },
 				success : function(result) {
+					console.log("Result::::"+result);
 					alert('Data saved successfully');
 					storeData=[];
 					window.location.reload(true);
-				}
+				},
+				error: function() {
+		            alert('gMemori Id exists. Try Different gMemori Id.');
+		        }
 			});  
 		
 		}
