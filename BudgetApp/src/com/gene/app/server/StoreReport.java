@@ -120,7 +120,7 @@ public class StoreReport extends HttpServlet {
 				if(multiBrand !=null && !"".equalsIgnoreCase(multiBrand.trim()) && "true".equalsIgnoreCase(multiBrand.trim())){
 					prepareMultiBrandProjectData(gtfReports,gtfReport,rprtObject);
 				}else{
-					prepareSingleBrandProjectData(gtfReports,gtfReport,rprtObject);
+					prepareSingleBrandProjectData(gtfReports,gtfReport,rprtObject, false);
 				}
 				//gtfReports.add(gtfReport);
 			}
@@ -131,7 +131,7 @@ public class StoreReport extends HttpServlet {
 		} 
 	}
 	
-	public void prepareSingleBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport,JSONObject rprtObject){
+	public void prepareSingleBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport,JSONObject rprtObject, boolean isMultibrand){
 		try{
 		
 		gtfReport.setgMemoryId(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId));
@@ -151,7 +151,7 @@ public class StoreReport extends HttpServlet {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
 				plannedMap.put(BudgetConstants.months[cnt],
-						Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))));
+						util.round(Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))),2));
 			} catch (NumberFormatException e ) {
 				plannedMap.put(BudgetConstants.months[cnt], 0.0);
 			}
@@ -160,7 +160,7 @@ public class StoreReport extends HttpServlet {
 		gtfReport.setBenchmarkMap(setZeroMap);
 		gtfReport.setAccrualsMap(setZeroMap);
 		gtfReport.setVariancesMap(setZeroMap);
-		gtfReport.setMultiBrand(false);
+		gtfReport.setMultiBrand(isMultibrand);
 		gtfReports.add(gtfReport);
 		
 		}catch(JSONException e){
@@ -169,7 +169,7 @@ public class StoreReport extends HttpServlet {
 	}
 	
 	public void prepareMultiBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport1,JSONObject rprtObject){
-		prepareSingleBrandProjectData(gtfReports, gtfReport1, rprtObject);
+		prepareSingleBrandProjectData(gtfReports, gtfReport1, rprtObject, true);
 		GtfReport gtfReport = null; 
 		JSONArray jsonArray = null;
 		JSONObject multiBrandObject = null;
@@ -206,7 +206,7 @@ public class StoreReport extends HttpServlet {
 		for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
-				value = parentPlannedMap.get(BudgetConstants.months[cnt])*percent_allocation/100;
+				value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percent_allocation/100, 2);
 				plannedMap.put(BudgetConstants.months[cnt],value);
 			} catch (NumberFormatException e ) {
 				plannedMap.put(BudgetConstants.months[cnt], 0.0);

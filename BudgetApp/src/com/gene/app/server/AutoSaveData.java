@@ -13,6 +13,9 @@ import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.GtfReport;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
 public class AutoSaveData extends HttpServlet {
@@ -21,11 +24,40 @@ public class AutoSaveData extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		String keyNum = req.getParameter(BudgetConstants.KEY).toString();
-		String cellValue = req.getParameter(BudgetConstants.CELL_VALUE)
-				.toString();
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
+		String objarray = req.getParameter(BudgetConstants.objArray).toString();
+		JSONArray jsonArray = null;
+		JSONObject rprtArray = null;
+		
+		try {
+			jsonArray = new JSONArray(objarray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (int count = 0; count < jsonArray.length(); count++) {
 		GtfReport gtfReportObj = null;
+		
+		try {
+			rprtArray = jsonArray.getJSONObject(count);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String keyNum="";
+		try {
+			keyNum = rprtArray.getString("0");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String cellValue="";
+		try {
+			cellValue = rprtArray.getString("1");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Map<String, GtfReport> gtfReportMap = util
 				.getAllReportDataFromCache(BudgetConstants.costCenter);
 		if (keyNum != null && !"".equalsIgnoreCase(keyNum.trim())) {
@@ -70,5 +102,5 @@ public class AutoSaveData extends HttpServlet {
 		session.setAttribute(BudgetConstants.KEY, keyNum);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 	}
-
+	}
 }

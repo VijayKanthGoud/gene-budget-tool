@@ -31,6 +31,7 @@ public class MultiBrandServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String m_data = req.getParameter("objarray").toString();
+		String sumTotal = req.getParameter("sumTotal").toString();
 		// String parent_key = req.getParameter("parentItem").toString();
 		String project_id = "";
 		String project_Name = "";
@@ -61,8 +62,9 @@ public class MultiBrandServlet extends HttpServlet {
 
 			List<GtfReport> newGtfReportList = new ArrayList<GtfReport>();
 			GtfReport gtfRpt = null;
-			Map<String, Double> benchMarkMap = new LinkedHashMap<String, Double>();
-			Map<String, Double> newBenchMap = new LinkedHashMap<String, Double>();
+			Map<String, Double> PlannedMap = new LinkedHashMap<String, Double>();
+			Map<String, Double> newPlannedMap = new LinkedHashMap<String, Double>();
+			Map<String, Double> parentPlannedMap = new LinkedHashMap<String, Double>();
 			Double value = 0.0;
 			String keyValue = "";
 			Map<String, Double> setZeroMap = new HashMap<String, Double>();
@@ -91,21 +93,11 @@ public class MultiBrandServlet extends HttpServlet {
 					newgtfReport.setVendor(gtfRpt.getVendor());
 					newgtfReport.setWBS_Name(gtfRpt.getWBS_Name());
 					newgtfReport.setProjectName(project_Name);
-					benchMarkMap = gtfRpt.getBenchmarkMap();
-					if (benchMarkMap != null) {
-
-						for (Map.Entry<String, Double> benchMapEntry : benchMarkMap
-								.entrySet()) {
-							keyValue = benchMapEntry.getKey();
-							value = (benchMapEntry.getValue() * percentage_Allocation)
-									/ (gtfRpt.getPercent_Allocation());
-							newBenchMap.put(keyValue, value);
-						}
-						newgtfReport.setBenchmarkMap(newBenchMap);
-					} else {
-						newgtfReport.setBenchmarkMap(setZeroMap);
-					}
-					newgtfReport.setPlannedMap(gtfRpt.getPlannedMap());
+					newgtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
+					PlannedMap = gtfRpt.getPlannedMap();
+					PlannedMap.put("TOTAL",util.round(Double.parseDouble(sumTotal),2));
+					parentPlannedMap = new LinkedHashMap(PlannedMap);
+					newgtfReport.setPlannedMap(PlannedMap);
 					newgtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 					newgtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 					newgtfReport.setPercent_Allocation(percentage_Allocation);
@@ -137,7 +129,8 @@ public class MultiBrandServlet extends HttpServlet {
 					if (project_id != null && !"".equals(project_id.trim())
 							&& project_id.equalsIgnoreCase(gtfRpt.getId())) {
 						GtfReport newgtfReport = new GtfReport();
-						benchMarkMap = gtfRpt.getBenchmarkMap();
+						PlannedMap =  new LinkedHashMap<>();
+						PlannedMap = gtfRpt.getPlannedMap();
 						newgtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 						newgtfReport.setBrand(gtfRpt.getBrand());
 						newgtfReport.setEmail(gtfRpt.getEmail());
@@ -155,32 +148,21 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setVendor(gtfRpt.getVendor());
 						newgtfReport.setWBS_Name(gtfRpt.getWBS_Name());
 						newgtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
-						newgtfReport.setPlannedMap(gtfRpt.getPlannedMap());
+						
 						newgtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 						newgtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 						newgtfReport.setProjectName(project_Name);
 
-						for (Map.Entry<String, Double> benchMapEntry : benchMarkMap
-								.entrySet()) {
-							keyValue = benchMapEntry.getKey();
-							value = (benchMapEntry.getValue() * percentage_Allocation)
-									/ (gtfRpt.getPercent_Allocation());
-							newBenchMap.put(keyValue, value);
-						}
-						newgtfReport.setBenchmarkMap(newBenchMap);
-						if (benchMarkMap != null) {
-
-							for (Map.Entry<String, Double> benchMapEntry : benchMarkMap
-									.entrySet()) {
-								keyValue = benchMapEntry.getKey();
-								value = (benchMapEntry.getValue() * percentage_Allocation)
-										/ (gtfRpt.getPercent_Allocation());
-								newBenchMap.put(keyValue, value);
+						for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
+							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+							try {
+								value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
+								PlannedMap.put(BudgetConstants.months[cnt],value);
+							} catch (NumberFormatException e ) {
+								PlannedMap.put(BudgetConstants.months[cnt], 0.0);
 							}
-							newgtfReport.setBenchmarkMap(newBenchMap);
-						} else {
-							newgtfReport.setBenchmarkMap(setZeroMap);
 						}
+						newgtfReport.setPlannedMap(PlannedMap);
 						newgtfReport
 								.setPercent_Allocation(percentage_Allocation);
 						newGtfReportList.add(newgtfReport);
@@ -189,6 +171,7 @@ public class MultiBrandServlet extends HttpServlet {
 							&& "".equals(project_id.trim())) {
 						GtfReport newgtfRpt = new GtfReport();
 						newgtfRpt.setBrand(brand);
+						PlannedMap= new LinkedHashMap(setZeroMap);
 						String gmemoryId = (gtfRpt.getgMemoryId()
 								.substring(0, (gtfRpt.getgMemoryId()
 										.indexOf(".")) == -1 ? gtfRpt
@@ -213,20 +196,22 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfRpt.setAccrualsMap(setZeroMap);
 						newgtfRpt.setVariancesMap(setZeroMap);
 						newgtfRpt.setBenchmarkMap(setZeroMap);
-						benchMarkMap = newgtfRpt.getBenchmarkMap();
 						Double per_allocation = newgtfRpt
 								.getPercent_Allocation();
 						newgtfRpt.setProjectName(project_Name);
 						if (per_allocation == 0.0) {
 							per_allocation = 1.0;
 						}
-						for (Map.Entry<String, Double> benchMapEntry : benchMarkMap
-								.entrySet()) {
-							keyValue = benchMapEntry.getKey();
-							value = (benchMapEntry.getValue() * percentage_Allocation)
-									/ (per_allocation);
-							newBenchMap.put(keyValue, value);
+						for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
+							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+							try {
+								value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
+								PlannedMap.put(BudgetConstants.months[cnt],value);
+							} catch (NumberFormatException e ) {
+								PlannedMap.put(BudgetConstants.months[cnt], 0.0);
+							}
 						}
+						newgtfRpt.setPlannedMap(PlannedMap);
 						newGtfReportList.add(newgtfRpt);
 						break;
 					}

@@ -466,15 +466,25 @@
 
 		console.log(args.item);
 		key = item[0];
-
+var aSaveData=[[]];
+	var iCnt=0;
+for(var i=0;i<data.length;i++){
+	var d = data[i];
+	 if(key== d[34] && d[11]=="Planned"){
+		 var aSave = (aSaveData[iCnt] = {});
+		 aSave[0] = d[0];
+		 aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+		 d[delCell]=aSave[1];
+		 iCnt++;
+	 }
+}
 		$.ajax({
 			url : '/AutoSaveData',
 			type : 'POST',
 			dataType : 'text',
 			data : {
-				key : key,
-				cellValue : cellValue,
-				celNum : cellNum
+				celNum : cellNum,
+				objarray : JSON.stringify(aSaveData)
 			},
 			success : function(result) {
 				$('#statusMessage').text("All changes saved successfully!")
@@ -518,6 +528,7 @@
         		d[33]="New";
         		d[34]=gmemoriID;
         		d[35]=" ";
+        		d[37]=<%=gReport.getMultiBrand()%>;
 				if(gmemoriID.indexOf(".") > -1){
 					d[34]=gmemoriID.split(".")[0];
 				}
@@ -547,18 +558,22 @@
     				d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
     				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
     				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
-    				d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
-    						gtfReports.get(i).getPlannedMap().get("FEB") + 
-    						gtfReports.get(i).getPlannedMap().get("MAR") + 
-    						gtfReports.get(i).getPlannedMap().get("APR") + 
-    						gtfReports.get(i).getPlannedMap().get("MAY") + 
-    						gtfReports.get(i).getPlannedMap().get("JUN") + 
-    						gtfReports.get(i).getPlannedMap().get("JUL") + 
-    						gtfReports.get(i).getPlannedMap().get("AUG") + 
-    						gtfReports.get(i).getPlannedMap().get("SEP") + 
-    						gtfReports.get(i).getPlannedMap().get("OCT") + 
-    						gtfReports.get(i).getPlannedMap().get("NOV") + 
-    						gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    				if(<%=gReport.getMultiBrand()%> == true){
+    					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
+    				}else{
+    					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
+						gtfReports.get(i).getPlannedMap().get("FEB") + 
+						gtfReports.get(i).getPlannedMap().get("MAR") + 
+						gtfReports.get(i).getPlannedMap().get("APR") + 
+						gtfReports.get(i).getPlannedMap().get("MAY") + 
+						gtfReports.get(i).getPlannedMap().get("JUN") + 
+						gtfReports.get(i).getPlannedMap().get("JUL") + 
+						gtfReports.get(i).getPlannedMap().get("AUG") + 
+						gtfReports.get(i).getPlannedMap().get("SEP") + 
+						gtfReports.get(i).getPlannedMap().get("OCT") + 
+						gtfReports.get(i).getPlannedMap().get("NOV") + 
+						gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    				}
     				d[25]="<%=gtfReports.get(i).getRemarks()%>";
   				<%} else{%>  
   				for(var cnt=1;cnt<11;cnt++){
@@ -776,6 +791,7 @@
 						dataLength++;
 					}
 				}
+				if(item[37]=='undefined' || item[37]==false){
 				data[totalSize][cell] = 0.0;
 				grid.invalidate();
 				
@@ -794,7 +810,7 @@
 					data[temp][24] = parseFloat(data[temp][24])
 								+ parseFloat(data[temp][j]);
 				}
-				
+				}
 				
 				// CODE FOR COLOUMNAR TOTALS
 				/* for (var j = 12; j < 24; j++) {
@@ -863,7 +879,7 @@
 				 				d["0"] = "<%=gtfReport.getId()%>";
 	    	    				d["1"] = "<%=gtfReport.getBrand()%>";
 	    	    				d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
-	    	    				<%Double total = gtfReport.getBenchmarkMap().get(BudgetConstants.total);%>
+	    	    				<%Double total = gtfReport.getPlannedMap().get(BudgetConstants.total);%>
 	    	    				d["3"] = "<%=total%>";
     							d["4"] = "<%=gtfReport.getProjectName()%>";
     							d["5"] =   itemClicked[0]+"."+multiBrandCnt;
@@ -1175,6 +1191,7 @@
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
 	            			"Neuroscience Pipeline", "Tarceva" ];
 	  function saveAndClose(){
+		
 		  for(var i=0;i<m_data.length;i++){
 			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
 				  m_data[i][4] = m_data[0][4];
@@ -1182,28 +1199,53 @@
 		  }
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
+			 var total =0.0;
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
 				
 				 if(d["id"]!='undefined' && d["id"]== itemClicked["id"]){
 					 itemClicked[36] = JSON.parse(JSON.stringify(m_data));
 					 itemClicked[37] = true;
-					 for (var j = 0; j < 5; j++) {
-							var d = (m_data[j] = {});
-							d[0] = "";
-							d[1] = "";
-							d[2] = "";
-							d[3] = "";
-							d[4] = "";
-							d[5] = "";
-							d[6] = "";
+					
+					 for (var j = 0; j < m_data.length; j++) {
+						 var d = m_data[j];
+						 if(d[4]!='' ){
+							total=total + parseFloat(d[3]);
+						 }else{
+							 break;
+						 }
 					 	} 
+					 
+					 
 					 break;
 				} 
 			}
-	
-			 
+			itemClicked[24]=total;
 		grid.invalidate();
+		  if(itemClicked["34"]!="New projects" ){
+			  alert(JSON.stringify(m_data, null, 4));
+				 $.ajax({
+						url : '/multiBrandServlet',
+						type : 'POST',
+						dataType : 'json',
+						data : {objarray: JSON.stringify(m_data),sumTotal:total},
+						success : function(result) {
+							alert('Data saved successfully');
+							isMultiBrand = false;
+							window.location.reload(true);
+						}
+					});
+		  }
+			  for (var j = 0; j < 5; j++) {
+					var d = (m_data[j] = {});
+					d[0] = "";
+					d[1] = "";
+					d[2] = "";
+					d[3] = "";
+					d[4] = "";
+					d[5] = "";
+					d[6] = "";
+			 	} 
 		}
 		
 		function saveWithoutClose(){
@@ -1257,9 +1299,6 @@
 				m_grid.invalidate();
 			}
 			
-			if(cell==3){
-				
-			}
 			}
 			return true;
 			
@@ -1296,38 +1335,18 @@
 			
 			m_grid.invalidate();
 			}
-			
 			if(cell == 3 && availableTags.indexOf(m_data[row][1]) == -1){
 				m_data[row][1]="";
 				alert("Enter a valid brand.");
 		        m_grid.gotoCell(row, 0, true);
 				
 			}
+			
+			
 
 		});
 	    
-	     $('#multibrandGrid').on('blur', function() {
-	    	var cell = args.cell+1;
-			var row = args.row;
-			sum = 0.0;
-			if(cell == 3){
-			
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				sum = sum + parseFloat(m_data[count]["3"]);
-			}
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
-			}
-			m_grid.invalidate();
-			}
-			
-			if(cell == 1 && availableTags.indexOf(m_data[row][1]) == -1){
-				m_data[row][1]="";
-				alert("Enter a valid brand.");
-		        m_grid.gotoCell(row, 0, true);
-				
-			}
-	    }); 
+
 	    
 	  }
 </script>

@@ -1,5 +1,7 @@
 package com.gene.app.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -7,8 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
@@ -420,13 +420,21 @@ public class DBUtil {
 	}
 	
 	public Map<String,GtfReport> getAllReportsByPrjName(String costCenter,String prjName,String email){
-		Map<String,GtfReport> rptList = (Map<String,GtfReport>)cache.get(BudgetConstants.costCenter);
+		Map<String,GtfReport> rptList = getAllReportDataFromCache(BudgetConstants.costCenter);
 		Map<String,GtfReport> newRptList = new LinkedHashMap<String, GtfReport>(); 
 		GtfReport gtfRpt = new GtfReport();
+		List<GtfReport> listReports = new ArrayList<GtfReport>();
+		if(rptList==null || rptList.isEmpty()){
+			listReports=readProjectDataByProjectName(email,prjName) ;
+			for(GtfReport nReport:listReports){
+			newRptList.put(nReport.getgMemoryId(),nReport);
+			}
+		}else{
 		for(Map.Entry<String, GtfReport> rptMap: rptList.entrySet()){
 			gtfRpt = rptMap.getValue();
 		if(prjName!=null && !"".equals(prjName) && prjName.equalsIgnoreCase(gtfRpt.getProjectName())){
 			newRptList.put(rptMap.getKey(), gtfRpt);
+		}
 		}
 		}
 		return newRptList;
@@ -641,5 +649,13 @@ public class DBUtil {
 			gtfReportFromCache.put(report.getgMemoryId(), report);
 			}
 			cache.put(BudgetConstants.costCenter, gtfReportFromCache);
+		}
+		
+		public double round(double value, int places) {
+		    if (places < 0) throw new IllegalArgumentException();
+
+		    BigDecimal bd = new BigDecimal(value);
+		    bd = bd.setScale(places, RoundingMode.HALF_UP);
+		    return bd.doubleValue();
 		}
 }
