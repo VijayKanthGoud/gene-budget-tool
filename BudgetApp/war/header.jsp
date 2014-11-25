@@ -124,10 +124,8 @@
 	
 	<script>
 	function myFunction(){
-		alert("hi");
 		<%MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		cache.clearAll();
 		%>
-		alert("hi");
 	}
 	</script>

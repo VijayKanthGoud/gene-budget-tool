@@ -465,7 +465,7 @@
 		var cellNum = delCell - 12;
 
 		console.log(args.item);
-		key = item[34];
+		key = item[0];
 
 		$.ajax({
 			url : '/AutoSaveData',
