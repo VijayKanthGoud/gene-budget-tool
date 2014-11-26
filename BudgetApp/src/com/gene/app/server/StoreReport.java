@@ -138,8 +138,7 @@ public class StoreReport extends HttpServlet {
 		gtfReport.setProjectName(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectName));
 		gtfReport.setBrand(rprtObject.getString(BudgetConstants.New_GTFReport_Brand));
 		try {
-			gtfReport.setPercent_Allocation(Integer.parseInt(rprtObject
-					.getString(BudgetConstants.New_GTFReport_Percent_Allocation)));
+			gtfReport.setPercent_Allocation(BudgetConstants.GTF_Percent_Total);
 		} catch (NumberFormatException e) {
 			gtfReport.setPercent_Allocation(0);
 		}

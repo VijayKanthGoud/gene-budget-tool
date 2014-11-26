@@ -5,6 +5,7 @@ public interface BudgetConstants {
 	//DBUtil.java
 	public static final String[] months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
+	public static final int GTF_Percent_Total = 100;
 	public static final String total = "TOTAL";
 	public static final String seperator = " - ";
 	public static final String GTFReportFilterString = "key == keyParam";
