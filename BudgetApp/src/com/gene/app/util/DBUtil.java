@@ -76,7 +76,23 @@ public class DBUtil {
 		return userMap;
 		
 	}
-	
+	public String getPrjEmailByName(String prj_owner){
+		String email = "";
+		Map<String,UserRoleInfo> userMap = readAllUserInfo(BudgetConstants.costCenter);
+		if(userMap!=null && !userMap.isEmpty()){
+		for(Map.Entry<String, UserRoleInfo> user:userMap.entrySet()){
+			if(prj_owner==null){
+				email = "";
+			}else{
+				if(!"".equals(prj_owner.trim()) && prj_owner.equalsIgnoreCase(user.getValue().getUserName())){
+					email = user.getValue().getEmail();
+					break;
+				}
+			}
+		}
+		}
+		return email;
+	}
 	public Map<String,BudgetSummary> readAllBudgetSummary(String costCenter){
 		String key = costCenter+BudgetConstants.seperator+BudgetSummary.class.getName();
 		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
