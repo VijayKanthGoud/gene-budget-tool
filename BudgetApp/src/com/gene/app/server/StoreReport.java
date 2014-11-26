@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -178,6 +179,11 @@ public class StoreReport extends HttpServlet {
 		JSONObject multiBrandObject = null;
 		Double value = 0.0;
 		double percent_allocation = 0.0;
+		String prj_owner;
+		String prj_owner_email;
+		DBUtil util = new DBUtil();
+		String email = "";
+		Map<String,UserRoleInfo> userMap = util.readAllUserInfo(BudgetConstants.costCenter);
 		try{
 		String mutliBrandArray = rprtObject.getString(BudgetConstants.multiBrandInput);
 		jsonArray = new JSONArray(mutliBrandArray);
@@ -195,6 +201,11 @@ public class StoreReport extends HttpServlet {
 		gtfReport.setProjectName(multiBrandObject.getString("4"));
 		gtfReport.setBrand(multiBrandObject.getString("1"));
 		gtfReport.setgMemoryId(multiBrandObject.getString("5"));
+		prj_owner = multiBrandObject.getString("7");
+		prj_owner_email = util.getPrjEmailByName(prj_owner);
+		gtfReport.setRequestor(multiBrandObject.getString("7")+":"+rprtObject.getString(BudgetConstants.New_GTFReport_ProjectOwner));
+		email = gtfReport.getEmail();
+		gtfReport.setEmail(prj_owner_email+":"+email);
 		try {
 			gtfReport.setPercent_Allocation(Double.parseDouble(multiBrandObject
 					.getString("2")));
@@ -226,195 +237,7 @@ public class StoreReport extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Store single brand project.
-	 *
-	 * @param objarray the objarray
-	 * @param email the email
-	 */
-	/*public void storeSingleBrandProject(String objarray, String email){
-		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
-		try {
-			JSONArray jsonArray = new JSONArray(objarray);
-			for (int count = 0; count < jsonArray.length(); count++) {
-				GtfReport gtfReport = new GtfReport();
-				JSONObject rprtObject = jsonArray.getJSONObject(count);
-				String projectWBS = rprtObject.getString(BudgetConstants.New_GTFReport_ProjectWBS);
-				if(projectWBS == null || projectWBS.isEmpty() || projectWBS.length() == 0){
-					continue;
-				}
-				gtfReport.setProjectName(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectName));
-				gtfReport.setEmail(email);
-				String status = rprtObject.getString(BudgetConstants.New_GTFReport_Status);
-				int flag = 0;
-				if(BudgetConstants.status_New.equalsIgnoreCase(status.trim())){
-					flag = 1;
-				}else if(BudgetConstants.status_Active.equalsIgnoreCase(status.trim())){
-					flag = 2;
-				}else{
-					flag = 3;
-				}
-				gtfReport.setFlag(flag);
-				gtfReport.setStatus(status);
-				//gtfReport.setStatus(rprtObject.getString("2"));
-				gtfReport.setRequestor(rprtObject.getString(BudgetConstants.New_GTFReport_Requestor));
-				gtfReport.setProject_WBS(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectWBS));
-				gtfReport.setWBS_Name(rprtObject.getString(BudgetConstants.New_GTFReport_WBS_Name));
-				gtfReport.setSubActivity(rprtObject.getString(BudgetConstants.New_GTFReport_SubActivity));
-				gtfReport.setBrand(rprtObject.getString(BudgetConstants.New_GTFReport_Brand));
-				String brand = rprtObject.getString(BudgetConstants.New_GTFReport_Brand);
-				try {
-					gtfReport.setPercent_Allocation(Integer.parseInt(rprtObject
-							.getString(BudgetConstants.New_GTFReport_Percent_Allocation)));
-				} catch (NumberFormatException e) {
-					gtfReport.setPercent_Allocation(0);
-				}
-				gtfReport.setPoNumber(rprtObject.getString(BudgetConstants.New_GTFReport_PoNumber));
-				String poDesc = rprtObject.getString(BudgetConstants.New_GTFReport_PoDesc);
-				gtfReport.setgMemoryId(poDesc.substring(0, 6));
-				gtfReport.setPoDesc(poDesc.substring(7, poDesc.length()));
-				gtfReport.setVendor(rprtObject.getString(BudgetConstants.New_GTFReport_Vendor));
-				String remarks = null;
-				try{
-					remarks = ((rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)!=null) && (!"".equalsIgnoreCase(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks).trim())))?(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)):"";
-				}catch(com.google.appengine.labs.repackaged.org.json.JSONException exception){
-					remarks = "";
-				}
-				gtfReport.setRemarks(remarks);
-				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
-				Map<String, Double> setZeroMap = new HashMap<String, Double>();
-				for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
-					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
-					try {
-						benchmarkMap.put(BudgetConstants.months[cnt],
-								Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))));
-					} catch (NumberFormatException e ) {
-						benchmarkMap.put(BudgetConstants.months[cnt], 0.0);
-					}
-				}
-				gtfReport.setBenchmarkMap(benchmarkMap);
-				gtfReport.setPlannedMap(setZeroMap);
-				gtfReport.setAccrualsMap(setZeroMap);
-				gtfReport.setVariancesMap(setZeroMap);
-				gtfReport.setMultiBrand(false);
-				gtfReports.add(gtfReport);
-				
-			}
-
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		util.generateProjectIdUsingJDOTxn(gtfReports);
-		util.storeProjectsToCache(gtfReports);
-	}
 	
-	*//**
-	 * Store multi brand project.
-	 *
-	 * @param objarray the objarray
-	 * @param email the email
-	 *//*
-	public void storeMultiBrandProject(String objarray, String email,Map<String,MultiBrand> multiBrandMap){
-		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
-		boolean isFirstLoop = true;
-		try {
-			JSONArray jsonArray = new JSONArray(objarray);
-			String requestor = "";
-			String projectName = "";
-			String status = "";
-			int flag = 0;
-			String subActivity = "";
-			String poNumber = "";
-			String vendor = "";
-			String poDesc = "";
-			String projectWBS = "";
-			String WBSName = "";
-			
-			for (int count = 0; count < jsonArray.length(); count++) {
-				GtfReport gtfReport = new GtfReport();
-				JSONObject rprtObject = jsonArray.getJSONObject(count);
-				if(isFirstLoop){
-					isFirstLoop = false;
-					requestor = rprtObject.getString(BudgetConstants.New_GTFReport_Requestor);
-					projectName = rprtObject.getString(BudgetConstants.New_GTFReport_ProjectName);
-					status = rprtObject.getString(BudgetConstants.New_GTFReport_Status);
-					if(BudgetConstants.status_New.equalsIgnoreCase(status.trim())){
-						flag = 1;
-					}else if(BudgetConstants.status_Active.equalsIgnoreCase(status.trim())){
-						flag = 2;
-					}else{
-						flag = 3;
-					}
-					subActivity = rprtObject.getString(BudgetConstants.New_GTFReport_SubActivity);
-					poNumber = rprtObject.getString(BudgetConstants.New_GTFReport_PoNumber);
-					vendor = rprtObject.getString(BudgetConstants.New_GTFReport_Vendor);
-					poDesc = rprtObject.getString(BudgetConstants.New_GTFReport_PoDesc);
-					projectWBS = rprtObject.getString(BudgetConstants.New_GTFReport_ProjectWBS);
-					WBSName = rprtObject.getString(BudgetConstants.New_GTFReport_WBS_Name);
-				}
-
-				gtfReport.setRequestor(requestor);
-				gtfReport.setProjectName(projectName);
-				gtfReport.setEmail(email);
-				String brand = rprtObject.getString(BudgetConstants.New_GTFReport_Brand);
-				if(brand == null || brand.isEmpty() || brand.length() == 0){
-					continue;
-				}
-				gtfReport.setFlag(flag);
-				gtfReport.setStatus(status);
-				gtfReport.setProject_WBS(projectWBS);
-				gtfReport.setWBS_Name(WBSName);
-				gtfReport.setSubActivity(subActivity);
-				gtfReport.setBrand(brand);
-				try {
-					gtfReport.setPercent_Allocation(Double.parseDouble(rprtObject
-							.getString(BudgetConstants.New_GTFReport_Percent_Allocation)));
-				} catch (NumberFormatException e) {
-					gtfReport.setPercent_Allocation(0);
-				}
-				gtfReport.setPoNumber(poNumber);
-				if (count != 0) {
-					gtfReport
-							.setgMemoryId(poDesc.substring(0, 6) + "." + count);
-				}else{
-					gtfReport
-					.setgMemoryId(poDesc.substring(0, 6));
-				}
-				gtfReport.setPoDesc(poDesc.substring(7, poDesc.length()));
-				gtfReport.setVendor(vendor);
-				String remarks = null;
-				try{
-					remarks = ((rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)!=null) && (!"".equalsIgnoreCase(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks).trim())))?(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)):"";
-				}catch(com.google.appengine.labs.repackaged.org.json.JSONException exception){
-					remarks = "";
-				}
-				gtfReport.setRemarks(remarks);
-				Map<String, Double> benchmarkMap = new HashMap<String, Double>();
-				Map<String, Double> setZeroMap = new HashMap<String, Double>();
-				for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
-					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
-					try {
-						benchmarkMap.put(BudgetConstants.months[cnt],
-								Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))));
-					} catch (NumberFormatException e ) {
-						benchmarkMap.put(BudgetConstants.months[cnt], 0.0);
-					}
-				}
-				gtfReport.setBenchmarkMap(benchmarkMap);
-				gtfReport.setPlannedMap(setZeroMap);
-				gtfReport.setAccrualsMap(setZeroMap);
-				gtfReport.setVariancesMap(setZeroMap);
-				gtfReport.setMultiBrand(true);
-				gtfReports.add(gtfReport);
-			}
-
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		util.generateProjectIdUsingJDOTxn(gtfReports);
-		util.storeProjectsToCache(gtfReports);
-		//cache.delete(BudgetConstants.costCenter);
-	}*/
 
 	/**
 	 * Generate project id using jdo txn.

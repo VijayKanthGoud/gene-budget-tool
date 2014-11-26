@@ -67,7 +67,7 @@ public class GetReport extends HttpServlet {
 			
 			for(Map.Entry<String, GtfReport> gtfEntry:gtfReports.entrySet()){
 				gtfReport = gtfEntry.getValue();
-				if((email !=null && !"".equals(email.trim())) && email.equalsIgnoreCase(gtfReport.getEmail())){
+				if((email !=null && !"".equals(email.trim())) && (gtfReport.getEmail().trim().toLowerCase()).contains(email.toLowerCase())){
 				gtfReportList.add(gtfReport);
 			}}
 		}
