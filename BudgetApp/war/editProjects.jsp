@@ -226,6 +226,7 @@
 		d[4] = "";
 		d[5] = "";
 		d[6] = "";
+		d[7] = "";
  	} 
 	var radioString = "All";
 	var totalSize = 0;
@@ -547,6 +548,7 @@
 		
 		// prepare the data
 		<%int idCounter = -1;
+		String requestor = "";
 		for (int i = 0; i < gtfReports.size(); i++) {
 			boolean isFirst = true;
 			for (int count = 0; count < 4; count++) {%>
@@ -576,9 +578,15 @@
 					d[34]=gmemoriID.split(".")[0];
 				}
         		<%if(isFirst){
-    				isFirst = false;%>    
+    				isFirst = false;
+    				requestor = gReport.getRequestor();
+    				if(requestor.contains(":")){
+    					requestor = requestor.substring(0,requestor.indexOf(":"));
+    				}
+    				%>    
    			 		d[0]=gmemoriID;
-    				d[1]="<%=gReport.getRequestor()%>";
+   			 		
+    				d[1]="<%=requestor%>";
     				d[2]="<%=gReport.getProjectName()%>";
     				d[3]="<%=gReport.getProject_WBS()%>";
     				d[4]="<%=gReport.getWBS_Name()%>";
@@ -919,7 +927,12 @@
 						var multiBrandCnt = 0 ;	
 						<% 
 						GtfReport pGtfReport = new GtfReport();
-						for(GtfReport gtfReport : gtfReports){%>
+						
+						for(GtfReport gtfReport : gtfReports){
+							requestor = gtfReport.getRequestor();
+    						if(requestor.contains(":")){
+    						requestor = requestor.substring(0,requestor.indexOf(":"));
+    						}%>
 							var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
 							var gMemoriId='<%=gtfReport.getgMemoryId()%>';
 				
@@ -933,6 +946,7 @@
 	    	    				d["3"] = "<%=total%>";
     							d["4"] = "<%=gtfReport.getProjectName()%>";
     							d["5"] =   itemClicked[0]+"."+multiBrandCnt;
+    							d["7"] = "<%=requestor%>";
 							}
 						<%}%>
 						$('#multibrandEdit').show().fadeIn(100);
@@ -945,15 +959,18 @@
 						// Start : Code for newly added projects
 						var error=0;
 						var errStrng="";
-				
-						if(itemClicked[2]=='' || itemClicked[0]=='' || 
-							itemClicked[2]=='undefined' || itemClicked[0]=='undefined'){
+				//alert("itemClicked = "+JSON.stringify(itemClicked));
+						if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
+							itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){
 					
 							if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
 								error=error+1;
 							}
 							if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
 								error=error+3;
+							}
+							if(itemClicked[1]=='' || itemClicked[1]=='undefined'){
+								error=error+5;
 							}
 							switch(error) {
 				    			case 0:
@@ -967,6 +984,12 @@
 				    			case 4:
 				    				errStrng="gMemoriID or Project name cannot be blank."
 				        			break;
+				    			case 5:
+				    				errStrng="Project Owner cannot be blank."
+				        			break;
+				    			case 9:
+				    				errStrng="gMemoriID or Project name or Project Owner cannot be blank."
+				        			break;
 				    			default:
 				        		break;
 							}
@@ -977,6 +1000,7 @@
 						 	}else{
 							 	m_data[0][4]=itemClicked[2];
 							 	m_data[0][5]=itemClicked[0]+'.1';
+							 	m_data[0][7]=itemClicked[1];
 						 	}
 						 	$('#multibrandEdit').show().fadeIn(100);
 							displayMultibrandGrid();
@@ -1274,6 +1298,12 @@
 			field : 4,
 			width : 160,
 			editor : Slick.Editors.Text
+		}, {
+			id : 5,
+			name : "Project Owner",
+			field : 7,
+			width : 125,
+			editor : Slick.Editors.Text
 		},
 		{
 			id : 4,
@@ -1308,7 +1338,9 @@
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
 	            			"Neuroscience Pipeline", "Tarceva" ];
 	  function saveAndClose(){
-		
+		//alert("m_data"+JSON.stringify(m_data));
+		console.log(JSON.stringify(m_data));
+		//return;
 		  for(var i=0;i<m_data.length;i++){
 			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
 				  m_data[i][4] = m_data[0][4];
@@ -1361,6 +1393,7 @@
 					d[4] = "";
 					d[5] = "";
 					d[6] = "";
+					d[7] = "";
 			 	} 
 		}
 		
@@ -1374,6 +1407,7 @@
 					d[4] = "";
 					d[5] = "";
 					d[6] = "";
+					d[7] = "";
 			 	} 
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
@@ -1400,6 +1434,7 @@
 	    
 	    m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
+			//alert("args.row"+args.row);
 			if(args.row!=0){
 			var cell = args.cell+1;
 			var row = args.row;
@@ -1410,8 +1445,13 @@
 				m_grid.invalidate();
 			}
 			
-			if(m_data[row]["5"] == "" && cell==2){
+			if(m_data[row]["5"] == "" && cell==3){
 				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
+				m_grid.invalidate();
+			}
+
+			if(m_data[row]["7"] == "" && cell==2){
+				m_data[row]["7"] = m_data[row-1]["7"];
 				m_grid.invalidate();
 			}
 			
@@ -1440,7 +1480,7 @@
 			
 			
 			
-			if(cell == 4){
+			if(cell == 5){
 				
 			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				sum = sum + parseFloat(m_data[count]["3"]);
@@ -1451,7 +1491,7 @@
 			
 			m_grid.invalidate();
 			}
-			if(cell == 3 && availableTags.indexOf(m_data[row][1]) == -1){
+			if(cell == 4 && availableTags.indexOf(m_data[row][1]) == -1){
 				m_data[row][1]="";
 				alert("Enter a valid brand.");
 		        m_grid.gotoCell(row, 0, true);
