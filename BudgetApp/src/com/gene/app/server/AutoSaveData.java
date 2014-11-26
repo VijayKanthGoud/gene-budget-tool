@@ -16,6 +16,7 @@ import com.gene.app.util.DBUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import com.google.gson.Gson;
 
 @SuppressWarnings("serial")
 public class AutoSaveData extends HttpServlet {
@@ -103,7 +104,9 @@ public class AutoSaveData extends HttpServlet {
 		BudgetSummary summary = util
 				.readBudgetSummary(BudgetConstants.costCenter);
 		session.setAttribute(BudgetConstants.KEY, keyNum);
-		req.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
+		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
+		Gson gson = new Gson();
+		resp.getWriter().write(gson.toJson(summary));
 	}
 	}
 }
