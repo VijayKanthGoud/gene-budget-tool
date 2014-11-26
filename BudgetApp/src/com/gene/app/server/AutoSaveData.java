@@ -25,7 +25,10 @@ public class AutoSaveData extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
-		String objarray = req.getParameter(BudgetConstants.objArray).toString();
+		String objarray = "[]";
+		if(req.getParameter(BudgetConstants.objArray)!=null){
+			objarray = req.getParameter(BudgetConstants.objArray).toString();
+		}
 		JSONArray jsonArray = null;
 		JSONObject rprtArray = null;
 		
