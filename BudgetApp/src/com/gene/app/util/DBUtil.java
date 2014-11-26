@@ -502,7 +502,7 @@ public class DBUtil {
 		// prepare BudgetSummaryData
 		Map<String,Map<String,BudgetSummary>> brandlevelBudgetMap = prepareBrandData(costCenterList);
 		// get project list matching the brand
-		Map<String,GtfReport> gtfRptList = getReport(BudgetConstants.costCenter, false );
+		Map<String,GtfReport> gtfRptList = getAllReportDataFromCache(BudgetConstants.costCenter);
 		Map<String,BudgetSummary> brandMap = null;
 		brandMap = getProjectListByBrand(gtfRptList,brandlevelBudgetMap);
 		if(brandMap == null){
