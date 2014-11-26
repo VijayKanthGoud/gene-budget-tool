@@ -62,7 +62,7 @@
 					<table class="summarytable" width=100%
 						style="color: #005691; white-space: nowrap; font-weight: bold;">
 						<%
-							BudgetSummary summary = (BudgetSummary) request.getAttribute("summary");
+							BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
 							Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
 							BudgetSummary budgetSummary = new BudgetSummary();
 							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
@@ -71,6 +71,7 @@
 						%>
 						 <script>
 						  var selectedValue = "";
+						  var summaryResult = "";
 						function getBrandTotals(){
 							
 							selectedValue = document.getElementById("brandType").value; 
@@ -107,7 +108,7 @@
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
                             <td>Select Brand:</td>
-                            <td><select id="brandType" onchange="getBrandTotals()">
+                            <td><select id="brandType" onchange="getSummaryValues()">
                             <%String option = "";
                             for(int i=0;i<brands.length;i++){ 
                             option = brands[i].toString();
@@ -498,10 +499,38 @@ for(var i=0;i<data.length;i++){
 				$('#statusMessage').text("All changes saved successfully!")
 						.fadeIn(200);
 				$("#statusMessage");
+				summaryResult = result;
+				getSummaryValues();
 			}
 		});
 	}
 
+	function getSummaryValues(){
+		//alert(selectedValue+"::::"+summaryResult);
+		var obj = $.parseJSON(summaryResult);
+		//alert("obj"+JSON.stringify(obj));
+		var value;
+		var varianceTotal;
+		if(obj==null){
+			getBrandTotals();
+		}else{
+		selectedValue = document.getElementById("brandType").value;
+		for(var key in obj.budgetMap){
+			//alert("value"+key);
+			if(key==selectedValue){
+				//alert("val = "+selectedValue);
+				value = obj.budgetMap[key];
+				$('#totalBudget').val(value.totalBudget);
+				$('#plannedTotal').text(value.plannedTotal);
+				$('#budgetLeftToSpend').text(value.budgetLeftToSpend);
+				$('#accrualTotal').text(value.accrualTotal);
+				$('#varianceTotal').text(value.varianceTotal);
+			}
+		}
+		}
+		//Data data = new Gson().fromJson(json, Data.class);
+		<%--summary = new Gson().fromJson(%>+obj+<%,BudgetSummary.class);--%>
+	}
 	
 	$(function() {
 		<% if(gtfReports == null || gtfReports.isEmpty()) { %>
