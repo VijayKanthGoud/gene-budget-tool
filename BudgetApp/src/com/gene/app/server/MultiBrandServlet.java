@@ -220,7 +220,7 @@ public class MultiBrandServlet extends HttpServlet {
 			}
 			util.removeExistingProject(gtfReportListFromDB);
 			util.generateProjectIdUsingJDOTxn(newGtfReportList);
-			util.storeProjectsToCache(gtfReportListFromDB);
+			util.storeProjectsToCache(newGtfReportList);
 			//cache.delete(BudgetConstants.costCenter);
 
 		} catch (JSONException e) {
