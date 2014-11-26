@@ -237,6 +237,7 @@
 		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
 		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
+		{ id : 3, name : columnNames[3], field : 3, width : 90, editor : Slick.Editors.Text},
 		{ id : 5, name : columnNames[5], field : 5, width : 90, editor : Slick.Editors.Text},
 		{ id : 7, name : columnNames[7], field : 7, width : 90, editor : Slick.Editors.Text},
 		{ id : 8, name : columnNames[8], field : 8, width : 90, editor : Slick.Editors.Text},
@@ -1240,7 +1241,6 @@ for(var i=0;i<data.length;i++){
 			itemClicked[24]=total;
 		grid.invalidate();
 		  if(itemClicked["34"]!="New projects" ){
-			  alert(JSON.stringify(m_data, null, 4));
 				 $.ajax({
 						url : '/multiBrandServlet',
 						type : 'POST',
