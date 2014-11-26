@@ -536,9 +536,6 @@ for(var i=0;i<data.length;i++){
 	}
 	
 	$(function() {
-		<% if(gtfReports == null || gtfReports.isEmpty()) { %>
-		$('#displayGrid').hide();
-		<% } %>
 		var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
 		dataView = new Slick.Data.DataView({
 			groupItemMetadataProvider : groupItemMetadataProvider,
@@ -1228,6 +1225,9 @@ for(var i=0;i<data.length;i++){
 		}));
 		grid.render();
 
+		<% if(gtfReports == null || gtfReports.isEmpty()) { %>
+			$('#displayGrid').hide();
+		<% } %>
 	})
 
 	// Persist the data to datastore while moving to other page or closing the application
