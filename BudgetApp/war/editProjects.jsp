@@ -573,6 +573,8 @@ for(var i=0;i<data.length;i++){
         		d[34]=gmemoriID;
         		d[35]=" ";
         		d[37]=<%=gReport.getMultiBrand()%>;
+        		d[38]="<%=gReport.getCreateDate()%>";
+        		d[39]="<%=gReport.getYear()%>";
 				if(gmemoriID.indexOf(".") > -1){
 					d[34]=gmemoriID.split(".")[0];
 				}
@@ -1121,10 +1123,16 @@ for(var i=0;i<data.length;i++){
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
-					if(args.item["34"]!="New projects" ){
-					var newYear = <%=year+1%>;
-					var quarter = <%=qtr%>;
-					var month = <%=month%>;
+				if(args.item["34"]!="New projects" ){
+				var newYear =args.item["39"];
+				var createYear = args.item["38"].split("-")[0];
+				var quarter = <%=qtr%>;
+				var month;
+				if(newYear > createYear){
+					month = 0;
+				}else{
+					month='<%=month%>';	
+				}
 					var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
 					var cell = args.cell;
 					var row = args.row;

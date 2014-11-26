@@ -1,9 +1,10 @@
 package com.gene.app.server;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +66,7 @@ public class StoreReport extends HttpServlet {
 		String projectWBS = "";
 		String remarks = null;
 		String multiBrand = "";
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
 		try{
 			jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
@@ -96,6 +98,8 @@ public class StoreReport extends HttpServlet {
 				String poDesc = rprtObject.getString(BudgetConstants.New_GTFReport_PoDesc);
 				gtfReport.setPoDesc(poDesc);
 				gtfReport.setVendor(rprtObject.getString(BudgetConstants.New_GTFReport_Vendor));
+				gtfReport.setCreateDate(timeStamp);
+				gtfReport.setYear(BudgetConstants.dataYEAR);
 				
 				try{
 					remarks = ((rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)!=null) && (!"".equalsIgnoreCase(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks).trim())))?(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)):"";

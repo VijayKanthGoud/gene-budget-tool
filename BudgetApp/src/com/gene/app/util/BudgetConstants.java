@@ -15,6 +15,7 @@ public interface BudgetConstants {
 	
 	// This variable is used in UI layer and service layer
 	public static final String costCenter = "307673";
+	public static final String dataYEAR = "2015";
 	
 	//StoreReport.java
 	public static final String contentType = "text/plain";

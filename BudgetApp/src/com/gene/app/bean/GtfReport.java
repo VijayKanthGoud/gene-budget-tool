@@ -82,6 +82,12 @@ public class GtfReport implements Serializable,Cloneable {
 	@Persistent
 	private Map<String,MultiBrand> mutliBrandMap;
 	
+	@Persistent
+	private String createDate;
+	
+	@Persistent
+	private String year;
+	
 	/*public GtfReport(GtfReport gtfReport1) {
 		// TODO Auto-generated constructor stub
 		this.gtfReport = gtfReport1;
@@ -92,12 +98,28 @@ public class GtfReport implements Serializable,Cloneable {
 		super();
 	}*/
 	
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
 	public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
 	public Map<String, MultiBrand> getMutliBrandMap() {
 		return mutliBrandMap;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 
 	public void setMutliBrandMap(Map<String, MultiBrand> mutliBrandMap) {
