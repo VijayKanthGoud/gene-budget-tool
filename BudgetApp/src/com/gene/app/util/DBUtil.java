@@ -620,7 +620,7 @@ public class DBUtil {
 					for(Entry<String, GtfReport> gtfRptEnty:gtfRptList.entrySet()){
 						gtfReport =gtfRptEnty.getValue();
 						if(brand.equalsIgnoreCase(gtfReport.getBrand())){
-							for(int j=0;j<BudgetConstants.months.length;j++){
+							for(int j=0;j<BudgetConstants.months.length-1;j++){
 									if (gtfReport.getPlannedMap() != null) {
 										plannedTotal = plannedTotal
 												+ gtfReport.getPlannedMap().get(
