@@ -83,9 +83,9 @@
 		  if(value.toLowerCase().indexOf("mb") >= 0){
 			  return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
 		  }else if(value=="Save"   && dataContext["35"] == "Buttons"){
-			  return  "<input type='button' value='"+value+"' id='submitProjects' />";
+			  return  "<input type='button' value='"+value+"' id='submitProjBtn' style='font-size: 12px; width:80px; height: 20px; background:#005691; color:#FFFFFF'/>";
 		  }else if( value=="Cancel"  && dataContext["35"] == "Buttons"){
-			  return  "<input type='button' value='"+value+"' id='cancelProjects' />";
+			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#005691; color:#FFFFFF' />";
 		  }
 	  }
 	  return value;

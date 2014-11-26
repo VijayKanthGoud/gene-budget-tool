@@ -199,6 +199,7 @@
 <script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 <script>
 	
+    
 	rdoSelectedmode = $('input[name="selectedmode"]');
 	chkBoxHideColumns = $('input[name="hideColumns"]');
 
@@ -313,7 +314,7 @@
 							return " " + g.value
 							+ "<span style='color:green'>("
 							+ noOfNew + " items)</span>" 
-							+ "&nbsp;&nbsp;<input type='button' style='font-size: 11px; height: 16px;' value='Create Projects'/>";
+							+ "&nbsp;&nbsp;<input type='button' style='font-size: 11px; height: 16px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
 						} 
 						else if (g.value == "Active"){
 							return " " + g.value
@@ -827,39 +828,7 @@ for(var i=0;i<data.length;i++){
 		});
 
 		grid.onClick.subscribe(function(e, args) {
-			//Start : Add save and Cancel button and blank rows above and below for adding new projects
-			if(args.cell==0 && args.row==0) {	
-				var length= data.length;
-				var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:"vijay",4:"",5:"sub_activity",6:"brand",7:"allocation_percentage",8:"",9:"",10:""
-					,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects",37:false};
-				dataView.insertItem(0,item);
-			if(addsave ==0){
-			    var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
-							,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
-				var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
-				var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
-				dataView.insertItem(1,item3);
-			    dataView.insertItem(2,saveClose);
-			    dataView.insertItem(3,item2);
-			}
-			    addsave=addsave+1;
-			    dataView.refresh(); 
-			    e.stopImmediatePropagation();
-			}
-			//End : Add save and Cancel button and blank rows above and below for adding new projects
 			
-			else{
-				
 				itemClicked = dataView.getItem(args.row);
 				// multi brand click
 				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
@@ -936,15 +905,14 @@ for(var i=0;i<data.length;i++){
 						}
 					}
 				} 
-				// Handele click on Save button
+				/* // Handele click on Save button
 				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("save")!=-1){
 					submitProjects();
-				}
+				} */
 				// Handele click on Cancel button
-				if(args.cell==3 && itemClicked[11].toLowerCase().indexOf("cancel")!=-1){
+				/* if(args.cell==3 && itemClicked[11].toLowerCase().indexOf("cancel")!=-1){
 					cancelProjects();
-				}
-			}
+				} */
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
@@ -959,6 +927,55 @@ for(var i=0;i<data.length;i++){
 			}
 		});
 		
+		// Handeler for Create New Project button
+		$(document).on('click', '#crtNewProjBtn',
+			    function() {
+				 	createNewProjects();
+			    }
+		);
+		
+		function createNewProjects(){
+			var length= data.length;
+			var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:"vijay",4:"",5:"sub_activity",6:"brand",7:"allocation_percentage",8:"",9:"",10:""
+				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+						,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects",37:false};
+			dataView.insertItem(0,item);
+		if(addsave ==0){
+		    var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+						,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+			var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+			var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+			dataView.insertItem(1,item3);
+		    dataView.insertItem(2,saveClose);
+		    dataView.insertItem(3,item2);
+		}
+		    addsave=addsave+1;
+		    dataView.refresh(); 
+		    e.stopImmediatePropagation();
+		
+		}
+		
+		// Handeler for click on submit and cancel button under new project creation
+		$(document).on('click', '#submitProjBtn',
+		    function() {
+			 	submitProjects();
+		    }
+		);
+		$(document).on('click', '#cnclProjBtn',
+			function() {
+				cancelProjects();
+			}
+		);
+
 		function cancelProjects(){
 			window.location.reload(true);
 		}
