@@ -475,9 +475,9 @@
 
 		console.log(args.item);
 		key = item[0];
-var aSaveData=[[]];
+	var aSaveData=[];
 	var iCnt=0;
-for(var i=0;i<data.length;i++){
+ for(var i=0;i<data.length;i++){
 	var d = data[i];
 	 if(key== d[34] && d[11]=="Planned"){
 		 var aSave = (aSaveData[iCnt] = {});
@@ -904,6 +904,7 @@ for(var i=0;i<data.length;i++){
 				}
 				
 				grid.invalidate();
+				dataView.refresh();
 			
 		});
 
@@ -1121,6 +1122,9 @@ for(var i=0;i<data.length;i++){
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
 				if(args.item["34"]!="New projects" ){
+				if(args.item["0"].indexOf(".") != -1){
+					return false;
+				}
 				var newYear =args.item["39"];
 				var createYear = args.item["38"].split("-")[0];
 				var quarter = <%=qtr%>;
