@@ -555,6 +555,7 @@ for(var i=0;i<data.length;i++){
     	   		d["id"] = "id_" + "<%=idCounter%>";
     	    	d["indent"] = indent;
     	    	d["parent"] = parent;
+    	    	d[0]=" ";
     	    	<%GtfReport gReport = gtfReports.get(i);%>
     	 		d[25]=" ";
        	 		d[26]="<%=gReport.getStatus()%>";
@@ -621,7 +622,7 @@ for(var i=0;i<data.length;i++){
   					}
    				<%if(idCounter%4 == 1){%>
    				if(gmemoriID.indexOf(".") == -1){
-				d[11]="Benchmark";
+   				d[11]="Benchmark";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
 				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
@@ -724,7 +725,7 @@ for(var i=0;i<data.length;i++){
     				<%}
 				}
 			}%>
-			totalSize="<%=gtfReports.size()%>" * 4;
+			totalSize=data.length;
 			for (var cntTotal = 0; cntTotal < 4; cntTotal++) {
 				var rowNum = cntTotal + totalSize;
 				var d = (data[rowNum] = {});
@@ -739,16 +740,27 @@ for(var i=0;i<data.length;i++){
 					d[j] = 0.0;
 					}
 				var trowNum = rowNum % 4;
-			if (trowNum == 0) {
-				d[11] = "Planned";
-			} else if (trowNum == 1) {
-				d[11] = "Benchmark";
-			} else if (trowNum == 2) {
-				d[11] = "Accurals";
-			} else {
-				d[11] = "Variance";
+				
+				switch(cntTotal) {
+			    case 0:
+			    	d[11] = "Planned";
+			        break;
+			    case 1:
+			    	d[11] = "Benchmark";
+			        break;
+			    case 2:
+			    	d[11] = "Accurals";
+			        break;
+			    case 3:
+			    	d[11] = "Variance";
+			        break;
+			    default:
+			    	d[11] = "Planned";
+		        	break;
 			}
-			for (var j = trowNum; j < totalSize; j = j + 4) {
+			
+			for (var j = 0; j < totalSize ; j++) {
+				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1){
 				d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 				d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
 				d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
@@ -762,6 +774,7 @@ for(var i=0;i<data.length;i++){
 				d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
 				d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
 				d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
+				}
 			}
 
 			for (var j = 12; j < 25; j++) {
@@ -777,6 +790,7 @@ for(var i=0;i<data.length;i++){
 			d[33] = "New";
 			d[34] = " ";
 			d[35]= " ";
+			d[0]=" ";
 
 		}
 
@@ -826,6 +840,15 @@ for(var i=0;i<data.length;i++){
 				var cell = args.cell;
 				var row = args.row;
 				var dataLength = 0;
+				
+				var delCell = cell + 1;
+				if ($('#hideColumns').is(":checked")) {
+					delCell = cell + numHideColumns;
+				} else {
+					delCell = cell + 2;
+				}
+				
+				
 				for(var counter = 0; counter<data.length; counter++ ){
 					if(data[counter][34] != "New projects"){
 						dataLength++;
@@ -850,16 +873,35 @@ for(var i=0;i<data.length;i++){
 				}
 				}
 				
-				// CODE FOR COLOUMNAR TOTALS
-				/* for (var j = 12; j < 24; j++) {
-					data[dataLength - 1][24] = parseFloat(data[dataLength - 1][24])
-								+ parseFloat(data[dataLength - 1][j]);
+				grid.invalidate();
+				
+				switch(item[11]) {
+			    case "Planned":
+			    	dataLength = data.length - 4;
+			        break;
+			    case "Benchmark":
+			    	dataLength = data.length - 3;
+			        break;
+			    case "Accurals":
+			    	dataLength = data.length - 2;
+			        break;
+			    case "Variance":
+			    	dataLength = data.length - 1;3
+			        break;
+			    default :
+			    	dataLength = data.length - 4;
+		        	break;
+			}
+				
+				data[dataLength][delCell]=0.0;
+				for (var j = 0; j < totalSize ; j++) {
+					alert(JSON.stringify(data[j], null, 4));
+					if( data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1){
+						data[dataLength][delCell] = parseFloat(data[dataLength][delCell]) + parseFloat(data[j][delCell]);
+					}
+				
 				}
 				
-				for (var j = 0; j < totalSize; j = j + 4) {
-					data[totalSize][cell] = parseFloat(data[totalSize][cell])
-								+ parseFloat(data[j][cell]);
-				} */
 				grid.invalidate();
 			
 		});
