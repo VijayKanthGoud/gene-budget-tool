@@ -794,9 +794,7 @@ for(var i=0;i<data.length;i++){
 					}
 				}
 				if(item[37]=='undefined' || item[37]==false){
-				data[totalSize][cell] = 0.0;
 				grid.invalidate();
-				
 				var temp = 0;
 				for (var j = 0; j < data.length - 1; j++) {
 					if (data[j]["id"] == args.item.id) {
@@ -1189,16 +1187,16 @@ for(var i=0;i<data.length;i++){
 			width : 160,
 			editor : Slick.Editors.Auto
 		}, {
-			id : 2,
-			name : "Allocation %",
-			field : 2,
-			width : 125
-		}, {
 			id : 3,
 			name : "Total",
 			field : 3,
 			width : 140,
 			editor : Slick.Editors.Text
+		}, {
+			id : 2,
+			name : "Allocation %",
+			field : 2,
+			width : 125
 		}
 	  ];
 		
@@ -1340,7 +1338,7 @@ for(var i=0;i<data.length;i++){
 			
 			
 			
-			if(cell == 5){
+			if(cell == 4){
 				
 			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				sum = sum + parseFloat(m_data[count]["3"]);
