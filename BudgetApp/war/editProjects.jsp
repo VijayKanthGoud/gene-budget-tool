@@ -482,6 +482,9 @@ for(var i=0;i<data.length;i++){
 	 if(key== d[34] && d[11]=="Planned"){
 		 var aSave = (aSaveData[iCnt] = {});
 		 aSave[0] = d[0];
+		 if(d[7] == 0.0){
+			 d[7]=100.0;
+		 }
 		 aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 		 d[delCell]=aSave[1];
 		 iCnt++;
@@ -895,7 +898,6 @@ for(var i=0;i<data.length;i++){
 				
 				data[dataLength][delCell]=0.0;
 				for (var j = 0; j < totalSize ; j++) {
-					alert(JSON.stringify(data[j], null, 4));
 					if( data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1){
 						data[dataLength][delCell] = parseFloat(data[dataLength][delCell]) + parseFloat(data[j][delCell]);
 					}
