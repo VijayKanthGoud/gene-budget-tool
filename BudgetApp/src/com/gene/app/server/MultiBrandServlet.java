@@ -1,7 +1,9 @@
 package com.gene.app.server;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,6 +44,7 @@ public class MultiBrandServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("loggedInUser");
 		String email = user.getEmail();
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
 		List<GtfReport> gtfReportListFromDB = new ArrayList<GtfReport>();
 		if (user == null) {
 			UserService userService = UserServiceFactory.getUserService();
@@ -77,6 +80,8 @@ public class MultiBrandServlet extends HttpServlet {
 				gtfRpt = gtfReportListFromDB.get(par);
 				GtfReport newgtfReport = new GtfReport();
 				if (gtfRpt.getgMemoryId().equalsIgnoreCase(gMemoriId)) {
+					newgtfReport.setCreateDate(gtfRpt.getCreateDate());
+					newgtfReport.setYear(gtfRpt.getYear());
 					newgtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 					newgtfReport.setBrand(gtfRpt.getBrand());
 					newgtfReport.setEmail(gtfRpt.getEmail());
@@ -136,6 +141,8 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setEmail(gtfRpt.getEmail());
 						newgtfReport.setFlag(gtfRpt.getFlag());
 						newgtfReport.setMultiBrand(true);
+						newgtfReport.setCreateDate(gtfRpt.getCreateDate());
+						newgtfReport.setYear(gtfRpt.getYear());
 						newgtfReport
 								.setPercent_Allocation(percentage_Allocation);
 						newgtfReport.setPoDesc(gtfRpt.getPoDesc());
@@ -179,6 +186,8 @@ public class MultiBrandServlet extends HttpServlet {
 										.getgMemoryId().indexOf(".")))
 								+ "." + (i + 1);
 						newgtfRpt.setgMemoryId(gmemoryId);
+						newgtfRpt.setCreateDate(timeStamp);
+						newgtfRpt.setYear(BudgetConstants.dataYEAR);
 						newgtfRpt.setEmail(gtfRpt.getEmail());
 						newgtfRpt.setFlag(gtfRpt.getFlag());
 						newgtfRpt.setMultiBrand(true);

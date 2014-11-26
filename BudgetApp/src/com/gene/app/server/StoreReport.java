@@ -28,6 +28,9 @@ import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
+
+
+
 @SuppressWarnings("serial")
 public class StoreReport extends HttpServlet {
 	Map<String,Double> brandMap = new TreeMap<String,Double>();
@@ -123,9 +126,9 @@ public class StoreReport extends HttpServlet {
 				}
 				
 				if(multiBrand !=null && !"".equalsIgnoreCase(multiBrand.trim()) && "true".equalsIgnoreCase(multiBrand.trim())){
-					prepareMultiBrandProjectData(gtfReports,gtfReport,rprtObject);
+					prepareMultiBrandProjectData(gtfReports,gtfReport,rprtObject,timeStamp);
 				}else{
-					prepareSingleBrandProjectData(gtfReports,gtfReport,rprtObject, false);
+					prepareSingleBrandProjectData(gtfReports,gtfReport,rprtObject, false,timeStamp);
 				}
 				//gtfReports.add(gtfReport);
 			}
@@ -136,12 +139,14 @@ public class StoreReport extends HttpServlet {
 		} 
 	}
 	
-	public void prepareSingleBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport,JSONObject rprtObject, boolean isMultibrand){
+	public void prepareSingleBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport,JSONObject rprtObject, boolean isMultibrand,String timeStamp){
 		try{
 		
 		gtfReport.setgMemoryId(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId));
 		gtfReport.setProjectName(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectName));
 		gtfReport.setBrand(rprtObject.getString(BudgetConstants.New_GTFReport_Brand));
+		gtfReport.setCreateDate(timeStamp);
+		gtfReport.setYear(BudgetConstants.dataYEAR);
 		try {
 			gtfReport.setPercent_Allocation(BudgetConstants.GTF_Percent_Total);
 		} catch (NumberFormatException e) {
@@ -172,8 +177,8 @@ public class StoreReport extends HttpServlet {
 		}
 	}
 	
-	public void prepareMultiBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport1,JSONObject rprtObject){
-		prepareSingleBrandProjectData(gtfReports, gtfReport1, rprtObject, true);
+	public void prepareMultiBrandProjectData(List<GtfReport> gtfReports,GtfReport gtfReport1,JSONObject rprtObject,String timeStamp){
+		prepareSingleBrandProjectData(gtfReports, gtfReport1, rprtObject, true,timeStamp);
 		GtfReport gtfReport = null; 
 		JSONArray jsonArray = null;
 		JSONObject multiBrandObject = null;
@@ -198,6 +203,8 @@ public class StoreReport extends HttpServlet {
 			if(multiBrandObject.getString("4") ==null || "".equals(multiBrandObject.getString("4").trim())){
 				break;
 			}
+			gtfReport.setCreateDate(timeStamp);
+		gtfReport.setYear(BudgetConstants.dataYEAR);
 		gtfReport.setProjectName(multiBrandObject.getString("4"));
 		gtfReport.setBrand(multiBrandObject.getString("1"));
 		gtfReport.setgMemoryId(multiBrandObject.getString("5"));
