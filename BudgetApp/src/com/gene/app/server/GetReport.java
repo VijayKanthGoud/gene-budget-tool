@@ -33,6 +33,7 @@ public class GetReport extends HttpServlet {
 	DBUtil util = new DBUtil();
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		HttpSession session = req.getSession();
 		resp.setContentType(BudgetConstants.contentType);
 		UserService userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
 		String email = userService.getCurrentUser().getEmail();
@@ -47,7 +48,7 @@ public class GetReport extends HttpServlet {
 		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
 		BudgetSummary summary = util.readBudgetSummary(BudgetConstants.costCenter);
 		req.setAttribute("user", user);
-		req.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
+		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		RequestDispatcher rd = req.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);
 		try {
 			rd.forward(req, resp);
