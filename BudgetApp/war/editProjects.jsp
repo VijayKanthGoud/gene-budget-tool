@@ -961,7 +961,6 @@ for(var i=0;i<data.length;i++){
 		}
 		    addsave=addsave+1;
 		    dataView.refresh(); 
-		    e.stopImmediatePropagation();
 		
 		}
 		
