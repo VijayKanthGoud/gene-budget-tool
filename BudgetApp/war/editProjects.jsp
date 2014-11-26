@@ -165,6 +165,12 @@
 	</div>
 	<div id="statusMessage"></div>
 </center>
+<% 	if(gtfReports == null || gtfReports.isEmpty()) { %>
+ 		<span style="  margin: auto;  position: absolute;  top: 350px; left: 48%; bottom: 0; right; font-size:12px; font-weight:bold; color: #005691" 
+ 		id="noData">(No data available!)</span>
+ 		<input type='button' style='font-size: 12px; height: 25px; width: 160px; background:#005691; color:#FFFFFF' 
+ 		value='Click to Create Project' id='topCrtNewProjBtn'/>  
+	<%}%>
 <div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
 
 	<div id="multibrandEdit">
@@ -315,7 +321,7 @@
 							return " " + g.value
 							+ "<span style='color:green'>("
 							+ noOfNew + " items)</span>" 
-							+ "&nbsp;&nbsp;<input type='button' style='font-size: 11px; height: 16px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
+							+ "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
 						} 
 						else if (g.value == "Active"){
 							return " " + g.value
@@ -498,6 +504,9 @@ for(var i=0;i<data.length;i++){
 
 	
 	$(function() {
+		<% if(gtfReports == null || gtfReports.isEmpty()) { %>
+		$('#displayGrid').hide();
+		<% } %>
 		var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
 		dataView = new Slick.Data.DataView({
 			groupItemMetadataProvider : groupItemMetadataProvider,
@@ -932,8 +941,16 @@ for(var i=0;i<data.length;i++){
 				 	createNewProjects();
 			    }
 		);
+		$(document).on('click', '#topCrtNewProjBtn',
+			    function() {
+				 	createNewProjects();
+			    }
+		);
 		
 		function createNewProjects(){
+			$('#displayGrid').show();
+			$('#topCrtNewProjBtn').hide();
+			$('#noData').hide();
 			var length= data.length;
 			var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:"vijay",4:"",5:"sub_activity",6:"brand",7:"allocation_percentage",8:"",9:"",10:""
 				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
