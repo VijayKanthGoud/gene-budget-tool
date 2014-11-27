@@ -1338,11 +1338,11 @@
 		}
 	  ];
 		
-	  var availableTags = [ "Rituxan Heme/Onc", "Kadcyla", "Actemra",
+	  var availableTags = [ "Total Products(MB)","Rituxan Heme/Onc", "Kadcyla", "Actemra",
 	            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
 	            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
-	            			"Neuroscience Pipeline", "Tarceva","Total Products(MB)" ];
+	            			"Neuroscience Pipeline", "Tarceva" ];
 	  function saveAndClose(){
 		//alert("m_data"+JSON.stringify(m_data));
 		console.log(JSON.stringify(m_data));
