@@ -224,7 +224,7 @@ public class StoreReport extends HttpServlet {
 		Map<String, Double> plannedMap = new HashMap<String, Double>();
 		Map<String, Double> setZeroMap = new HashMap<String, Double>();
 		Map<String,Double> parentPlannedMap = gtfReport.getPlannedMap();
-		for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
+		for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
 				value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percent_allocation/100, 2);
@@ -233,6 +233,7 @@ public class StoreReport extends HttpServlet {
 				plannedMap.put(BudgetConstants.months[cnt], 0.0);
 			}
 		}
+		plannedMap.put(BudgetConstants.months[BudgetConstants.months.length-1], Double.parseDouble(multiBrandObject.getString("3")));
 		gtfReport.setPlannedMap(plannedMap);
 		gtfReport.setBenchmarkMap(setZeroMap);
 		gtfReport.setAccrualsMap(setZeroMap);

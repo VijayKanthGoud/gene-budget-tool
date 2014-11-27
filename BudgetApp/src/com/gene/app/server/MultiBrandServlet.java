@@ -160,7 +160,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 						newgtfReport.setProjectName(project_Name);
 
-						for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
+						for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
 								value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
@@ -169,6 +169,8 @@ public class MultiBrandServlet extends HttpServlet {
 								PlannedMap.put(BudgetConstants.months[cnt], 0.0);
 							}
 						}
+						
+						PlannedMap.put(BudgetConstants.months[BudgetConstants.months.length-1], Double.parseDouble(totalValue));
 						newgtfReport.setPlannedMap(PlannedMap);
 						newgtfReport
 								.setPercent_Allocation(percentage_Allocation);
@@ -211,7 +213,7 @@ public class MultiBrandServlet extends HttpServlet {
 						if (per_allocation == 0.0) {
 							per_allocation = 1.0;
 						}
-						for (int cnt = 0; cnt <= BudgetConstants.months.length-1; cnt++) {
+						for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
 								value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
@@ -220,6 +222,7 @@ public class MultiBrandServlet extends HttpServlet {
 								PlannedMap.put(BudgetConstants.months[cnt], 0.0);
 							}
 						}
+						PlannedMap.put(BudgetConstants.months[BudgetConstants.months.length-1], Double.parseDouble(totalValue));
 						newgtfRpt.setPlannedMap(PlannedMap);
 						newGtfReportList.add(newgtfRpt);
 						break;
