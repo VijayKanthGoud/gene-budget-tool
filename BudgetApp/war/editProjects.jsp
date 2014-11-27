@@ -849,7 +849,7 @@
 					}
 			if(args.item["34"]!="New projects"){
 				updateMemCache(e, args, tempKey);
-			}
+			
 				var item = args.item;
 				var tempKey = item[27];
 				
@@ -902,24 +902,23 @@
 			    	dataLength = data.length - 2;
 			        break;
 			    case "Variance":
-			    	dataLength = data.length - 1;3
+			    	dataLength = data.length - 1;
 			        break;
 			    default :
 			    	dataLength = data.length - 4;
 		        	break;
 			}
 				
-				data[dataLength][delCell]=0.0;
-				for (var j = 0; j < totalSize ; j++) {
-					if( data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1){
-						data[dataLength][delCell] = parseFloat(data[dataLength][delCell]) + parseFloat(data[j][delCell]);
+				var verTotal=0.0;
+				for (var j = 0; j < data.length ; j++) {
+					if( data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1 && data[j]["34"]!="New projects"){
+						verTotal= parseFloat(verTotal) + parseFloat(data[j][delCell]);
 					}
-				
 				}
-				
+				data[dataLength][delCell]=verTotal;
 				grid.invalidate();
 				dataView.refresh();
-			
+			}
 		});
 
 		grid.onClick.subscribe(function(e, args) {
@@ -1449,16 +1448,19 @@
 			if(m_data[row]["4"] == "" && cell==1){
 				m_data[row]["4"] = m_data[row-1]["4"];
 				m_grid.invalidate();
+				return false;
 			}
 			
 			if(m_data[row]["5"] == "" && cell==3){
 				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
 				m_grid.invalidate();
+				return false;
 			}
 
 			if(m_data[row]["7"] == "" && cell==2){
 				m_data[row]["7"] = m_data[row-1]["7"];
 				m_grid.invalidate();
+				return false;
 			}
 			
 			}
