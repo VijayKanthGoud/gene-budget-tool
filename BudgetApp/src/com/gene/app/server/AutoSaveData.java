@@ -101,12 +101,18 @@ public class AutoSaveData extends HttpServlet {
 				&& !(keyNum.equals(sessionKey))) {
 			util.saveDataToDataStore(sessionGtfReport);
 		}
+		/*BudgetSummary summary = util
+				.readBudgetSummary(BudgetConstants.costCenter);
+		*/session.setAttribute(BudgetConstants.KEY, keyNum);
+		/*session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
+		Gson gson = new Gson();
+		resp.getWriter().write(gson.toJson(summary));*/
+	}
 		BudgetSummary summary = util
 				.readBudgetSummary(BudgetConstants.costCenter);
-		session.setAttribute(BudgetConstants.KEY, keyNum);
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		Gson gson = new Gson();
 		resp.getWriter().write(gson.toJson(summary));
 	}
-	}
+	
 }

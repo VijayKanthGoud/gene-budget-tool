@@ -241,7 +241,7 @@
 	var columns = [ 
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
-		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Text},
+		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
 		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
@@ -270,7 +270,7 @@
 	var hidecolumns = [ 
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
-		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Text},
+		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
 		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
@@ -841,6 +841,12 @@
 		// Caluculation of total (row and columnwise)
 		grid.onCellChange
 				.subscribe(function(e, args) {
+					
+					if(args.item["34"]=="New projects" && args.cell==2 && availableTags.indexOf(args.item[6]) == -1){
+							args.item[6]="";
+							alert("Enter a valid brand.");
+							grid.invalidate();
+					}
 			if(args.item["34"]!="New projects"){
 				updateMemCache(e, args, tempKey);
 			}
@@ -1049,10 +1055,10 @@
 			$('#topCrtNewProjBtn').hide();
 			$('#noData').hide();
 			var length= data.length;
-			var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:"vijay",4:"",5:"sub_activity",6:"brand",7:"allocation_percentage",8:"",9:"",10:""
+			var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
 				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"vijay",33:"New",34:"New projects",35:"NewProjects",37:false};
+						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false};
 			dataView.insertItem(0,item);
 		if(addsave ==0){
 		    var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
@@ -1336,7 +1342,7 @@
 	            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
 	            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
-	            			"Neuroscience Pipeline", "Tarceva" ];
+	            			"Neuroscience Pipeline", "Tarceva","Total Products(MB)" ];
 	  function saveAndClose(){
 		//alert("m_data"+JSON.stringify(m_data));
 		console.log(JSON.stringify(m_data));
