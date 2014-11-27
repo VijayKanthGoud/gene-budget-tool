@@ -847,15 +847,37 @@
 							alert("Enter a valid brand.");
 							grid.invalidate();
 					}
+					var item = args.item;
+					var tempKey = item[27];
+					
+					var cell = args.cell;
+					var row = args.row;
+					var dataLength = 0;
+					
+					if(item[37]=='undefined' || item[37]==false){
+						grid.invalidate();
+						var temp = 0;
+						for (var j = 0; j < data.length - 1; j++) {
+							if (data[j]["id"] == args.item.id) {
+								temp = j;
+								break;
+							}
+						}
+						data[temp][24] = 0.0;
+						for (var j = 12; j < 24; j++) {
+							if(data[temp][j] == "" || data[temp][j] == "undefined"){
+								data[temp][j] = 0.0;
+							}
+							data[temp][24] = parseFloat(data[temp][24])
+										+ parseFloat(data[temp][j]);
+						}
+						}
+						
+						grid.invalidate();
 			if(args.item["34"]!="New projects"){
 				updateMemCache(e, args, tempKey);
 			
-				var item = args.item;
-				var tempKey = item[27];
 				
-				var cell = args.cell;
-				var row = args.row;
-				var dataLength = 0;
 				
 				var delCell = cell + 1;
 				if ($('#hideColumns').is(":checked")) {
@@ -870,26 +892,6 @@
 						dataLength++;
 					}
 				}
-				if(item[37]=='undefined' || item[37]==false){
-				grid.invalidate();
-				var temp = 0;
-				for (var j = 0; j < data.length - 1; j++) {
-					if (data[j]["id"] == args.item.id) {
-						temp = j;
-						break;
-					}
-				}
-				data[temp][24] = 0.0;
-				for (var j = 12; j < 24; j++) {
-					if(data[temp][j] == "" || data[temp][j] == "undefined"){
-						data[temp][j] = 0.0;
-					}
-					data[temp][24] = parseFloat(data[temp][24])
-								+ parseFloat(data[temp][j]);
-				}
-				}
-				
-				grid.invalidate();
 				
 				switch(item[11]) {
 			    case "Planned":
