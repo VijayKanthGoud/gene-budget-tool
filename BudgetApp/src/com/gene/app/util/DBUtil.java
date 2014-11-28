@@ -528,7 +528,20 @@ public class DBUtil {
 			brandMap = new LinkedHashMap<String,BudgetSummary>();
 		}
 		summary.setBudgetMap(brandMap);
+		cache.put(BudgetConstants.GMBT_SUMMARY, summary);
 		return summary;
+	}
+	
+	public BudgetSummary getSummaryFromCache(String costCenter){
+		BudgetSummary summary = (BudgetSummary)cache.get(BudgetConstants.GMBT_SUMMARY);
+		if(summary == null){
+			summary = readBudgetSummary(costCenter);
+		}
+		return summary;
+	}
+	
+	public void putSummaryToCache(BudgetSummary summary){
+		cache.put(BudgetConstants.GMBT_SUMMARY, summary);
 	}
 	// reading costcenter_brand table data and put it in cache
 	
