@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
@@ -657,15 +660,18 @@ public class DBUtil {
 			return brandMap;
 		}
 		
-		public void storeProjectsToCache(List<GtfReport> gtfReports){
-			Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(BudgetConstants.costCenter);
-			GtfReport report = new GtfReport();
-			for(int i=0;i<gtfReports.size();i++){
-				report = gtfReports.get(i);
+	public void storeProjectsToCache(List<GtfReport> gtfReports) {
+		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(BudgetConstants.costCenter);
+		GtfReport report = new GtfReport();
+		for (int i = 0; i < gtfReports.size(); i++) {
+			report = gtfReports.get(i);
 			gtfReportFromCache.put(report.getgMemoryId(), report);
-			}
-			cache.put(BudgetConstants.costCenter, gtfReportFromCache);
 		}
+		ReportComparator reportComparator =  new ReportComparator(gtfReportFromCache);
+		TreeMap<String, GtfReport> sortedMap = new TreeMap<String, GtfReport>(reportComparator);
+		sortedMap.putAll(gtfReportFromCache);
+		cache.put(BudgetConstants.costCenter, sortedMap);
+	}
 		
 		public double round(double value, int places) {
 		    if (places < 0) throw new IllegalArgumentException();
