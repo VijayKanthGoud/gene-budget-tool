@@ -2,10 +2,11 @@ package com.gene.app.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,10 +20,8 @@ import com.gene.app.bean.GtfReport;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
-import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -41,6 +40,16 @@ public class GetReport extends HttpServlet {
 		gtfReports = util.getAllReportDataFromCache(BudgetConstants.costCenter);
 		
 		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
+		Collections.sort( gtfReportList, new Comparator<GtfReport>()
+		        {
+		            public int compare( GtfReport o1, GtfReport o2 )
+		            {
+		            	if((o1.getProjectName()).compareTo(o2.getProjectName()) ==0){
+		        			return (o1.getgMemoryId()).compareTo(o2.getgMemoryId());
+		        		}
+		        		return (o1.getProjectName()).compareTo(o2.getProjectName());
+		            }
+		        } );
 		gtfReportList = util.calculateVarianceMap(gtfReportList);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, gtfReportList);
 		DBUtil util = new DBUtil();
