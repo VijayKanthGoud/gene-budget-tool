@@ -667,10 +667,7 @@ public class DBUtil {
 			report = gtfReports.get(i);
 			gtfReportFromCache.put(report.getgMemoryId(), report);
 		}
-		ReportComparator reportComparator =  new ReportComparator(gtfReportFromCache);
-		TreeMap<String, GtfReport> sortedMap = new TreeMap<String, GtfReport>(reportComparator);
-		sortedMap.putAll(gtfReportFromCache);
-		cache.put(BudgetConstants.costCenter, sortedMap);
+		cache.put(BudgetConstants.costCenter, gtfReportFromCache);
 	}
 		
 		public double round(double value, int places) {
