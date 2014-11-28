@@ -61,4 +61,5 @@ public interface BudgetConstants {
 	public static final String New_GTFReport_Remarks = "25";
 	public static final String New_isMultiBrand = "37";
 	public static final String New_multiBrandInput = "36";
+	public static final String GMBT_SUMMARY = "summary";
 }
