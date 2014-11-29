@@ -682,6 +682,40 @@ public class DBUtil {
 		}
 		cache.put(BudgetConstants.costCenter, gtfReportFromCache);
 	}
+
+	@SuppressWarnings("unchecked")
+	public void updateReports() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(GtfReport.class);
+		q.setFilter("status==statusParam");
+		q.declareParameters("String statusParam");
+		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
+		Map<String, GtfReport> gtfMap = new LinkedHashMap<String, GtfReport>();
+		Map<String, Double> plannedMap = new LinkedHashMap<String, Double>();
+		Map<String, Double> accrualsMap = new LinkedHashMap<String, Double>();
+		try {
+			gtfReports = (List<GtfReport>) q.execute("Active");
+			if (!gtfReports.isEmpty()) {
+				
+				for (GtfReport gtfReport : gtfReports) {
+					plannedMap.clear();
+					plannedMap.putAll(gtfReport.getPlannedMap());
+					gtfReport.setBenchmarkMap(plannedMap);
+					accrualsMap.clear();
+					accrualsMap.putAll(gtfReport.getAccrualsMap());
+					gtfReport.setPlannedMap(accrualsMap);
+					gtfMap.put(gtfReport.getgMemoryId(), gtfReport);
+				}
+			}
+			pm.makePersistentAll(gtfReports);
+			saveAllReportDataToCache(BudgetConstants.costCenter, gtfMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
 		
 		public double round(double value, int places) {
 		    if (places < 0) throw new IllegalArgumentException();
