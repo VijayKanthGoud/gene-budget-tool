@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.GtfReport;
+import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
@@ -34,7 +35,8 @@ public class AutoSaveData extends HttpServlet {
 		double oldPlannedValue = 0.0;
 		double newPlannedValue = 0.0;
 		double plannedTotal = 0.0;
-		BudgetSummary summary = util.getSummaryFromCache(BudgetConstants.costCenter);
+		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
+		BudgetSummary summary = util.getSummaryFromCache(user.getCostCenter());
 		Map<String,BudgetSummary> budgetMap = summary.getBudgetMap();
 		BudgetSummary summaryObj = new BudgetSummary();
 		JSONArray jsonArray = null;
@@ -107,7 +109,7 @@ public class AutoSaveData extends HttpServlet {
 		}
 		/*BudgetSummary summary = util
 				.readBudgetSummary(BudgetConstants.costCenter);*/
-		util.putSummaryToCache(summary);
+		util.putSummaryToCache(summary,user.getCostCenter());
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		Gson gson = new Gson();
 		resp.getWriter().write(gson.toJson(summary));

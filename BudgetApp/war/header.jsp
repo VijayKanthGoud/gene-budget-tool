@@ -34,7 +34,7 @@
 		String logoutLink = "";
 		DBUtil util = new DBUtil();
 		String costCenter="307673";
-		/*  UserDataUtil util1 = new UserDataUtil();
+		/*UserDataUtil util1 = new UserDataUtil();
 		util1.insertCCMapping();
 		util1.insertUserRoleInfo();
 		util1.insertBudgetSummary(); */
@@ -45,7 +45,7 @@
 			isAdmin = userService.isUserAdmin();
 			
 			boolean isGeneUser = false;//util.readUserRoleInfo(email,costCenter);
-			UserRoleInfo userInfo = util.readUserRoleInfo(email, costCenter);
+			UserRoleInfo userInfo = util.readUserRoleInfo(email);
 			String role = "";
 			if(userInfo!=null){
 				session.setAttribute("userInfo", userInfo);

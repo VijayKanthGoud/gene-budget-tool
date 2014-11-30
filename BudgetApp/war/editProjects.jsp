@@ -54,9 +54,10 @@
 						</tr>
 					</table>
 				</td>				
+				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); %>
 				<td style="width: 50%; height: 55px; text-align: center;"><span
 						style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
-						My Projects </span><br/>(<%=BudgetConstants.costCenter%>)</td>
+						My Projects </span><br/>(<%=userInfo.getCostCenter()%>)</td>
 
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%

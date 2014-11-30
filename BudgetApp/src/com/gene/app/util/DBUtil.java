@@ -28,10 +28,10 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 public class DBUtil {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
-	public UserRoleInfo readUserRoleInfo(String email,String costCenter) {
+	public UserRoleInfo readUserRoleInfo(String email) {
 		boolean isGeneUser = false;
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
-		userMap = readAllUserInfo(costCenter);
+		userMap = readAllUserInfo();
 		UserRoleInfo user = new UserRoleInfo();
 		if(userMap!=null && !userMap.isEmpty()){
 		user = userMap.get(email);
@@ -57,8 +57,9 @@ public class DBUtil {
 		}
 		return user;
 	}
-	public Map<String,UserRoleInfo> readAllUserInfo(String costCenter){
-		String key = costCenter+BudgetConstants.seperator+UserRoleInfo.class.getName();
+	public Map<String,UserRoleInfo> readAllUserInfo(){
+		//String key = costCenter+BudgetConstants.seperator+UserRoleInfo.class.getName();
+		String key = UserRoleInfo.class.getName();
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
 		userMap = (Map<String,UserRoleInfo>)cache.get(key);
 		if(userMap==null || userMap.isEmpty()){
@@ -81,7 +82,7 @@ public class DBUtil {
 	}
 	public String getPrjEmailByName(String prj_owner){
 		String email = "";
-		Map<String,UserRoleInfo> userMap = readAllUserInfo(BudgetConstants.costCenter);
+		Map<String,UserRoleInfo> userMap = readAllUserInfo();
 		if(userMap!=null && !userMap.isEmpty()){
 		for(Map.Entry<String, UserRoleInfo> user:userMap.entrySet()){
 			if(prj_owner==null){
@@ -523,25 +524,25 @@ public class DBUtil {
 		// get project list matching the brand
 		Map<String,GtfReport> gtfRptList = getAllReportDataFromCache(BudgetConstants.costCenter);
 		Map<String,BudgetSummary> brandMap = null;
-		brandMap = getProjectListByBrand(gtfRptList,brandlevelBudgetMap);
+		brandMap = getProjectListByBrand(gtfRptList,brandlevelBudgetMap,costCenter);
 		if(brandMap == null){
 			brandMap = new LinkedHashMap<String,BudgetSummary>();
 		}
 		summary.setBudgetMap(brandMap);
-		cache.put(BudgetConstants.GMBT_SUMMARY, summary);
+		cache.put(BudgetConstants.GMBT_SUMMARY+costCenter, summary);
 		return summary;
 	}
 	
 	public BudgetSummary getSummaryFromCache(String costCenter){
-		BudgetSummary summary = (BudgetSummary)cache.get(BudgetConstants.GMBT_SUMMARY);
+		BudgetSummary summary = (BudgetSummary)cache.get(BudgetConstants.GMBT_SUMMARY+costCenter);
 		if(summary == null){
 			summary = readBudgetSummary(costCenter);
 		}
 		return summary;
 	}
 	
-	public void putSummaryToCache(BudgetSummary summary){
-		cache.put(BudgetConstants.GMBT_SUMMARY, summary);
+	public void putSummaryToCache(BudgetSummary summary,String costCenter){
+		cache.put(BudgetConstants.GMBT_SUMMARY+costCenter, summary);
 	}
 	// reading costcenter_brand table data and put it in cache
 	
@@ -612,7 +613,7 @@ public class DBUtil {
 			}
 			return costCenterBrandMap;
 		}
-		public Map<String,BudgetSummary> getProjectListByBrand(Map<String, GtfReport> gtfRptList,Map<String,Map<String,BudgetSummary>> brandDataMap){
+		public Map<String,BudgetSummary> getProjectListByBrand(Map<String, GtfReport> gtfRptList,Map<String,Map<String,BudgetSummary>> brandDataMap,String costCenter){
 			Map<String,BudgetSummary> brandMap = new LinkedHashMap<String,BudgetSummary>();
 			GtfReport gtfReport = new GtfReport();
 			String brand = "";
@@ -623,7 +624,7 @@ public class DBUtil {
 			
 			BudgetSummary summary = new BudgetSummary();
 			for(Entry<String, Map<String, BudgetSummary>> brandEntry: brandDataMap.entrySet()){
-				if((BudgetConstants.costCenter).equalsIgnoreCase(brandEntry.getKey())){
+				if(costCenter.equalsIgnoreCase(brandEntry.getKey())){
 				brandMap = brandEntry.getValue();
 				for(Entry<String, BudgetSummary> budgetEntry: brandMap.entrySet()){
 					brand = budgetEntry.getKey();

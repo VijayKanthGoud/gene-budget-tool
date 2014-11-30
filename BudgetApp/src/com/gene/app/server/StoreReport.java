@@ -40,11 +40,12 @@ public class StoreReport extends HttpServlet {
 			throws IOException {
 		String email = "";
 		HttpSession session = req.getSession();
-		User user = (User)session.getAttribute(BudgetConstants.loggedInUser);
+		//User user = (User)session.getAttribute(BudgetConstants.loggedInUser);
+		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
 		email = user.getEmail();
 		resp.setContentType(BudgetConstants.contentType);
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
-		storeProjectData(objarray, email, resp);
+		storeProjectData(objarray, user, resp);
 		/*boolean isMultiBrand = Boolean.parseBoolean(req.getParameter("multibrand").toString());
 		String email = "";
 		HttpSession session = req.getSession();
@@ -62,7 +63,7 @@ public class StoreReport extends HttpServlet {
 	}
 	
 	
-	public void storeProjectData(String objarray, String email, HttpServletResponse resp){
+	public void storeProjectData(String objarray, UserRoleInfo user, HttpServletResponse resp){
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		JSONArray jsonArray = null;
 		GtfReport gtfReport = null;
@@ -80,7 +81,7 @@ public class StoreReport extends HttpServlet {
 				if(projectWBS == null || projectWBS.isEmpty() || projectWBS.length() == 0){
 					continue;
 				}*/
-				gtfReport.setEmail(email);
+				gtfReport.setEmail(user.getEmail());
 				String status =BudgetConstants.New_GTFReport_Status;
 				int flag = 0;
 				if(BudgetConstants.status_New.equalsIgnoreCase(status.trim())){
@@ -104,7 +105,7 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setVendor(rprtObject.getString(BudgetConstants.New_GTFReport_Vendor));
 				gtfReport.setCreateDate(timeStamp);
 				gtfReport.setYear(BudgetConstants.dataYEAR);
-				
+				gtfReport.setCostCenter(user.getCostCenter());
 				try{
 					remarks = ((rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)!=null) && (!"".equalsIgnoreCase(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks).trim())))?(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)):"";
 				}catch(com.google.appengine.labs.repackaged.org.json.JSONException exception){
@@ -188,7 +189,7 @@ public class StoreReport extends HttpServlet {
 		String prj_owner_email;
 		DBUtil util = new DBUtil();
 		String email = "";
-		Map<String,UserRoleInfo> userMap = util.readAllUserInfo(BudgetConstants.costCenter);
+		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
 		try{
 		String mutliBrandArray = rprtObject.getString(BudgetConstants.multiBrandInput);
 		jsonArray = new JSONArray(mutliBrandArray);

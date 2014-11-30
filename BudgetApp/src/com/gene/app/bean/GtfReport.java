@@ -88,6 +88,9 @@ public class GtfReport implements Serializable,Cloneable {
 	@Persistent
 	private String year;
 	
+	//@Persistent
+	private String costCenter;
+	
 	/*public GtfReport(GtfReport gtfReport1) {
 		// TODO Auto-generated constructor stub
 		this.gtfReport = gtfReport1;
@@ -98,6 +101,14 @@ public class GtfReport implements Serializable,Cloneable {
 		super();
 	}*/
 	
+	public String getCostCenter() {
+		return costCenter;
+	}
+
+	public void setCostCenter(String costCenter) {
+		this.costCenter = costCenter;
+	}
+
 	public String getYear() {
 		return year;
 	}

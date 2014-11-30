@@ -11,6 +11,7 @@ import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.CostCenter_Brand;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.server.PMF;
+import com.google.apphosting.api.DatastorePb.Cost;
 
 public class UserDataUtil {
 	
@@ -24,6 +25,7 @@ public class UserDataUtil {
 	// create role array
 	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
+	String [] costCenter = {"307673","235031","307672","235032","307674","307675","307676","307677","307678"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Avastin",  60000.0);
@@ -40,6 +42,7 @@ public class UserDataUtil {
 	userRoleInfo.setBrand(brandMap);
 	userRoleInfo.setUserName(userName[i]);
 	userRoleInfo.setRole(role[i]);
+	userRoleInfo.setCostCenter(costCenter[i]);
 	userInfoList.add(userRoleInfo);
 	}
 	try{
@@ -87,10 +90,17 @@ public class UserDataUtil {
 		budgetSummary.setTotalBudget(budgetArray[i]);
 		budgetSummaryList.add(budgetSummary);
 		}*/
-		cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
-		cc.setCostCenter("307673");
+		List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
+		for(int i=0;i<userName.length;i++){
+			cc = new CostCenter_Brand();
+			cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
+			cc.setCostCenter(costCenter[i]);
+			ccList.add(cc);
+		}
+		//cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
+		//cc.setCostCenter("307673");
 		try{
-			pm.makePersistent(cc);
+			pm.makePersistentAll(ccList);
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
