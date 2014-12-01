@@ -1216,14 +1216,13 @@
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
-				console.log(args);
-				var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
-				var cell = args.cell;
-				var row = args.row;
-				var cols = grid.getColumns();
-				var result = false;
-				var result1 = false;
-				if(args.item["34"]!="New projects" ){
+			console.log(args);
+			var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
+			var cell = args.cell;
+			var row = args.row;
+			var cols = grid.getColumns();
+	
+			if(args.item["34"]!="New projects" ){
 					
 				if(args.item["0"].indexOf(".") != -1){
 					return false;
@@ -1243,34 +1242,27 @@
 				}else{
 					month='<%=month%>';	
 				}
-					for (var i = month; i < 12; i++) {
-						if (cols[cell].name == monthArray[i]
-								&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
-							result = true;
-							break;
-						} else {
-							result = false;
-						}
-					}
-					if (args.item["11"] == "Planned"
-							&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
-						result1 = true;
-					} else {
-						result1 = false;
-					}
-					if (result || result1) {
+				for (var i = month; i < 12; i++) {
+					if (cols[cell].name == monthArray[i]
+							&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
 						return true;
-					} else {
-						return false;
-					}
-					}else{
-						if( args.item["35"]!="Buttons"){
-						return true;
-						}else{
-							return false;
-						}
-					}
-				});
+					} 
+				}
+				
+				if (args.item["11"] == "Planned"
+						&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
+					return true;
+				} 
+				
+				return false;
+			}else{
+				if( args.item["35"]!="Buttons"){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		});
 
 		// wire up model events to drive the grid
 		dataView.onRowCountChanged.subscribe(function(e, args) {
