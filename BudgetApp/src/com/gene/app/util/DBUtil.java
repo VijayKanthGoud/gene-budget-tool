@@ -374,6 +374,16 @@ public class DBUtil {
 		}
 	}
 		
+	public void saveAllDataToDataStore(List<GtfReport> gtfReportList){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistentAll(gtfReportList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pm.close();
+		}
+	}
 	public Map<String,GtfReport> getReport(String costCenter, boolean resetCache) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);

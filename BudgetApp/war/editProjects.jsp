@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
     <html>
-<body onload="getBrandTotals()">  
+<body onload="getBrandTotals();getAvailableTags()">  
      
    
 <center>
@@ -68,11 +68,26 @@
 							BudgetSummary budgetSummary = new BudgetSummary();
 							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
 							Map<String,Double> brandMap = user.getBrand();
-							Object[] brands = brandMap.keySet().toArray();
+							
+							System.out.println("brandMap = "+brandMap);
+							Object[] brands = {}; 
+							if(brandMap!=null && !brandMap.isEmpty()){
+								brands = brandMap.keySet().toArray();
+							}
 						%>
 						 <script>
 						  var selectedValue = "";
 						  var summaryResult = "";
+						 var availableTags = [];
+	            		function getAvailableTags(){
+		            		availableTags[0] = "Total Products(MB)";
+		            		var j;
+		            		<%for(int i=0;i<brands.length;i++){%>
+		            			j=<%= i+1%>;
+		            			availableTags[j] = '<%= brands[i]%>';
+		            			<%}%>
+		            			//alert("getAvailableTags"+availableTags);
+		            	} 
 						function getBrandTotals(){
 							
 							selectedValue = document.getElementById("brandType").value; 
@@ -111,13 +126,15 @@
                             <td>Select Brand:</td>
                             <td><select id="brandType" onchange="getSummaryValues()">
                             <%String option = "";
-                            for(int i=0;i<brands.length;i++){ 
-                            option = brands[i].toString();
+                            if(budgetMap!=null && !budgetMap.isEmpty()){
+                            	Object[] budgets = budgetMap.keySet().toArray();
+                            for(int i=0;i<budgets.length;i++){ 
+                            option = budgets[i].toString();
                             if(i==1){%>
                             <option value=<%=option %> selected><%=option %></option>
                             <%}else{ %>
                             <option value=<%=option %>><%=option %></option>
-                            <%}} %>
+                            <%}}} %>
                             </select></td>
                         </tr>
 						
@@ -1340,11 +1357,11 @@
 		}
 	  ];
 		
-	  var availableTags = [ "Total Products(MB)","Rituxan Heme/Onc", "Kadcyla", "Actemra",
+	   /* var availableTags = [ "Total Products(MB)","Rituxan Heme/Onc", "Kadcyla", "Actemra",
 	            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
 	            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
-	            			"Neuroscience Pipeline", "Tarceva" ];
+	            			"Neuroscience Pipeline", "Tarceva" ];  */
 	  function saveAndClose(){
 		//alert("m_data"+JSON.stringify(m_data));
 		console.log(JSON.stringify(m_data));

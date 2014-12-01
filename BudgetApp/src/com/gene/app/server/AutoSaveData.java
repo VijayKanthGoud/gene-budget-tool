@@ -1,6 +1,9 @@
 package com.gene.app.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -28,9 +31,20 @@ public class AutoSaveData extends HttpServlet {
 		HttpSession session = req.getSession();
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
 		String objarray = "[]";
+		//String sessionObjArray = (String)session.getAttribute("objArray");
+		boolean fromSession = false;
 		if (req.getParameter(BudgetConstants.objArray) != null) {
 			objarray = req.getParameter(BudgetConstants.objArray).toString();
+		}else{
+			fromSession = true;
 		}
+		/*else if(sessionObjArray!=null){
+		}
+			objarray = sessionObjArray;
+			fromSession = true;
+		}else if(sessionObjArray == null){
+			sessionObjArray = "[]";
+		}*/
 		String brand = "";
 		double oldPlannedValue = 0.0;
 		double newPlannedValue = 0.0;
@@ -41,18 +55,21 @@ public class AutoSaveData extends HttpServlet {
 		BudgetSummary summaryObj = new BudgetSummary();
 		JSONArray jsonArray = null;
 		JSONObject rprtArray = null;
-
+		Map<String, GtfReport> gtfReportMap =  new LinkedHashMap<String,GtfReport>();
+		Map<String, GtfReport> editedGtfReportMap =  new LinkedHashMap<String,GtfReport>();
+		String keyNum = "";
+		String sessionKey = "";
+		String cellValue = "";
+		GtfReport gtfReportObj = null;
 		try {
 			jsonArray = new JSONArray(objarray);
+			gtfReportMap = util
+					.getAllReportDataFromCache(BudgetConstants.costCenter);
 			for (int count = 0; count < jsonArray.length(); count++) {
-				GtfReport gtfReportObj = null;
 				rprtArray = jsonArray.getJSONObject(count);
-				String keyNum = "";
 				keyNum = rprtArray.getString("0");
-				String cellValue = "";
+				sessionKey = sessionKey+keyNum+",";
 				cellValue = rprtArray.getString("1");
-				Map<String, GtfReport> gtfReportMap = util
-						.getAllReportDataFromCache(BudgetConstants.costCenter);
 				if (keyNum != null && !"".equalsIgnoreCase(keyNum.trim())) {
 					gtfReportObj = gtfReportMap.get(keyNum);
 					if (gtfReportObj != null) {
@@ -60,6 +77,7 @@ public class AutoSaveData extends HttpServlet {
 							String remarks = cellValue;
 							gtfReportObj.setRemarks(remarks);
 							gtfReportMap.put(keyNum, gtfReportObj);
+							//editedGtfReportMap.put(keyNum, gtfReportObj);
 						} else {
 							Map<String, Double> plannedMap = gtfReportObj
 									.getPlannedMap();
@@ -69,46 +87,54 @@ public class AutoSaveData extends HttpServlet {
 								newPlannedValue = Double.parseDouble(cellValue);
 								brand = gtfReportObj.getBrand();
 								summaryObj = budgetMap.get(brand);
+								if(summaryObj!=null){
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
+								}
 								plannedMap.put(BudgetConstants.months[Integer
 										.parseInt(cellNum)], Double
 										.parseDouble(cellValue));
 								gtfReportObj.setPlannedMap(plannedMap);
 								gtfReportMap.put(keyNum, gtfReportObj);
+								//editedGtfReportMap.put(keyNum, gtfReportObj);
 							}
 						}
 					}
 				}
 
-				String sessionKey = (String) session
+				
+			}
+				String key = (String) session
 						.getAttribute(BudgetConstants.KEY);
 				util.saveAllReportDataToCache(BudgetConstants.costCenter,
 						gtfReportMap);
-				if (sessionKey != null && sessionKey.isEmpty()) {
-					sessionKey = keyNum;
+				if (key != null && key.isEmpty()) {
+					key = sessionKey;
 				}
-				GtfReport sessionGtfReport = util.readReportDataFromCache(
-						sessionKey, BudgetConstants.costCenter);
-				if (keyNum == null && cellValue == null && cellNum == null
-						&& sessionKey != null) {
-					util.saveDataToDataStore(sessionGtfReport);
+				String[] keys = {};
+				List<GtfReport> gtfList = new ArrayList<GtfReport>();
+				if(key!=null){
+					keys = key.split(",");
+					for(int i=0;i<keys.length;i++){
+						gtfList.add(gtfReportMap.get(keys[i]));
+					}
+				}
+				if (fromSession) {
+					util.saveAllDataToDataStore(gtfList);
 				}
 
-				if ((keyNum != null && sessionKey != null)
-						&& !(keyNum.equals(sessionKey))) {
-					util.saveDataToDataStore(sessionGtfReport);
+				if ((key != null && sessionKey != null)
+						&& !(key.equals(sessionKey))) {
+					util.saveAllDataToDataStore(gtfList);
 				}
-				 session.setAttribute(BudgetConstants.KEY, keyNum);
-			}
+				 session.setAttribute(BudgetConstants.KEY, sessionKey);
+				 session.setAttribute("objArray",objarray);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*BudgetSummary summary = util
-				.readBudgetSummary(BudgetConstants.costCenter);*/
 		util.putSummaryToCache(summary,user.getCostCenter());
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		Gson gson = new Gson();
