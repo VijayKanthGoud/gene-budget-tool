@@ -42,6 +42,7 @@ public interface BudgetConstants {
 	public static final String KEY = "key";
 	public static final String CELL_VALUE = "cellValue";
 	public static final String CELL_NUM = "celNum";
+	public static final int CELL_PONUMBER = -1;
 	public static final int CELL_REMARKS = 13;
 	public static final String isMultiBrand = "37";
 	public static final String multiBrandInput = "36";

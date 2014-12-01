@@ -78,6 +78,11 @@ public class AutoSaveData extends HttpServlet {
 							gtfReportObj.setRemarks(remarks);
 							gtfReportMap.put(keyNum, gtfReportObj);
 							//editedGtfReportMap.put(keyNum, gtfReportObj);
+						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
+							String poNumber = cellValue;
+							gtfReportObj.setPoNumber(poNumber);
+							gtfReportObj.setStatus("Active");
+							gtfReportMap.put(keyNum, gtfReportObj);	
 						} else {
 							Map<String, Double> plannedMap = gtfReportObj
 									.getPlannedMap();
@@ -127,6 +132,9 @@ public class AutoSaveData extends HttpServlet {
 
 				if ((key != null && sessionKey != null)
 						&& !(key.equals(sessionKey))) {
+					util.saveAllDataToDataStore(gtfList);
+				}
+				if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
 					util.saveAllDataToDataStore(gtfList);
 				}
 				 session.setAttribute(BudgetConstants.KEY, sessionKey);

@@ -261,7 +261,7 @@
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
 		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
-		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
+		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText },
 		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
 		{ id : 3, name : columnNames[3], field : 3, width : 90, editor : Slick.Editors.Text},
 		{ id : 5, name : columnNames[5], field : 5, width : 90, editor : Slick.Editors.Text},
@@ -290,7 +290,7 @@
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
 		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
-		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.Text},
+		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText},
 		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
 		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
@@ -318,7 +318,7 @@
 						var noOfActive = 0;
 						var noOfClosed = 0;
 						for(var cnt=0; cnt<data.length; cnt++){
-							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("New") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
+							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("New") != -1 && data[cnt][1] != "" && data[cnt][1] != " " && data[cnt][34]!="New projects" ){
 								noOfNew++;
 							}
 						}
@@ -493,12 +493,16 @@
 		var cellNum = delCell - 12;
 
 		console.log(args.item);
+		var poNum = 0;
+		if(cell == 9){
+			poNum = args.item["8"];
+		}
 		key = item[0];
 	var aSaveData=[];
 	var iCnt=0;
  for(var i=0;i<data.length;i++){
 	var d = data[i];
-	 if(key== d[34] && d[11]=="Planned"){
+	 if(key== d[34] && d[11]=="Planned" && cell != 9){
 		 var aSave = (aSaveData[iCnt] = {});
 		 aSave[0] = d[0];
 		 if(d[7] == 0.0){
@@ -506,6 +510,14 @@
 		 }
 		 aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 		 d[delCell]=aSave[1];
+		 iCnt++;
+	 }else if(key== d[34] && d[11]=="Planned" && cell == 9){
+		 var aSave = (aSaveData[iCnt] = {});
+		 aSave[0] = d[0];
+		 if(poNum != 0){
+		 	d[8] = poNum
+		 }
+		 aSave[1] = d[8];
 		 iCnt++;
 	 }
 }
@@ -523,6 +535,9 @@
 				$("#statusMessage");
 				summaryResult = result;
 				getSummaryValues();
+				if(cellNum == '-1'){
+					window.location.reload(true);
+				}
 			}
 		});
 	}
@@ -1001,19 +1016,19 @@
 				    			case 0:
 				        			break;
 				    			case 1:
-				    				errStrng="Project name cannot be blank."
+				    				errStrng="Project name can not be blank."
 				        			break;
 				    			case 3:
-				    				errStrng="gMemoriID cannot be blank."
+				    				errStrng="gMemoriID can not be blank."
 				        			break;
 				    			case 4:
-				    				errStrng="gMemoriID or Project name cannot be blank."
+				    				errStrng="gMemoriID or Project name can not be blank."
 				        			break;
 				    			case 5:
-				    				errStrng="Project Owner cannot be blank."
+				    				errStrng="Project Owner can not be blank."
 				        			break;
 				    			case 9:
-				    				errStrng="gMemoriID or Project name or Project Owner cannot be blank."
+				    				errStrng="gMemoriID or Project name or Project Owner can not be blank."
 				        			break;
 				    			default:
 				        		break;
@@ -1074,7 +1089,7 @@
 			$('#topCrtNewProjBtn').hide();
 			$('#noData').hide();
 			var length= data.length;
-			var item ={id:"id_"+length,indent:0,0:"",1:"project_owner_name",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
+			var item ={id:"id_"+length,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
 				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false};
@@ -1118,18 +1133,48 @@
 		}
 		
 		function submitProjects(){
+			var errStr = 0;
 			var storeData=[];
 			var flag = true;
 			for(var i=0;i<addsave;i++){
-				
-				if(data[i][0]=="" || data[i][0]=='undefined'){
-					alert("gMemoriID cannot be blank.");
-					return;
+	
+				if( data[i][0] == 'undefined' || data[i][0].toString().trim() ==""){
+					errStr += 1;
+				}
+				if( data[i][2] == 'undefined' || data[i][2].toString().trim() ==""){
+					errStr += 2;
+				}
+				if( data[i][6] == 'undefined' || data[i][6].toString().trim() ==""){
+					errStr += 4;	
+				}
+				switch(errStr) {
+				case 0:
+			        break;
+			    case 1:
+			    	alert('"gMemori ID" can not be blank.');
+			        break;
+			    case 2:
+			    	alert('"Project name" can not be blank.');
+			    	break;
+			    case 3:
+			    	alert('"Project name" and "gMemori ID" can not be blank.');
+			        break;
+			    case 4:
+			    	alert('"Brand" can not be blank.');
+			        break;
+			    case 5:
+			    	alert('"Brand" and "gMemori Id" can not be blank.');
+			        break;
+			    case 6:
+			    	alert('"Project name" and "Brand" can not be blank.');
+			        break;
+			    case 7:
+			    	alert('"Project name", "Brand" and "Gmemori ID" can not be blank.');
+			        break;
 				}
 				storeData[i]=data[i];
-				//alert(JSON.stringify(data[i], null, 4));
 			}
-			
+			if(errStr == 0){
 			 $.ajax({
 				url : '/storereport',
 				type : 'POST',
@@ -1145,6 +1190,7 @@
 		            alert('gMemori Id exists. Try Different gMemori Id.');
 		        }
 			});  
+			}
 		
 		}
 		
@@ -1170,10 +1216,24 @@
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
+				console.log(args);
+				var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
+				var cell = args.cell;
+				var row = args.row;
+				var cols = grid.getColumns();
+				var result = false;
+				var result1 = false;
 				if(args.item["34"]!="New projects" ){
+					
 				if(args.item["0"].indexOf(".") != -1){
 					return false;
 				}
+				
+				if (args.item["11"] == "Planned"
+					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && args.item["26"] =="New") {
+					return true;
+				}
+				
 				var newYear =args.item["39"];
 				var createYear = args.item["38"].split("-")[0];
 				var quarter = <%=qtr%>;
@@ -1183,12 +1243,6 @@
 				}else{
 					month='<%=month%>';	
 				}
-					var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
-					var cell = args.cell;
-					var row = args.row;
-					var cols = grid.getColumns();
-					var result = false;
-					var result1 = false;
 					for (var i = month; i < 12; i++) {
 						if (cols[cell].name == monthArray[i]
 								&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
@@ -1465,13 +1519,13 @@
 			var row = args.row;
 			var pRow=row+1;
 			
-			if(m_data[row]["4"] == "" && cell==1){
+			if(cell==1){
 				m_data[row]["4"] = m_data[row-1]["4"];
 				m_grid.invalidate();
 				return false;
 			}
 			
-			if(m_data[row]["5"] == "" && cell==3){
+			if(cell==3){
 				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
 				m_grid.invalidate();
 				return false;
