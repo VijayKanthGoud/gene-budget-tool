@@ -57,7 +57,7 @@
 				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); %>
 				<td style="width: 50%; height: 55px; text-align: center;"><span
 						style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
-						My Projects </span><br/>(<%=userInfo.getCostCenter()%>)</td>
+						My Projects </span><br/><br/>(Cost center : <%=userInfo.getCostCenter()%>)</td>
 
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
@@ -542,11 +542,11 @@
 			if(key==selectedValue){
 				//alert("val = "+selectedValue);
 				value = obj.budgetMap[key];
-				$('#totalBudget').val(value.totalBudget);
-				$('#plannedTotal').text(value.plannedTotal);
-				$('#budgetLeftToSpend').text(value.budgetLeftToSpend);
-				$('#accrualTotal').text(value.accrualTotal);
-				$('#varianceTotal').text(value.varianceTotal);
+				$('#totalBudget').val((value.totalBudget).toFixed(2));
+				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
+				$('#budgetLeftToSpend').text((value.budgetLeftToSpend).toFixed(2));
+				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
+				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
 			}
 		}
 		}
