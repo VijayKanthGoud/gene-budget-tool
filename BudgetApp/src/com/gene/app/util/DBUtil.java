@@ -634,6 +634,7 @@ public class DBUtil {
 					accrualTotal = 0.0;
 					varianceTotal = 0.0;
 					//for(int i=0;i<gtfRptList.size();i++){
+					if(gtfRptList!=null && !gtfRptList.isEmpty()){
 					for(Entry<String, GtfReport> gtfRptEnty:gtfRptList.entrySet()){
 						gtfReport =gtfRptEnty.getValue();
 						if(brand.equalsIgnoreCase(gtfReport.getBrand())){
@@ -660,6 +661,7 @@ public class DBUtil {
 									}
 							}
 						}
+					}
 					}
 					summary.setAccrualTotal(accrualTotal);
 					summary.setVarianceTotal(varianceTotal);
