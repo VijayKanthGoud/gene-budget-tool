@@ -39,7 +39,7 @@
 		util1.insertUserRoleInfo();
 		util1.insertBudgetSummary(); */
 		if (userPrincipal != null) {
-			logoutLink = userService.createLogoutURL(requestUri);
+			logoutLink = userService.createLogoutURL("/");
 			User user = userService.getCurrentUser();
 			session.setAttribute("loggedInUser",user);
 			isAdmin = userService.isUserAdmin();
