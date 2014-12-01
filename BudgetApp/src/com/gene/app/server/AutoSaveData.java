@@ -134,7 +134,7 @@ public class AutoSaveData extends HttpServlet {
 						&& !(key.equals(sessionKey))) {
 					util.saveAllDataToDataStore(gtfList);
 				}
-				if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
+				if(cellNum.matches("[-+]?[0-9]+") && Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
 					util.saveAllDataToDataStore(gtfList);
 				}
 				 session.setAttribute(BudgetConstants.KEY, sessionKey);
