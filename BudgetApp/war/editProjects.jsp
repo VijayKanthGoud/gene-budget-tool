@@ -188,7 +188,7 @@
  		<span style="  margin: auto;  position: absolute;  top: 350px; left: 48%; bottom: 0; right; font-size:12px; font-weight:bold; color: #005691" 
  		id="noData">(No data available!)</span>
  		<input type='button' style='font-size: 12px; height: 25px; width: 160px; background:#005691; color:#FFFFFF' 
- 		value='Click to Create Project' id='topCrtNewProjBtn'/>  
+ 		value='Create Projects' id='topCrtNewProjBtn'/>  
 	<%}%>
 <div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
 
@@ -419,12 +419,12 @@
 
 	// Filter data acording to search field
 	function searchProject(item) {
-		console.log("item:"+JSON.stringify(item));
+		//console.log("item:"+JSON.stringify(item));
 		var status = true;
 		if (item[33] != "New") {
 			status = false;
 		}
-		//alert("item[11] "+item[11]);
+		
 		if (((searchString != "" && item[27].toLowerCase().indexOf(
 				searchString.toLowerCase()) == -1)
 				&& (searchString != "" && item[28].toLowerCase().indexOf(
@@ -435,7 +435,7 @@
 						searchString.toLowerCase()) == -1)
 				&& (searchString != "" && item[30].toLowerCase().indexOf(
 						searchString.toLowerCase()) == -1) && item[26] != "Total")
-				|| (radioString != "All" && item[11]!="undefined" && item[11].toLowerCase().indexOf(
+				|| (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase().indexOf(
 						radioString.toLowerCase()) == -1)) {
 			return false;
 		}
@@ -767,7 +767,10 @@
     						}
    				<%}%>
     
-    				<%}
+    				<%} %>
+    				d[40] = d[11];
+    				
+    				<%
 				}
 			}%>
 			totalSize=data.length;
@@ -835,6 +838,12 @@
 			d[33] = "New";
 			d[34] = " ";
 			d[35]= " ";
+			d[36]= " ";
+			d[37]= " ";
+			d[38]= " ";
+			d[39]= " ";
+			d[40]= "Planned";
+			
 			d[0]=" ";
 
 		}
@@ -1094,21 +1103,21 @@
 			var item ={id:"id_"+length,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
 				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false};
+						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
 			dataView.insertItem(0,item);
 		if(addsave ==0){
 		    var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 						,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
 			var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
 			var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false};
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
 			dataView.insertItem(1,item3);
 		    dataView.insertItem(2,saveClose);
 		    dataView.insertItem(3,item2);
@@ -1420,7 +1429,7 @@
 	            			"Neuroscience Pipeline", "Tarceva" ];  */
 	  function saveAndClose(){
 		//alert("m_data"+JSON.stringify(m_data));
-		console.log(JSON.stringify(m_data));
+		// console.log(JSON.stringify(m_data));
 		//return;
 		  for(var i=0;i<m_data.length;i++){
 			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
