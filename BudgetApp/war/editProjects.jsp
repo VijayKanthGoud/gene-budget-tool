@@ -1555,7 +1555,7 @@
 			}
 			
 			}
-			 if(args.row == 0 && (cell!=4 && cell!=5)){{
+			 if(args.row == 0 && (cell!=4 && cell!=5)){
 				return false;
 			}
 			return true;

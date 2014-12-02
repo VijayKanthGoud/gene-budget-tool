@@ -52,6 +52,7 @@ public interface BudgetConstants {
 	public static final String New_GTFReport_gMemoriId = "0";
 	public static final String New_GTFReport_ProjectOwner = "1";
 	public static final String New_GTFReport_ProjectName = "2";
+	public static final String New_GTFReport_Project_WBS = "3";
 	public static final String New_GTFReport_Status = "New";
 	public static final String New_GTFReport_SubActivity = "5";
 	public static final String New_GTFReport_Brand = "6";

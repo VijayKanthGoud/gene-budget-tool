@@ -98,7 +98,7 @@ public class StoreReport extends HttpServlet {
 				//gtfReport.setStatus(rprtObject.getString("2"));
 				
 				gtfReport.setRequestor(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectOwner));
-				//gtfReport.setProject_WBS(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectWBS));
+				gtfReport.setProject_WBS(rprtObject.getString(BudgetConstants.New_GTFReport_Project_WBS));
 				//gtfReport.setWBS_Name(rprtObject.getString(BudgetConstants.New_GTFReport_WBS_Name));
 				gtfReport.setSubActivity(rprtObject.getString(BudgetConstants.New_GTFReport_SubActivity));
 				gtfReport.setPoNumber(rprtObject.getString(BudgetConstants.New_GTFReport_PoNumber));
