@@ -280,7 +280,7 @@
 		{ id : 21, name : columnNames[21], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 22, name : columnNames[22], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 23, name : columnNames[23], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[24], field : 24, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[24], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[25], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	} ];
 
@@ -304,7 +304,7 @@
 		{ id : 21, name : columnNames[21], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 22, name : columnNames[22], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 23, name : columnNames[23], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[24], field : 24, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[24], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[25], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	}]
 	var searchString = "";
@@ -806,7 +806,7 @@
 			    	d[11] = "Planned";
 		        	break;
 			}
-			
+				d[40] = d[11];
 			for (var j = 0; j < totalSize ; j++) {
 				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1){
 				d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
@@ -842,7 +842,7 @@
 			d[37]= " ";
 			d[38]= " ";
 			d[39]= " ";
-			d[40]= "Planned";
+/* 			d[40]= "Planned"; */
 			
 			d[0]=" ";
 
