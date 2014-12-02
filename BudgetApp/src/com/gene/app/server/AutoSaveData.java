@@ -22,6 +22,8 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
 
+import static com.gene.app.util.Util.isInt;
+
 @SuppressWarnings("serial")
 public class AutoSaveData extends HttpServlet {
 	DBUtil util = new DBUtil();
@@ -50,7 +52,10 @@ public class AutoSaveData extends HttpServlet {
 		double newPlannedValue = 0.0;
 		double plannedTotal = 0.0;
 		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
-		BudgetSummary summary = util.getSummaryFromCache(user.getCostCenter());
+		BudgetSummary summary = new BudgetSummary();
+		if(user != null && user.getCostCenter() != null &&util.getSummaryFromCache(user.getCostCenter()) != null){
+			summary = util.getSummaryFromCache(user.getCostCenter());
+		}
 		Map<String,BudgetSummary> budgetMap = summary.getBudgetMap();
 		BudgetSummary summaryObj = new BudgetSummary();
 		JSONArray jsonArray = null;
@@ -133,17 +138,18 @@ public class AutoSaveData extends HttpServlet {
 				if ((key != null && sessionKey != null)
 						&& !(key.equals(sessionKey))) {
 					util.saveAllDataToDataStore(gtfList);
-				}
-				if(cellNum.matches("[-+]?[0-9]+") && Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
+				}				
+				if( key != null && isInt(cellNum) && Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
 					util.saveAllDataToDataStore(gtfList);
 				}
 				 session.setAttribute(BudgetConstants.KEY, sessionKey);
 				 session.setAttribute("objArray",objarray);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		util.putSummaryToCache(summary,user.getCostCenter());
+		if(user != null && user.getCostCenter() != null){
+			util.putSummaryToCache(summary,user.getCostCenter());
+		}
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		Gson gson = new Gson();
 		resp.getWriter().write(gson.toJson(summary));
