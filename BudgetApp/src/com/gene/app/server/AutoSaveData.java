@@ -87,6 +87,7 @@ public class AutoSaveData extends HttpServlet {
 							String poNumber = cellValue;
 							gtfReportObj.setPoNumber(poNumber);
 							gtfReportObj.setStatus("Active");
+							gtfReportObj.setFlag(2);
 							gtfReportMap.put(keyNum, gtfReportObj);	
 						} else {
 							Map<String, Double> plannedMap = gtfReportObj
