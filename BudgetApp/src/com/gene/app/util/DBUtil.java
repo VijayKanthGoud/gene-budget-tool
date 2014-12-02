@@ -686,14 +686,15 @@ public class DBUtil {
 			return brandMap;
 		}
 		
-	public void storeProjectsToCache(List<GtfReport> gtfReports) {
-		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(BudgetConstants.costCenter);
+	public void storeProjectsToCache(List<GtfReport> gtfReports,String costCenter) {
+		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(costCenter);
 		GtfReport report = new GtfReport();
 		for (int i = 0; i < gtfReports.size(); i++) {
 			report = gtfReports.get(i);
 			gtfReportFromCache.put(report.getgMemoryId(), report);
 		}
-		cache.put(BudgetConstants.costCenter, gtfReportFromCache);
+		cache.put(costCenter, gtfReportFromCache);
+	
 	}
 
 	@SuppressWarnings("unchecked")

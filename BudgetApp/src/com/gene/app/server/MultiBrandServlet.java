@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gene.app.bean.GtfReport;
+import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
 import com.google.appengine.api.memcache.MemcacheService;
@@ -26,6 +27,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+
 import static com.gene.app.util.Util.roundDoubleValue;
 
 public class MultiBrandServlet extends HttpServlet {
@@ -43,7 +45,8 @@ public class MultiBrandServlet extends HttpServlet {
 		String gMemoriId = "";
 		Double percentage_Allocation = 100.0;
 		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("loggedInUser");
+		//User user = (User) session.getAttribute("loggedInUser");
+		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
 		String email = user.getEmail();
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
 		List<GtfReport> gtfReportListFromDB = new ArrayList<GtfReport>();
@@ -233,7 +236,7 @@ public class MultiBrandServlet extends HttpServlet {
 			}
 			util.removeExistingProject(gtfReportListFromDB);
 			util.generateProjectIdUsingJDOTxn(newGtfReportList);
-			util.storeProjectsToCache(newGtfReportList);
+			util.storeProjectsToCache(newGtfReportList,user.getCostCenter());
 			//cache.delete(BudgetConstants.costCenter);
 
 		} catch (JSONException e) {

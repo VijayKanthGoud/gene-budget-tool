@@ -136,7 +136,7 @@ public class StoreReport extends HttpServlet {
 				//gtfReports.add(gtfReport);
 			}
 			util.generateProjectIdUsingJDOTxn(gtfReports);
-			util.storeProjectsToCache(gtfReports);
+			util.storeProjectsToCache(gtfReports,user.getCostCenter());
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		} 
