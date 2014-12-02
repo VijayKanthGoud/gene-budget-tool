@@ -28,6 +28,8 @@ import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
+import static com.gene.app.util.Util.roundDoubleValue;
+
 
 
 
@@ -161,7 +163,7 @@ public class StoreReport extends HttpServlet {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
 				plannedMap.put(BudgetConstants.months[cnt],
-						util.round(Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))),2));
+						roundDoubleValue(Double.parseDouble(rprtObject.getString(Integer.toString(cnt+BudgetConstants.months.length-1))),2));
 			} catch (NumberFormatException e ) {
 				plannedMap.put(BudgetConstants.months[cnt], 0.0);
 			}
@@ -228,7 +230,7 @@ public class StoreReport extends HttpServlet {
 		for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
-				value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percent_allocation/100, 2);
+				value = roundDoubleValue(parentPlannedMap.get(BudgetConstants.months[cnt])*percent_allocation/100, 2);
 				plannedMap.put(BudgetConstants.months[cnt],value);
 			} catch (NumberFormatException e ) {
 				plannedMap.put(BudgetConstants.months[cnt], 0.0);

@@ -26,6 +26,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import static com.gene.app.util.Util.roundDoubleValue;
 
 public class MultiBrandServlet extends HttpServlet {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
@@ -100,7 +101,7 @@ public class MultiBrandServlet extends HttpServlet {
 					newgtfReport.setProjectName(project_Name);
 					newgtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
 					PlannedMap = gtfRpt.getPlannedMap();
-					PlannedMap.put("TOTAL",util.round(Double.parseDouble(sumTotal),2));
+					PlannedMap.put("TOTAL", roundDoubleValue(Double.parseDouble(sumTotal),2));
 					parentPlannedMap = new LinkedHashMap(PlannedMap);
 					newgtfReport.setPlannedMap(PlannedMap);
 					newgtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
@@ -163,7 +164,7 @@ public class MultiBrandServlet extends HttpServlet {
 						for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
-								value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
+								value = roundDoubleValue(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
 								PlannedMap.put(BudgetConstants.months[cnt],value);
 							} catch (NumberFormatException e ) {
 								PlannedMap.put(BudgetConstants.months[cnt], 0.0);
@@ -216,7 +217,7 @@ public class MultiBrandServlet extends HttpServlet {
 						for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
-								value = util.round(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
+								value = roundDoubleValue(parentPlannedMap.get(BudgetConstants.months[cnt])*percentage_Allocation/100, 2);
 								PlannedMap.put(BudgetConstants.months[cnt],value);
 							} catch (NumberFormatException e ) {
 								PlannedMap.put(BudgetConstants.months[cnt], 0.0);
