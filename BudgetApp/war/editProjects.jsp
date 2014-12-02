@@ -57,7 +57,7 @@
 				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); %>
 				<td style="width: 50%; height: 55px; text-align: center;"><span
 						style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
-						My Projects </span><br/><br/>(Cost center : <%=userInfo.getCostCenter()%>)</td>
+						My Projects </span><br/><br/>Cost center : <%=userInfo.getCostCenter()%></td>
 
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable" width=100%
@@ -260,9 +260,9 @@
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
 		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
+		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText },
-		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
+		{ id : 1, name : columnNames[1], field : 1, width : 90},
 		{ id : 3, name : columnNames[3], field : 3, width : 90, editor : Slick.Editors.Text},
 		{ id : 5, name : columnNames[5], field : 5, width : 90, editor : Slick.Editors.Text},
 		{ id : 7, name : columnNames[7], field : 7, width : 90, editor : Slick.Editors.Text},
@@ -289,9 +289,9 @@
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
 		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 11, name : columnNames[11], field : 11, width : 110, editor : Slick.Editors.Text, formatter : Slick.Formatters.HyperLink},
+		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText},
-		{ id : 1, name : columnNames[1], field : 1, width : 90, editor : Slick.Editors.Text},
+		{ id : 1, name : columnNames[1], field : 1, width : 90},
 		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 14, name : columnNames[14], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
@@ -1474,6 +1474,8 @@
 		}
 		
 		function saveWithoutClose(){
+			
+			
 			 for (var j = 0; j < 5; j++) {
 					var d = (m_data[j] = {});
 					d[0] = "";

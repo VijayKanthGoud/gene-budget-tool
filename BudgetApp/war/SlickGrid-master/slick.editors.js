@@ -686,7 +686,7 @@
 	    };
 
 	    this.validate = function () {
-	      if (isNaN($input.val())) {
+	      if (isNaN($input.val()) || $input.val().length < 6) {
 	        return {
 	          valid: false,
 	          msg: "Please enter a valid integer"
