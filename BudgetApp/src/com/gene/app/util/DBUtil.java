@@ -704,19 +704,20 @@ public class DBUtil {
 		q.declareParameters("String statusParam");
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		Map<String, GtfReport> gtfMap = new LinkedHashMap<String, GtfReport>();
-		Map<String, Double> plannedMap = new LinkedHashMap<String, Double>();
-		Map<String, Double> accrualsMap = new LinkedHashMap<String, Double>();
+		Calendar cal = Calendar.getInstance();
+		int month = cal.get(Calendar.MONTH);
 		try {
 			gtfReports = (List<GtfReport>) q.execute("Active");
 			if (!gtfReports.isEmpty()) {
-				
 				for (GtfReport gtfReport : gtfReports) {
-					plannedMap.clear();
-					plannedMap.putAll(gtfReport.getPlannedMap());
-					gtfReport.setBenchmarkMap(plannedMap);
-					accrualsMap.clear();
-					accrualsMap.putAll(gtfReport.getAccrualsMap());
-					gtfReport.setPlannedMap(accrualsMap);
+					Map<String, Double> benchMarkMap = new LinkedHashMap<String, Double>();
+					benchMarkMap = gtfReport.getBenchmarkMap();
+					for(int iMonths=0;iMonths<BudgetConstants.months.length-1;iMonths++){
+						if(iMonths + 1> month ){
+							benchMarkMap.put(BudgetConstants.months[iMonths], gtfReport.getPlannedMap().get(iMonths));	
+						}
+					}
+					gtfReport.setBenchmarkMap(benchMarkMap);
 					gtfMap.put(gtfReport.getgMemoryId(), gtfReport);
 				}
 			}
