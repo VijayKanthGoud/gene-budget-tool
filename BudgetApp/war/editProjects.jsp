@@ -1526,11 +1526,14 @@
 	    
 	    m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
-			//alert("args.row"+args.row);
+			if(args.row == 0 && (args.cell==0 || args.cell==1 || args.cell==2)){
+				return false;
+			}
 			if(args.row!=0){
 			var cell = args.cell+1;
 			var row = args.row;
 			var pRow=row+1;
+			
 			
 			if(cell==1){
 				m_data[row]["4"] = m_data[row-1]["4"];
@@ -1551,9 +1554,7 @@
 			}
 			
 			}
-			if(args.row == 0){
-				return false;
-			}
+			
 			return true;
 			
 		});
