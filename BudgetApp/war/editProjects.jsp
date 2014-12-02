@@ -1131,7 +1131,12 @@
 		);
 
 		function cancelProjects(){
+			var result = confirm("Are you sure you want to cancel the projects you created?");
+			if(result){
 			window.location.reload(true);
+			}else{
+				return;
+			}
 		}
 		
 		function submitProjects(){
