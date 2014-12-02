@@ -828,6 +828,7 @@
 			for (var j = 12; j < 25; j++) {
 				d[j] = d[j].toFixed(2);
 			}
+			d[25] = "";
 			d[26] = "Total";
 			d[27] = " ";
 			d[28] = " ";
@@ -918,7 +919,7 @@
 						}
 						
 						grid.invalidate();
-			if(args.item["34"]!="New projects"){
+			if(args.item["34"] != "New projects"){
 				updateMemCache(e, args, tempKey);
 			
 				
@@ -1554,7 +1555,9 @@
 			}
 			
 			}
-			
+			 if(args.row == 0 && (cell!=4 && cell!=5)){{
+				return false;
+			}
 			return true;
 			
 		});
