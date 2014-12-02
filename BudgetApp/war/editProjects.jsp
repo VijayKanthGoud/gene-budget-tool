@@ -419,11 +419,12 @@
 
 	// Filter data acording to search field
 	function searchProject(item) {
-		
+		console.log("item:"+JSON.stringify(item));
 		var status = true;
 		if (item[33] != "New") {
 			status = false;
 		}
+		//alert("item[11] "+item[11]);
 		if (((searchString != "" && item[27].toLowerCase().indexOf(
 				searchString.toLowerCase()) == -1)
 				&& (searchString != "" && item[28].toLowerCase().indexOf(
@@ -434,7 +435,7 @@
 						searchString.toLowerCase()) == -1)
 				&& (searchString != "" && item[30].toLowerCase().indexOf(
 						searchString.toLowerCase()) == -1) && item[26] != "Total")
-				|| (radioString != "All" && item[11].toLowerCase().indexOf(
+				|| (radioString != "All" && item[11]!="undefined" && item[11].toLowerCase().indexOf(
 						radioString.toLowerCase()) == -1)) {
 			return false;
 		}
@@ -457,7 +458,7 @@
 								&& (searchString != "" && parent[30]
 										.toLowerCase().indexOf(
 												searchString.toLowerCase()) == -1) && (parent[26] != "Total"))
-						|| (radioString != "All" && item[11].toLowerCase()
+						|| (radioString != "All" && item[11]!="undefined" && item[11].toLowerCase()
 								.indexOf(radioString.toLowerCase()) == -1)) {
 					return false;
 				}
@@ -691,6 +692,7 @@
     					gtfReports.get(i).getBenchmarkMap().get("NOV") + 
    				 		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
    				}else{
+   	   				d[11]="";
    					for (var j = 12; j < 25; j++) {
 						d[j] = 0.0;
 						}
@@ -1532,6 +1534,9 @@
 				return false;
 			}
 			
+			}
+			if(args.row == 0){
+				return false;
 			}
 			return true;
 			
