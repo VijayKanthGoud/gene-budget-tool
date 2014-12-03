@@ -395,7 +395,6 @@
 		frozenColumn : 3
 	};
 
-	var sortcol = "29";
 
 	// Display total for active new and closed projects (roll up total)
 	function sumTotalsFormatter(totals, columnDef) {
@@ -1324,6 +1323,7 @@
 	    if (searchString != "") {
 				dataView.expandGroup("Active");
 				dataView.expandGroup("Closed");
+				dataView.expandGroup("New");
 			} else {
 				dataView.collapseGroup("Active");
 				dataView.collapseGroup("Closed");

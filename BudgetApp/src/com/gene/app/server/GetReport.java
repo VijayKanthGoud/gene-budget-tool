@@ -53,10 +53,13 @@ public class GetReport extends HttpServlet {
 		        {
 		            public int compare( GtfReport o1, GtfReport o2 )
 		            {
-		            	if((o2.getProjectName()).compareTo(o1.getProjectName()) ==0){
-		        			return (o1.getgMemoryId()).compareTo(o2.getgMemoryId());
-		        		}
-		        		return (o2.getProjectName()).compareTo(o1.getProjectName());
+		            	if(o1.getFlag() == o2.getFlag()) {
+		            		if((o1.getProjectName()).compareTo(o2.getProjectName()) ==0){
+		            			return (o1.getgMemoryId()).compareTo(o2.getgMemoryId());
+		            		}
+		            		return (o1.getProjectName()).compareTo(o2.getProjectName());
+		            	}
+		            	return o1.getFlag() - o2.getFlag();
 		            }
 		        } );
 		gtfReportList = util.calculateVarianceMap(gtfReportList);
