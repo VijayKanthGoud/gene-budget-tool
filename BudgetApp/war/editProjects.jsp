@@ -1012,8 +1012,12 @@
 				itemClicked = dataView.getItem(args.row);
 				// multi brand click
 				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
-					
+					var index = availableTags.indexOf("Total Products(MB)");
+					if (index > -1) {
+						availableTags.splice(index, 1);
+					}
 					if(itemClicked[34]!="New projects"){
+						
 						// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
 						var multiBrandCnt = 0 ;	
 						<% 
@@ -1040,6 +1044,7 @@
     							d["7"] = "<%=requestor%>";
 							}
 						<%}%>
+						
 						$('#multibrandEdit').show().fadeIn(100);
 						displayMultibrandGrid();
 						$('#back').addClass('black_overlay').fadeIn(100);
@@ -1101,14 +1106,6 @@
 						}
 					}
 				} 
-				/* // Handele click on Save button
-				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("save")!=-1){
-					submitProjects();
-				} */
-				// Handele click on Cancel button
-				/* if(args.cell==3 && itemClicked[11].toLowerCase().indexOf("cancel")!=-1){
-					cancelProjects();
-				} */
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
 				if (item) {
@@ -1479,6 +1476,9 @@
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
 	            			"Neuroscience Pipeline", "Tarceva" ];  */
 	  function saveAndClose(){
+	     if(availableTags.indexOf("Total Products(MB)")==-1){
+	         availableTags.splice(0, 0, "Total Products(MB)");
+	     }
 		//alert("m_data"+JSON.stringify(m_data));
 		// console.log(JSON.stringify(m_data));
 		//return;
@@ -1539,8 +1539,9 @@
 		}
 		
 		function saveWithoutClose(){
-			
-			
+			if(availableTags.indexOf("Total Products(MB)")==-1){
+			availableTags.splice(0, 0, "Total Products(MB)");
+			}
 			 for (var j = 0; j < 5; j++) {
 					var d = (m_data[j] = {});
 					d[0] = "";
