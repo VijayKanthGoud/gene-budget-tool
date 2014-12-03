@@ -982,7 +982,7 @@
 				
 				var verTotal=0.0;
 				for (var j = 0; j < data.length ; j++) {
-					if( data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1 && data[j]["34"]!="New projects"){
+					if(data[j][26] != 'Total' && data[j][11]=="Planned" &&  data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
 						verTotal= parseFloat(verTotal) + parseFloat(data[j][delCell]);
 					}
 				}
