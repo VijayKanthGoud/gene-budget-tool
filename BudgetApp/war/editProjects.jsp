@@ -266,7 +266,7 @@
 		{ id : 3, name : columnNames[3], field : 3, width : 90, editor : Slick.Editors.Text},
 		{ id : 5, name : columnNames[5], field : 5, width : 90, editor : Slick.Editors.Text},
 		{ id : 7, name : columnNames[7], field : 7, width : 90, editor : Slick.Editors.Text},
-		{ id : 8, name : columnNames[8], field : 8, width : 90, editor : Slick.Editors.Text},
+		{ id : 8, name : columnNames[8], field : 8, width : 90, editor : Slick.Editors.PONumberText},
 		{ id : 10, name : columnNames[10], field : 10, width : 90, editor : Slick.Editors.Text},
 		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
@@ -499,29 +499,29 @@
 			poNum = args.item["8"];
 		}
 		key = item[0];
-	var aSaveData=[];
-	var iCnt=0;
- for(var i=0;i<data.length;i++){
-	var d = data[i];
-	 if(key== d[34] && d[11]=="Planned" && cell != 9){
-		 var aSave = (aSaveData[iCnt] = {});
-		 aSave[0] = d[0];
-		 if(d[7] == 0.0){
-			 d[7]=100.0;
-		 }
-		 aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
-		 d[delCell]=aSave[1];
-		 iCnt++;
-	 }else if(key== d[34] && d[11]=="Planned" && cell == 9){
-		 var aSave = (aSaveData[iCnt] = {});
-		 aSave[0] = d[0];
-		 if(poNum != 0){
-		 	d[8] = poNum
-		 }
-		 aSave[1] = d[8];
-		 iCnt++;
-	 }
-}
+		var aSaveData=[];
+		var iCnt=0;
+ 		for(var i=0;i<data.length;i++){
+			var d = data[i];
+	 		if(key== d[34] && d[11]=="Planned" && cell != 9){
+		 		var aSave = (aSaveData[iCnt] = {});
+		 		aSave[0] = d[0];
+		 		if(d[7] == 0.0){
+				 d[7]=100.0;
+		 		}
+		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+		 		d[delCell]=aSave[1];
+		 		iCnt++;
+	 		}else if(key== d[34] && d[11]=="Planned" && cell == 9){
+		 		var aSave = (aSaveData[iCnt] = {});
+		 		aSave[0] = d[0];
+		 		if(poNum != 0){
+		 			d[8] = poNum
+		 		}
+		 		aSave[1] = d[8];
+		 		iCnt++;
+	 		}
+	}
 		$.ajax({
 			url : '/AutoSaveData',
 			type : 'POST',
@@ -920,8 +920,14 @@
 						
 						grid.invalidate();
 			if(args.item["34"] != "New projects"){
-				updateMemCache(e, args, tempKey);
-			
+				if(cell == 9){
+					var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
+					if (userAccepted == true) {
+						updateMemCache(e, args, tempKey);
+					} else {
+					    return;
+					}
+				}
 				
 				
 				var delCell = cell + 1;
@@ -1414,7 +1420,7 @@
 			name : "Total",
 			field : 3,
 			width : 140,
-			editor : Slick.Editors.Text
+			editor : Slick.Editors.FloatText
 		}, {
 			id : 2,
 			name : "Allocation %",
@@ -1527,14 +1533,14 @@
 	    
 	    m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
-			if(args.row == 0 && (args.cell==0 || args.cell==1 || args.cell==2)){
-				return false;
-			}
-			if(args.row!=0){
 			var cell = args.cell+1;
 			var row = args.row;
 			var pRow=row+1;
 			
+			if(args.row == 0 && (args.cell==0 || args.cell==1 || args.cell==2)){
+				return false;
+			}
+			if(args.row!=0){
 			
 			if(cell==1){
 				m_data[row]["4"] = m_data[row-1]["4"];
