@@ -47,6 +47,7 @@ public interface BudgetConstants {
 	public static final int CELL_REMARKS = 13;
 	public static final String isMultiBrand = "37";
 	public static final String multiBrandInput = "36";
+	public static final String MAP_TYPE = "mapType";
 	
 	// New Store Report
 	

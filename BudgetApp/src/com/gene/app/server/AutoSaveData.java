@@ -33,6 +33,7 @@ public class AutoSaveData extends HttpServlet {
 		HttpSession session = req.getSession();
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
 		String objarray = "[]";
+		String mapType = req.getParameter(BudgetConstants.MAP_TYPE).toString();
 		//String sessionObjArray = (String)session.getAttribute("objArray");
 		boolean fromSession = false;
 		if (req.getParameter(BudgetConstants.objArray) != null) {
@@ -92,10 +93,15 @@ public class AutoSaveData extends HttpServlet {
 						} else {
 							Map<String, Double> plannedMap = gtfReportObj
 									.getPlannedMap();
+							Map<String, Double> accrualMap = gtfReportObj
+									.getAccrualsMap();
 							if (plannedMap != null) {
+								
 								oldPlannedValue = plannedMap.get(BudgetConstants.months[Integer
 										.parseInt(cellNum)]);
+								
 								newPlannedValue = Double.parseDouble(cellValue);
+								
 								brand = gtfReportObj.getBrand();
 								summaryObj = budgetMap.get(brand);
 								if(summaryObj!=null){
@@ -107,6 +113,11 @@ public class AutoSaveData extends HttpServlet {
 								plannedMap.put(BudgetConstants.months[Integer
 										.parseInt(cellNum)], Double
 										.parseDouble(cellValue));
+								if(mapType.equalsIgnoreCase("accrual")){
+									accrualMap.put(BudgetConstants.months[Integer
+																			.parseInt(cellNum)], newPlannedValue);
+									gtfReportObj.setAccrualsMap(accrualMap);;
+								}
 								gtfReportObj.setPlannedMap(plannedMap);
 								gtfReportMap.put(keyNum, gtfReportObj);
 								//editedGtfReportMap.put(keyNum, gtfReportObj);

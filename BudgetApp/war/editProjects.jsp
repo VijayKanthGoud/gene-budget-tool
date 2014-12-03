@@ -476,16 +476,19 @@
 		var delCell = cell + 1;
 		var row = args.row;
 		var poNum = 0;
+		
 		if ($('#hideColumns').is(":checked")) {
 			delCell = cell + numHideColumns;
 		} else {
 			delCell = cell + 2;
 		}
+		
+		
 		if(delCell == 11){
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
 		if (!userAccepted) {
 			data[row][delCell]="";
-			alert("Enter a valid brand.");
+			grid.invalidate();
 	        grid.gotoCell(row, delCell, true);
 		    return;
 		}
@@ -500,26 +503,38 @@
 		}
 		var cellValue = item[delCell];
 		var cellNum = delCell - 12;
-
-		console.log(args.item);
 		
-		key = item[0];
+		
+		console.log(args.item);
+		key = item[34];
 		var aSaveData=[];
 		var iCnt=0;
+		if( delCell == 25){
+ 			var aSave = (aSaveData[0] = {});
+ 			aSave[0] = key;
+	 		aSave[1] = cellValue;
+ 		}else{
  		for(var i=0;i<data.length;i++){
 			var d = data[i];
-	 		if(key== d[34] && d[11]=="Planned" && cell != 9){
+			if(key== d[34] && d[11]=="Accrual" && delCell > 11 && delCell< 24 && item[11]=='Accrual'){
+				d[delCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);;
+			}
+			
+	 		if(key== d[34] && d[11]=="Planned" &&  delCell > 11 && delCell< 24){
 		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[0];
+		 		aSave[0] = d[34];
 		 		if(d[7] == 0.0){
 				 d[7]=100.0;
 		 		}
+		 		if(item[11]=='Accrual'){
+					d[delCell]=parseFloat(cellValue).toFixed(2);
+				}
 		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 		 		d[delCell]=aSave[1];
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Planned" && cell == 9){
 		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[0];
+		 		aSave[0] = d[34];
 		 		if(poNum != 0){
 		 			d[8] = poNum
 		 		}
@@ -527,13 +542,15 @@
 		 		iCnt++;
 	 		}
 	}
+ 		}
 		$.ajax({
 			url : '/AutoSaveData',
 			type : 'POST',
 			dataType : 'text',
 			data : {
 				celNum : cellNum,
-				objarray : JSON.stringify(aSaveData)
+				objarray : JSON.stringify(aSaveData),
+				mapType : item[11]
 			},
 			success : function(result) {
 				$('#statusMessage').text("All changes saved successfully!")
@@ -648,6 +665,7 @@
     				d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
     				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
     				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    				d[41]="<%=gReport.getPercent_Allocation()%>";
     				if(<%=gReport.getMultiBrand()%> == true){
     					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				}else{
@@ -670,7 +688,8 @@
   						d[cnt]=" "; 
   					}
    				<%if(idCounter%4 == 1){%>
-   				if(gmemoriID.indexOf(".") == -1){
+   				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
+   				if(gmemoriID.indexOf(".") == -1 ){
    				d[11]="Benchmark";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
@@ -705,7 +724,8 @@
    				}
    				<%} if(idCounter%4 == 2){%>
 				d[11]="Accrual";
-				if(d[26]!="New"){
+				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
+				if(d[26]!="New" && gmemoriID.indexOf(".") == -1 ){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
 					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
 					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
@@ -739,7 +759,8 @@
    
    				<%} if(idCounter%4 == 3){%>
 				d[11]="Variance";
-				if(d[26]!="New"){
+				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
+				if(d[26]!="New" && gmemoriID.indexOf(".") == -1 ){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
 					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
 					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
@@ -925,20 +946,7 @@
 						
 						grid.invalidate();
 			if(args.item["34"] != "New projects"){
-				/* if(cell == 9){
-					var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
-					if (userAccepted == true) {
-						updateMemCache(e, args, tempKey);
-					} else {
-						data[row][cell]="";
-						alert("Enter a valid brand.");
-				        m_grid.gotoCell(row, 0, true);
-					    return;
-					}
-				}else{ */
 					updateMemCache(e, args, tempKey);
-				/* } */
-				
 				
 				var delCell = cell + 1;
 				if ($('#hideColumns').is(":checked")) {
@@ -1256,8 +1264,7 @@
 			var cols = grid.getColumns();
 	
 			if(args.item["34"]!="New projects" ){
-					
-				if(args.item["0"].indexOf(".") != -1){
+				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;
 				}
 				
@@ -1277,7 +1284,7 @@
 				}
 				for (var i = month; i < 12; i++) {
 					if (cols[cell].name == monthArray[i]
-							&& args.item["11"] == "Planned" && args.item["26"] !="Total") {
+							&& ((args.item["11"] == "Planned" && args.item["26"] !="Total") || (args.item["11"] == "Accrual" && args.item["26"] =="Active"))) {
 						return true;
 					} 
 				}
@@ -1378,7 +1385,8 @@
 					data : {
 						key : "",
 						cellValue : "",
-						celNum : ""
+						celNum : "",
+						mapType: ""
 					},
 					success : function(result) {
 						$('#statusMessage').text(
