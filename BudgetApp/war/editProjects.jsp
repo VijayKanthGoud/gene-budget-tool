@@ -1537,7 +1537,7 @@
 			var row = args.row;
 			var pRow=row+1;
 			
-			if(args.row == 0 && (args.cell==0 || args.cell==1 || args.cell==2)){
+			if(args.row == 0 && (args.cell==0 || args.cell==2)){
 				return false;
 			}
 			if(args.row!=0){
@@ -1561,9 +1561,7 @@
 			}
 			
 			}
-			 if(args.row == 0 && (cell!=4 && cell!=5)){
-				return false;
-			}
+			
 			return true;
 			
 		});
