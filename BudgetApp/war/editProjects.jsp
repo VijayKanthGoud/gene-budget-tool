@@ -392,7 +392,8 @@
 		enableCellNavigation : true,
 		asyncEditorLoading : false,
 		autoEdit : false,
-		frozenColumn : 3
+		frozenColumn : 3,
+		enableColumnReorder: false
 	};
 
 
@@ -1404,7 +1405,8 @@
 	    enableAddRow: true,
 	    enableCellNavigation: true,
 	    asyncEditorLoading: false,
-	    autoEdit: false
+	    autoEdit: false,
+	    enableColumnReorder: false
 	  };
 	  var sum = 0.0;
 	  var m_columns = [
