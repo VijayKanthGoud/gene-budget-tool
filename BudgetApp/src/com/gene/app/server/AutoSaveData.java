@@ -95,6 +95,10 @@ public class AutoSaveData extends HttpServlet {
 									.getPlannedMap();
 							Map<String, Double> accrualMap = gtfReportObj
 									.getAccrualsMap();
+							Map<String, Double> varianceMap = gtfReportObj
+									.getVariancesMap();
+							Map<String, Double> benchMarkMap = gtfReportObj
+									.getBenchmarkMap();
 							if (plannedMap != null) {
 								
 								oldPlannedValue = plannedMap.get(BudgetConstants.months[Integer
@@ -108,7 +112,7 @@ public class AutoSaveData extends HttpServlet {
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
 								summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldPlannedValue);
-								summaryObj.setVarianceTotal(summaryObj.getVarianceTotal()-newPlannedValue+oldPlannedValue);
+								summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
 								}
@@ -118,7 +122,11 @@ public class AutoSaveData extends HttpServlet {
 								if(mapType.equalsIgnoreCase("accrual")){
 									accrualMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);
-									gtfReportObj.setAccrualsMap(accrualMap);;
+									varianceMap.put(BudgetConstants.months[Integer
+																			.parseInt(cellNum)], benchMarkMap.get(BudgetConstants.months[Integer
+																			.parseInt(cellNum)]) - newPlannedValue);
+									gtfReportObj.setAccrualsMap(accrualMap);
+									gtfReportObj.setVariancesMap(varianceMap);
 								}
 								gtfReportObj.setPlannedMap(plannedMap);
 								gtfReportMap.put(keyNum, gtfReportObj);

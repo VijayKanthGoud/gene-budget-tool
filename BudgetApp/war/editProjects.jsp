@@ -7,6 +7,7 @@
 
 
 <%
+	String color ="yellow";
 	List<GtfReport> gtfReports = (List<GtfReport>) request
 			.getAttribute("gtfreports");
 	for (GtfReport report : gtfReports) {
@@ -109,9 +110,10 @@
 									<%-- document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>; --%>
 									$('#totalBudget').val("<%= budgetSummary.getTotalBudget()%>");
 									$('#plannedTotal').text("<%= Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
-									$('#budgetLeftToSpend').text("<%= Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%>");
+									$('#budgetLeftToSpend').text("<%= Math.round(budgetSummary.getTotalBudget() -budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
 									$('#accrualTotal').text("<%= Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%>");
 									$('#varianceTotal').text("<%= Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%>"); 
+									<% color=(budgetSummary.getVarianceTotal()/budgetSummary.getTotalBudget() *100) < 5?"yellow":  "#00FFFF";%>
 								}else{
 									<%budgetSummary = new BudgetSummary();%>
 								}
@@ -157,9 +159,10 @@
                                  <td>Accrual:</td><td><span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           
-                          <%
-                                 String color=budgetSummary.getPercentageVarianceTotal() < 5?"yellow":  "#00FFFF";
-                          %>
+                          <%-- <%
+                          System.out.println(budgetSummary.getVarianceTotal()+":::"+ budgetSummary.getTotalBudget());
+                                  color=(budgetSummary.getVarianceTotal()/budgetSummary.getTotalBudget() *100) < 5?"yellow":  "#00FFFF";
+                          %> --%>
                            <tr>
                                  <!-- td style="padding-left: 20px;"><span
                                         style="background: <%=color%>;color:black">2017</span></td> -->
@@ -505,7 +508,6 @@
 		var cellValue = item[delCell];
 		var cellNum = delCell - 12;
 		
-		
 		console.log(args.item);
 		key = item[34];
 		var aSaveData=[];
@@ -517,8 +519,15 @@
  		}else{
  		for(var i=0;i<data.length;i++){
 			var d = data[i];
-			if(key== d[34] && d[11]=="Accrual" && delCell > 11 && delCell< 24 && item[11]=='Accrual'){
-				d[delCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);;
+			if(key== d[34] && delCell > 11 && delCell< 24 && item[11]=='Accrual'){
+				if(d[11]=="Accrual"){
+				d[delCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
+				}else if(d[11]=="Variance"){
+					if( item[43]!='undefined' ||item[43]=="" ){
+						item[43]=0.0;
+					}
+					d[delCell] = parseFloat(d[delCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
+				}
 			}
 			
 	 		if(key== d[34] && d[11]=="Planned" &&  delCell > 11 && delCell< 24){
@@ -583,9 +592,14 @@
 				value = obj.budgetMap[key];
 				$('#totalBudget').val((value.totalBudget).toFixed(2));
 				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
-				$('#budgetLeftToSpend').text((value.budgetLeftToSpend).toFixed(2));
+				$('#budgetLeftToSpend').text((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2));
 				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
 				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
+				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
+					<% color= "yellow"; %>
+				}else{
+					<% color= "#00FFFF" ;%>
+				}
 			}
 		}
 		}
@@ -1264,7 +1278,16 @@
 			var row = args.row;
 			var cols = grid.getColumns();
 	
+			var delCell = cell + 1;
+			if ($('#hideColumns').is(":checked")) {
+				delCell = cell + numHideColumns;
+			} else {
+				delCell = cell + 2;
+			}
 			if(args.item["34"]!="New projects" ){
+				if(args.item["11"] == "Accrual" && args.item["26"]=="Active" && delCell>11 && delCell<24){
+					args.item["43"] = args.item[delCell];
+				}
 				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;
 				}

@@ -712,13 +712,21 @@ public class DBUtil {
 			if (!gtfReports.isEmpty()) {
 				for (GtfReport gtfReport : gtfReports) {
 					Map<String, Double> benchMarkMap = new LinkedHashMap<String, Double>();
+					Map<String, Double> accrualMap = new LinkedHashMap<String, Double>();
+					Map<String, Double> varianceMap = new LinkedHashMap<String, Double>();
 					benchMarkMap = gtfReport.getBenchmarkMap();
+					varianceMap = gtfReport.getVariancesMap();
+					accrualMap= gtfReport.getAccrualsMap();
 					for(int iMonths=0;iMonths<BudgetConstants.months.length-1;iMonths++){
 						if(iMonths + 1> month ){
 							benchMarkMap.put(BudgetConstants.months[iMonths], gtfReport.getPlannedMap().get(iMonths));	
+							varianceMap.put( BudgetConstants.months[iMonths],benchMarkMap.get(BudgetConstants.months[iMonths]) - 
+									accrualMap.get(BudgetConstants.months[iMonths]));
 						}
+						
 					}
 					gtfReport.setBenchmarkMap(benchMarkMap);
+					gtfReport.setVariancesMap(varianceMap);
 					gtfMap =  getAllReportDataFromCache(gtfReport.getCostCenter());
 					if(gtfMap ==null ){
 						gtfMap = new LinkedHashMap<String, GtfReport>();
