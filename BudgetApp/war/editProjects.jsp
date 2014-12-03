@@ -110,7 +110,7 @@
 									<%-- document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>; --%>
 									$('#totalBudget').val("<%= budgetSummary.getTotalBudget()%>");
 									$('#plannedTotal').text("<%= Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
-									$('#budgetLeftToSpend').text("<%= Math.round(budgetSummary.getTotalBudget() -budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
+									$('#budgetLeftToSpend').text("<%= Math.round(( (budgetSummary.getTotalBudget() -budgetSummary.getPlannedTotal())*10.0)/10.0 )%>");
 									$('#accrualTotal').text("<%= Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%>");
 									$('#varianceTotal').text("<%= Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%>"); 
 									<% color=(budgetSummary.getVarianceTotal()/budgetSummary.getTotalBudget() *100) < 5?"yellow":  "#00FFFF";%>
@@ -152,7 +152,7 @@
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Unplanned Total:</td><td><span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
+                                 <td>Unplanned Total:</td><td><span id = "budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0) %></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
@@ -192,7 +192,7 @@
  		<input type='button' style='font-size: 12px; height: 25px; width: 160px; background:#005691; color:#FFFFFF' 
  		value='Create Projects' id='topCrtNewProjBtn'/>  
 	<%}%>
-<div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
+<div id="displayGrid" style="width: 100%; height: 51%;  min-height: 300px;"></div>
 
 	<div id="multibrandEdit">
 		<div id="header"
