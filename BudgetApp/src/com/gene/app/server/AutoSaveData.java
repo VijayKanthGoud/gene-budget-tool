@@ -107,6 +107,8 @@ public class AutoSaveData extends HttpServlet {
 								if(summaryObj!=null){
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
+								summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldPlannedValue);
+								summaryObj.setVarianceTotal(summaryObj.getVarianceTotal()-newPlannedValue+oldPlannedValue);
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
 								}
