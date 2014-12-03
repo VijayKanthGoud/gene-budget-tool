@@ -450,7 +450,7 @@ public class DBUtil {
 	}
 	
 	public Map<String,GtfReport> getAllReportsByPrjName(String costCenter,String prjName,String email){
-		Map<String,GtfReport> rptList = getAllReportDataFromCache(BudgetConstants.costCenter);
+		Map<String,GtfReport> rptList = getAllReportDataFromCache(costCenter);
 		Map<String,GtfReport> newRptList = new LinkedHashMap<String, GtfReport>(); 
 		GtfReport gtfRpt = new GtfReport();
 		List<GtfReport> listReports = new ArrayList<GtfReport>();
@@ -532,7 +532,7 @@ public class DBUtil {
 		// prepare BudgetSummaryData
 		Map<String,Map<String,BudgetSummary>> brandlevelBudgetMap = prepareBrandData(costCenterList);
 		// get project list matching the brand
-		Map<String,GtfReport> gtfRptList = getAllReportDataFromCache(BudgetConstants.costCenter);
+		Map<String,GtfReport> gtfRptList = getAllReportDataFromCache(costCenter);
 		Map<String,BudgetSummary> brandMap = null;
 		brandMap = getProjectListByBrand(gtfRptList,brandlevelBudgetMap,costCenter);
 		if(brandMap == null){
@@ -719,11 +719,17 @@ public class DBUtil {
 						}
 					}
 					gtfReport.setBenchmarkMap(benchMarkMap);
+					gtfMap =  getAllReportDataFromCache(gtfReport.getCostCenter());
+					if(gtfMap ==null ){
+						gtfMap = new LinkedHashMap<String, GtfReport>();
+					}
 					gtfMap.put(gtfReport.getgMemoryId(), gtfReport);
+					saveAllReportDataToCache(gtfReport.getCostCenter(), gtfMap);
 				}
 			}
 			pm.makePersistentAll(gtfReports);
-			saveAllReportDataToCache(BudgetConstants.costCenter, gtfMap);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -116,7 +116,7 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setRemarks(remarks);
 				multiBrand = rprtObject.getString(BudgetConstants.isMultiBrand);
 				
-				Map<String,GtfReport> gtfReportMap = util.getAllReportDataFromCache(BudgetConstants.costCenter);
+				Map<String,GtfReport> gtfReportMap = util.getAllReportDataFromCache(user.getCostCenter());
 				Set<String> existingGmemoriIds = gtfReportMap.keySet();
 				if(existingGmemoriIds.contains(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId))){
 					try {

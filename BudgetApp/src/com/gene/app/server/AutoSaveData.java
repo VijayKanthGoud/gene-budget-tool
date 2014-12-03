@@ -69,7 +69,7 @@ public class AutoSaveData extends HttpServlet {
 		try {
 			jsonArray = new JSONArray(objarray);
 			gtfReportMap = util
-					.getAllReportDataFromCache(BudgetConstants.costCenter);
+					.getAllReportDataFromCache(user.getCostCenter());
 			for (int count = 0; count < jsonArray.length(); count++) {
 				rprtArray = jsonArray.getJSONObject(count);
 				keyNum = rprtArray.getString("0");
@@ -119,7 +119,7 @@ public class AutoSaveData extends HttpServlet {
 			}
 				String key = (String) session
 						.getAttribute(BudgetConstants.KEY);
-				util.saveAllReportDataToCache(BudgetConstants.costCenter,
+				util.saveAllReportDataToCache(user.getCostCenter(),
 						gtfReportMap);
 				if (key != null && key.isEmpty()) {
 					key = sessionKey;

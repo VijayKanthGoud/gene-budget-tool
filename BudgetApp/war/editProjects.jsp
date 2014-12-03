@@ -120,7 +120,8 @@
 						} 
 						</script> 
 						
-						
+						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000s)</td> </tr>
+						 <tr>
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
                             <td>Select Brand:</td>
@@ -137,25 +138,23 @@
                             <%}}} %>
                             </select></td>
                         </tr>
-						
-						 <tr>
                                 <!-- td style="padding-left: 20px;">2017</td> -->
                                 <td>Budget:</td>
-                                <td>$<input id = "totalBudget" style="color: #005691" type=text name=type
+                                <td><input id = "totalBudget" style="color: #005691" type=text name=type
                                        maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
                          </tr>
 
 						 <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Planned:</td><td>$<span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+                                 <td>Planned:</td><td><span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Unplanned Total:</td><td>$<span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
+                                 <td>Unplanned Total:</td><td><span id = "budgetLeftToSpend"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></td>
                           </tr>
                           <tr>
                                  <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Accrual:</td><td>$<span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+                                 <td>Accrual:</td><td><span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
                           </tr>
                           
                           <%
@@ -164,8 +163,8 @@
                            <tr>
                                  <!-- td style="padding-left: 20px;"><span
                                         style="background: <%=color%>;color:black">2017</span></td> -->
-                                 <td><span style="background: <%=color%>;color:black">2017 Variance Total:</span></td>
-                                 <td><span style="background: <%=color%>;color:black">$<span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+                                 <td><span style="background: <%=color%>;color:black">Variance Total:</span></td>
+                                 <td><span style="background: <%=color%>;color:black"><span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
                                  </td>
                           </tr>
 
@@ -477,12 +476,22 @@
 		var item = args.item;
 		var delCell = cell + 1;
 		var row = args.row;
+		var poNum = 0;
 		if ($('#hideColumns').is(":checked")) {
 			delCell = cell + numHideColumns;
 		} else {
 			delCell = cell + 2;
 		}
-
+		if(delCell == 11){
+		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
+		if (!userAccepted) {
+			data[row][delCell]="";
+			alert("Enter a valid brand.");
+	        grid.gotoCell(row, delCell, true);
+		    return;
+		}
+		poNum = args.item["8"];
+		}
 		if (delCell == 25) {
 			for (var i = 0; i < totalSize; i++) {
 				if (data[i][31] == item[31]) {
@@ -494,10 +503,7 @@
 		var cellNum = delCell - 12;
 
 		console.log(args.item);
-		var poNum = 0;
-		if(cell == 9){
-			poNum = args.item["8"];
-		}
+		
 		key = item[0];
 		var aSaveData=[];
 		var iCnt=0;
@@ -920,14 +926,19 @@
 						
 						grid.invalidate();
 			if(args.item["34"] != "New projects"){
-				if(cell == 9){
+				/* if(cell == 9){
 					var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
 					if (userAccepted == true) {
 						updateMemCache(e, args, tempKey);
 					} else {
+						data[row][cell]="";
+						alert("Enter a valid brand.");
+				        m_grid.gotoCell(row, 0, true);
 					    return;
 					}
-				}
+				}else{ */
+					updateMemCache(e, args, tempKey);
+				/* } */
 				
 				
 				var delCell = cell + 1;
@@ -1561,7 +1572,7 @@
 			}
 			
 			}
-			
+
 			return true;
 			
 		});

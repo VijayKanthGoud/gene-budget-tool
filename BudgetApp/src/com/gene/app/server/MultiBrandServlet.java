@@ -62,7 +62,7 @@ public class MultiBrandServlet extends HttpServlet {
 			DBUtil util = new DBUtil();
 			JSONObject rprtObject = null;
 			Map<String, GtfReport> rptList = util.getAllReportsByPrjName(
-					BudgetConstants.costCenter, project_Name, email);
+					user.getCostCenter(), project_Name, email);
 			for (Map.Entry<String, GtfReport> rptMap : rptList.entrySet()) {
 				gtfReportListFromDB.add(rptMap.getValue());
 			}
@@ -237,7 +237,6 @@ public class MultiBrandServlet extends HttpServlet {
 			util.removeExistingProject(gtfReportListFromDB);
 			util.generateProjectIdUsingJDOTxn(newGtfReportList);
 			util.storeProjectsToCache(newGtfReportList,user.getCostCenter());
-			//cache.delete(BudgetConstants.costCenter);
 
 		} catch (JSONException e) {
 			e.printStackTrace();

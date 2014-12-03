@@ -34,10 +34,10 @@
 		String logoutLink = "";
 		DBUtil util = new DBUtil();
 		String costCenter="307673";
-		/*UserDataUtil util1 = new UserDataUtil();
+		/* UserDataUtil util1 = new UserDataUtil();
 		util1.insertCCMapping();
 		util1.insertUserRoleInfo();
-		util1.insertBudgetSummary(); */
+		util1.insertBudgetSummary();  */
 		if (userPrincipal != null) {
 			logoutLink = userService.createLogoutURL("/");
 			User user = userService.getCurrentUser();

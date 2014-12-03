@@ -235,7 +235,6 @@ public class StoreReportCreate extends HttpServlet {
                 }
                 util.generateProjectIdUsingJDOTxn(gtfReports);
                 MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
-                cache.delete(BudgetConstants.costCenter);
         }
 
         /**

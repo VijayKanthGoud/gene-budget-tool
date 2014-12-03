@@ -34,26 +34,35 @@ public class GetReport extends HttpServlet {
 			throws IOException {
 		HttpSession session = req.getSession();
 		resp.setContentType(BudgetConstants.contentType);
-		UserService userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
-		String email = userService.getCurrentUser().getEmail();
+		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
+		UserService userService;
+		String email ="";
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
-		gtfReports = util.getAllReportDataFromCache(BudgetConstants.costCenter);
+		
+		if(user==null){
+		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
+		email = userService.getCurrentUser().getEmail();
+		user = util.readUserRoleInfo(email);
+		}else{
+		email = user.getEmail();
+		}
+		gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
 		
 		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
 		Collections.sort( gtfReportList, new Comparator<GtfReport>()
 		        {
 		            public int compare( GtfReport o1, GtfReport o2 )
 		            {
-		            	if((o1.getProjectName()).compareTo(o2.getProjectName()) ==0){
+		            	if((o2.getProjectName()).compareTo(o1.getProjectName()) ==0){
 		        			return (o1.getgMemoryId()).compareTo(o2.getgMemoryId());
 		        		}
-		        		return (o1.getProjectName()).compareTo(o2.getProjectName());
+		        		return (o2.getProjectName()).compareTo(o1.getProjectName());
 		            }
 		        } );
 		gtfReportList = util.calculateVarianceMap(gtfReportList);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, gtfReportList);
 		DBUtil util = new DBUtil();
-		UserRoleInfo user = util.readUserRoleInfo(email);
+		//UserRoleInfo user = util.readUserRoleInfo(email);
 		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
 		BudgetSummary summary = util.readBudgetSummary(user.getCostCenter());
 		req.setAttribute("user", user);
