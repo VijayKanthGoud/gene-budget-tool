@@ -256,7 +256,10 @@
 			"PO Number", "PO Desc", "Vendor", "$ in 1000s", "JAN", "FEB",
 			"MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
 			"DEC", "Total", "Remark" ];
-
+	var noOfNew = 0;
+	var noOfActive = 0;
+	var noOfClosed = 0;
+	var newExist=false;
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
@@ -316,20 +319,16 @@
 				.setGrouping([{
 					getter : 26,
 					formatter : function(g) {
-						var noOfNew = 0;
-						var noOfActive = 0;
-						var noOfClosed = 0;
+						noOfNew = 0;
+						noOfActive = 0;
+						noOfClosed = 0;
 						for(var cnt=0; cnt<data.length; cnt++){
 							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("New") != -1 && data[cnt][1] != "" && data[cnt][1] != " " && data[cnt][34]!="New projects" ){
 								noOfNew++;
 							}
-						}
-						for(var cnt=0; cnt<data.length; cnt++){
 							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("Active") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
 								noOfActive++;
 							}
-						}
-						for(var cnt=0; cnt<data.length; cnt++){
 							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("Closed") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
 								noOfClosed++;
 							}
@@ -382,9 +381,11 @@
 				
 				
 				]);
-
-		dataView.collapseGroup("Active");
-		dataView.collapseGroup("Closed");
+		 if(newExist == false){
+			dataView.collapseGroup("New");
+		}
+		 dataView.collapseGroup("Active");
+		 dataView.collapseGroup("Closed");
 	}
 
 	
@@ -421,7 +422,6 @@
 
 	// Filter data acording to search field
 	function searchProject(item) {
-		//console.log("item:"+JSON.stringify(item));
 		var status = true;
 		if (item[33] != "New") {
 			status = false;
@@ -532,7 +532,7 @@
 			
 	 		if(key== d[34] && d[11]=="Planned" &&  delCell > 11 && delCell< 24){
 		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[34];
+		 		aSave[0] = d[27];
 		 		if(d[7] == 0.0){
 				 d[7]=100.0;
 		 		}
@@ -544,7 +544,7 @@
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Planned" && cell == 9){
 		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[34];
+		 		aSave[0] = d[27];
 		 		if(poNum != 0){
 		 			d[8] = poNum
 		 		}
@@ -617,15 +617,32 @@
 		var indent = 0;
 		var parents = [];
 		
+		<% 	if(gtfReports == null || gtfReports.isEmpty()) { %>
+		createNewProjects();
+		newExist=true;
+		<%}else{
+		for(int counter = 0; counter< gtfReports.size(); counter++ ){%>
+			if("<%=gtfReports.get(counter).getStatus()%>" == "New"){
+				newExist=true;
+			}
+		<%}
+		}%>
+		if(newExist ==false){
+			dummyNewProjects();
+		}
+		
+		var jsId = -1;
+		var dLength= data.length;
 		// prepare the data
-		<%int idCounter = -1;
+		<%
 		String requestor = "";
 		for (int i = 0; i < gtfReports.size(); i++) {
 			boolean isFirst = true;
 			for (int count = 0; count < 4; count++) {%>
-				var d = (data["<%=++idCounter%>"] = {});
+				var d = (data[++jsId + dLength] = {});
 			 	var parent;
-    	   		d["id"] = "id_" + "<%=idCounter%>";
+			 	
+    	   		d["id"] = "id_" + (parseInt(jsId) + parseInt(dLength));
     	    	d["indent"] = indent;
     	    	d["parent"] = parent;
     	    	d[0]=" ";
@@ -702,7 +719,7 @@
   				for(var cnt=1;cnt<11;cnt++){
   						d[cnt]=" "; 
   					}
-   				<%if(idCounter%4 == 1){%>
+   				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if(gmemoriID.indexOf(".") == -1 ){
    				d[11]="Benchmark";
@@ -737,7 +754,7 @@
 						}
 					d[33]="";
    				}
-   				<%} if(idCounter%4 == 2){%>
+   				} if(jsId % 4 == 2){
 				d[11]="Accrual";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New" && gmemoriID.indexOf(".") == -1 ){
@@ -772,7 +789,7 @@
     					d[33]=" ";
     					}
    
-   				<%} if(idCounter%4 == 3){%>
+   				} if(jsId % 4 == 3){
 				d[11]="Variance";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New" && gmemoriID.indexOf(".") == -1 ){
@@ -806,7 +823,7 @@
     							}
     						d[33]=" ";
     						}
-   				<%}%>
+   				}
     
     				<%} %>
     				d[40] = d[11];
@@ -849,7 +866,7 @@
 			}
 				d[40] = d[11];
 			for (var j = 0; j < totalSize ; j++) {
-				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][0].indexOf(".") ==-1){
+				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && data[j][0].indexOf(".") ==-1){
 				d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 				d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
 				d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
@@ -878,7 +895,7 @@
 			d[31] = " ";
 			d[32] = " ";
 			d[33] = "New";
-			d[34] = " ";
+			d[34] = ":";
 			d[35]= " ";
 			d[36]= " ";
 			d[37]= " ";
@@ -912,6 +929,7 @@
 		dataView = new Slick.Data.DataView({
 			inlineFilters : true
 		});
+		
 		dataView.beginUpdate();
 		dataView.setItems(data);
 		dataView.setFilter(searchProject);
@@ -1123,7 +1141,7 @@
 		// Handeler for Create New Project button
 		$(document).on('click', '#crtNewProjBtn',
 			    function() {
-				 	createNewProjects();
+			createIntProjects();
 			    }
 		);
 		$(document).on('click', '#topCrtNewProjBtn',
@@ -1137,17 +1155,17 @@
 			$('#topCrtNewProjBtn').hide();
 			$('#noData').hide();
 			var length= data.length;
-			var item ={id:"id_"+length,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
+			var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
 				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
 			dataView.insertItem(0,item);
 		if(addsave ==0){
-		    var saveClose ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+		    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 						,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
-			var item2 ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+			var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
@@ -1155,14 +1173,79 @@
 						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+			var item4 ={id:"id_"+length+4,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+				,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
+					,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Closed",27:"",28:"",29:"",30:""
+						,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+			var item5 ={id:"id_"+length+5,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+				,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
+				,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
+						,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+			dataView.insertItem(1,item3);
+		    dataView.insertItem(2,saveClose);
+		    dataView.insertItem(3,item2);
+		    dataView.insertItem(4,item4);
+		    dataView.insertItem(5,item5);
+		}
+		    addsave=addsave+1;
+		    dataView.refresh(); 
+		    data=dataView.getItems();
+		    
+		}
+		
+		function createIntProjects(){
+			if(newExist == false){
+				dataView.deleteItem("id_0");
+				newExist = true;
+				dataView.expandGroup("New");
+			}
+			$('#displayGrid').show();
+			$('#topCrtNewProjBtn').hide();
+			$('#noData').hide();
+			var length= data.length;
+			var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
+				,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
+			dataView.insertItem(0,item);
+		if(addsave ==0){
+		    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+						,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+			var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+			var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+		
 			dataView.insertItem(1,item3);
 		    dataView.insertItem(2,saveClose);
 		    dataView.insertItem(3,item2);
 		}
 		    addsave=addsave+1;
 		    dataView.refresh(); 
-		
+		    data=dataView.getItems();
+		    
 		}
+		
+		function dummyNewProjects(){
+			
+			var length= data.length;
+			var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:" ",4:" ",5:"",6:" ",7:"",8:"",9:"",10:""
+				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+						,31:"",32:" ",33:"New",34:"",35:"",37:false,38:"",39:"",40:""};
+			dataView.insertItem(0,item);
+		    dataView.refresh(); 
+		    data=dataView.getItems();
+		    
+		}
+		
+		
 		
 		// Handeler for click on submit and cancel button under new project creation
 		$(document).on('click', '#submitProjBtn',
@@ -1388,10 +1471,10 @@
 			enableForHeaderCells : true
 		}));
 		grid.render();
-
+<%-- 
 		<% if(gtfReports == null || gtfReports.isEmpty()) { %>
 			$('#displayGrid').hide();
-		<% } %>
+		<% } %> --%>
 	})
 
 	// Persist the data to datastore while moving to other page or closing the application
