@@ -614,7 +614,7 @@
 	      };
 	  
 	      this.serializeValue = function () {
-	        return parseFloat($input.val(), 10) || 0;
+	        return parseFloat($input.val().trim()) || 0;
 	      };
 	  
 	      this.applyValue = function (item, state) {
@@ -675,7 +675,7 @@
 	    };
 
 	    this.serializeValue = function () {
-	      return parseInt($input.val(), 10) || 0;
+	      return parseInt($input.val().trim()) || 0;
 	    };
 
 	    this.applyValue = function (item, state) {
@@ -687,10 +687,10 @@
 	    };
 
 	    this.validate = function () {
-	      if (isNaN($input.val()) || $input.val().length < 6) {
+	      if ( ($input.val() != "") && (isNaN($input.val()) ||  $input.val().trim().length < 6)) {
 	        return {
 	          valid: false,
-	          msg: "Please enter a valid integer"
+	          msg: "Please enter 6 digit integer."
 	        };
 	      }
 

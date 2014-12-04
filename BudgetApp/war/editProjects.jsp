@@ -1140,6 +1140,22 @@
 			}
 		});
 		
+		grid.onValidationError.subscribe(function(e, args) {
+	        var validationResult = args.validationResults;
+	        var activeCellNode = args.cellNode;
+	        var editor = args.editor;
+	        var errorMessage = validationResult.msg;
+	        var valid_result = validationResult.valid;
+	        if (!valid_result) {
+	        	alert(errorMessage);
+	          	$(activeCellNode).attr("title", errorMessage);
+	        }
+	        else {
+	           $(activeCellNode).attr("title", "");
+	        }
+
+	    });
+		
 		// Handeler for Create New Project button
 		$(document).on('click', '#crtNewProjBtn',
 			    function() {
@@ -1273,7 +1289,7 @@
 		function submitProjects(){
 			var errStr = 0;
 			var storeData=[];
-			var flag = true;
+			var flag = false;
 			for(var i=0;i<addsave;i++){
 	
 				if( data[i][0] == 'undefined' || data[i][0].toString().trim() ==""){
@@ -1284,6 +1300,10 @@
 				}
 				if( data[i][6] == 'undefined' || data[i][6].toString().trim() ==""){
 					errStr += 4;	
+				}
+				if(data[i][6].toString().toLowerCase().indexOf("mb")!=-1 && data[i][37] == false){
+					flag=true;
+					break;
 				}
 				switch(errStr) {
 				case 0:
@@ -1311,6 +1331,10 @@
 			        break;
 				}
 				storeData[i]=data[i];
+			}
+			if(flag == true){
+				alert("Please add sub-projects to your multibrand project: "+ data[i][2]);
+				return;
 			}
 			if(errStr == 0){
 			 $.ajax({
@@ -1561,13 +1585,59 @@
 	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
 	            			"Neuroscience Pipeline", "Tarceva" ];  */
 	  function saveAndClose(){
-	     if(availableTags.indexOf("Total Products(MB)")==-1){
-	         availableTags.splice(0, 0, "Total Products(MB)");
-	     }
+	     
 		//alert("m_data"+JSON.stringify(m_data));
 		// console.log(JSON.stringify(m_data));
 		//return;
+		var errStr ="";
+		var i=0;
+		  for(i=0;i<m_data.length;i++){
+			  var d = m_data[i];
+			  errStr ="";
+			  if(m_data[i][4]!="" && m_data[i][4]!="undefined"){
+				  if(m_data[i][7].trim()=="" || m_data[i][7]=="undefined"){
+					  errStr=errStr +"Project Owner "
+				  }
+				  if(m_data[i][5].toString().trim()=="" || m_data[i][5]=="undefined"){
+					  if(errStr.length >0){
+						  errStr =errStr+", "
+					  }
+					  errStr=errStr +"gMemori Id "
+				  }
+				  if(m_data[i][1].trim()=="" || m_data[i][1]=="undefined"){
+					  if(errStr.length >0){
+						  errStr =errStr+", "
+					  }
+					  errStr=errStr +"Brand "
+				  }
+				  if(m_data[i][3].toString().trim()=="" || m_data[i][3]=="undefined"){
+					  if(errStr.length >0){
+						  errStr =errStr+", "
+					  }
+					  errStr=errStr +"Total "
+				  }
+				  if(errStr.length >0){
+					  break;
+				  }
+			  }else{
+				  break;
+			  }
+		  }
+		  if(errStr.length >0 || i==1){
+			  if(errStr.length>0){
+			  errStr=errStr +" cannot be blank."
+			  }else{
+				  errStr="Please enter atleast two sub-projects." 
+			  }
+			  alert(errStr);
+			  return;
+		  }
+		  
+		  if(availableTags.indexOf("Total Products(MB)")==-1){
+		         availableTags.splice(0, 0, "Total Products(MB)");
+		     }
 		  for(var i=0;i<m_data.length;i++){
+			  
 			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
 				  m_data[i][4] = m_data[0][4];
 			  }

@@ -40,6 +40,7 @@ public class MultiBrandServlet extends HttpServlet {
 		// String parent_key = req.getParameter("parentItem").toString();
 		String project_id = "";
 		String project_Name = "";
+		String project_Owner = "";
 		String brand = "";
 		String totalValue = "";
 		String gMemoriId = "";
@@ -124,6 +125,7 @@ public class MultiBrandServlet extends HttpServlet {
 				project_id = rprtObject.getString("0");
 				project_Name = rprtObject.getString("4");
 				brand = rprtObject.getString("1");
+				project_Owner = rprtObject.getString("7");
 				totalValue = rprtObject.getString("3");
 				percentage_Allocation = Double.parseDouble(rprtObject
 						.getString("2"));
@@ -153,7 +155,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setPoNumber(gtfRpt.getPoNumber());
 						newgtfReport.setProject_WBS(gtfRpt.getProject_WBS());
 						newgtfReport.setRemarks(gtfRpt.getRemarks());
-						newgtfReport.setRequestor(gtfRpt.getRequestor());
+						newgtfReport.setRequestor(project_Owner);
 						newgtfReport.setStatus(gtfRpt.getStatus());
 						newgtfReport.setSubActivity(gtfRpt.getSubActivity());
 						newgtfReport.setVendor(gtfRpt.getVendor());
@@ -202,7 +204,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfRpt.setPoNumber(gtfRpt.getPoNumber());
 						newgtfRpt.setProject_WBS(gtfRpt.getProject_WBS());
 						newgtfRpt.setRemarks(gtfRpt.getRemarks());
-						newgtfRpt.setRequestor(gtfRpt.getRequestor());
+						newgtfRpt.setRequestor(project_Owner);
 						newgtfRpt.setStatus(gtfRpt.getStatus());
 						newgtfRpt.setSubActivity(gtfRpt.getSubActivity());
 						newgtfRpt.setVendor(gtfRpt.getVendor());
