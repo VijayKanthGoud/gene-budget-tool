@@ -265,7 +265,7 @@
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
 		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink},
+		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText },
 		{ id : 1, name : columnNames[1], field : 1, width : 90},
 		{ id : 3, name : columnNames[3], field : 3, width : 90, editor : Slick.Editors.Text},
@@ -294,7 +294,7 @@
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
 		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink},
+		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText},
 		{ id : 1, name : columnNames[1], field : 1, width : 90},
 		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
@@ -404,8 +404,7 @@
 	// Display total for active new and closed projects (roll up total)
 	function sumTotalsFormatter(totals, columnDef) {
 		var val = totals.sum && totals.sum[columnDef.field];
-		if(columnDef.field==11 && totals['group']['value'].toLowerCase() != 'Total'
-			.toLowerCase()){
+		if(columnDef.field==11 && totals['group']['value'].toLowerCase() != 'total'){
 			return "<span style='color:rgb(168, 39, 241)'>" + "Totals (Planned)"
 			+ "</span> ";
 		}
@@ -413,7 +412,7 @@
 				&& totals['group']['value'].toLowerCase() != 'Total'
 						.toLowerCase()
 						) {
-			return "<span style='color:rgb(168, 39, 241)'>"
+			return "<span style='color:rgb(168, 39, 241)'>" 
 					+ ((Math.round(parseFloat(val) * 100) / 100)).toFixed(2)
 					+ "</span> ";
 		}
