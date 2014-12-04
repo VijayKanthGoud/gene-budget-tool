@@ -169,7 +169,7 @@ public class StoreReport extends HttpServlet {
 			}
 		}
 		gtfReport.setPlannedMap(plannedMap);
-		gtfReport.setBenchmarkMap(setZeroMap);
+		gtfReport.setBenchmarkMap(plannedMap);
 		gtfReport.setAccrualsMap(setZeroMap);
 		gtfReport.setVariancesMap(setZeroMap);
 		gtfReport.setMultiBrand(isMultibrand);
@@ -238,7 +238,7 @@ public class StoreReport extends HttpServlet {
 		}
 		plannedMap.put(BudgetConstants.months[BudgetConstants.months.length-1], Double.parseDouble(multiBrandObject.getString("3")));
 		gtfReport.setPlannedMap(plannedMap);
-		gtfReport.setBenchmarkMap(setZeroMap);
+		gtfReport.setBenchmarkMap(plannedMap);
 		gtfReport.setAccrualsMap(setZeroMap);
 		gtfReport.setVariancesMap(setZeroMap);
 		gtfReport.setMultiBrand(true);

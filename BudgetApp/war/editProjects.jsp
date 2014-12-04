@@ -550,6 +550,8 @@
 		 		}
 		 		aSave[1] = d[8];
 		 		iCnt++;
+	 		}else if(key== d[34] && d[11]=="Benchmark" &&  delCell > 11 && delCell< 24 && d[26]=="New"){
+	 			d[delCell]=parseFloat(cellValue).toFixed(2);
 	 		}
 	}
  		}
