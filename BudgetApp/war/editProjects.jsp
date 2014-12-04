@@ -857,7 +857,7 @@
 			    	d[11] = "Benchmark";
 			        break;
 			    case 2:
-			    	d[11] = "Accurals";
+			    	d[11] = "Accrual";
 			        break;
 			    case 3:
 			    	d[11] = "Variance";
@@ -997,31 +997,28 @@
 					}
 				}
 				
-				switch(item[11]) {
-			    case "Planned":
-			    	dataLength = data.length - 4;
-			        break;
-			    case "Benchmark":
-			    	dataLength = data.length - 3;
-			        break;
-			    case "Accurals":
-			    	dataLength = data.length - 2;
-			        break;
-			    case "Variance":
-			    	dataLength = data.length - 1;
-			        break;
-			    default :
-			    	dataLength = data.length - 4;
-		        	break;
-			}
-				
-				var verTotal=0.0;
+				var verPlannedTotal=0.0;
+				var verBenchmarkTotal=0.0;
+				var verAccrualTotal=0.0;
+				var verVarianceTotal=0.0;
 				for (var j = 0; j < data.length ; j++) {
-					if(data[j][26] != 'Total' && data[j][11]=="Planned" &&  data[dataLength][11]==item[11] && data[j][0]!= 'undefined' && data[j][0].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
-						verTotal= parseFloat(verTotal) + parseFloat(data[j][delCell]);
+					if(data[j][26] != 'Total' && data[j][11]=="Planned"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
+						verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
+					}
+					if(data[j][26] != 'Total' && data[j][11]=="Benchmark"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
+						verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][delCell]);
+					}
+					if(data[j][26] != 'Total' && data[j][11]=="Accrual" && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
+						verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][delCell]);
+					}
+					if(data[j][26] != 'Total' && data[j][11]=="Variance" && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
+						verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][delCell]);
 					}
 				}
-				data[dataLength][delCell]=verTotal;
+				data[data.length - 4][delCell]=verPlannedTotal;
+				data[data.length - 3][delCell]=verBenchmarkTotal;
+				data[data.length - 2][delCell]=verAccrualTotal;
+				data[data.length - 1][delCell]=verVarianceTotal;
 				grid.invalidate();
 				dataView.refresh();
 			}
