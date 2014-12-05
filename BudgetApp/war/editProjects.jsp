@@ -524,7 +524,7 @@
 				if(d[11]=="Accrual"){
 				d[delCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
 				}else if(d[11]=="Variance"){
-					if( item[43]!='undefined' ||item[43]=="" ){
+					if( item[43]=='undefined' ||item[43]=="" ){
 						item[43]=0.0;
 					}
 					d[delCell] = parseFloat(d[delCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
@@ -1447,6 +1447,7 @@
 			if(args.item["34"]!="New projects" ){
 				if(args.item["11"] == "Accrual" && args.item["26"]=="Active" && delCell>11 && delCell<24){
 					args.item["43"] = args.item[delCell];
+					grid.invalidate();
 				}
 				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;

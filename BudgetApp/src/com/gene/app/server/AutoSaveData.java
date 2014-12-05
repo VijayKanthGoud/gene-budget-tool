@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import sun.swing.AccumulativeRunnable;
+
 import com.gene.app.bean.BudgetSummary;
 import com.gene.app.bean.GtfReport;
 import com.gene.app.bean.UserRoleInfo;
@@ -56,6 +58,7 @@ public class AutoSaveData extends HttpServlet {
 		double oldPlannedValue = 0.0;
 		double newPlannedValue = 0.0;
 		double plannedTotal = 0.0;
+		double oldAccrualValue = 0.0;
 		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
 		BudgetSummary summary = new BudgetSummary();
 		if(user != null && user.getCostCenter() != null &&util.getSummaryFromCache(user.getCostCenter()) != null){
@@ -107,6 +110,7 @@ public class AutoSaveData extends HttpServlet {
 									.getVariancesMap();
 							Map<String, Double> benchMarkMap = gtfReportObj
 									.getBenchmarkMap();
+							oldAccrualValue=0.0;
 							if (plannedMap != null) {
 								
 								oldPlannedValue = plannedMap.get(BudgetConstants.months[Integer
@@ -119,8 +123,10 @@ public class AutoSaveData extends HttpServlet {
 								if(summaryObj!=null){// && !(gtfReportObj.getgMemoryId().contains("."))){
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
-								if(!(gtfReportObj.getgMemoryId().contains("."))){
-								summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldPlannedValue);
+								if(!(gtfReportObj.getgMemoryId().contains(".")) && gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
+									oldAccrualValue = accrualMap.get(BudgetConstants.months[Integer
+									                										.parseInt(cellNum)]);
+								summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldAccrualValue);
 								summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
 								}
 								budgetMap.put(brand, summaryObj);

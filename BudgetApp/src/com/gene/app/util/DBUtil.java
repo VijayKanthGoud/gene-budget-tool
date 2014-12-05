@@ -677,17 +677,17 @@ public class DBUtil {
 												+ gtfReport.getPlannedMap().get(
 														BudgetConstants.months[j]);
 									}
-									if (gtfReport.getBenchmarkMap() != null) {
+									if (gtfReport.getBenchmarkMap() != null && !(gtfReport.getgMemoryId().contains(".")) ) {
 										benchMarkTotal = benchMarkTotal
 												+ gtfReport.getBenchmarkMap().get(
 														BudgetConstants.months[j]);
 									}
-									if (gtfReport.getAccrualsMap() != null) {
+									if (gtfReport.getAccrualsMap() != null && !(gtfReport.getgMemoryId().contains("."))) {
 										accrualTotal = accrualTotal
 												+ gtfReport.getAccrualsMap().get(
 														BudgetConstants.months[j]);
 									}
-									if (gtfReport.getVariancesMap() != null) {
+									if (gtfReport.getVariancesMap() != null && !(gtfReport.getgMemoryId().contains("."))) {
 										varianceTotal = varianceTotal
 												+ gtfReport.getVariancesMap().get(
 														BudgetConstants.months[j]);
@@ -697,7 +697,7 @@ public class DBUtil {
 					}
 					}
 					summary.setAccrualTotal(accrualTotal);
-					summary.setVarianceTotal(varianceTotal);
+					summary.setVarianceTotal(benchMarkTotal - accrualTotal);
 					summary.setPlannedTotal(plannedTotal);
 					summary.setBenchmarkTotal(benchMarkTotal);
 					summary.setBudgetLeftToSpend(summary.getTotalBudget()-summary.getPlannedTotal());
