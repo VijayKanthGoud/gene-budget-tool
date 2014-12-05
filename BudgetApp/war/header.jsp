@@ -123,9 +123,10 @@
 	%>
 	
 	<script>
+	<%MemcacheService cache = MemcacheServiceFactory.getMemcacheService();%>
 	function myFunction(){
-		<%MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
-		cache.clearAll();
+		
+		<%cache.clearAll();
 		%>
 	}
 	</script>

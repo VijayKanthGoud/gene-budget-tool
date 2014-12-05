@@ -30,6 +30,7 @@ public class DBUtil {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 	public UserRoleInfo readUserRoleInfo(String email) {
 		boolean isGeneUser = false;
+		ArrayList<String> ccUsers = new ArrayList<>();
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
 		userMap = readAllUserInfo();
 		UserRoleInfo user = new UserRoleInfo();
@@ -41,7 +42,20 @@ public class DBUtil {
 			user = readUserInfoFromDB(email);
 		}
 		}
+		
+		System.out.println("ccUsers:::"+ccUsers);
 		return user;
+	}
+	public List<String> getCCUsersList(String costCenter){
+		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
+		ArrayList<String> ccUsers = new ArrayList<>();
+		userMap = readAllUserInfo();
+		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
+			if(ccMap.getValue().getCostCenter().equalsIgnoreCase(costCenter)){
+				ccUsers.add(ccMap.getValue().getUserName());
+			}	
+		}
+		return ccUsers;
 	}
 	
 	public UserRoleInfo readUserInfoFromDB(String email){
@@ -80,6 +94,7 @@ public class DBUtil {
 		return userMap;
 		
 	}
+	
 	public String getPrjEmailByName(String prj_owner){
 		String email = "";
 		Map<String,UserRoleInfo> userMap = readAllUserInfo();

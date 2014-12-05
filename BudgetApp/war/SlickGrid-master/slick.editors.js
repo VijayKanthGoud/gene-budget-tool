@@ -30,13 +30,19 @@
 	     var defaultValue;
 	     var scope = this;
 	     var calendarOpen = false;
-
+	     var autoTags = [];
+	     
 	     this.init = function () {
 	       $input = $("<INPUT id='tags' class='editor-text' />");
 	       $input.appendTo(args.container);
 	       $input.focus().select();
+	       if(args.column.name == "Project Owner"){
+	    	   autoTags =  poOwners 
+    	   }else{
+    		   autoTags = availableTags
+    	   }
 	       $input.autocomplete({
-	            source: availableTags
+	    		   source: autoTags
 	        });
 	     };
 

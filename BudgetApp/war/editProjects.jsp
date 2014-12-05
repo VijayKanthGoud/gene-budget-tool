@@ -80,6 +80,7 @@
 						  var selectedValue = "";
 						  var summaryResult = "";
 						 var availableTags = [];
+						 var poOwners=[];
 	            		function getAvailableTags(){
 		            		availableTags[0] = "Total Products(MB)";
 		            		var j;
@@ -511,6 +512,7 @@
 		key = item[34];
 		var aSaveData=[];
 		var iCnt=0;
+		var varTotal = 0.0;
 		if( delCell == 25){
  			var aSave = (aSaveData[0] = {});
  			aSave[0] = key;
@@ -527,6 +529,17 @@
 					}
 					d[delCell] = parseFloat(d[delCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
 				}
+				
+				varTotal = 0.0;
+				for (var j = 12; j < 24; j++) {
+					if(d[j] == "" || d[j] == "undefined"){
+						data[temp][j] = 0.0;
+					}
+					varTotal = parseFloat(varTotal)
+								+ parseFloat(d[j]);
+				}
+				
+				d[24]= parseFloat(varTotal);
 			}
 			
 	 		if(key== d[34] && d[11]=="Planned" &&  delCell > 11 && delCell< 24){
@@ -538,6 +551,16 @@
 		 		if(item[11]=='Accrual'){
 					d[delCell]=parseFloat(cellValue).toFixed(2);
 				}
+		 		varTotal = 0.0;
+				for (var j = 12; j < 24; j++) {
+					if(d[j] == "" || d[j] == "undefined"){
+						data[temp][j] = 0.0;
+					}
+					varTotal = parseFloat(varTotal)
+								+ parseFloat(d[j]);
+				}
+				
+				d[24]= parseFloat(varTotal);
 		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 		 		d[delCell]=aSave[1];
 		 		iCnt++;
@@ -551,6 +574,16 @@
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Benchmark" &&  delCell > 11 && delCell< 24 && d[26]=="New"){
 	 			d[delCell]=parseFloat(cellValue).toFixed(2);
+	 			varTotal = 0.0;
+				for (var j = 12; j < 24; j++) {
+					if(d[j] == "" || d[j] == "undefined"){
+						data[temp][j] = 0.0;
+					}
+					varTotal = parseFloat(varTotal)
+								+ parseFloat(d[j]);
+				}
+				
+				d[24]= parseFloat(varTotal);
 	 		}
 	}
  		}
@@ -916,12 +949,12 @@
 			var variancesAmt = data[j++]["24"];
 			var percentage;
 			if (bnchmrkAmt != 0) {
-				percentage = (bnchmrkAmt - accrualsAmt) / bnchmrkAmt * 100;
+				percentage = parseFloat((parseFloat(bnchmrkAmt) - parseFloat(accrualsAmt)) / parseFloat(bnchmrkAmt) * 100).toFixed(2);
 			} else {
 				percentage = 0;
 			}
 			var remarks = data[j - 4]["25"];
-			if ($.trim(remarks).length <= 0) {
+			if ($.trim(remarks).length <= 0 && data[j - 4][11]=='Planned' && (data[j - 4][27].toString().indexOf(".") ==-1)) {
 				data[j - 4]["25"] = percentage + "%";
 				data[j - 4][32] = percentage + "%";
 			}
@@ -1000,24 +1033,37 @@
 				var verBenchmarkTotal=0.0;
 				var verAccrualTotal=0.0;
 				var verVarianceTotal=0.0;
+				var verPlanned=0.0;
+				var verBenchmark=0.0;
+				var verAccrual=0.0;
+				var verVariance=0.0;
 				for (var j = 0; j < data.length ; j++) {
 					if(data[j][26] != 'Total' && data[j][11]=="Planned"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
 						verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
+						verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
 					}
 					if(data[j][26] != 'Total' && data[j][11]=="Benchmark"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
 						verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][delCell]);
+						verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
 					}
 					if(data[j][26] != 'Total' && data[j][11]=="Accrual" && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
 						verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][delCell]);
+						verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
 					}
 					if(data[j][26] != 'Total' && data[j][11]=="Variance" && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
 						verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][delCell]);
+						verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
 					}
 				}
 				data[data.length - 4][delCell]=verPlannedTotal;
 				data[data.length - 3][delCell]=verBenchmarkTotal;
 				data[data.length - 2][delCell]=verAccrualTotal;
 				data[data.length - 1][delCell]=verVarianceTotal;
+				data[data.length - 4][24]=verPlanned;
+				data[data.length - 3][24]=verBenchmark;
+				data[data.length - 2][24]=verAccrual;
+				data[data.length - 1][24]=verVariance;
+				
 				grid.invalidate();
 				dataView.refresh();
 			}
@@ -1026,8 +1072,18 @@
 		grid.onClick.subscribe(function(e, args) {
 			
 				itemClicked = dataView.getItem(args.row);
+				<%
+				MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
+				List<String> ccUsers = util.getCCUsersList(user.getCostCenter());%>
 				// multi brand click
+				
+				var usr=0;
+				<%for(String usrName :  ccUsers){%>
+				 poOwners[usr++] = "<%=usrName%>";
+				<%}%>
+				alert(poOwners);
 				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+					
 					var index = availableTags.indexOf("Total Products(MB)");
 					if (index > -1) {
 						availableTags.splice(index, 1);
@@ -1546,7 +1602,7 @@
 			name : "Project Owner",
 			field : 7,
 			width : 125,
-			editor : Slick.Editors.Text
+			editor : Slick.Editors.Auto
 		},
 		{
 			id : 4,
