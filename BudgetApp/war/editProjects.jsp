@@ -1081,7 +1081,6 @@
 				<%for(String usrName :  ccUsers){%>
 				 poOwners[usr++] = "<%=usrName%>";
 				<%}%>
-				alert(poOwners);
 				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
 					
 					var index = availableTags.indexOf("Total Products(MB)");
