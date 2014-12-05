@@ -1256,8 +1256,8 @@
 			dataView.insertItem(1,item3);
 		    dataView.insertItem(2,saveClose);
 		    dataView.insertItem(3,item2);
-		    dataView.insertItem(4,item4);
-		    dataView.insertItem(5,item5);
+		    dataView.insertItem(4,item5);
+		    dataView.insertItem(5,item4);
 		}
 		    addsave=addsave+1;
 		    dataView.refresh(); 
