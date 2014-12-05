@@ -1,5 +1,7 @@
 package com.gene.app.server;
 
+import static com.gene.app.util.Util.isInt;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,12 +19,12 @@ import com.gene.app.bean.GtfReport;
 import com.gene.app.bean.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.DBUtil;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
-
-import static com.gene.app.util.Util.isInt;
 
 @SuppressWarnings("serial")
 public class AutoSaveData extends HttpServlet {
@@ -34,6 +36,8 @@ public class AutoSaveData extends HttpServlet {
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
 		String objarray = "[]";
 		String mapType = req.getParameter(BudgetConstants.MAP_TYPE).toString();
+		UserService userService;
+		String email="";
 		//String sessionObjArray = (String)session.getAttribute("objArray");
 		boolean fromSession = false;
 		if (req.getParameter(BudgetConstants.objArray) != null) {
@@ -56,6 +60,10 @@ public class AutoSaveData extends HttpServlet {
 		BudgetSummary summary = new BudgetSummary();
 		if(user != null && user.getCostCenter() != null &&util.getSummaryFromCache(user.getCostCenter()) != null){
 			summary = util.getSummaryFromCache(user.getCostCenter());
+		}else{
+			userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
+			email = userService.getCurrentUser().getEmail();
+			user = util.readUserRoleInfo(email);
 		}
 		Map<String,BudgetSummary> budgetMap = summary.getBudgetMap();
 		BudgetSummary summaryObj = new BudgetSummary();

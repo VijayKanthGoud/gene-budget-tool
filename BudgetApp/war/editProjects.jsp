@@ -533,7 +533,7 @@
 				varTotal = 0.0;
 				for (var j = 12; j < 24; j++) {
 					if(d[j] == "" || d[j] == "undefined"){
-						data[temp][j] = 0.0;
+						d[j] = 0.0;
 					}
 					varTotal = parseFloat(varTotal)
 								+ parseFloat(d[j]);
@@ -554,7 +554,7 @@
 		 		varTotal = 0.0;
 				for (var j = 12; j < 24; j++) {
 					if(d[j] == "" || d[j] == "undefined"){
-						data[temp][j] = 0.0;
+						d[j] = 0.0;
 					}
 					varTotal = parseFloat(varTotal)
 								+ parseFloat(d[j]);
@@ -577,7 +577,7 @@
 	 			varTotal = 0.0;
 				for (var j = 12; j < 24; j++) {
 					if(d[j] == "" || d[j] == "undefined"){
-						data[temp][j] = 0.0;
+						d[j] = 0.0;
 					}
 					varTotal = parseFloat(varTotal)
 								+ parseFloat(d[j]);
@@ -1072,16 +1072,19 @@
 		grid.onClick.subscribe(function(e, args) {
 			
 				itemClicked = dataView.getItem(args.row);
-				<%
-				MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
-				List<String> ccUsers = util.getCCUsersList(user.getCostCenter());%>
-				// multi brand click
 				
-				var usr=0;
-				<%for(String usrName :  ccUsers){%>
-				 poOwners[usr++] = "<%=usrName%>";
-				<%}%>
 				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+					
+					<%
+					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
+					List<String> ccUsers = util.getCCUsersList(user.getCostCenter());%>
+					// multi brand click
+					
+					var usr=0;
+					<%for(String usrName :  ccUsers){%>
+					 poOwners[usr++] = "<%=usrName%>";
+					<%}%>
+					
 					
 					var index = availableTags.indexOf("Total Products(MB)");
 					if (index > -1) {
@@ -1834,9 +1837,6 @@
 			var cell = args.cell+1;
 			var row = args.row;
 			sum = 0.0;
-			
-			
-			
 			if(cell == 5){
 				
 			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
@@ -1848,11 +1848,17 @@
 			
 			m_grid.invalidate();
 			}
-			if(cell == 4 && availableTags.indexOf(m_data[row][1]) == -1){
+			if(cell == 2 && poOwners.toString().indexOf(m_data[row][7]) == -1){
+				m_data[row][7]="";
+			alert("Please choose a valid project owner.");
+			m_grid.invalidate();
+			return;
+			}
+			if(cell == 4 && availableTags.toString().indexOf(m_data[row][1]) == -1){
 				m_data[row][1]="";
 				alert("Enter a valid brand.");
 		        m_grid.gotoCell(row, 0, true);
-				
+		        m_grid.invalidate();
 			}
 			
 			
