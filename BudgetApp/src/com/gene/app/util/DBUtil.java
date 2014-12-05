@@ -403,9 +403,11 @@ public class DBUtil {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);
 		q.setOrdering(BudgetConstants.GTFReportOrderingParameters_getReport);
+		q.setFilter("costCenter==costCenterParam");
+		q.declareParameters("String costCenterParam");
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
-			List<GtfReport> results = (List<GtfReport>) q.execute();
+			List<GtfReport> results = (List<GtfReport>) q.execute(costCenter);
 			if(!results.isEmpty()){
 			for(GtfReport p : results){
 				gtfList.put(p.getgMemoryId(),p);
@@ -470,7 +472,7 @@ public class DBUtil {
 		GtfReport gtfRpt = new GtfReport();
 		List<GtfReport> listReports = new ArrayList<GtfReport>();
 		if(rptList==null || rptList.isEmpty()){
-			listReports=readProjectDataByProjectName(email,prjName) ;
+			listReports=readProjectDataByProjectName(email,prjName,costCenter) ;
 			for(GtfReport nReport:listReports){
 			newRptList.put(nReport.getgMemoryId(),nReport);
 			}
@@ -486,7 +488,7 @@ public class DBUtil {
 	}
 	
 	// methods for multibrand
-	public List<GtfReport> readProjectDataByProjectName(String email,String projectName) {
+	public List<GtfReport> readProjectDataByProjectName(String email,String projectName,String costCenter) {
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
@@ -494,9 +496,11 @@ public class DBUtil {
 		if("".equals(projectName)){
 			q.setFilter("email==emailParam");
 			q.declareParameters("String emailParam");
+			q.setFilter("costCenter==costCenterParam");
+			q.declareParameters("String costCenterParam");
 		}else{
-			q.setFilter("projectName == projectNameParam && email==emailParam");
-			q.declareParameters("String projectNameParam,String emailParam");
+			q.setFilter("projectName == projectNameParam && email==emailParam && costCenter==costCenterParam");
+			q.declareParameters("String projectNameParam,String emailParam,String costCenterParam");
 		}
 		
 		
@@ -541,8 +545,10 @@ public class DBUtil {
 		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
 		// read costcenter_brand table data and put it in cache
 		List<CostCenter_Brand> costCenterList = (List<CostCenter_Brand>)cache.get(key);
+		System.out.println("costCenterList from cache in readBudgetSummary = "+costCenterList );
 		if(costCenterList==null || costCenterList.isEmpty()){
 			costCenterList = readCostCenterBrandMappingData();
+			System.out.println("costCenterList from datastore in readBudgetSummary = "+costCenterList );
 		}
 		// prepare BudgetSummaryData
 		Map<String,Map<String,BudgetSummary>> brandlevelBudgetMap = prepareBrandData(costCenterList);
@@ -632,7 +638,9 @@ public class DBUtil {
 					costCenter_Brand = (CostCenter_Brand)costCenterList.get(i);
 					String brands = costCenter_Brand.getBrandFromDB();
 					// prepare brandmap
+					System.out.println("brands from costCenter_Brand.getBrandFromDB() in readBudgetSummary = "+brands );
 					brandMap = prepareBrandMap(brands);
+					System.out.println("brandMap from prepareBrandMap(brands) in readBudgetSummary = "+brandMap+"costCenter_Brand.getCostCenter() = "+costCenter_Brand.getCostCenter() );
 					costCenterBrandMap.put(costCenter_Brand.getCostCenter(), brandMap);
 				}
 			}

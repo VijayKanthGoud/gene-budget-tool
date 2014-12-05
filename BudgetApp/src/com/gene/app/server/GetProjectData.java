@@ -2,6 +2,8 @@ package com.gene.app.server;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -13,12 +15,14 @@ import com.gene.app.bean.GtfReport;
 
 @SuppressWarnings("serial")
 public class GetProjectData extends HttpServlet {
+	private final static Logger LOGGER = Logger
+			.getLogger(GetProjectData.class.getName());
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
 	}
 	public void readProjectDataByProjectOwner(String projectOwner) {
-		//System.out.println("results = ");
+		//LOGGER.log(Level.INFO, "results = ");
 		//projectOwner = "Chris Sung";
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(GtfReport.class);
@@ -27,8 +31,8 @@ public class GetProjectData extends HttpServlet {
 		List<GtfReport> results = (List<GtfReport>) q.execute(projectOwner);
 		if(!results.isEmpty()){
 		for (GtfReport p : results) {
-			System.out.println("getBrand = " + p.getRequestor());
-			System.out.println("getPoNumber = " + p.getPoNumber());
+			LOGGER.log(Level.INFO, "getBrand = " + p.getRequestor());
+			LOGGER.log(Level.INFO, "getPoNumber = " + p.getPoNumber());
 		}
 		}
 	}
@@ -43,8 +47,8 @@ public class GetProjectData extends HttpServlet {
 		List<GtfReport> results = (List<GtfReport>) q.execute(projectOwner,brand);
 		if(!results.isEmpty()){
 		for (GtfReport p : results) {
-			System.out.println("getBrand = " + p.getRequestor());
-			System.out.println("getPoNumber = " + p.getPoNumber());
+			LOGGER.log(Level.INFO, "getBrand = " + p.getRequestor());
+			LOGGER.log(Level.INFO, "getPoNumber = " + p.getPoNumber());
 		}
 		}
 	}
@@ -60,8 +64,8 @@ public class GetProjectData extends HttpServlet {
 		List<GtfReport> results = (List<GtfReport>) q.execute(projectOwner,brand);
 		if(!results.isEmpty()){
 		for (GtfReport p : results) {
-			System.out.println("getBrand = " + p.getRequestor());
-			System.out.println("getPoNumber = " + p.getPoNumber());
+			LOGGER.log(Level.INFO, "getBrand = " + p.getRequestor());
+			LOGGER.log(Level.INFO, "getPoNumber = " + p.getPoNumber());
 		}
 		}
 	}

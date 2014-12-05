@@ -8,6 +8,17 @@ import javax.jdo.annotations.Persistent;
 @PersistenceCapable
 public class BudgetSummary  implements Serializable {
 
+	@Override
+	public String toString() {
+		return "BudgetSummary [projectOwnerEmail=" + projectOwnerEmail
+				+ ", totalBudget=" + totalBudget + ", budgetLeftToSpend="
+				+ budgetLeftToSpend + ", benchmarkTotal=" + benchmarkTotal
+				+ ", plannedTotal=" + plannedTotal + ", varianceTotal="
+				+ varianceTotal + ", accrualTotal=" + accrualTotal
+				+ ", budgetMap=" + budgetMap + ", percentageVarianceTotal="
+				+ percentageVarianceTotal + "]";
+	}
+
 	@Persistent
 	private String projectOwnerEmail;
 	

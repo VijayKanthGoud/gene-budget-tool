@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,7 +29,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class GetReport extends HttpServlet {
-
+	private final static Logger LOGGER = Logger
+			.getLogger(GetReport.class.getName());
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 	DBUtil util = new DBUtil();
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -38,17 +41,20 @@ public class GetReport extends HttpServlet {
 		UserService userService;
 		String email ="";
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
-		
+		LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
 		email = userService.getCurrentUser().getEmail();
 		user = util.readUserRoleInfo(email);
+		LOGGER.log(Level.INFO, "email in userService"+email);
 		}else{
 		email = user.getEmail();
+		LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
 		gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
-		
+		LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
+		LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
 		Collections.sort( gtfReportList, new Comparator<GtfReport>()
 		        {
 		            public int compare( GtfReport o1, GtfReport o2 )
@@ -63,11 +69,13 @@ public class GetReport extends HttpServlet {
 		            }
 		        } );
 		gtfReportList = util.calculateVarianceMap(gtfReportList);
+		LOGGER.log(Level.INFO, "gtfReportList from after calculating variance map"+gtfReportList);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, gtfReportList);
 		DBUtil util = new DBUtil();
 		//UserRoleInfo user = util.readUserRoleInfo(email);
 		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
 		BudgetSummary summary = util.readBudgetSummary(user.getCostCenter());
+		LOGGER.log(Level.INFO, "summary from util.readBudgetSummary(user.getCostCenter())"+summary);
 		req.setAttribute("user", user);
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		RequestDispatcher rd = req.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);

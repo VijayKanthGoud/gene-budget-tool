@@ -117,6 +117,7 @@ public class AutoSaveData extends HttpServlet {
 								}
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
+								util.putSummaryToCache(summary, user.getCostCenter());
 								}
 								plannedMap.put(BudgetConstants.months[Integer
 										.parseInt(cellNum)], Double
