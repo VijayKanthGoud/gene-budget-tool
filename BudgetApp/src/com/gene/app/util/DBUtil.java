@@ -440,7 +440,7 @@ public class DBUtil {
 			benchMarkMap = report.getBenchmarkMap();
 			accrualsMap = report.getAccrualsMap();
 			varianceMap = report.getVariancesMap();
-			for(int j=0;j<month;j++){
+			for(int j=0;j<BudgetConstants.months.length-1;j++){
 				if(benchMarkMap!=null){
 					benchMark = benchMarkMap.get(BudgetConstants.months[j]);
 				}if(accrualsMap!=null){
