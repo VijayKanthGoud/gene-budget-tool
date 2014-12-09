@@ -111,6 +111,7 @@ public class MultiBrandServlet extends HttpServlet {
 					newgtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 					newgtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 					newgtfReport.setPercent_Allocation(percentage_Allocation);
+					newgtfReport.setCostCenter(user.getCostCenter());
 					newGtfReportList.add(newgtfReport);
 					// gtfReportListFromDB.add(gtfRpt);
 					break;
@@ -165,7 +166,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 						newgtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 						newgtfReport.setProjectName(project_Name);
-
+						newgtfReport.setCostCenter(user.getCostCenter());
 						for (int cnt = 0; cnt < BudgetConstants.months.length-1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
@@ -213,6 +214,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfRpt.setAccrualsMap(setZeroMap);
 						newgtfRpt.setVariancesMap(setZeroMap);
 						newgtfRpt.setBenchmarkMap(setZeroMap);
+						newgtfRpt.setCostCenter(user.getCostCenter());
 						Double per_allocation = newgtfRpt
 								.getPercent_Allocation();
 						newgtfRpt.setProjectName(project_Name);
