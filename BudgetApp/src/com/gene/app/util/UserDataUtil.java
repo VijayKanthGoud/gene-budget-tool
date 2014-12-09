@@ -27,13 +27,22 @@ public class UserDataUtil {
 	// create role array
 	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
-	String [] costCenter = {"307673","235031","307672","235032","307674","307675","307676","307677","307678","307680","307676"};
+	String [] costCenter = {"307680","235031","307672","235032","307680","307680","307676","307677","307678","307680","307676"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
-		brandMap.put("Avastin",  60000.0);
 		brandMap.put("Onart", 30000.0);
 		brandMap.put("Perjeta", 20000.0);
 		brandMap.put("Tarceva", 50000.0);
+		
+		Map<String,Double> brand1Map = new LinkedHashMap<String,Double>();
+		brand1Map.put("Onart",  60000.0);
+		brand1Map.put("Xolair", 30000.0);
+		brand1Map.put("Perjeta", 20000.0);
+		
+		
+		Map<String,Double> brand2Map = new LinkedHashMap<String,Double>();
+		brand2Map.put("Avastin",  60000.0);
+		brand2Map.put("Tarceva", 30000.0);
 		
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	List<UserRoleInfo> userInfoList = new ArrayList<UserRoleInfo>();
@@ -41,7 +50,15 @@ public class UserDataUtil {
 	for(int i=0;i<userName.length;i++){
 	userRoleInfo = new UserRoleInfo();
 	userRoleInfo.setEmail(userEmail[i]);
+	if("makodea".equalsIgnoreCase( userName[i])){
+		userRoleInfo.setBrand(brand1Map);
+	}else if("sreedhac".equalsIgnoreCase( userName[i])){
+		userRoleInfo.setBrand(brandMap);
+	}else if("challags".equalsIgnoreCase( userName[i])){
+		userRoleInfo.setBrand(brand2Map);
+	}else{
 	userRoleInfo.setBrand(brandMap);
+	}
 	userRoleInfo.setUserName(userName[i]);
 	userRoleInfo.setRole(role[i]);
 	userRoleInfo.setCostCenter(costCenter[i]);

@@ -46,13 +46,17 @@ public class DBUtil {
 		System.out.println("ccUsers:::"+ccUsers);
 		return user;
 	}
-	public List<String> getCCUsersList(String costCenter){
+	public Map<String,ArrayList<String>> getCCUsersList(String costCenter){
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
-		ArrayList<String> ccUsers = new ArrayList<>();
+		Map<String,ArrayList<String>> ccUsers = new LinkedHashMap<String, ArrayList<String>>();
 		userMap = readAllUserInfo();
 		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
 			if(ccMap.getValue().getCostCenter().equalsIgnoreCase(costCenter)){
-				ccUsers.add(ccMap.getValue().getUserName());
+				ArrayList<String> validBrands =new ArrayList<String>();
+				for(Map.Entry<String,Double> brandName: ccMap.getValue().getBrand().entrySet()){
+					validBrands.add(brandName.getKey());
+				}
+				ccUsers.put(ccMap.getValue().getUserName(),validBrands);
 			}	
 		}
 		return ccUsers;

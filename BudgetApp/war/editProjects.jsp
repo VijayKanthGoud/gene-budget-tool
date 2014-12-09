@@ -81,6 +81,7 @@
 						  var summaryResult = "";
 						 var availableTags = [];
 						 var poOwners=[];
+						 var ccUsersVar=[];
 	            		function getAvailableTags(){
 		            		availableTags[0] = "Total Products(MB)";
 		            		var j;
@@ -929,7 +930,7 @@
 			d[31] = " ";
 			d[32] = " ";
 			d[33] = "New";
-			d[34] = ":";
+			d[34] = " ";
 			d[35]= " ";
 			d[36]= " ";
 			d[37]= " ";
@@ -942,7 +943,8 @@
 		}
 
 		// Calculation of remark field(To be calculated on server side)
-		for (var j = 0; j < totalSize;) {
+		
+		/* for (var j = 0; j < totalSize;) {
 			var plannedAmt = data[j++]["24"];
 			var bnchmrkAmt = data[j++]["24"];
 			var accrualsAmt = data[j++]["24"];
@@ -958,7 +960,7 @@
 				data[j - 4]["25"] = percentage + "%";
 				data[j - 4][32] = percentage + "%";
 			}
-		}
+		} */
 		// initialize the model
 		dataView = new Slick.Data.DataView({
 			inlineFilters : true
@@ -979,11 +981,19 @@
 		// Caluculation of total (row and columnwise)
 		grid.onCellChange
 				.subscribe(function(e, args) {
-					
-					if(args.item["34"]=="New projects" && args.cell==2 && availableTags.indexOf(args.item[6]) == -1){
+					var isValidBrand =false;
+					if(args.item["34"]=="New projects" && args.cell==2 ){
+						for(var i=0;i< availableTags.length;i++){
+							if(availableTags[i]===args.item[6] ){
+								isValidBrand = true;
+								break;
+							}
+						}
+						if(isValidBrand == false){
 							args.item[6]="";
 							alert("Enter a valid brand.");
 							grid.invalidate();
+						}
 					}
 					var item = args.item;
 					var tempKey = item[27];
@@ -1078,14 +1088,22 @@
 					
 					<%
 					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
-					List<String> ccUsers = util.getCCUsersList(user.getCostCenter());%>
+					Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(user.getCostCenter());%>
 					// multi brand click
 					
 					var usr=0;
-					<%for(String usrName :  ccUsers){%>
-					 poOwners[usr++] = "<%=usrName%>";
-					<%}%>
+					var userCnt=0;
+					<% 
 					
+					Set<String> userList = ccUsers.keySet();
+					for(Map.Entry<String,ArrayList<String>> userMapDetails: ccUsers.entrySet()){%>
+					 poOwners[userCnt] = "<%=userMapDetails.getKey()%>";
+					 var d = (ccUsersVar[userCnt] = {});
+					 d[0]=   poOwners[userCnt];
+					 d[1] = "<%=userMapDetails.getValue()%>";
+					 
+					 userCnt++;
+					<%}%>
 					
 					var index = availableTags.indexOf("Total Products(MB)");
 					if (index > -1) {
@@ -1689,10 +1707,18 @@
 			  return;
 		  }
 		  
-		  if(availableTags.indexOf("Total Products(MB)")==-1){
-		         availableTags.splice(0, 0, "Total Products(MB)");
-		     }
-		  for(var i=0;i<m_data.length;i++){
+		  availableTags=[];
+			for(var j=0;j<ccUsersVar.length;j++){
+				if(ccUsersVar[j][0] == itemClicked[1]){
+					var res = ccUsersVar[j][1].substring(1, ccUsersVar[j][1].length-1);
+					availableTags = res.split(",");
+					break;
+				}
+			}
+		  
+		 availableTags.splice(0, 0, "Total Products(MB)");
+		 
+		 for(var i=0;i<m_data.length;i++){
 			  
 			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
 				  m_data[i][4] = m_data[0][4];
@@ -1750,9 +1776,15 @@
 		}
 		
 		function saveWithoutClose(){
-			if(availableTags.indexOf("Total Products(MB)")==-1){
+			 availableTags=[];
+				for(var j=0;j<ccUsersVar.length;j++){
+					if(ccUsersVar[j][0] == itemClicked[1]){
+						var res = ccUsersVar[j][1].substring(1, ccUsersVar[j][1].length-1);
+						availableTags = res.split(",");
+						break;
+					}
+				}
 			availableTags.splice(0, 0, "Total Products(MB)");
-			}
 			 for (var j = 0; j < 5; j++) {
 					var d = (m_data[j] = {});
 					d[0] = "";
@@ -1793,6 +1825,16 @@
 			var row = args.row;
 			var pRow=row+1;
 			
+			 if(cell == 4 ){
+				 availableTags=[];
+				for(var j=0;j<ccUsersVar.length;j++){
+					if(ccUsersVar[j][0] == m_data[row]["7"]){
+						var res = ccUsersVar[j][1].substring(1, ccUsersVar[j][1].length-1);
+						availableTags = res.split(",");
+						break;
+					}
+				}
+			} 
 			if(args.row == 0 && (args.cell==0 || args.cell==2)){
 				return false;
 			}
@@ -1817,6 +1859,7 @@
 			}
 			
 			}
+			
 
 			return true;
 			
@@ -1838,6 +1881,7 @@
 			
 			var cell = args.cell+1;
 			var row = args.row;
+			var isValidBrand = false;
 			sum = 0.0;
 			if(cell == 5){
 				
@@ -1851,18 +1895,33 @@
 			m_grid.invalidate();
 			}
 			if(cell == 2 && poOwners.toString().indexOf(m_data[row][7]) == -1){
+				for(var i=0;i< poOwners.length;i++){
+					if(poOwners[i]===m_data[row][1] ){
+						isValidBrand = true;
+						break;
+					}
+				}
+				if(isValidBrand == false){
 				m_data[row][7]="";
 			alert("Please choose a valid project owner.");
 			m_grid.invalidate();
 			return;
+				}
 			}
-			if(cell == 4 && availableTags.toString().indexOf(m_data[row][1]) == -1){
-				m_data[row][1]="";
-				alert("Enter a valid brand.");
-		        m_grid.gotoCell(row, 0, true);
-		        m_grid.invalidate();
+			if(cell == 4 ){
+				for(var i=0;i< availableTags.length;i++){
+					if(availableTags[i]===m_data[row][1] ){
+						isValidBrand = true;
+						break;
+					}
+				}
+				if(isValidBrand == false){
+					m_data[row][1]="";
+					alert("Enter a valid brand.");
+			        m_grid.gotoCell(row, cell-2, true);
+			        m_grid.invalidate();
 			}
-			
+			}
 			
 
 		});
