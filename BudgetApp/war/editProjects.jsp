@@ -1762,7 +1762,7 @@
 						}
 					});
 		  }
-			  for (var j = 0; j < 5; j++) {
+			  for (var j = 0; j < m_data.length; j++) {
 					var d = (m_data[j] = {});
 					d[0] = "";
 					d[1] = "";
@@ -1785,7 +1785,7 @@
 					}
 				}
 			availableTags.splice(0, 0, "Total Products(MB)");
-			 for (var j = 0; j < 5; j++) {
+			 for (var j = 0; j < m_data.length; j++) {
 					var d = (m_data[j] = {});
 					d[0] = "";
 					d[1] = "";
@@ -1824,7 +1824,6 @@
 			var cell = args.cell+1;
 			var row = args.row;
 			var pRow=row+1;
-			
 			 if(cell == 4 ){
 				 availableTags=[];
 				for(var j=0;j<ccUsersVar.length;j++){
@@ -1841,6 +1840,7 @@
 			if(args.row!=0){
 			
 			if(cell==1){
+				
 				m_data[row]["4"] = m_data[row-1]["4"];
 				m_grid.invalidate();
 				return false;
@@ -1851,8 +1851,7 @@
 				m_grid.invalidate();
 				return false;
 			}
-
-			if(m_data[row]["7"] == "" && cell==2){
+			if((m_data[row]["7"]=='undefined' || m_data[row]["7"] == "") && cell==2){
 				m_data[row]["7"] = m_data[row-1]["7"];
 				m_grid.invalidate();
 				return false;
@@ -1891,7 +1890,21 @@
 			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
 				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
 			}
-			
+           if(	row+1 >= 5 && m_grid.getDataLength()==row+1){
+        	   var initMData = (m_data[m_grid.getDataLength()] = {});
+        	   initMData[0] = "";
+        	   initMData[1] = "";
+        	   initMData[2] = "";
+        	   initMData[3] = "";
+        	   initMData[4] = "";
+        	   initMData[5] = "";
+        	   initMData[6] = "";
+        	   initMData[7] = "";
+        	   m_grid.invalidate();
+        	   m_grid.invalidateRow(m_grid.getSelectedRows());
+        	   m_grid.updateRowCount();
+        	   m_grid.render();
+			}
 			m_grid.invalidate();
 			}
 			if(cell == 2 && poOwners.toString().indexOf(m_data[row][7]) == -1){
