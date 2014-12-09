@@ -1037,6 +1037,7 @@
 				var verBenchmark=0.0;
 				var verAccrual=0.0;
 				var verVariance=0.0;
+				if(delCell >11 && delCell <25){
 				for (var j = 0; j < data.length ; j++) {
 					if(data[j][26] != 'Total' && data[j][11]=="Planned"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
 						verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
@@ -1063,7 +1064,7 @@
 				data[data.length - 3][24]=verBenchmark;
 				data[data.length - 2][24]=verAccrual;
 				data[data.length - 1][24]=verVariance;
-				
+				}
 				grid.invalidate();
 				dataView.refresh();
 			}
