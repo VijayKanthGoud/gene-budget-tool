@@ -517,7 +517,10 @@
 
     this.handleKeyDown = function (e) {
       if (e.which == $.ui.keyCode.ENTER && e.ctrlKey) {
-        scope.save();
+            scope.save();
+          } 
+      else if (e.which == $.ui.keyCode.ENTER) {
+            return false;
       } else if (e.which == $.ui.keyCode.ESCAPE) {
         e.preventDefault();
         scope.cancel();
