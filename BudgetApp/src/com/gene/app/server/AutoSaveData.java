@@ -172,23 +172,23 @@ public class AutoSaveData extends HttpServlet {
 				}
 				String[] keys = {};
 				List<GtfReport> gtfList = new ArrayList<GtfReport>();
-				if(key!=null){
-					keys = key.split(",");
+				if(sessionKey!=null){
+					keys = sessionKey.split(",");
 					for(int i=0;i<keys.length;i++){
 						gtfList.add(gtfReportMap.get(keys[i]));
 					}
 				}
-				if (fromSession) {
+				if (true){//if(fromSession) {
 					util.saveAllDataToDataStore(gtfList);
 				}
 
-				if ((key != null && sessionKey != null)
+				/*if ((key != null && sessionKey != null)
 						&& !(key.equals(sessionKey))) {
 					util.saveAllDataToDataStore(gtfList);
 				}				
 				if( key != null && isInt(cellNum) && Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
 					util.saveAllDataToDataStore(gtfList);
-				}
+				}*/
 				 session.setAttribute(BudgetConstants.KEY, sessionKey);
 				 session.setAttribute("objArray",objarray);
 		} catch (JSONException e) {
