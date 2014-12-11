@@ -92,7 +92,7 @@ public class AutoSaveData extends HttpServlet {
 					if (gtfReportObj != null) {
 						if (Integer.parseInt(cellNum) == BudgetConstants.CELL_REMARKS) {
 							if(cellValue.contains("\"")){
-								cellValue = cellValue.replace("\"", "\\\'");
+								cellValue = cellValue.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'");
 							}
 							String remarks = cellValue;
 							gtfReportObj.setRemarks(remarks);

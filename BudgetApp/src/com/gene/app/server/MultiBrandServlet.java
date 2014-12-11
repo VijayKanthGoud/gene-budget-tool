@@ -157,7 +157,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setProject_WBS(gtfRpt.getProject_WBS());
 						String remarks = gtfRpt.getRemarks();
 						if(remarks.contains("\"")){
-							remarks = remarks.replace("\"", "\\\'");
+							remarks = remarks.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'");
 						}
 						newgtfReport.setRemarks(remarks);
 						newgtfReport.setRequestor(project_Owner);
@@ -210,7 +210,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfRpt.setProject_WBS(gtfRpt.getProject_WBS());
 						String remarks = gtfRpt.getRemarks();
 						if(remarks.contains("\"")){
-							remarks = remarks.replace("\"", "\\\'");
+							remarks = remarks.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'");
 						}
 						newgtfRpt.setRemarks(remarks);
 						newgtfRpt.setRequestor(project_Owner);
