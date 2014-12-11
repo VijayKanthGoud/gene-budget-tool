@@ -677,7 +677,7 @@ public class DBUtil {
 						gtfReport =gtfRptEnty.getValue();
 						System.out.println("gtfReport.getBrand() = "+gtfReport.getBrand());
 						System.out.println("gtfReport.getgMemoryId() = "+gtfReport.getgMemoryId());
-						if(brand.equalsIgnoreCase(gtfReport.getBrand().trim())){
+						if(brand.trim().equalsIgnoreCase(gtfReport.getBrand().trim())){
 							for(int j=0;j<BudgetConstants.months.length-1;j++){
 									if (gtfReport.getPlannedMap() != null) {
 										plannedTotal = plannedTotal
