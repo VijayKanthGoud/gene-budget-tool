@@ -92,18 +92,7 @@
   }
   
   function RemarkFormatter(row, cell, value, columnDef, dataContext) {
-	 
-	  if(dataContext[11]!='Planned'){
-		  
-	  }
-	  if(value != "" && typeof(value) != "undefined"){
-		  if (value < 50) {
-			  color = "red";
-		  } else {
-			  color = "green";
-		  }
-		  return "<span style='color:"+color+"'>"+ value +"</span>";
-	  }
+		  return "<span style='color:green'>"+ value +"</span>";
   }
   
   function BudgetFormatter(row, cell, value, columnDef, dataContext) {

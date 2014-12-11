@@ -124,7 +124,7 @@
 						} 
 						</script> 
 						
-						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000s)</td> </tr>
+						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000's)</td> </tr>
 						 <tr>
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
@@ -255,7 +255,7 @@
 	var numHideColumns = 6;
 	var columnNames = [ "gMemori Id", "Project Owner", "Project Name",
 			"Project WBS", "WBS Name", "SubActivity", "Brand", "Allocation %",
-			"PO Number", "PO Desc", "Vendor", "$ in 1000s", "JAN", "FEB",
+			"PO Number", "PO Desc", "Vendor", "$ in 1000's", "JAN", "FEB",
 			"MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
 			"DEC", "Total", "Remark" ];
 	var noOfNew = 0;
@@ -1506,7 +1506,7 @@
 				
 				return false;
 			}else{
-				if( cols[cell].name == "$ in 1000s" ||  cols[cell].name == "Status"){
+				if( cols[cell].name == "$ in 1000's" ||  cols[cell].name == "Status"){
 					return false;
 				}
 				if( args.item["35"]!="Buttons"){
@@ -1647,7 +1647,7 @@
 			editor : Slick.Editors.Auto
 		}, {
 			id : 3,
-			name : "Total($ in 1000s)",
+			name : "Total($ in 1000's)",
 			field : 3,
 			width : 140,
 			editor : Slick.Editors.FloatText
