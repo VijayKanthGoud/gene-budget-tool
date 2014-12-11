@@ -531,11 +531,13 @@
     };
 
     this.save = function () {
+    	if($input.val().trim().length == 0){
+    	$input.val(" ");
+    	}
       args.commitChanges();
     };
 
     this.cancel = function () {
-      $input.val(defaultValue);
       args.cancelChanges();
     };
 
