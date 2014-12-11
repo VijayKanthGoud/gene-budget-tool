@@ -530,7 +530,7 @@
 					}
 					d[delCell] = parseFloat(d[delCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
 				}
-				
+				if(item[37]== false){
 				varTotal = 0.0;
 				for (var j = 12; j < 24; j++) {
 					if(d[j] == "" || d[j] == "undefined"){
@@ -541,6 +541,8 @@
 				}
 				
 				d[24]= parseFloat(varTotal);
+				}
+				
 			}
 			
 	 		if(key== d[34] && d[11]=="Planned" &&  delCell > 11 && delCell< 24){
@@ -552,6 +554,12 @@
 		 		if(item[11]=='Accrual'){
 					d[delCell]=parseFloat(cellValue).toFixed(2);
 				}
+		 		
+				
+				
+		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+		 		d[delCell]=aSave[1];
+		 		if(item[37]== false){
 		 		varTotal = 0.0;
 				for (var j = 12; j < 24; j++) {
 					if(d[j] == "" || d[j] == "undefined"){
@@ -560,10 +568,8 @@
 					varTotal = parseFloat(varTotal)
 								+ parseFloat(d[j]);
 				}
-				
 				d[24]= parseFloat(varTotal);
-		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
-		 		d[delCell]=aSave[1];
+		 		}
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Planned" && cell == 9){
 		 		var aSave = (aSaveData[iCnt] = {});
