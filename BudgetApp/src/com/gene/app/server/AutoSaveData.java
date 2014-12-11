@@ -167,9 +167,9 @@ public class AutoSaveData extends HttpServlet {
 						.getAttribute(BudgetConstants.KEY);
 				util.saveAllReportDataToCache(user.getCostCenter(),
 						gtfReportMap);
-				if (key != null && key.isEmpty()) {
+				/*if (key != null && key.isEmpty()) {
 					key = sessionKey;
-				}
+				}*/
 				String[] keys = {};
 				List<GtfReport> gtfList = new ArrayList<GtfReport>();
 				if(sessionKey!=null){
