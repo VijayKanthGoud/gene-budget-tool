@@ -658,7 +658,8 @@ public class DBUtil {
 			Double benchMarkTotal = 0.0;
 			Double accrualTotal = 0.0;
 			Double varianceTotal = 0.0;
-			
+			System.out.println("gtfRptList from getProjectListByBrand in readBudgetSummary = "+gtfRptList );
+			System.out.println("brandDataMap from getProjectListByBrand in readBudgetSummary = "+brandDataMap );
 			BudgetSummary summary = new BudgetSummary();
 			for(Entry<String, Map<String, BudgetSummary>> brandEntry: brandDataMap.entrySet()){
 				if(costCenter.equalsIgnoreCase(brandEntry.getKey())){
@@ -674,12 +675,16 @@ public class DBUtil {
 					if(gtfRptList!=null && !gtfRptList.isEmpty()){
 					for(Entry<String, GtfReport> gtfRptEnty:gtfRptList.entrySet()){
 						gtfReport =gtfRptEnty.getValue();
-						if(brand.equalsIgnoreCase(gtfReport.getBrand())){
+						System.out.println("gtfReport.getBrand() = "+gtfReport.getBrand());
+						System.out.println("gtfReport.getgMemoryId() = "+gtfReport.getgMemoryId());
+						if(brand.equalsIgnoreCase(gtfReport.getBrand().trim())){
 							for(int j=0;j<BudgetConstants.months.length-1;j++){
 									if (gtfReport.getPlannedMap() != null) {
 										plannedTotal = plannedTotal
 												+ gtfReport.getPlannedMap().get(
 														BudgetConstants.months[j]);
+										System.out.println("gtfReport.getBrand() in plannedTotal = "+gtfReport.getBrand());
+										System.out.println("gtfReport.getgMemoryId() in plannedTotal = "+gtfReport.getgMemoryId());
 									}
 									if (gtfReport.getBenchmarkMap() != null && !(gtfReport.getgMemoryId().contains(".")) ) {
 										benchMarkTotal = benchMarkTotal

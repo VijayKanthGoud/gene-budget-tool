@@ -121,7 +121,7 @@ public class AutoSaveData extends HttpServlet {
 								
 								newPlannedValue = Double.parseDouble(cellValue);
 								
-								brand = gtfReportObj.getBrand();
+								brand = gtfReportObj.getBrand().trim();
 								summaryObj = budgetMap.get(brand);
 								if(summaryObj!=null){// && !(gtfReportObj.getgMemoryId().contains("."))){
 								plannedTotal = summaryObj.getPlannedTotal();

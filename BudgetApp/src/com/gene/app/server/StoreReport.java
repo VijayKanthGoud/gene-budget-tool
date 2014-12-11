@@ -150,7 +150,7 @@ public class StoreReport extends HttpServlet {
 		
 		gtfReport.setgMemoryId(rprtObject.getString(BudgetConstants.New_GTFReport_gMemoriId));
 		gtfReport.setProjectName(rprtObject.getString(BudgetConstants.New_GTFReport_ProjectName));
-		gtfReport.setBrand(rprtObject.getString(BudgetConstants.New_GTFReport_Brand));
+		gtfReport.setBrand(rprtObject.getString(BudgetConstants.New_GTFReport_Brand).trim());
 		gtfReport.setCreateDate(timeStamp);
 		gtfReport.setYear(BudgetConstants.dataYEAR);
 		try {
@@ -212,7 +212,7 @@ public class StoreReport extends HttpServlet {
 			gtfReport.setCreateDate(timeStamp);
 		gtfReport.setYear(BudgetConstants.dataYEAR);
 		gtfReport.setProjectName(multiBrandObject.getString("4"));
-		gtfReport.setBrand(multiBrandObject.getString("1"));
+		gtfReport.setBrand(multiBrandObject.getString("1").trim());
 		gtfReport.setgMemoryId(multiBrandObject.getString("5"));
 		prj_owner = multiBrandObject.getString("7");
 		prj_owner_email = util.getPrjEmailByName(prj_owner);
