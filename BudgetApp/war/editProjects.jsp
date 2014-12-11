@@ -1329,7 +1329,7 @@
 			var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:" ",4:" ",5:"",6:" ",7:"",8:"",9:"",10:""
 				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:" ",33:"New",34:"",35:"",37:false,38:"",39:"",40:""};
+						,31:"",32:" ",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
 			dataView.insertItem(0,item);
 		    dataView.refresh(); 
 		    data=dataView.getItems();
@@ -1641,7 +1641,7 @@
 			editor : Slick.Editors.Auto
 		}, {
 			id : 3,
-			name : "Total",
+			name : "Total($ in 1000s)",
 			field : 3,
 			width : 140,
 			editor : Slick.Editors.FloatText
