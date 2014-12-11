@@ -91,6 +91,9 @@ public class AutoSaveData extends HttpServlet {
 					gtfReportObj = gtfReportMap.get(keyNum);
 					if (gtfReportObj != null) {
 						if (Integer.parseInt(cellNum) == BudgetConstants.CELL_REMARKS) {
+							if(cellValue.contains("\"")){
+								cellValue = cellValue.replace("\"", "\\\"");
+							}
 							String remarks = cellValue;
 							gtfReportObj.setRemarks(remarks);
 							gtfReportMap.put(keyNum, gtfReportObj);

@@ -110,6 +110,9 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setCostCenter(user.getCostCenter());
 				try{
 					remarks = ((rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)!=null) && (!"".equalsIgnoreCase(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks).trim())))?(rprtObject.getString(BudgetConstants.New_GTFReport_Remarks)):"";
+					if(remarks.contains("\"")){
+						remarks = remarks.replace("\"", "\\\"");
+					}
 				}catch(com.google.appengine.labs.repackaged.org.json.JSONException exception){
 					remarks = "";
 				}

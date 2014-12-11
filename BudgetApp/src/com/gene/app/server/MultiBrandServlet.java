@@ -155,7 +155,11 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfReport.setPoDesc(gtfRpt.getPoDesc());
 						newgtfReport.setPoNumber(gtfRpt.getPoNumber());
 						newgtfReport.setProject_WBS(gtfRpt.getProject_WBS());
-						newgtfReport.setRemarks(gtfRpt.getRemarks());
+						String remarks = gtfRpt.getRemarks();
+						if(remarks.contains("\"")){
+							remarks = remarks.replace("\"", "\\\"");
+						}
+						newgtfReport.setRemarks(remarks);
 						newgtfReport.setRequestor(project_Owner);
 						newgtfReport.setStatus(gtfRpt.getStatus());
 						newgtfReport.setSubActivity(gtfRpt.getSubActivity());
@@ -204,7 +208,11 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfRpt.setPoDesc(gtfRpt.getPoDesc());
 						newgtfRpt.setPoNumber(gtfRpt.getPoNumber());
 						newgtfRpt.setProject_WBS(gtfRpt.getProject_WBS());
-						newgtfRpt.setRemarks(gtfRpt.getRemarks());
+						String remarks = gtfRpt.getRemarks();
+						if(remarks.contains("\"")){
+							remarks = remarks.replace("\"", "\\\"");
+						}
+						newgtfRpt.setRemarks(remarks);
 						newgtfRpt.setRequestor(project_Owner);
 						newgtfRpt.setStatus(gtfRpt.getStatus());
 						newgtfRpt.setSubActivity(gtfRpt.getSubActivity());
