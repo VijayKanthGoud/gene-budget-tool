@@ -1760,7 +1760,7 @@
 					  }
 					  errStr=errStr +"Brand "
 				  }
-				  if(m_data[i][3].toString().trim()=="" || m_data[i][3]=="undefined"){
+				  if(m_data[i][3].toString().trim()=="" || m_data[i][3]=="undefined" || m_data[i][3].toString()=="0" || m_data[i][3].toString()=="0.0"){
 					  if(errStr.length >0){
 						  errStr =errStr+", "
 					  }
@@ -1775,7 +1775,12 @@
 		  }
 		  if(errStr.length >0 || i==1){
 			  if(errStr.length>0){
-			  errStr=errStr +" cannot be blank."
+			  errStr=errStr +" cannot be blank"
+			  if(errStr.toString().indexOf("Total") != -1){
+				  errStr = errStr +"or zero."
+			  }else{
+				  errStr = errStr +".";
+			  }
 			  }else{
 				  errStr="Please enter atleast two sub-projects." 
 			  }
