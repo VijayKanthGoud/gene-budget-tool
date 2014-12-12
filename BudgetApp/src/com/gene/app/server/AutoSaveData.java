@@ -104,7 +104,33 @@ public class AutoSaveData extends HttpServlet {
 							gtfReportObj.setStatus("Active");
 							gtfReportObj.setFlag(2);
 							gtfReportMap.put(keyNum, gtfReportObj);	
-						} else {
+						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PNAME ||
+								Integer.parseInt(cellNum) == BudgetConstants.CELL_PWBS ||
+								Integer.parseInt(cellNum) == BudgetConstants.CELL_SUBACTVTY ||
+								Integer.parseInt(cellNum) == BudgetConstants.CELL_VENDOR){
+							String strValue = cellValue;
+							switch(Integer.parseInt(cellNum)){
+							case BudgetConstants.CELL_PNAME:
+								gtfReportObj.setProjectName(strValue);
+								break;
+							case BudgetConstants.CELL_PWBS:
+								gtfReportObj.setProject_WBS(strValue);
+								break;
+							case BudgetConstants.CELL_SUBACTVTY:
+								gtfReportObj.setSubActivity(strValue);
+								break;
+							case BudgetConstants.CELL_VENDOR:
+								gtfReportObj.setVendor(strValue);
+								break;
+							default:
+								break;
+								
+							}
+							gtfReportMap.put(keyNum, gtfReportObj);	
+							
+						}
+							else {
+						
 							Map<String, Double> plannedMap = gtfReportObj
 									.getPlannedMap();
 							Map<String, Double> accrualMap = gtfReportObj

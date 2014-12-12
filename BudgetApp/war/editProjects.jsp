@@ -475,21 +475,27 @@
 
     // Method called to store changed value in to memcache
 	function updateMemCache(e, args, tempKey) {
+
 		$('#statusMessage').text("Saving data...").fadeIn(200);
 		var cell = args.cell;
 		var item = args.item;
 		var delCell = cell + 1;
 		var row = args.row;
 		var poNum = 0;
+		var projName = "";
+		var projWBS = "";
+		var subactivity = "";
 		
 		if ($('#hideColumns').is(":checked")) {
 			delCell = cell + numHideColumns;
 		} else {
-			delCell = cell + 2;
+			delCell = cell + 1;
+		}
+		if(cell < 4){
+			delCell = cell + 1;
 		}
 		
-		
-		if(delCell == 11){
+		if(delCell == 10){
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
 		if (!userAccepted) {
 			data[row][delCell]="";
@@ -555,8 +561,6 @@
 					d[delCell]=parseFloat(cellValue).toFixed(2);
 				}
 		 		
-				
-				
 		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 		 		d[delCell]=aSave[1];
 		 		if(item[37]== false){
@@ -571,13 +575,26 @@
 				d[24]= parseFloat(varTotal);
 		 		}
 		 		iCnt++;
-	 		}else if(key== d[34] && d[11]=="Planned" && cell == 9){
+	 		}else if(key== d[34] && d[11]=="Planned" && (delCell == 10 || delCell == 2 || delCell == 7 || delCell == 8	|| delCell == 11)){
 		 		var aSave = (aSaveData[iCnt] = {});
 		 		aSave[0] = d[27];
-		 		if(poNum != 0){
-		 			d[8] = poNum
+		 		if(delCell == 11){
+		 			d[delCell-1] = args.item[delCell-1];
+		 			aSave[1] = d[delCell-1];
+		 		}else if(delCell == 10){
+		 			d[delCell-2] = args.item[delCell-2];
+		 			aSave[1] = d[delCell-2];
+		 		}else if(delCell == 8){
+		 			d[delCell-3] = args.item[delCell-3];
+		 			aSave[1] = d[delCell-3];
+		 		}else if(delCell == 7){
+		 			d[delCell-4] = args.item[delCell-4];
+		 			aSave[1] = d[delCell-4];
+		 		}else{
+		 			d[delCell] = args.item[delCell];
+		 			aSave[1] = d[delCell];
 		 		}
-		 		aSave[1] = d[8];
+		 		
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Benchmark" &&  delCell > 11 && delCell< 24 && d[26]=="New"){
 	 			d[delCell]=parseFloat(cellValue).toFixed(2);
@@ -609,11 +626,12 @@
 				$("#statusMessage");
 				summaryResult = result;
 				getSummaryValues();
-				if(cellNum == '-1'){
+				if(cellNum == '-2' || cellNum == '-10'){
 					window.location.reload(true);
 				}
 			}
 		});
+	
 	}
 
 	function getSummaryValues(){
@@ -1507,7 +1525,13 @@
 					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && args.item["26"] =="New") {
 					return true;
 				}
-				
+
+				if (args.item["11"] == "Planned"
+									&& (cols[cell].name == "Project Name" || cols[cell].name == "Project WBS" || 
+											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" ) &&  
+											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active")) {
+					return true;
+				}
 				var newYear =args.item["39"];
 				var createYear = args.item["38"].split("-")[0];
 				var quarter = <%=qtr%>;
@@ -1609,7 +1633,7 @@
 	})
 
 	// Persist the data to datastore while moving to other page or closing the application
-	$(window).bind(
+	/* $(window).bind(
 			'beforeunload',
 			function(e) {
 				$('#statusMessage').text("Saving data...").fadeIn(200);
@@ -1629,7 +1653,7 @@
 						$("#statusMessage").fadeOut(400);
 					}
 				});
-			});
+			}); */
 	
 	
 	  var m_grid;
