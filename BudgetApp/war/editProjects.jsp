@@ -1046,8 +1046,10 @@
 					var isValidBrand =false;
 					if(args.item["34"]=="New projects" && args.cell==2 ){
 						for(var i=0;i< availableTags.length;i++){
-							if(availableTags[i]===args.item[6] ){
+								if(availableTags[i].toString().trim().toLowerCase()===args.item[6].toString().trim().toLowerCase()){
+									args.item[6]=availableTags[i].toString();
 								isValidBrand = true;
+								grid.invalidate();
 								break;
 							}
 						}
@@ -1777,7 +1779,7 @@
 			  if(errStr.length>0){
 			  errStr=errStr +" cannot be blank"
 			  if(errStr.toString().indexOf("Total") != -1){
-				  errStr = errStr +"or zero."
+				  errStr = errStr +" or zero."
 			  }else{
 				  errStr = errStr +".";
 			  }
@@ -2024,7 +2026,8 @@
 			}
 			if(cell == 4 ){
 				for(var i=0;i< availableTags.length;i++){
-					if(availableTags[i]===m_data[row][1] ){
+					if(availableTags[i].toString().trim().toLowerCase()===m_data[row][1].toString().trim().toLowerCase()){
+						m_data[row][1]=availableTags[i].toString();
 						isValidBrand = true;
 						break;
 					}
@@ -2033,8 +2036,9 @@
 					m_data[row][1]="";
 					alert("Enter a valid brand.");
 			        m_grid.gotoCell(row, cell-2, true);
-			        m_grid.invalidate();
+			      
 			}
+				m_grid.invalidate();
 			}
 			
 
