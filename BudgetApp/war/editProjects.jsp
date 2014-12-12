@@ -324,17 +324,38 @@
 						noOfNew = 0;
 						noOfActive = 0;
 						noOfClosed = 0;
+						
+						var newArr = [];
+						var ActiveArr = [];
+						var ClosedArr = [];
+						var uniqueNames = [];
 						for(var cnt=0; cnt<data.length; cnt++){
-							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("New") != -1 && data[cnt][1] != "" && data[cnt][1] != " " && data[cnt][34]!="New projects" ){
-								noOfNew++;
+							if(data[cnt][26].indexOf("New") != -1 && data[cnt][0].toString().trim() != ""  && data[cnt][34]!="New projects" ){
+								newArr.push(data[cnt][34]);
 							}
-							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("Active") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
-								noOfActive++;
+							if(data[cnt][26].indexOf("Active") != -1 && data[cnt][0].toString().trim() != ""  && data[cnt][34]!="New projects"){
+								ActiveArr.push(data[cnt][34]);
 							}
-							if(data[cnt][27].indexOf(".") ==-1 && data[cnt][26].indexOf("Closed") != -1 && data[cnt][1] != "" && data[cnt][1] != " "){
-								noOfClosed++;
+							if(data[cnt][26].indexOf("Closed") != -1 && data[cnt][0].toString().trim() != ""  && data[cnt][34]!="New projects"){
+								ClosedArr.push(data[cnt][34]);
 							}
 						}
+						
+						
+						$.each(newArr, function(i, el){
+						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+						});
+						noOfNew = uniqueNames.length;
+						uniqueNames = [];
+						$.each(ActiveArr, function(i, el){
+						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+						});
+						noOfActive = uniqueNames.length;
+						uniqueNames = [];
+						$.each(ClosedArr, function(i, el){
+						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+						});
+						noOfClosed = uniqueNames.length;
 						
 						if (g.value == "Total") {
 							return "<span style='color:green'>"
