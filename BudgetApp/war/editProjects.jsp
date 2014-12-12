@@ -907,20 +907,37 @@
 			}
 				d[40] = d[11];
 			for (var j = 0; j < totalSize ; j++) {
-				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && data[j][0].indexOf(".") ==-1){
-				d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
-				d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
-				d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
-				d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
-				d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
-				d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
-				d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
-				d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
-				d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
-				d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
-				d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
-				d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
-				d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
+				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" ){
+				if((data[j][37] == false || data[j][11] != "Planned") && data[j][0].indexOf(".") == -1 ){
+					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
+					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
+					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
+					d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
+					d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
+					d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
+					d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
+					d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
+					d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
+					d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
+					d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
+					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
+					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
+					}
+				else if(data[j][0].indexOf(".") != -1){
+					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
+					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
+					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
+					d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
+					d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
+					d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
+					d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
+					d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
+					d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
+					d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
+					d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
+					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
+					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
+					}
 				}
 			}
 
@@ -1055,21 +1072,28 @@
 				var verVariance=0.0;
 				if(delCell >11 && delCell <25){
 				for (var j = 0; j < data.length ; j++) {
-					if(data[j][26] != 'Total' && data[j][11]=="Planned"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
-						verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
-						verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
-					}
-					if(data[j][26] != 'Total' && data[j][11]=="Benchmark"  && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
-						verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][delCell]);
-						verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
-					}
-					if(data[j][26] != 'Total' && data[j][11]=="Accrual" && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
-						verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][delCell]);
-						verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
-					}
-					if(data[j][26] != 'Total' && data[j][11]=="Variance" && data[j][0]!= 'undefined' && data[j][27].toString().indexOf(".") ==-1 && data[j]["34"]!="New projects"){
-						verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][delCell]);
-						verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
+					if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
+						if( data[j][11] == "Planned"){
+							if(data[j][37] == false && data[j][27].toString().indexOf(".") == -1){
+								verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
+								verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
+							}else if(data[j][37] == true && data[j][27].toString().indexOf(".") != -1){
+								verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
+								verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
+							}
+						}				
+						if(data[j][11]=="Benchmark"  && data[j][27].toString().indexOf(".") ==-1){
+							verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][delCell]);
+							verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
+						}
+						if(data[j][11]=="Accrual" && data[j][27].toString().indexOf(".") ==-1 ){
+							verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][delCell]);
+							verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
+						}
+						if(data[j][11]=="Variance" && data[j][27].toString().indexOf(".") ==-1 ){
+							verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][delCell]);
+							verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
+						}
 					}
 				}
 				data[data.length - 4][delCell]=verPlannedTotal;
@@ -1080,6 +1104,7 @@
 				data[data.length - 3][24]=verBenchmark;
 				data[data.length - 2][24]=verAccrual;
 				data[data.length - 1][24]=verVariance;
+				
 				}
 				grid.invalidate();
 				dataView.refresh();
