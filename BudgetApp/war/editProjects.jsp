@@ -94,7 +94,20 @@
 						function getBrandTotals(){
 							
 							selectedValue = document.getElementById("brandType").value; 
-							 <%
+							$.ajax({
+								url : '/GetSummaryFromCache',
+								type : 'POST',
+								dataType : 'text',
+								data : {costCentre: <%=userInfo.getCostCenter()%>
+								},
+								success : function(result) {
+									summaryResult = result;
+									getSummaryValues();
+								}
+							});
+							<%--  <%
+							summary = util.getSummaryFromCache(userInfo.getCostCenter());
+								 budgetMap = summary.getBudgetMap();
 							 System.out.println("budgetMap = "+budgetMap);
 							 
 							for (Map.Entry<String, BudgetSummary> entry : budgetMap.entrySet())
@@ -109,7 +122,7 @@
 								if(selectedValue == '<%= keyV%>'){
 									
 									 <%budgetSummary = entry.getValue();%>
-									<%-- document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>; --%>
+									document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>;
 									$('#totalBudget').val("<%= budgetSummary.getTotalBudget()%>");
 									$('#plannedTotal').text("<%= Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
 									$('#budgetLeftToSpend').text("<%= Math.round(( (budgetSummary.getTotalBudget() -budgetSummary.getPlannedTotal())*10.0)/10.0 )%>");
@@ -120,16 +133,17 @@
 									<%budgetSummary = new BudgetSummary();%>
 								}
 								<%}
-							%> 
+							%>  --%>
 						} 
 						</script> 
 						
-						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000's)</td> </tr>
+						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000's)</td>
+						<td> <img alt="" src="images/refresh.png" height="25" width="25" align='left' onclick="getBrandTotals()"> </td> </tr>
 						 <tr>
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
-                            <td>Select Brand:</td>
-                            <td><select id="brandType" onchange="getSummaryValues()">
+                            <td >Select Brand:</td>
+                            <td><select id="brandType" onchange="getBrandTotals()" >
                             <%String option = "";
                             if(budgetMap!=null && !budgetMap.isEmpty()){
                             	Object[] budgets = budgetMap.keySet().toArray();
@@ -1435,10 +1449,10 @@
 						,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
 			data[length-1]
 			if(activeExist==false){
-				data[iPlace++] = item5;
+				data[++iPlace] = item5;
 			}
 			if(closedExist==false){
-				data[iPlace++] = item4;
+				data[++iPlace] = item4;
 			}
 		}
 		
