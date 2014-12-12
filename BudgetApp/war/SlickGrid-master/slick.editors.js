@@ -640,7 +640,7 @@
 	        if (isNaN($input.val())) {
 	          return {
 	            valid: false,
-	            msg: "Please enter a valid decimal number"
+	            msg: "Please enter a valid decimal number."
 	          };
 	        }
 	  

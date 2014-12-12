@@ -1894,7 +1894,21 @@
 	      m_grid.render();
 	    });
 	    
-	    
+		m_grid.onValidationError.subscribe(function(e, args) {
+	        var validationResult = args.validationResults;
+	        var activeCellNode = args.cellNode;
+	        var editor = args.editor;
+	        var errorMessage = validationResult.msg;
+	        var valid_result = validationResult.valid;
+	        if (!valid_result) {
+	        	alert(errorMessage);
+	          	$(activeCellNode).attr("title", errorMessage);
+	        }
+	        else {
+	           $(activeCellNode).attr("title", "");
+	        }
+
+	    });
 	    m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
 			
