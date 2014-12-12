@@ -1852,10 +1852,16 @@
 	    
 	    m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
+			
 			var cell = args.cell+1;
 			var row = args.row;
 			var pRow=row+1;
-			 if(cell == 4 ){
+			
+			if((args.item[0].toString().trim()!="" && itemClicked[26]=="Active") || (itemClicked[26]=="Closed")){
+				return false;
+			}
+			
+			if(cell == 4 ){
 				 availableTags=[];
 				for(var j=0;j<ccUsersVar.length;j++){
 					if(ccUsersVar[j][0] == m_data[row]["7"]){
