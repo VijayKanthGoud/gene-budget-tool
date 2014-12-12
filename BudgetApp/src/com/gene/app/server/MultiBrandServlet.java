@@ -45,6 +45,7 @@ public class MultiBrandServlet extends HttpServlet {
 		String totalValue = "";
 		String gMemoriId = "";
 		Double percentage_Allocation = 100.0;
+		DBUtil util = new DBUtil();
 		HttpSession session = req.getSession();
 		//User user = (User) session.getAttribute("loggedInUser");
 		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
@@ -54,13 +55,13 @@ public class MultiBrandServlet extends HttpServlet {
 		if (user == null) {
 			UserService userService = UserServiceFactory.getUserService();
 			email = userService.getCurrentUser().getEmail();
+			user = util.readUserInfoFromDB(email);
 		}
 		try {
 			JSONArray jsonArray = new JSONArray(m_data);
 			JSONObject rptObject = jsonArray.getJSONObject(0);
 			project_Name = rptObject.getString("4");
 			gMemoriId = rptObject.getString("5").split("\\.")[0];
-			DBUtil util = new DBUtil();
 			JSONObject rprtObject = null;
 			Map<String, GtfReport> rptList = util.getAllReportsByPrjName(
 					user.getCostCenter(), project_Name, email);
@@ -75,6 +76,7 @@ public class MultiBrandServlet extends HttpServlet {
 			Map<String, Double> parentPlannedMap = new LinkedHashMap<String, Double>();
 			Double value = 0.0;
 			String keyValue = "";
+			String prj_owner_email ="";
 			Map<String, Double> setZeroMap = new HashMap<String, Double>();
 			for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
 				setZeroMap.put(BudgetConstants.months[cnt], 0.0);
@@ -160,7 +162,7 @@ public class MultiBrandServlet extends HttpServlet {
 							remarks = remarks.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'");
 						}
 						newgtfReport.setRemarks(remarks);
-						newgtfReport.setRequestor(project_Owner);
+						newgtfReport.setRequestor(project_Owner+":"+user.getUserName());
 						newgtfReport.setStatus(gtfRpt.getStatus());
 						newgtfReport.setSubActivity(gtfRpt.getSubActivity());
 						newgtfReport.setVendor(gtfRpt.getVendor());
@@ -201,7 +203,10 @@ public class MultiBrandServlet extends HttpServlet {
 						newgtfRpt.setgMemoryId(gmemoryId);
 						newgtfRpt.setCreateDate(timeStamp);
 						newgtfRpt.setYear(BudgetConstants.dataYEAR);
-						newgtfRpt.setEmail(gtfRpt.getEmail());
+						prj_owner_email = util.getPrjEmailByName(project_Owner);
+						newgtfRpt.setRequestor(project_Owner+":"+user.getUserName());
+						email = gtfRpt.getEmail();
+						newgtfRpt.setEmail(prj_owner_email+":"+email);
 						newgtfRpt.setFlag(gtfRpt.getFlag());
 						newgtfRpt.setMultiBrand(true);
 						newgtfRpt.setPercent_Allocation(percentage_Allocation);
@@ -213,7 +218,6 @@ public class MultiBrandServlet extends HttpServlet {
 							remarks = remarks.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'");
 						}
 						newgtfRpt.setRemarks(remarks);
-						newgtfRpt.setRequestor(project_Owner);
 						newgtfRpt.setStatus(gtfRpt.getStatus());
 						newgtfRpt.setSubActivity(gtfRpt.getSubActivity());
 						newgtfRpt.setVendor(gtfRpt.getVendor());
