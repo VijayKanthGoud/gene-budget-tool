@@ -74,6 +74,8 @@ public class StoreReport extends HttpServlet {
 		String remarks = null;
 		String multiBrand = "";
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
+		String status = "";
+		int flag = 0;
 		try{
 			jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
@@ -84,8 +86,11 @@ public class StoreReport extends HttpServlet {
 					continue;
 				}*/
 				gtfReport.setEmail(user.getEmail());
-				String status =BudgetConstants.New_GTFReport_Status;
-				int flag = 0;
+				if(rprtObject.getString(BudgetConstants.New_GTFReport_PoNumber).toString().trim().length() >0){
+					status =BudgetConstants.status_Active;
+				}else{
+				status =BudgetConstants.New_GTFReport_Status;
+				}
 				if(BudgetConstants.status_New.equalsIgnoreCase(status.trim())){
 					flag = 1;
 				}else if(BudgetConstants.status_Active.equalsIgnoreCase(status.trim())){
