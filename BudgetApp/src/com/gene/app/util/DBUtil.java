@@ -618,8 +618,12 @@ public class DBUtil {
 				for(int j=0;j<budgetArray.length;j++){
 					valueArray = budgetArray[j].split("=");
 					if(j==1){
-						summary.setPlannedTotal(Double.parseDouble(valueArray[1]));
-					}else if(j==2){
+						summary.setTotalBudget(Double.parseDouble(valueArray[1]));
+						summary.setAccrualTotal(0.0);
+						summary.setBenchmarkTotal(0.0);
+						summary.setVarianceTotal(0.0);
+						summary.setPlannedTotal(0.0);
+					}/*else if(j==2){
 						summary.setAccrualTotal(Double.parseDouble(valueArray[1]));
 					}else if(j==3){
 						summary.setBenchmarkTotal(Double.parseDouble(valueArray[1]));
@@ -627,7 +631,7 @@ public class DBUtil {
 						summary.setVarianceTotal(Double.parseDouble(valueArray[1]));
 					}else if(j==5){
 						summary.setTotalBudget(Double.parseDouble(valueArray[1]));
-					}
+					}*/
 				}
 				brandMap.put(budgetArray[0], summary);
 			}
