@@ -54,9 +54,9 @@
 					role = userInfo.getRole();
 				}
 			}
-			if("singhb15@gene.com".equals(email)){%>
-				<button onclick="myFunction()">Clear cache</button>
-			<%}
+			%>
+				
+			<%
 			//Set username message
 		
 			/* if (isAdmin && isGeneUser) {
@@ -106,7 +106,6 @@
 	<div id='cssmenu'>
 		<ul>
 			<li><a href='/'><span>Home</span></a></li>
-			<li class='last'><a href='/createProjects'><span>New Projects</span></a></li>
 			<li class='last'><a href='/displayReports'><span>Reports</span></a></li>
 			<%
 				if (isAdmin) {
