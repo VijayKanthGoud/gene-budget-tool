@@ -638,6 +638,7 @@
 	  
 	      this.validate = function () {
 	        if (isNaN($input.val())) {
+	        	$input.val(defaultValue)
 	          return {
 	            valid: false,
 	            msg: "Please enter a valid decimal number."
