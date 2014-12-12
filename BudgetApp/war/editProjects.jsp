@@ -103,10 +103,10 @@
 								String keyV = entry.getKey();
 								/* int index = keyV.indexOf(" ");
 								keyV = keyV.substring(0,index-1); */
-								keyV = keyV.replaceAll("\\s+","");
+								//keyV = keyV.replaceAll("\\s+","");
 								%>
 								
-								if(selectedValue == '<%= keyV.trim()%>'){
+								if(selectedValue == '<%= keyV%>'){
 									
 									 <%budgetSummary = entry.getValue();%>
 									<%-- document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>; --%>
@@ -136,9 +136,9 @@
                             for(int i=0;i<budgets.length;i++){ 
                             option = budgets[i].toString();
                             if(i==1){%>
-                            <option value=<%=option %> selected><%=option %></option>
+                            <option value="<%=option %>" selected><%=option %></option>
                             <%}else{ %>
-                            <option value=<%=option %>><%=option %></option>
+                            <option value="<%=option %>"><%=option %></option>
                             <%}}} %>
                             </select></td>
                         </tr>
