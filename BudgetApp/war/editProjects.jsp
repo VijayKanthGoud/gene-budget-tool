@@ -143,7 +143,7 @@
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
                             <td >Select Brand:</td>
-                            <td><select id="brandType" onchange="getBrandTotals()" >
+                            <td colspan="2"><select id="brandType" onchange="getBrandTotals()" >
                             <%String option = "";
                             if(budgetMap!=null && !budgetMap.isEmpty()){
                             	Object[] budgets = budgetMap.keySet().toArray();
