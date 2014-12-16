@@ -754,8 +754,8 @@ public class DBUtil {
 					varianceMap = gtfReport.getVariancesMap();
 					accrualMap= gtfReport.getAccrualsMap();
 					for(int iMonths=0;iMonths<BudgetConstants.months.length-1;iMonths++){
-						if(iMonths + 1> month ){
-							benchMarkMap.put(BudgetConstants.months[iMonths], gtfReport.getPlannedMap().get(iMonths));	
+						if(iMonths + 1 > month ){
+							benchMarkMap.put(BudgetConstants.months[iMonths], gtfReport.getPlannedMap().get(BudgetConstants.months[iMonths]));	
 							varianceMap.put( BudgetConstants.months[iMonths],benchMarkMap.get(BudgetConstants.months[iMonths]) - 
 									accrualMap.get(BudgetConstants.months[iMonths]));
 						}
