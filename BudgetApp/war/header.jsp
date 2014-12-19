@@ -93,7 +93,7 @@
 			<td style="width: 25%; float: right">
 				<div style="text-align: right;">
 					<span
-						style="color: #105596; font-family: 'trebuchet ms'; font-size: 14px;"><i><%=userName%></i>
+						style="color: #105596; font-family: 'trebuchet ms'; font-size: 14px; white-space: nowrap;"><i><%=userName%></i>
 					</span>
 				</div>
 			</td>

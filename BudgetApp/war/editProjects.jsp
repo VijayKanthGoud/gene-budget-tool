@@ -143,7 +143,7 @@
        					<tr>
                             <!-- td style="padding-left: 20px;">2017</td> -->
                             <td >Select Brand:</td>
-                            <td colspan="2"><select id="brandType" onchange="getBrandTotals()" >
+                            <td colspan="2"><select id="brandType" onchange="getBrandTotals()" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;">
                             <%String option = "";
                             if(budgetMap!=null && !budgetMap.isEmpty()){
                             	Object[] budgets = budgetMap.keySet().toArray();
@@ -158,7 +158,7 @@
                         </tr>
                                 <!-- td style="padding-left: 20px;">2017</td> -->
                                 <td>Budget:</td>
-                                <td><input id = "totalBudget" style="color: #005691" type=text name=type
+                                <td><input id = "totalBudget" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;" type=text name=type
                                        maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
                          </tr>
 
