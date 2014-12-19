@@ -193,7 +193,7 @@
 			<tr style="">
 				<td style="padding-left: 21.5%"><input type=text
 					style="float: left; align: center; width: 140px;" id="txtSearch">
-					<img src="images/search.png" height="25" width="25" align="bottom"
+					<img src="images/search.png" height="20" width="20" align="bottom"
 					style="float: left;"
 					title="Search in Project name, gMemori Id, Brand and Remarks.">
 				</td>
@@ -216,10 +216,12 @@
 		</div>
 		<div id="multibrandGrid" style="width: 100%; height: 230px;"></div>
 		<center>
+			<button class="myButton" value="" onclick="deleteSelectedProjects();">
+				DELETE SELECTED</button>
 			<button id="saveClose" class="myButton" value=""
-				onclick="saveAndClose();">Save and close</button>
-			<button class="myButton" value="" onclick="saveWithoutClose();">
-				Cancel</button>
+				onclick="saveAndClose();">SAVE AND CLOSE</button>
+			<button class="myButton" value="" onclick="closeWithoutSave();">
+				CANCEL</button>
 		</center>
 	</div>
 	<div id="back">	</div>  
@@ -278,6 +280,7 @@
 	var newExist=false;
 	var activeExist=false;
 	var closedExist=false;
+	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
 		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
@@ -1230,7 +1233,7 @@
 	    	    				<%Double total = gtfReport.getPlannedMap().get(BudgetConstants.total);%>
 	    	    				d["3"] = "<%=total%>";
     							d["4"] = "<%=gtfReport.getProjectName()%>";
-    							d["5"] =   itemClicked[0]+"."+multiBrandCnt;
+    							d["5"] =  "<%=gtfReport.getgMemoryId()%>";
     							d["7"] = "<%=requestor%>";
 							}
 						<%}%>
@@ -1737,6 +1740,13 @@
 	  };
 	  var sum = 0.0;
 	  var m_columns = [
+	 	{
+			id : 8,
+			name : "",
+			field : 8,
+			width : 25,
+			formatter : Slick.Formatters.checkbox
+		},
 		{
 			id : 0,
 			name : "Project name",
@@ -1784,9 +1794,6 @@
 	            			"Neuroscience Pipeline", "Tarceva" ];  */
 	  function saveAndClose(){
 	     
-		//alert("m_data"+JSON.stringify(m_data));
-		// console.log(JSON.stringify(m_data));
-		//return;
 		var errStr ="";
 		var i=0;
 		  for(i=0;i<m_data.length;i++){
@@ -1855,7 +1862,7 @@
 		  }
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
-			 var total =0.0;
+			var total =0.0;
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
 				
@@ -1871,13 +1878,11 @@
 							 break;
 						 }
 					 	} 
-					 
-					 
 					 break;
 				} 
 			}
 			itemClicked[24]=total;
-		grid.invalidate();
+			grid.invalidate();
 		  if(itemClicked["34"]!="New projects" ){
 				 $.ajax({
 						url : '/multiBrandServlet',
@@ -1904,7 +1909,7 @@
 			 	} 
 		}
 		
-		function saveWithoutClose(){
+		function closeWithoutSave(){
 			 availableTags=[];
 				for(var j=0;j<ccUsersVar.length;j++){
 					if(ccUsersVar[j][0] == itemClicked[1]){
@@ -1928,16 +1933,69 @@
 			$('#multibrandEdit').hide();
 			$('#back').removeClass('black_overlay').fadeIn(100);
 		}
+		
+		function deleteSelectedProjects(){
+			var userAccepted = confirm("Selected project(s) will be deleted. Want to continue?");
+			if(!userAccepted){
+				return false;
+			}
+			var pLength = m_data.length;
+			var noProjToDelete = true;
+			for(var count = 0; count < m_data.length; count++){
+	    		if(m_data[count]["8"] != 'undefined' && m_data[count]["8"] == true){
+	    			m_data.splice(count--,1);
+	    			noProjToDelete = false;
+	    		}
+	    	}
+			if(noProjToDelete){
+				alert("Please select project(s) to delete.");
+			}
+			for(var c = 0; c < pLength; c++){
+				if(c >= m_data.length){
+					var d = (m_data[c] = {});
+					d[0] = "";
+					d[1] = "";
+					d[2] = "";
+					d[3] = "";
+					d[4] = "";
+					d[5] = "";
+					d[6] = "";
+					d[7] = "";
+					d[8] = false;
+				}
+				if(m_data[c][4].toString().trim() != "" && itemClicked[34] == "New projects"){
+				 	m_data[c][5]=itemClicked[0]+'.'+(c+1);
+				}
+			}
+			sum = 0;
+			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				sum = sum + parseFloat(m_data[count]["3"]);
+			}
+			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+			}
+			
+			if( m_data[0]["3"] == ""){
+				m_data[0][4]=itemClicked[2];
+			 	m_data[0][5]=itemClicked[0]+'.1';
+			 	m_data[0][7]=itemClicked[1];
+			}
+			m_grid.invalidate();
+		}
+		
 	function displayMultibrandGrid() {
 	    m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
 	    m_grid.setSelectionModel(new Slick.CellSelectionModel());
 	    m_grid.registerPlugin(new Slick.AutoTooltips());
-	    // set keyboard focus on the grid
 	    m_grid.getCanvasNode().focus();
-	    //var copyManager = new Slick.CellCopyManager();
-	    //m_grid.registerPlugin(copyManager);
-	   
-	    m_grid.onAddNewRow.subscribe(function (e, args) {
+	    
+	    m_grid.onClick.subscribe(function(e, args) {
+		   if(args.cell == 0){
+		   		deleteProjects(args.row);
+		   } 
+	   	})
+	    
+	   	m_grid.onAddNewRow.subscribe(function (e, args) {
 	      var item = args.item;
 	      var column = args.column;
 	      var row = args.row;
@@ -1953,6 +2011,7 @@
 	        var editor = args.editor;
 	        var errorMessage = validationResult.msg;
 	        var valid_result = validationResult.valid;
+	        
 	        if (!valid_result) {
 	        	alert(errorMessage);
 	          	$(activeCellNode).attr("title", errorMessage);
@@ -1962,17 +2021,17 @@
 	        }
 
 	    });
-	    m_grid.onBeforeEditCell
+	   
+		m_grid.onBeforeEditCell
 		.subscribe(function(e, args) {
 			
-			var cell = args.cell+1;
+			var cell = args.cell;
 			var row = args.row;
 			var pRow=row+1;
 			
 			if((args.item[0].toString().trim()!="" && itemClicked[26]=="Active") || (itemClicked[26]=="Closed")){
 				return false;
 			}
-			
 			if(cell == 4 ){
 				 availableTags=[];
 				for(var j=0;j<ccUsersVar.length;j++){
@@ -1994,10 +2053,11 @@
 				m_grid.invalidate();
 				return false;
 			}
-			
 			if(cell==3){
-				m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+pRow;
-				m_grid.invalidate();
+				if(m_data[row]["5"] == ""){
+					m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+  (parseInt(m_data[row-1]["5"].split(".")[1]) + 1);
+					m_grid.invalidate();
+				}
 				return false;
 			}
 			if((m_data[row]["7"]=='undefined' || m_data[row]["7"] == "") && cell==2){
@@ -2007,11 +2067,20 @@
 			}
 			
 			}
-			
-
 			return true;
 			
 		});
+	    
+	    function deleteProjects(row){
+	    	for(var count = 0; count < m_data.length /* && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined" */; count++){
+	    		var thisId = "#"+count+"chkBox";
+	    		if($(thisId).is(':checked')){
+	    			m_data[count]["8"] = true;
+	    		}else{
+	    			m_data[count]["8"] = false;
+	    		}
+	    	}
+	    }
 	    
 	    function removeArrayItem(arr, item) {
 	        var removeCounter = 0;
@@ -2025,9 +2094,10 @@
 	        }
 	        return removeCounter;
 	    }
+	    
 	    m_grid.onCellChange.subscribe(function(e, args) {
 			
-			var cell = args.cell+1;
+			var cell = args.cell;
 			var row = args.row;
 			var isValidBrand = false;
 			sum = 0.0;
@@ -2049,6 +2119,7 @@
         	   initMData[5] = "";
         	   initMData[6] = "";
         	   initMData[7] = "";
+        	   initMData[8] = false;
         	   m_grid.invalidate();
         	   m_grid.invalidateRow(m_grid.getSelectedRows());
         	   m_grid.updateRowCount();
@@ -2087,11 +2158,8 @@
 				m_grid.invalidate();
 			}
 			
-
 		});
-	    
-
-	    
+    
 	  }
 </script>
 

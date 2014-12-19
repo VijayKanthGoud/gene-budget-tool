@@ -4,12 +4,10 @@ import java.io.Serializable;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+
 @PersistenceCapable
 public class MultiBrand implements Serializable {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	@Persistent
 	private String brand;
