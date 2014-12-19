@@ -1,17 +1,12 @@
 package com.gene.app.util;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
@@ -722,15 +717,22 @@ public class DBUtil {
 			return brandMap;
 		}
 		
-	public void storeProjectsToCache(List<GtfReport> gtfReports,String costCenter) {
+	public void storeProjectsToCache(List<GtfReport> gtfReports,
+			String costCenter, String listType) {
 		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(costCenter);
 		GtfReport report = new GtfReport();
 		for (int i = 0; i < gtfReports.size(); i++) {
 			report = gtfReports.get(i);
-			gtfReportFromCache.put(report.getgMemoryId(), report);
+			if (listType != null && !"".equalsIgnoreCase(listType.trim())
+					&& BudgetConstants.OLD.equalsIgnoreCase(listType.trim())) {
+				gtfReportFromCache.remove(report.getgMemoryId());
+			} else if (listType != null
+					&& !"".equalsIgnoreCase(listType.trim())
+					&& BudgetConstants.NEW.equalsIgnoreCase(listType.trim())) {
+				gtfReportFromCache.put(report.getgMemoryId(), report);
+			}
 		}
 		cache.put(costCenter, gtfReportFromCache);
-	
 	}
 
 	@SuppressWarnings("unchecked")

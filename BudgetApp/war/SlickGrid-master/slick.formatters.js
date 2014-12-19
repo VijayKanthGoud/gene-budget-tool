@@ -21,7 +21,8 @@
         "Remark":RemarkFormatter,
         "HyperLink":HyperLinkFormatter,
         "budget":BudgetFormatter,
-        "button": ButtonFormatter
+        "button": ButtonFormatter,
+        "checkbox": CheckBoxFormatter
       }
     }
   });
@@ -101,6 +102,12 @@
 		}else if(dataContext[25]=="Added"){
 			return "<span style='color:#005691'>" + (0).toFixed(2) +"</span>";
 		}
+  }
+  
+  function CheckBoxFormatter(row, cell, value, columnDef, dataContext) {
+	  if(dataContext[4].toString().trim() != ""){
+		return "<input type='checkbox' class='checkDeletion' value='true' id = "+ row+"chkBox>";
 	  }
+  }
 
 })(jQuery);

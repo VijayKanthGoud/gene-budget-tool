@@ -284,10 +284,12 @@ public class MultiBrandServlet extends HttpServlet {
 					"Number of reports removed from the datastore : "
 							+ oldGtfReportList.size());
 			util.removeExistingProject(oldGtfReportList);
+			util.storeProjectsToCache(oldGtfReportList,user.getCostCenter(), BudgetConstants.OLD);
 			LOGGER.log(Level.INFO,
 					"Number of reports new report(s) inserted in to the datastore : "
 							+ masterGtfReportList.size());
 			util.generateProjectIdUsingJDOTxn(masterGtfReportList);
+			util.storeProjectsToCache(masterGtfReportList,user.getCostCenter(),BudgetConstants.NEW);
 		} catch (JSONException e) {
 			LOGGER.log(Level.SEVERE, "JSONException caught in Multibrand Servlet :" + e);
 		}
