@@ -10,7 +10,7 @@
 <%@ page import="com.google.appengine.api.memcache.MemcacheServiceFactory" %>
 
 <head>
-<title>Budget App</title>
+<title>gMemori Budgeting Tool</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/menustyles.css">
 <script src="SlickGrid-master/lib/jquery-1.7.min.js"
@@ -20,14 +20,17 @@
 <html>
 
 <body bgcolor="#F4F6F8">
-	<%!private static Logger log = Logger.getLogger("header.jsp");%>
-
+	<%!
+		private static Logger LOGGER = Logger.getLogger("header.jsp");
+	%>
 	<%
+		LOGGER.log(Level.INFO, "Inside Header.jsp...");
 		UserService userService = UserServiceFactory.getUserService();
 		String requestUri = request.getRequestURI();
 		Principal userPrincipal = request.getUserPrincipal();
 		String loginLink = userService.createLoginURL(requestUri);
 		String email = userService.getCurrentUser().getEmail();
+		LOGGER.log(Level.INFO, "Logged in user : "+email);
 		request.setAttribute("email", email);
 		Boolean isAdmin = false;
 		String userName = "";
@@ -43,7 +46,6 @@
 			User user = userService.getCurrentUser();
 			session.setAttribute("loggedInUser",user);
 			isAdmin = userService.isUserAdmin();
-			
 			boolean isGeneUser = false;//util.readUserRoleInfo(email,costCenter);
 			UserRoleInfo userInfo = util.readUserRoleInfo(email);
 			String role = "";
@@ -52,25 +54,19 @@
 				if(email.equalsIgnoreCase(userInfo.getEmail())){
 					isGeneUser = true;
 					role = userInfo.getRole();
+					LOGGER.log(Level.INFO, "Logged in user role : "+role);
 				}
 			}
-			%>
+	%>
 				
 			<%
-			//Set username message
-		
-			/* if (isAdmin && isGeneUser) {
-				userName = "Welcome, " + user.getNickname() + role +" !";
-			} else if(!isAdmin) {
-				userName = "Welcome, " + user.getNickname() + "!";
-			} */
 			if (userService!= null && userService.isUserLoggedIn()    /* && isGeneUser   */) {
 				userName = "Welcome, " + user.getNickname() + " (" + role +") !";
 			} else{%>
-				alert("You are not authorised to access the application !!");
+				alert("You are not authorized to access the application!");
 			<%	response.sendRedirect(userService.createLogoutURL(requestUri));
 			} 
-	%>
+			%>
 
 	<table style="width: 100%;">
 		<tr>
@@ -120,12 +116,3 @@
 	<%
 		}
 	%>
-	
-	<script>
-	<%MemcacheService cache = MemcacheServiceFactory.getMemcacheService();%>
-	function myFunction(){
-		
-		<%cache.clearAll();
-		%>
-	}
-	</script>
