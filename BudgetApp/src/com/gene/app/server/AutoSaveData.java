@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,14 +32,19 @@ import com.google.gson.Gson;
 
 @SuppressWarnings("serial")
 public class AutoSaveData extends HttpServlet {
+	private final static Logger LOGGER = Logger
+			.getLogger(AutoSaveData.class.getName());
 	DBUtil util = new DBUtil();
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		LOGGER.log(Level.INFO, "Inside Autosave...");
 		HttpSession session = req.getSession();
 		String cellNum = req.getParameter(BudgetConstants.CELL_NUM).toString();
+		LOGGER.log(Level.INFO, "cellNum : " + cellNum);
 		String objarray = "[]";
 		String mapType = req.getParameter(BudgetConstants.MAP_TYPE).toString();
+		LOGGER.log(Level.INFO, "mapType : " + mapType);
 		UserService userService;
 		String email="";
 		//String sessionObjArray = (String)session.getAttribute("objArray");
@@ -47,6 +54,7 @@ public class AutoSaveData extends HttpServlet {
 		}else{
 			fromSession = true;
 		}
+		LOGGER.log(Level.INFO, "objarray : " + objarray);
 		/*else if(sessionObjArray!=null){
 		}
 			objarray = sessionObjArray;
@@ -85,6 +93,7 @@ public class AutoSaveData extends HttpServlet {
 			for (int count = 0; count < jsonArray.length(); count++) {
 				rprtArray = jsonArray.getJSONObject(count);
 				keyNum = rprtArray.getString("0");
+				LOGGER.log(Level.INFO, "KeyNum received : " + keyNum);
 				sessionKey = sessionKey+keyNum+",";
 				cellValue = rprtArray.getString("1");
 				if (keyNum != null && !"".equalsIgnoreCase(keyNum.trim())) {
@@ -99,10 +108,15 @@ public class AutoSaveData extends HttpServlet {
 							gtfReportMap.put(keyNum, gtfReportObj);
 							//editedGtfReportMap.put(keyNum, gtfReportObj);
 						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
+							LOGGER.log(Level.INFO, "Changing PO NUMBER ... ");
 							String poNumber = cellValue;
+							LOGGER.log(Level.INFO, "cellValue : " + cellValue);
 							gtfReportObj.setPoNumber(poNumber);
+							LOGGER.log(Level.INFO, "poNumber : " + poNumber);
 							gtfReportObj.setStatus("Active");
+							LOGGER.log(Level.INFO, "Changed project status to : " + gtfReportObj.getStatus());
 							gtfReportObj.setFlag(2);
+							LOGGER.log(Level.INFO, "Set flag to : " + gtfReportObj.getFlag());
 							gtfReportMap.put(keyNum, gtfReportObj);	
 						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PNAME ||
 								Integer.parseInt(cellNum) == BudgetConstants.CELL_PWBS ||

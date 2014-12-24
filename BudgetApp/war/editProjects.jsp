@@ -1,4 +1,5 @@
 <%@page import="com.gene.app.bean.*"%>
+<%@page import="com.gene.app.util.*"%>
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
 <%@page import="javax.servlet.RequestDispatcher"%>
@@ -11,7 +12,7 @@
 	List<GtfReport> gtfReports = (List<GtfReport>) request
 			.getAttribute("gtfreports");
 	for (GtfReport report : gtfReports) {
-		System.out.println(report.getgMemoryId());
+		LOGGER.log(Level.INFO, "Reports received : " + report.getgMemoryId());
 	}
 	Calendar cal = Calendar.getInstance();
 	int year = cal.get(Calendar.YEAR);
@@ -33,10 +34,7 @@
 	type="text/css" />
     <html>
 <body onload="getBrandTotals();getAvailableTags()">  
-     
-   
-<center>
-	<div>
+	<div align="center">
 		<table
 			style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #005691; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
 			<tr>
@@ -69,8 +67,7 @@
 							BudgetSummary budgetSummary = new BudgetSummary();
 							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
 							Map<String,Double> brandMap = user.getBrand();
-							
-							System.out.println("brandMap = "+brandMap);
+							LOGGER.log(Level.INFO, "brandMaps received : " + brandMap);
 							Object[] brands = {}; 
 							if(brandMap!=null && !brandMap.isEmpty()){
 								brands = brandMap.keySet().toArray();
@@ -79,17 +76,16 @@
 						 <script>
 						  var selectedValue = "";
 						  var summaryResult = "";
-						 var availableTags = [];
-						 var poOwners=[];
-						 var ccUsersVar=[];
+						  var availableTags = [];
+						  var poOwners=[];
+						  var ccUsersVar=[];
 	            		function getAvailableTags(){
 		            		availableTags[0] = "Total Products(MB)";
 		            		var j;
 		            		<%for(int i=0;i<brands.length;i++){%>
 		            			j=<%= i+1%>;
 		            			availableTags[j] = '<%= brands[i]%>';
-		            			<%}%>
-		            			//alert("getAvailableTags"+availableTags);
+		            		<%}%>
 		            	} 
 						function getBrandTotals(){
 							
@@ -105,35 +101,6 @@
 									getSummaryValues();
 								}
 							});
-							<%--  <%
-							summary = util.getSummaryFromCache(userInfo.getCostCenter());
-								 budgetMap = summary.getBudgetMap();
-							 System.out.println("budgetMap = "+budgetMap);
-							 
-							for (Map.Entry<String, BudgetSummary> entry : budgetMap.entrySet())
-							{
-								budgetSummary = new BudgetSummary();
-								String keyV = entry.getKey();
-								/* int index = keyV.indexOf(" ");
-								keyV = keyV.substring(0,index-1); */
-								//keyV = keyV.replaceAll("\\s+","");
-								%>
-								
-								if(selectedValue == '<%= keyV%>'){
-									
-									 <%budgetSummary = entry.getValue();%>
-									document.getElementById("totalBudget").value = <%= budgetSummary.getTotalBudget()%>;
-									$('#totalBudget').val("<%= budgetSummary.getTotalBudget()%>");
-									$('#plannedTotal').text("<%= Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%>");
-									$('#budgetLeftToSpend').text("<%= Math.round(( (budgetSummary.getTotalBudget() -budgetSummary.getPlannedTotal())*10.0)/10.0 )%>");
-									$('#accrualTotal').text("<%= Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%>");
-									$('#varianceTotal').text("<%= Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%>"); 
-									<% color=(budgetSummary.getVarianceTotal()/budgetSummary.getTotalBudget() *100) < 5?"yellow":  "#00FFFF";%>
-								}else{
-									<%budgetSummary = new BudgetSummary();%>
-								}
-								<%}
-							%>  --%>
 						} 
 						</script> 
 						
@@ -201,7 +168,6 @@
 		</table>
 	</div>
 	<div id="statusMessage"></div>
-</center>
 <% 	if(gtfReports == null || gtfReports.isEmpty()) { %>
  		<span style="  margin: auto;  position: absolute;  top: 350px; left: 48%; bottom: 0; right; font-size:12px; font-weight:bold; color: #005691" 
  		id="noData">(No data available!)</span>
@@ -244,17 +210,30 @@
 <script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 <script>
 	
-    
-	rdoSelectedmode = $('input[name="selectedmode"]');
-	chkBoxHideColumns = $('input[name="hideColumns"]');
-
-	choice = '';
+    // rdoSelectedmode holds the radio(Planned/All) button object
+	var rdoSelectedmode = $('input[name="selectedmode"]');
+	
+    // chkBoxHideColumns holds the checkbox(Hide Columns) object
+	var chkBoxHideColumns = $('input[name="hideColumns"]');
+	
+    //External wrapper for data grid with advance functionalities 
 	var dataView;
+    
+    // It is the actual displayed table on the UI
 	var grid;
+    
 	var addsave=0;
+	
+	// data is the original grid data array containing objects representing each line in the edit project grid
 	var data = [];
+	
+	// m_data is the popup grid data array 
 	var m_data = [];
+	
+	// itemclicked global variable is take to use the clicked row (in the grid) data in other methods
 	var itemClicked;
+	
+	// initializing the multi-brand popup data with five blank rows for intial display 
 	 for (var i = 0; i < 5; i++) {
 		var d = (m_data[i] = {});
 		d[0] = "";
@@ -268,12 +247,11 @@
  	} 
 	var radioString = "All";
 	var totalSize = 0;
-	var numHideColumns = 6;
-	var columnNames = [ "gMemori Id", "Project Owner", "Project Name",
-			"Project WBS", "WBS Name", "SubActivity", "Brand", "Allocation %",
-			"PO Number", "PO Desc", "Vendor", "$ in 1000's", "JAN", "FEB",
-			"MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
-			"DEC", "Total", "Remark" ];
+	var numHideColumns = <%=BudgetConstants.NUMBER_OF_HDN_COLS%>;
+	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
+	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", 
+	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
+	        			"DEC", "Total", "Remark" ];
 	var noOfNew = 0;
 	var noOfActive = 0;
 	var noOfClosed = 0;
@@ -283,57 +261,58 @@
 	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
-		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
-		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
-		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText },
-		{ id : 1, name : columnNames[1], field : 1, width : 90},
-		{ id : 3, name : columnNames[3], field : 3, width : 90, editor : Slick.Editors.Text},
-		{ id : 5, name : columnNames[5], field : 5, width : 90, editor : Slick.Editors.Text},
-		{ id : 7, name : columnNames[7], field : 7, width : 90, editor : Slick.Editors.Text},
-		{ id : 8, name : columnNames[8], field : 8, width : 90, editor : Slick.Editors.PONumberText},
-		{ id : 10, name : columnNames[10], field : 10, width : 90, editor : Slick.Editors.Text},
-		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 14, name : columnNames[14], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 15, name : columnNames[15], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 16, name : columnNames[16], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 17, name : columnNames[17], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 18, name : columnNames[18], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 19, name : columnNames[19], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 20, name : columnNames[20], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 21, name : columnNames[21], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 22, name : columnNames[22], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 23, name : columnNames[23], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[24], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[25], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 1, name : columnNames[0], field : 30, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[1], field : 2, width : 150, editor : Slick.Editors.Text},
+		{ id : 3, name : columnNames[2], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
+		{ id : 4, name : columnNames[3], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 5, name : columnNames[4], field : 0, width : 90, editor : Slick.Editors.GMemoriText },
+		{ id : 6, name : columnNames[5], field : 1, width : 90},
+		{ id : 7, name : columnNames[6], field : 3, width : 90, editor : Slick.Editors.Text},
+		{ id : 8, name : columnNames[7], field : 5, width : 90, editor : Slick.Editors.Text},
+		{ id : 9, name : columnNames[8], field : 7, width : 90, editor : Slick.Editors.Text},
+		{ id : 10, name : columnNames[9], field : 8, width : 90, editor : Slick.Editors.PONumberText},
+		{ id : 11, name : columnNames[10], field : 10, width : 90, editor : Slick.Editors.Text},
+		{ id : 12, name : columnNames[11], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 13, name : columnNames[12], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	} ];
 
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
-		{ id : 30, name : "Status", field : 30, width : 120, editor : Slick.Editors.Text}, 
-		{ id : 2, name : columnNames[2], field : 2, width : 150, editor : Slick.Editors.Text},
-		{ id : 6, name : columnNames[6], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 11, name : columnNames[11], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 0, name : columnNames[0], field : 0, width : 90, editor : Slick.Editors.GMemoriText},
-		{ id : 1, name : columnNames[1], field : 1, width : 90},
-		{ id : 12, name : columnNames[12], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 13, name : columnNames[13], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 14, name : columnNames[14], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 15, name : columnNames[15], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 16, name : columnNames[16], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 17, name : columnNames[17], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 18, name : columnNames[18], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 19, name : columnNames[19], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 20, name : columnNames[20], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 21, name : columnNames[21], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 22, name : columnNames[22], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 23, name : columnNames[23], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[24], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[25], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 1, name : columnNames[0], field : 30, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[1], field : 2, width : 150, editor : Slick.Editors.Text},
+		{ id : 3, name : columnNames[2], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
+		{ id : 4, name : columnNames[3], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 5, name : columnNames[4], field : 0, width : 90, editor : Slick.Editors.GMemoriText },
+		{ id : 6, name : columnNames[5], field : 1, width : 90},
+		{ id : 12, name : columnNames[11], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 13, name : columnNames[12], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	}]
 	var searchString = "";
+	
 	// Grouping columns acording to status(New, Active, Closed)
 	function groupByStatus() {
 		dataView
@@ -374,6 +353,7 @@
 						$.each(ClosedArr, function(i, el){
 						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
 						});
+						
 						noOfClosed = uniqueNames.length;
 						
 						if (g.value == "Total") {
@@ -515,11 +495,10 @@
 
     // Method called to store changed value in to memcache
 	function updateMemCache(e, args, tempKey) {
-
 		$('#statusMessage').text("Saving data...").fadeIn(200);
 		var cell = args.cell;
 		var item = args.item;
-		var delCell = cell + 1;
+		var fixedCell = cell;
 		var row = args.row;
 		var poNum = 0;
 		var projName = "";
@@ -527,130 +506,126 @@
 		var subactivity = "";
 		
 		if ($('#hideColumns').is(":checked")) {
-			delCell = cell + numHideColumns;
+			fixedCell = cell + numHideColumns;
 		} else {
-			delCell = cell + 1;
-		}
-		if(cell < 4){
-			delCell = cell + 1;
+			fixedCell = cell;
 		}
 		
-		if(delCell == 10){
-		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
-		if (!userAccepted) {
-			data[row][delCell]="";
-			grid.invalidate();
-	        grid.gotoCell(row, delCell, true);
-		    return;
+		if(cell <= <%=BudgetConstants.$_IN_THOUSAND_CELL%>){
+			fixedCell = cell;
 		}
-		poNum = args.item["8"];
+		var itemCell = fixedCell + 1;
+		
+		if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
+			var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
+			if (!userAccepted) {
+				data[row][fixedCell]="";
+				grid.invalidate();
+		        grid.gotoCell(row, fixedCell, true);
+			    return;
+			}
+			poNum = args.item["8"];
 		}
-		if (delCell == 25) {
+		
+		if (fixedCell == <%=BudgetConstants.REMARK_CELL%>) {
 			for (var i = 0; i < totalSize; i++) {
 				if (data[i][31] == item[31]) {
-					data[i][32] = item[delCell];
+					data[i][32] = item[itemCell];
 				}
 			}
 		}
-		var cellValue = item[delCell];
-		var cellNum = delCell - 12;
 		
-		console.log(args.item);
+		var cellValue = item[itemCell];
+		var cellNum = fixedCell - 11;
 		key = item[34];
 		var aSaveData=[];
 		var iCnt=0;
 		var varTotal = 0.0;
-		if( delCell == 25){
+		if( fixedCell == <%=BudgetConstants.REMARK_CELL%>){
  			var aSave = (aSaveData[0] = {});
  			aSave[0] = key;
 	 		aSave[1] = cellValue;
  		}else{
- 		for(var i=0;i<data.length;i++){
-			var d = data[i];
-			if(key== d[34] && delCell > 11 && delCell< 24 && item[11]=='Accrual'){
-				if(d[11]=="Accrual"){
-				d[delCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
-				}else if(d[11]=="Variance"){
-					if( item[43]=='undefined' ||item[43]=="" ){
-						item[43]=0.0;
+	 		for(var i=0;i<data.length;i++){
+				var d = data[i];
+				if(key== d[34] && fixedCell > 11 && fixedCell< 24 && item[11]=='Accrual'){
+					if(d[11]=="Accrual"){
+						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
+					}else if(d[11]=="Variance"){
+						if( item[43]=='undefined' ||item[43]=="" ){
+							item[43]=0.0;
+						}
+						d[itemCell] = parseFloat(d[itemCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
 					}
-					d[delCell] = parseFloat(d[delCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
-				}
-				if(item[37]== false){
-				varTotal = 0.0;
-				for (var j = 12; j < 24; j++) {
-					if(d[j] == "" || d[j] == "undefined"){
-						d[j] = 0.0;
+					if(item[37]== false){
+						varTotal = 0.0;
+						for (var j = 12; j < 24; j++) {
+							if(d[j] == "" || d[j] == "undefined"){
+								d[j] = 0.0;
+							}
+							varTotal = parseFloat(varTotal)
+										+ parseFloat(d[j]);
+						}
+						
+						d[24]= parseFloat(varTotal);
 					}
-					varTotal = parseFloat(varTotal)
-								+ parseFloat(d[j]);
 				}
-				
-				d[24]= parseFloat(varTotal);
-				}
-				
+		 		if(key== d[34] && d[11]=="Planned" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+			 		var aSave = (aSaveData[iCnt] = {});
+			 		aSave[0] = d[27];
+			 		if(d[7] == 0.0){
+					 	d[7]=100.0;
+			 		}
+			 		if(item[11]=='Accrual'){
+						d[itemCell]=parseFloat(cellValue).toFixed(2);
+					}
+			 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+			 		d[itemCell]=aSave[1];
+			 		if(item[37]== false){
+			 			varTotal = 0.0;
+						for (var j = 12; j < 24; j++) {
+							if(d[j] == "" || d[j] == "undefined"){
+								d[j] = 0.0;
+							}
+							varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
+						}
+						d[24]= parseFloat(varTotal);
+			 		}
+			 		iCnt++;
+		 		}else if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%>)){
+			 		var aSave = (aSaveData[iCnt] = {});
+			 		aSave[0] = d[27];
+			 		if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
+			 			d[fixedCell] = args.item[fixedCell];
+			 			aSave[1] = d[fixedCell];
+			 		}else if(fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	){
+			 			d[fixedCell - 2] = args.item[fixedCell - 2];
+			 			aSave[1] = d[fixedCell - 2];
+			 		}else if(fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%>){
+			 			d[fixedCell - 3] = args.item[fixedCell - 3];
+			 			aSave[1] = d[fixedCell - 3];
+			 		}else if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
+			 			d[fixedCell - 1] = args.item[fixedCell - 1];
+			 			aSave[1] = d[fixedCell - 1];
+			 		}else if(fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%>){
+			 			d[itemCell] = args.item[itemCell];
+			 			aSave[1] = d[itemCell];
+			 		}
+			 		iCnt++;
+		 		}else if(key== d[34] && d[11]=="Benchmark" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
+		 			d[itemCell]=parseFloat(cellValue).toFixed(2);
+		 			varTotal = 0.0;
+					for (var j = 12; j < 24; j++) {
+						if(d[j] == "" || d[j] == "undefined"){
+							d[j] = 0.0;
+						}
+						varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
+					}	
+					d[24]= parseFloat(varTotal);
+	 			}
 			}
-			
-	 		if(key== d[34] && d[11]=="Planned" &&  delCell > 11 && delCell< 24){
-		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[27];
-		 		if(d[7] == 0.0){
-				 d[7]=100.0;
-		 		}
-		 		if(item[11]=='Accrual'){
-					d[delCell]=parseFloat(cellValue).toFixed(2);
-				}
-		 		
-		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
-		 		d[delCell]=aSave[1];
-		 		if(item[37]== false){
-		 		varTotal = 0.0;
-				for (var j = 12; j < 24; j++) {
-					if(d[j] == "" || d[j] == "undefined"){
-						d[j] = 0.0;
-					}
-					varTotal = parseFloat(varTotal)
-								+ parseFloat(d[j]);
-				}
-				d[24]= parseFloat(varTotal);
-		 		}
-		 		iCnt++;
-	 		}else if(key== d[34] && d[11]=="Planned" && (delCell == 10 || delCell == 2 || delCell == 7 || delCell == 8	|| delCell == 11)){
-		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[27];
-		 		if(delCell == 11){
-		 			d[delCell-1] = args.item[delCell-1];
-		 			aSave[1] = d[delCell-1];
-		 		}else if(delCell == 10){
-		 			d[delCell-2] = args.item[delCell-2];
-		 			aSave[1] = d[delCell-2];
-		 		}else if(delCell == 8){
-		 			d[delCell-3] = args.item[delCell-3];
-		 			aSave[1] = d[delCell-3];
-		 		}else if(delCell == 7){
-		 			d[delCell-4] = args.item[delCell-4];
-		 			aSave[1] = d[delCell-4];
-		 		}else{
-		 			d[delCell] = args.item[delCell];
-		 			aSave[1] = d[delCell];
-		 		}
-		 		
-		 		iCnt++;
-	 		}else if(key== d[34] && d[11]=="Benchmark" &&  delCell > 11 && delCell< 24 && d[26]=="New"){
-	 			d[delCell]=parseFloat(cellValue).toFixed(2);
-	 			varTotal = 0.0;
-				for (var j = 12; j < 24; j++) {
-					if(d[j] == "" || d[j] == "undefined"){
-						d[j] = 0.0;
-					}
-					varTotal = parseFloat(varTotal)
-								+ parseFloat(d[j]);
-				}
-				
-				d[24]= parseFloat(varTotal);
-	 		}
-	}
  		}
+		
 		$.ajax({
 			url : '/AutoSaveData',
 			type : 'POST',
@@ -683,27 +658,25 @@
 		if(obj==null){
 			getBrandTotals();
 		}else{
-		selectedValue = document.getElementById("brandType").value;
-		for(var key in obj.budgetMap){
-			//alert("value"+key);
-			if(key==selectedValue){
-				//alert("val = "+selectedValue);
-				value = obj.budgetMap[key];
-				$('#totalBudget').val((value.totalBudget).toFixed(2));
-				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
-				$('#budgetLeftToSpend').text((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2));
-				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
-				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
-				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
-					<% color= "yellow"; %>
-				}else{
-					<% color= "#00FFFF" ;%>
+			selectedValue = document.getElementById("brandType").value;
+			for(var key in obj.budgetMap){
+				//alert("value"+key);
+				if(key==selectedValue){
+					//alert("val = "+selectedValue);
+					value = obj.budgetMap[key];
+					$('#totalBudget').val((value.totalBudget).toFixed(2));
+					$('#plannedTotal').text((value.plannedTotal).toFixed(2));
+					$('#budgetLeftToSpend').text((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2));
+					$('#accrualTotal').text((value.accrualTotal).toFixed(2));
+					$('#varianceTotal').text((value.varianceTotal).toFixed(2));
+					if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
+						<% color= "yellow"; %>
+					}else{
+						<% color= "#00FFFF" ;%>
+					}
 				}
 			}
 		}
-		}
-		//Data data = new Gson().fromJson(json, Data.class);
-		<%--summary = new Gson().fromJson(%>+obj+<%,BudgetSummary.class);--%>
 	}
 	
 	$(function() {
@@ -1025,31 +998,10 @@
 			d[37]= " ";
 			d[38]= " ";
 			d[39]= " ";
-/* 			d[40]= "Planned"; */
-			
 			d[0]=" ";
 
 		}
 
-		// Calculation of remark field(To be calculated on server side)
-		
-		/* for (var j = 0; j < totalSize;) {
-			var plannedAmt = data[j++]["24"];
-			var bnchmrkAmt = data[j++]["24"];
-			var accrualsAmt = data[j++]["24"];
-			var variancesAmt = data[j++]["24"];
-			var percentage;
-			if (bnchmrkAmt != 0) {
-				percentage = parseFloat((parseFloat(bnchmrkAmt) - parseFloat(accrualsAmt)) / parseFloat(bnchmrkAmt) * 100).toFixed(2);
-			} else {
-				percentage = 0;
-			}
-			var remarks = data[j - 4]["25"];
-			if ($.trim(remarks).length <= 0 && data[j - 4][11]=='Planned' && (data[j - 4][27].toString().indexOf(".") ==-1)) {
-				data[j - 4]["25"] = percentage + "%";
-				data[j - 4][32] = percentage + "%";
-			}
-		} */
 		// initialize the model
 		dataView = new Slick.Data.DataView({
 			inlineFilters : true
@@ -1068,14 +1020,14 @@
 		grid.registerPlugin(groupItemMetadataProvider);
 		grid.setSelectionModel(new Slick.CellSelectionModel());
 
-		// Caluculation of total (row and columnwise)
 		grid.onCellChange
 				.subscribe(function(e, args) {
 					var isValidBrand =false;
-					if(args.item["34"]=="New projects" && args.cell==2 ){
+					// Code for brand column(dropdown and validation)
+					if(args.item["34"]=="New projects" && args.cell == <%=BudgetConstants.BRAND_CELL%> ){
 						for(var i=0;i< availableTags.length;i++){
-								if(availableTags[i].toString().trim().toLowerCase()===args.item[6].toString().trim().toLowerCase()){
-									args.item[6]=availableTags[i].toString();
+							if(availableTags[i].toString().trim().toLowerCase()===args.item[6].toString().trim().toLowerCase()){
+								args.item[6]=availableTags[i].toString();
 								isValidBrand = true;
 								grid.invalidate();
 								break;
@@ -1093,9 +1045,7 @@
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
-					
 					if(item[37]=='undefined' || item[37]==false){
-						grid.invalidate();
 						var temp = 0;
 						for (var j = 0; j < data.length - 1; j++) {
 							if (data[j]["id"] == args.item.id) {
@@ -1111,80 +1061,79 @@
 							data[temp][24] = parseFloat(data[temp][24])
 										+ parseFloat(data[temp][j]);
 						}
-						}
+					}
 						
-						grid.invalidate();
-			if(args.item["34"] != "New projects"){
-					updateMemCache(e, args, tempKey);
-				
-				var delCell = cell + 1;
-				if ($('#hideColumns').is(":checked")) {
-					delCell = cell + numHideColumns;
-				} else {
-					delCell = cell + 2;
-				}
-				
-				
-				for(var counter = 0; counter<data.length; counter++ ){
-					if(data[counter][34] != "New projects"){
-						dataLength++;
-					}
-				}
-				
-				var verPlannedTotal=0.0;
-				var verBenchmarkTotal=0.0;
-				var verAccrualTotal=0.0;
-				var verVarianceTotal=0.0;
-				var verPlanned=0.0;
-				var verBenchmark=0.0;
-				var verAccrual=0.0;
-				var verVariance=0.0;
-				if(delCell >11 && delCell <25){
-				for (var j = 0; j < data.length ; j++) {
-					if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
-						if( data[j][11] == "Planned"){
-							if(data[j][37] == false && data[j][27].toString().indexOf(".") == -1){
-								verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
-								verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
-							}else if(data[j][37] == true && data[j][27].toString().indexOf(".") != -1){
-								verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][delCell]);
-								verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
+					grid.invalidate();
+			
+					if(args.item["34"] != "New projects"){
+						updateMemCache(e, args, tempKey);
+						var fixedCell = cell;
+						
+						if ($('#hideColumns').is(":checked")) {
+							fixedCell = cell + numHideColumns;
+						} else {
+							fixedCell = cell;
+						}
+						var itemCell = fixedCell + 1;
+						for(var counter = 0; counter<data.length; counter++ ){
+							if(data[counter][34] != "New projects"){
+								dataLength++;
 							}
-						}				
-						if(data[j][11]=="Benchmark"  && data[j][27].toString().indexOf(".") ==-1){
-							verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][delCell]);
-							verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
 						}
-						if(data[j][11]=="Accrual" && data[j][27].toString().indexOf(".") ==-1 ){
-							verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][delCell]);
-							verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
+						// Caluculation of total (columnwise)
+						var verPlannedTotal=0.0;
+						var verBenchmarkTotal=0.0;
+						var verAccrualTotal=0.0;
+						var verVarianceTotal=0.0;
+						var verPlanned=0.0;
+						var verBenchmark=0.0;
+						var verAccrual=0.0;
+						var verVariance=0.0;
+						if(fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+							for (var j = 0; j < data.length ; j++) {
+								if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
+									if( data[j][11] == "Planned"){
+										if(data[j][37] == false && data[j][27].toString().indexOf(".") == -1){
+											verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][itemCell]);
+											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
+										}else if(data[j][37] == true && data[j][27].toString().indexOf(".") != -1){
+											verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][itemCell]);
+											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
+										}
+									}				
+									if(data[j][11]=="Benchmark"  && data[j][27].toString().indexOf(".") ==-1){
+										verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][itemCell]);
+										verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
+									}
+									if(data[j][11]=="Accrual" && data[j][27].toString().indexOf(".") ==-1 ){
+										verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][itemCell]);
+										verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
+									}
+									if(data[j][11]=="Variance" && data[j][27].toString().indexOf(".") ==-1 ){
+										verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][itemCell]);
+										verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
+									}
+								}
+							}
+							data[data.length - 4][itemCell]=verPlannedTotal;
+							data[data.length - 3][itemCell]=verBenchmarkTotal;
+							data[data.length - 2][itemCell]=verAccrualTotal;
+							data[data.length - 1][itemCell]=verVarianceTotal;
+							data[data.length - 4][24]=verPlanned;
+							data[data.length - 3][24]=verBenchmark;
+							data[data.length - 2][24]=verAccrual;
+							data[data.length - 1][24]=verVariance;
+						
 						}
-						if(data[j][11]=="Variance" && data[j][27].toString().indexOf(".") ==-1 ){
-							verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][delCell]);
-							verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
-						}
+						grid.invalidate();
+						dataView.refresh();
 					}
-				}
-				data[data.length - 4][delCell]=verPlannedTotal;
-				data[data.length - 3][delCell]=verBenchmarkTotal;
-				data[data.length - 2][delCell]=verAccrualTotal;
-				data[data.length - 1][delCell]=verVarianceTotal;
-				data[data.length - 4][24]=verPlanned;
-				data[data.length - 3][24]=verBenchmark;
-				data[data.length - 2][24]=verAccrual;
-				data[data.length - 1][24]=verVariance;
-				
-				}
-				grid.invalidate();
-				dataView.refresh();
-			}
 		});
 
 		grid.onClick.subscribe(function(e, args) {
-			
 				itemClicked = dataView.getItem(args.row);
 				
-				if(args.cell==2 && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
 					
 					<%
 					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
@@ -1401,32 +1350,30 @@
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 						,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
 			dataView.insertItem(0,item);
-		if(addsave ==0){
-		    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
-						,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
-			var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
-			var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
-						,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
-							,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-								,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
-		
-			dataView.insertItem(1,item3);
-		    dataView.insertItem(2,saveClose);
-		    dataView.insertItem(3,item2);
-		}
+			if(addsave ==0){
+			    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
+							,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+				var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+				var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+							,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+								,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
+									,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+			
+				dataView.insertItem(1,item3);
+			    dataView.insertItem(2,saveClose);
+			    dataView.insertItem(3,item2);
+			}
 		    addsave=addsave+1;
 		    dataView.refresh(); 
 		    data=dataView.getItems();
-		    
 		}
 		
 		function dummyNewProjects(){
-			
 			var length= data.length;
 			var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:" ",4:" ",5:"",6:" ",7:"",8:"",9:"",10:""
 				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
@@ -1435,11 +1382,9 @@
 			dataView.insertItem(0,item);
 		    dataView.refresh(); 
 		    data=dataView.getItems();
-		    
 		}
 		
 		function dummyACProjects(){
-			
 			var length= data.length;
 			var iPlace=length-1;
 			var item4 ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
@@ -1450,7 +1395,6 @@
 				,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 				,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
 						,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
-			data[length-1]
 			if(activeExist==false){
 				data[++iPlace] = item5;
 			}
@@ -1465,6 +1409,7 @@
 			 	submitProjects();
 		    }
 		);
+		
 		$(document).on('click', '#cnclProjBtn',
 			function() {
 				cancelProjects();
@@ -1531,62 +1476,60 @@
 				return;
 			}
 			if(errStr == 0){
-			 $.ajax({
-				url : '/storereport',
-				type : 'POST',
-				dataType : 'json',
-				data : {objarray: JSON.stringify(storeData) },
-				success : function(result) {
-					console.log("Result::::"+result);
-					alert('Data saved successfully');
-					storeData=[];
-					window.location.reload(true);
-				},
-				error: function() {
-		            alert('gMemori Id exists. Try Different gMemori Id.');
-		        }
-			});  
+				 $.ajax({
+					url : '/storereport',
+					type : 'POST',
+					dataType : 'json',
+					data : {objarray: JSON.stringify(storeData) },
+					success : function(result) {
+						alert('Data saved successfully');
+						storeData=[];
+						window.location.reload(true);
+					},
+					error: function() {
+			            alert('gMemori Id exists. Try Different gMemori Id.');
+			        }
+				});  
 			}
 		
 		}
 		
-		// delete cell data on press of delete button
+		/* 	// delete cell data on press of delete button
 		grid.onKeyDown.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row - 1;
-			var delCell = cell + 1;
+			var fixedCell = cell;
 			if (e.which == 46) {
 				if ($('#hideColumns').is(":checked")) {
-					delCell = cell + numHideColumns;
+					fixedCell = cell + numHideColumns;
 				}
-				data[row][delCell] = 0.0;
-				updateTotals(cell, row, delCell, args);
+				data[row][fixedCell] = 0.0;
+				updateTotals(cell, row, fixedCell, args);
 				if (!grid.getEditorLock().commitCurrentEdit()) {
 					return;
 				}
 				grid.invalidate();
 				e.stopPropagation();
 			}
-		});
+		}); */
 		
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
-			console.log(args);
 			var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
 			var cell = args.cell;
 			var row = args.row;
 			var cols = grid.getColumns();
 	
-			var delCell = cell + 1;
+			var fixedCell = cell;
 			if ($('#hideColumns').is(":checked")) {
-				delCell = cell + numHideColumns;
+				fixedCell = cell + numHideColumns;
 			} else {
-				delCell = cell + 2;
+				fixedCell = cell;
 			}
 			if(args.item["34"]!="New projects" ){
-				if(args.item["11"] == "Accrual" && args.item["26"]=="Active" && delCell>11 && delCell<24){
-					args.item["43"] = args.item[delCell];
+				if(args.item["11"] == "Accrual" && args.item["26"]=="Active" && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+					args.item["43"] = args.item[fixedCell];
 					grid.invalidate();
 				}
 				if(args.item["27"].toString().indexOf(".") != -1){
@@ -1673,7 +1616,7 @@
 		// Handeling radio button "Planned" and "All"
 		rdoSelectedmode.change(function(e) {
 			Slick.GlobalEditorLock.cancelCurrentEdit();
-			choice = this.value;
+			var choice = this.value;
 			if (choice == 'planned') {
 				radioString = 'Planned'
 			} else {
@@ -1698,10 +1641,6 @@
 			enableForHeaderCells : true
 		}));
 		grid.render();
-<%-- 
-		<% if(gtfReports == null || gtfReports.isEmpty()) { %>
-			$('#displayGrid').hide();
-		<% } %> --%>
 	})
 
 	// Persist the data to datastore while moving to other page or closing the application
@@ -2103,29 +2042,30 @@
 			sum = 0.0;
 			if(cell == 5){
 				
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				sum = sum + parseFloat(m_data[count]["3"]);
-			}
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
-			}
-           if(	row+1 >= 5 && m_grid.getDataLength()==row+1){
-        	   var initMData = (m_data[m_grid.getDataLength()] = {});
-        	   initMData[0] = "";
-        	   initMData[1] = "";
-        	   initMData[2] = "";
-        	   initMData[3] = "";
-        	   initMData[4] = "";
-        	   initMData[5] = "";
-        	   initMData[6] = "";
-        	   initMData[7] = "";
-        	   initMData[8] = false;
-        	   m_grid.invalidate();
-        	   m_grid.invalidateRow(m_grid.getSelectedRows());
-        	   m_grid.updateRowCount();
-        	   m_grid.render();
-			}
-			m_grid.invalidate();
+				for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+					sum = sum + parseFloat(m_data[count]["3"]);
+				}
+				for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
+					m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+				}
+	           if(	row+1 >= 5 && m_grid.getDataLength()==row+1){
+	        	   var initMData = (m_data[m_grid.getDataLength()] = {});
+	        	   initMData[0] = "";
+	        	   initMData[1] = "";
+	        	   initMData[2] = "";
+	        	   initMData[3] = "";
+	        	   initMData[4] = "";
+	        	   initMData[5] = "";
+	        	   initMData[6] = "";
+	        	   initMData[7] = "";
+	        	   initMData[8] = false;
+	        	   m_grid.invalidate();
+	        	   m_grid.invalidateRow(m_grid.getSelectedRows());
+	        	   m_grid.updateRowCount();
+	        	   m_grid.render();
+				}
+				m_grid.invalidate();
+				
 			}
 			if(cell == 2 && poOwners.toString().indexOf(m_data[row][7]) == -1){
 				for(var i=0;i< poOwners.length;i++){
@@ -2135,10 +2075,10 @@
 					}
 				}
 				if(isValidBrand == false){
-				m_data[row][7]="";
-			alert("Please choose a valid project owner.");
-			m_grid.invalidate();
-			return;
+					m_data[row][7]="";
+					alert("Please choose a valid project owner.");
+					m_grid.invalidate();
+					return;
 				}
 			}
 			if(cell == 4 ){

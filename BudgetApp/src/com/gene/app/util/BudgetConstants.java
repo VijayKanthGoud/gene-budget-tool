@@ -74,4 +74,34 @@ public interface BudgetConstants {
 	public static final String OLD = "old";
 	public static final String NEW = "new";
 	
+	//cell numbers edit projects
+	public static final String NUMBER_OF_HDN_COLS = "5";
+	
+	public static final String STATUS_CELL = "0";
+	public static final String PROJECT_NAME_CELL = "1";
+	public static final String BRAND_CELL = "2";
+	public static final String $_IN_THOUSAND_CELL = "3";
+	public static final String  GMEMORI_ID_CELL= "4";
+	public static final String PROJECT_OWNER_CELL = "5";
+	public static final String PROJECT_WBS_CELL = "6";
+	public static final String SUBACTIVITY_CELL = "7";
+	public static final String ALLOCATION_PERCENTAGE_CELL = "8";
+	public static final String PO_NUMBER_CELL = "9";
+	public static final String VENDOR_CELL = "10";
+	public static final String JAN_CELL = "11";
+	public static final String FEB_CELL = "12";
+	public static final String MAR_CELL = "13";
+	public static final String APR_CELL = "14";
+	public static final String MAY_CELL = "15";
+	public static final String JUN_CELL = "16";
+	public static final String JUL_CELL = "17";
+	public static final String AUG_CELL = "18";
+	public static final String SEP_CELL = "19";
+	public static final String OCT_CELL = "20";
+	public static final String NOV_CELL = "21";
+	public static final String DEC_CELL = "22";
+	public static final String TOTAL_CELL = "23";
+	public static final String REMARK_CELL = "24";
+	
+	
 }
