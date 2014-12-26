@@ -103,5 +103,13 @@ public interface BudgetConstants {
 	public static final String TOTAL_CELL = "23";
 	public static final String REMARK_CELL = "24";
 	
+	// cell numbers edit project multiple brand pop up
+	public static final String MB_CHECKBOX_CELL = "0";
+	public static final String MB_PROJECT_NAME_CELL = "1";
+	public static final String MB_PROJECT_OWNER_CELL = "2";
+	public static final String MB_GMEMORI_ID_CELL = "3";
+	public static final String MB_BRAND_CELL = "4";
+	public static final String  MB_$_IN_THOUSAND_CELL= "5";
+	public static final String MB_ALLOCATION_PERCENTAGE_CELL = "6";
 	
 }

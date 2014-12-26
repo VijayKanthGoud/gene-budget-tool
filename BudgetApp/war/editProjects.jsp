@@ -73,7 +73,7 @@
 								brands = brandMap.keySet().toArray();
 							}
 						%>
-						 <script>
+					<script>
 						  var selectedValue = "";
 						  var summaryResult = "";
 						  var availableTags = [];
@@ -102,13 +102,12 @@
 								}
 							});
 						} 
-						</script> 
+					</script> 
 						
 						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000's)</td>
 						<td> <img alt="" src="images/refresh.png" height="25" width="25" align='left' onclick="getBrandTotals()"> </td> </tr>
 						 <tr>
        					<tr>
-                            <!-- td style="padding-left: 20px;">2017</td> -->
                             <td >Select Brand:</td>
                             <td colspan="2"><select id="brandType" onchange="getBrandTotals()" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;">
                             <%String option = "";
@@ -123,37 +122,26 @@
                             <%}}} %>
                             </select></td>
                         </tr>
-                                <!-- td style="padding-left: 20px;">2017</td> -->
                                 <td>Budget:</td>
                                 <td><input id = "totalBudget" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;" type=text name=type
                                        maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
+                        </tr>
+
+						<tr>
+                                <td>Planned:</td><td><span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+                        </tr>
+                        <tr>
+                                <td>Unplanned Total:</td><td><span id = "budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0) %></span></td>
+                        </tr>
+                        <tr>
+                                <!-- td style="padding-left: 20px;">2017</td> -->
+                                <td>Accrual:</td><td><span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+                        </tr>
+                         <tr>
+                               <td><span style="background: <%=color%>;color:black">Variance Total:</span></td>
+                               <td><span style="background: <%=color%>;color:black"><span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+                               </td>
                          </tr>
-
-						 <tr>
-                                 <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Planned:</td><td><span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
-                          </tr>
-                          <tr>
-                                 <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Unplanned Total:</td><td><span id = "budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0) %></span></td>
-                          </tr>
-                          <tr>
-                                 <!-- td style="padding-left: 20px;">2017</td> -->
-                                 <td>Accrual:</td><td><span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
-                          </tr>
-                          
-                          <%-- <%
-                          System.out.println(budgetSummary.getVarianceTotal()+":::"+ budgetSummary.getTotalBudget());
-                                  color=(budgetSummary.getVarianceTotal()/budgetSummary.getTotalBudget() *100) < 5?"yellow":  "#00FFFF";
-                          %> --%>
-                           <tr>
-                                 <!-- td style="padding-left: 20px;"><span
-                                        style="background: <%=color%>;color:black">2017</span></td> -->
-                                 <td><span style="background: <%=color%>;color:black">Variance Total:</span></td>
-                                 <td><span style="background: <%=color%>;color:black"><span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
-                                 </td>
-                          </tr>
-
 					</table>
 				</td>
 			</tr>
@@ -168,27 +156,20 @@
 		</table>
 	</div>
 	<div id="statusMessage"></div>
-<% 	if(gtfReports == null || gtfReports.isEmpty()) { %>
- 		<span style="  margin: auto;  position: absolute;  top: 350px; left: 48%; bottom: 0; right; font-size:12px; font-weight:bold; color: #005691" 
- 		id="noData">(No data available!)</span>
- 		<input type='button' style='font-size: 12px; height: 25px; width: 160px; background:#005691; color:#FFFFFF' 
- 		value='Create Projects' id='topCrtNewProjBtn'/>  
-	<%}%>
-<div id="displayGrid" style="width: 100%; height: 51%;  min-height: 300px;"></div>
-
+	<div id="displayGrid" style="width: 100%; height: 51%;  min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
 			style="width: 100%; height: 20px; background-color: #005691; color: white">&nbsp;Multi-brand:
 		</div>
 		<div id="multibrandGrid" style="width: 100%; height: 230px;"></div>
-		<center>
+		<div align='center'>
 			<button class="myButton" value="" onclick="deleteSelectedProjects();">
 				DELETE SELECTED</button>
 			<button id="saveClose" class="myButton" value=""
 				onclick="saveAndClose();">SAVE AND CLOSE</button>
 			<button class="myButton" value="" onclick="closeWithoutSave();">
 				CANCEL</button>
-		</center>
+		</div>
 	</div>
 	<div id="back">	</div>  
   
@@ -1197,7 +1178,7 @@
 						// Start : Code for newly added projects
 						var error=0;
 						var errStrng="";
-				//alert("itemClicked = "+JSON.stringify(itemClicked));
+						//alert("itemClicked = "+JSON.stringify(itemClicked));
 						if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
 							itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){
 					
@@ -1281,14 +1262,10 @@
 		// Handeler for Create New Project button
 		$(document).on('click', '#crtNewProjBtn',
 			    function() {
-			createIntProjects();
+					createIntProjects();
 			    }
 		);
-		$(document).on('click', '#topCrtNewProjBtn',
-			    function() {
-				 	createNewProjects();
-			    }
-		);
+		
 		
 		function createNewProjects(){
 			$('#displayGrid').show();
@@ -1335,6 +1312,7 @@
 		    
 		}
 		
+		// Create a new project
 		function createIntProjects(){
 			if(newExist == false){
 				dataView.deleteItem("id_0");
@@ -1373,6 +1351,7 @@
 		    data=dataView.getItems();
 		}
 		
+		// inserts dummy new projects
 		function dummyNewProjects(){
 			var length= data.length;
 			var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:" ",4:" ",5:"",6:" ",7:"",8:"",9:"",10:""
@@ -1384,6 +1363,7 @@
 		    data=dataView.getItems();
 		}
 		
+		// inserts dummy active or closed projects
 		function dummyACProjects(){
 			var length= data.length;
 			var iPlace=length-1;
@@ -1680,20 +1660,20 @@
 	  var sum = 0.0;
 	  var m_columns = [
 	 	{
-			id : 8,
+			id : 1,
 			name : "",
 			field : 8,
 			width : 25,
 			formatter : Slick.Formatters.checkbox
 		},
 		{
-			id : 0,
+			id : 2,
 			name : "Project name",
 			field : 4,
 			width : 160,
 			editor : Slick.Editors.Text
 		}, {
-			id : 5,
+			id : 3,
 			name : "Project Owner",
 			field : 7,
 			width : 125,
@@ -1707,400 +1687,426 @@
 			editor : Slick.Editors.Text
 		},
 	    {
-			id : 1,
+			id : 5,
 			name : "Brand",
 			field : 1,
 			width : 160,
 			editor : Slick.Editors.Auto
 		}, {
-			id : 3,
+			id : 6,
 			name : "Total($ in 1000's)",
 			field : 3,
 			width : 140,
 			editor : Slick.Editors.FloatText
 		}, {
-			id : 2,
+			id : 7,
 			name : "Allocation %",
 			field : 2,
 			width : 125
 		}
 	  ];
 		
-	   /* var availableTags = [ "Total Products(MB)","Rituxan Heme/Onc", "Kadcyla", "Actemra",
-	            			"Rituxan RA", "Lucentis", "Bitopertin", "Ocrelizumab", "Onart",
-	            			"Avastin", "BioOnc Pipeline", "Lebrikizumab", "Pulmozyme",
-	            			"Xolair", "Oral Octreotide", "Etrolizumab", "GDC-0199",
-	            			"Neuroscience Pipeline", "Tarceva" ];  */
-	  function saveAndClose(){
-	     
-		var errStr ="";
-		var i=0;
-		  for(i=0;i<m_data.length;i++){
-			  var d = m_data[i];
-			  errStr ="";
-			  if(m_data[i][4]!="" && m_data[i][4]!="undefined"){
-				  if(m_data[i][7].trim()=="" || m_data[i][7]=="undefined"){
-					  errStr=errStr +"Project Owner "
-				  }
-				  if(m_data[i][5].toString().trim()=="" || m_data[i][5]=="undefined"){
-					  if(errStr.length >0){
-						  errStr =errStr+", "
-					  }
-					  errStr=errStr +"gMemori Id "
-				  }
-				  if(m_data[i][1].trim()=="" || m_data[i][1]=="undefined"){
-					  if(errStr.length >0){
-						  errStr =errStr+", "
-					  }
-					  errStr=errStr +"Brand "
-				  }
-				  if(m_data[i][3].toString().trim()=="" || m_data[i][3]=="undefined" || m_data[i][3].toString()=="0" || m_data[i][3].toString()=="0.0"){
-					  if(errStr.length >0){
-						  errStr =errStr+", "
-					  }
-					  errStr=errStr +"Total "
-				  }
-				  if(errStr.length >0){
-					  break;
-				  }
-			  }else{
-				  break;
-			  }
-		  }
-		  if(errStr.length >0 || i==1){
-			  if(errStr.length>0){
-			  errStr=errStr +" cannot be blank"
-			  if(errStr.toString().indexOf("Total") != -1){
-				  errStr = errStr +" or zero."
-			  }else{
-				  errStr = errStr +".";
-			  }
-			  }else{
-				  errStr="Please enter atleast two sub-projects." 
-			  }
-			  alert(errStr);
-			  return;
-		  }
-		  
-		  availableTags=[];
-			for(var j=0;j<ccUsersVar.length;j++){
-				if(ccUsersVar[j][0] == itemClicked[1]){
-					var res = ccUsersVar[j][1].substring(1, ccUsersVar[j][1].length-1);
-					availableTags = res.split(",");
+
+	function saveAndClose() {
+		var errStr = "";
+		var i = 0;
+		for (i = 0; i < m_data.length; i++) {
+			var d = m_data[i];
+			errStr = "";
+			
+			if (m_data[i][4] != "" && m_data[i][4] != "undefined") {
+				if (m_data[i][7].trim() == "" || m_data[i][7] == "undefined") {
+					errStr = errStr + "Project Owner "
+				}
+				if (m_data[i][5].toString().trim() == ""
+						|| m_data[i][5] == "undefined") {
+					if (errStr.length > 0) {
+						errStr = errStr + ", "
+					}
+					errStr = errStr + "gMemori Id "
+				}
+				if (m_data[i][1].trim() == "" || m_data[i][1] == "undefined") {
+					if (errStr.length > 0) {
+						errStr = errStr + ", "
+					}
+					errStr = errStr + "Brand "
+				}
+				if (m_data[i][3].toString().trim() == ""
+						|| m_data[i][3] == "undefined"
+						|| m_data[i][3].toString() == "0"
+						|| m_data[i][3].toString() == "0.0") {
+					if (errStr.length > 0) {
+						errStr = errStr + ", "
+					}
+					errStr = errStr + "Total "
+				}
+				if (errStr.length > 0) {
 					break;
 				}
+			} else {
+				break;
 			}
-		  
-		 availableTags.splice(0, 0, "Total Products(MB)");
-		 
-		 for(var i=0;i<m_data.length;i++){
-			  
-			  if((m_data[i][4]=="" || m_data[i][4]=="undefined") && m_data[i][1]!=""){
-				  m_data[i][4] = m_data[0][4];
-			  }
-		  }
-			$('#multibrandEdit').hide();
-			$('#back').removeClass('black_overlay').fadeIn(100);
-			var total =0.0;
-			for(var i=0;i<data.length;i++){
-				var d = data[i];
-				
-				 if(d["id"]!='undefined' && d["id"]== itemClicked["id"]){
-					 itemClicked[36] = JSON.parse(JSON.stringify(m_data));
-					 itemClicked[37] = true;
-					
-					 for (var j = 0; j < m_data.length; j++) {
-						 var d = m_data[j];
-						 if(d[4]!='' ){
-							total=total + parseFloat(d[3]);
-						 }else{
-							 break;
-						 }
-					 	} 
-					 break;
-				} 
-			}
-			itemClicked[24]=total;
-			grid.invalidate();
-		  if(itemClicked["34"]!="New projects" ){
-				 $.ajax({
-						url : '/multiBrandServlet',
-						type : 'POST',
-						dataType : 'json',
-						data : {objarray: JSON.stringify(m_data),sumTotal:total},
-						success : function(result) {
-							alert('Data saved successfully');
-							isMultiBrand = false;
-							window.location.reload(true);
-						}
-					});
-		  }
-			  for (var j = 0; j < m_data.length; j++) {
-					var d = (m_data[j] = {});
-					d[0] = "";
-					d[1] = "";
-					d[2] = "";
-					d[3] = "";
-					d[4] = "";
-					d[5] = "";
-					d[6] = "";
-					d[7] = "";
-			 	} 
 		}
 		
-		function closeWithoutSave(){
-			 availableTags=[];
-				for(var j=0;j<ccUsersVar.length;j++){
-					if(ccUsersVar[j][0] == itemClicked[1]){
-						var res = ccUsersVar[j][1].substring(1, ccUsersVar[j][1].length-1);
-						availableTags = res.split(",");
+		if (errStr.length > 0 || i == 1) {
+			if (errStr.length > 0) {
+				errStr = errStr + " cannot be blank"
+				if (errStr.toString().indexOf("Total") != -1) {
+					errStr = errStr + " or zero."
+				} else {
+					errStr = errStr + ".";
+				}
+			} else {
+				errStr = "Please enter atleast two sub-projects."
+			}
+			alert(errStr);
+			return;
+		}
+
+		availableTags = [];
+		
+		for (var j = 0; j < ccUsersVar.length; j++) {
+			if (ccUsersVar[j][0] == itemClicked[1]) {
+				var res = ccUsersVar[j][1].substring(1,
+						ccUsersVar[j][1].length - 1);
+				availableTags = res.split(",");
+				break;
+			}
+		}
+
+		availableTags.splice(0, 0, "Total Products(MB)");
+
+		for (var i = 0; i < m_data.length; i++) {
+
+			if ((m_data[i][4] == "" || m_data[i][4] == "undefined")
+					&& m_data[i][1] != "") {
+				m_data[i][4] = m_data[0][4];
+			}
+		}
+		$('#multibrandEdit').hide();
+		$('#back').removeClass('black_overlay').fadeIn(100);
+		var total = 0.0;
+		
+		for (var i = 0; i < data.length; i++) {
+			var d = data[i];
+
+			if (d["id"] != 'undefined' && d["id"] == itemClicked["id"]) {
+				itemClicked[36] = JSON.parse(JSON.stringify(m_data));
+				itemClicked[37] = true;
+
+				for (var j = 0; j < m_data.length; j++) {
+					var d = m_data[j];
+					if (d[4] != '') {
+						total = total + parseFloat(d[3]);
+					} else {
 						break;
 					}
 				}
-			availableTags.splice(0, 0, "Total Products(MB)");
-			 for (var j = 0; j < m_data.length; j++) {
-					var d = (m_data[j] = {});
-					d[0] = "";
-					d[1] = "";
-					d[2] = "";
-					d[3] = "";
-					d[4] = "";
-					d[5] = "";
-					d[6] = "";
-					d[7] = "";
-			 	} 
-			$('#multibrandEdit').hide();
-			$('#back').removeClass('black_overlay').fadeIn(100);
+				break;
+			}
+		}
+		itemClicked[24] = total;
+		grid.invalidate();
+		
+		if (itemClicked["34"] != "New projects") {
+			$.ajax({
+				url : '/multiBrandServlet',
+				type : 'POST',
+				dataType : 'json',
+				data : {
+					objarray : JSON.stringify(m_data),
+					sumTotal : total
+				},
+				success : function(result) {
+					alert('Data saved successfully');
+					isMultiBrand = false;
+					window.location.reload(true);
+				}
+			});
 		}
 		
-		function deleteSelectedProjects(){
-			var userAccepted = confirm("Selected project(s) will be deleted. Want to continue?");
-			if(!userAccepted){
-				return false;
-			}
-			var pLength = m_data.length;
-			var noProjToDelete = true;
-			for(var count = 0; count < m_data.length; count++){
-	    		if(m_data[count]["8"] != 'undefined' && m_data[count]["8"] == true){
-	    			m_data.splice(count--,1);
-	    			noProjToDelete = false;
-	    		}
-	    	}
-			if(noProjToDelete){
-				alert("Please select project(s) to delete.");
-			}
-			for(var c = 0; c < pLength; c++){
-				if(c >= m_data.length){
-					var d = (m_data[c] = {});
-					d[0] = "";
-					d[1] = "";
-					d[2] = "";
-					d[3] = "";
-					d[4] = "";
-					d[5] = "";
-					d[6] = "";
-					d[7] = "";
-					d[8] = false;
-				}
-				if(m_data[c][4].toString().trim() != "" && itemClicked[34] == "New projects"){
-				 	m_data[c][5]=itemClicked[0]+'.'+(c+1);
-				}
-			}
-			sum = 0;
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				sum = sum + parseFloat(m_data[count]["3"]);
-			}
-			for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-				m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
-			}
-			
-			if( m_data[0]["3"] == ""){
-				m_data[0][4]=itemClicked[2];
-			 	m_data[0][5]=itemClicked[0]+'.1';
-			 	m_data[0][7]=itemClicked[1];
-			}
-			m_grid.invalidate();
+		for (var j = 0; j < m_data.length; j++) {
+			var d = (m_data[j] = {});
+			d[0] = "";
+			d[1] = "";
+			d[2] = "";
+			d[3] = "";
+			d[4] = "";
+			d[5] = "";
+			d[6] = "";
+			d[7] = "";
 		}
-		
-	function displayMultibrandGrid() {
-	    m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
-	    m_grid.setSelectionModel(new Slick.CellSelectionModel());
-	    m_grid.registerPlugin(new Slick.AutoTooltips());
-	    m_grid.getCanvasNode().focus();
-	    
-	    m_grid.onClick.subscribe(function(e, args) {
-		   if(args.cell == 0){
-		   		deleteProjects(args.row);
-		   } 
-	   	})
-	    
-	   	m_grid.onAddNewRow.subscribe(function (e, args) {
-	      var item = args.item;
-	      var column = args.column;
-	      var row = args.row;
-	      m_grid.invalidateRow(m_data.length);
-	      m_data.push(item);
-	      m_grid.updateRowCount();
-	      m_grid.render();
-	    });
-	    
-		m_grid.onValidationError.subscribe(function(e, args) {
-	        var validationResult = args.validationResults;
-	        var activeCellNode = args.cellNode;
-	        var editor = args.editor;
-	        var errorMessage = validationResult.msg;
-	        var valid_result = validationResult.valid;
-	        
-	        if (!valid_result) {
-	        	alert(errorMessage);
-	          	$(activeCellNode).attr("title", errorMessage);
-	        }
-	        else {
-	           $(activeCellNode).attr("title", "");
-	        }
+	}
+	
+	function closeWithoutSave() {
+		availableTags = [];
+		for (var j = 0; j < ccUsersVar.length; j++) {
+			if (ccUsersVar[j][0] == itemClicked[1]) {
+				var res = ccUsersVar[j][1].substring(1,
+						ccUsersVar[j][1].length - 1);
+				availableTags = res.split(",");
+				break;
+			}
+		}
+		availableTags.splice(0, 0, "Total Products(MB)");
+		for (var j = 0; j < m_data.length; j++) {
+			var d = (m_data[j] = {});
+			d[0] = "";
+			d[1] = "";
+			d[2] = "";
+			d[3] = "";
+			d[4] = "";
+			d[5] = "";
+			d[6] = "";
+			d[7] = "";
+		}
+		$('#multibrandEdit').hide();
+		$('#back').removeClass('black_overlay').fadeIn(100);
+	}
 
-	    });
-	   
+	function deleteSelectedProjects() {
+		var userAccepted = confirm("Selected project(s) will be deleted. Want to continue?");
+		if (!userAccepted) {
+			return false;
+		}
+		var pLength = m_data.length;
+		var noProjToDelete = true;
+		for (var count = 0; count < m_data.length; count++) {
+			if (m_data[count]["8"] != 'undefined' && m_data[count]["8"] == true) {
+				m_data.splice(count--, 1);
+				noProjToDelete = false;
+			}
+		}
+		if (noProjToDelete) {
+			alert("Please select project(s) to delete.");
+		}
+		for (var c = 0; c < pLength; c++) {
+			if (c >= m_data.length) {
+				var d = (m_data[c] = {});
+				d[0] = "";
+				d[1] = "";
+				d[2] = "";
+				d[3] = "";
+				d[4] = "";
+				d[5] = "";
+				d[6] = "";
+				d[7] = "";
+				d[8] = false;
+			}
+			if (m_data[c][4].toString().trim() != ""
+					&& itemClicked[34] == "New projects") {
+				m_data[c][5] = itemClicked[0] + '.' + (c + 1);
+			}
+		}
+		sum = 0;
+		for (var count = 0; count < m_data.length && m_data[count]["3"] != ""
+				&& m_data[count]["3"] != "undefined"; count++) {
+			sum = sum + parseFloat(m_data[count]["3"]);
+		}
+		for (var count = 0; count < m_data.length && m_data[count]["3"] != ""
+				&& m_data[count]["3"] != "undefined"; count++) {
+			m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+		}
+
+		if (m_data[0]["3"] == "") {
+			m_data[0][4] = itemClicked[2];
+			m_data[0][5] = itemClicked[0] + '.1';
+			m_data[0][7] = itemClicked[1];
+		}
+		m_grid.invalidate();
+	}
+
+	// Multibrand popup window
+	function displayMultibrandGrid() {
+		m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
+		m_grid.setSelectionModel(new Slick.CellSelectionModel());
+		m_grid.registerPlugin(new Slick.AutoTooltips());
+		m_grid.getCanvasNode().focus();
+
+		m_grid.onClick.subscribe(function(e, args) {
+			if (args.cell == <%=BudgetConstants.MB_CHECKBOX_CELL%>) {
+				initDeletionCell(args.row);
+			}
+		})
+		
+		function initDeletionCell(row) {
+			for (var count = 0; count < m_data.length; count++) {
+				var thisId = "#" + count + "chkBox";
+				if ($(thisId).is(':checked')) {
+					m_data[count]["8"] = true;
+				} else {
+					m_data[count]["8"] = false;
+				}
+			}
+		}
+
+		m_grid.onAddNewRow.subscribe(function(e, args) {
+			var item = args.item;
+			var column = args.column;
+			var row = args.row;
+			m_grid.invalidateRow(m_data.length);
+			m_data.push(item);
+			m_grid.updateRowCount();
+			m_grid.render();
+		});
+
+		m_grid.onValidationError.subscribe(function(e, args) {
+			var validationResult = args.validationResults;
+			var activeCellNode = args.cellNode;
+			var editor = args.editor;
+			var errorMessage = validationResult.msg;
+			var valid_result = validationResult.valid;
+
+			if (!valid_result) {
+				alert(errorMessage);
+				$(activeCellNode).attr("title", errorMessage);
+			} else {
+				$(activeCellNode).attr("title", "");
+			}
+
+		});
+
 		m_grid.onBeforeEditCell
-		.subscribe(function(e, args) {
-			
+				.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row;
-			var pRow=row+1;
-			
-			if((args.item[0].toString().trim()!="" && itemClicked[26]=="Active") || (itemClicked[26]=="Closed")){
+			var pRow = row + 1;
+
+			if ((args.item[0].toString().trim() != "" && itemClicked[26] == "Active")
+					|| (itemClicked[26] == "Closed")) {
 				return false;
 			}
-			if(cell == 4 ){
-				 availableTags=[];
-				for(var j=0;j<ccUsersVar.length;j++){
-					if(ccUsersVar[j][0] == m_data[row]["7"]){
-						var res = ccUsersVar[j][1].substring(1, ccUsersVar[j][1].length-1);
+			if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+				availableTags = [];
+				for (var j = 0; j < ccUsersVar.length; j++) {
+					if (ccUsersVar[j][0] == m_data[row]["7"]) {
+						var res = ccUsersVar[j][1].substring(1,
+								ccUsersVar[j][1].length - 1);
 						availableTags = res.split(",");
 						break;
 					}
 				}
-			} 
-			if(args.row == 0 && (args.cell==0 || args.cell==2)){
-				return false;
 			}
-			if(args.row!=0){
-			
-			if(cell==1){
-				
-				m_data[row]["4"] = m_data[row-1]["4"];
-				m_grid.invalidate();
-				return false;
-			}
-			if(cell==3){
-				if(m_data[row]["5"] == ""){
-					m_data[row]["5"] = m_data[row-1]["5"].split(".")[0]+"."+  (parseInt(m_data[row-1]["5"].split(".")[1]) + 1);
-					m_grid.invalidate();
+			if (row == 0){
+				if(cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>){
+					return false
 				}
-				return false;
+				return true;
 			}
-			if((m_data[row]["7"]=='undefined' || m_data[row]["7"] == "") && cell==2){
-				m_data[row]["7"] = m_data[row-1]["7"];
-				m_grid.invalidate();
-				return false;
-			}
-			
+			if (row != 0) {
+				if (cell == <%=BudgetConstants.MB_PROJECT_NAME_CELL%>) {
+					m_data[row]["4"] = m_data[row - 1]["4"];
+					m_grid.invalidate();
+					return false;
+				}
+				if (cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>) {
+					if (m_data[row]["5"] == "") {
+						m_data[row]["5"] = m_data[row - 1]["5"]
+								.split(".")[0]
+								+ "."
+								+ (parseInt(m_data[row - 1]["5"]
+										.split(".")[1]) + 1);
+						m_grid.invalidate();
+					}
+					return false;
+				}
+				if ((m_data[row]["7"] == 'undefined' || m_data[row]["7"] == "")
+						&& cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
+					m_data[row]["7"] = m_data[row - 1]["7"];
+					m_grid.invalidate();
+					return false;
+				}
 			}
 			return true;
-			
 		});
-	    
-	    function deleteProjects(row){
-	    	for(var count = 0; count < m_data.length /* && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined" */; count++){
-	    		var thisId = "#"+count+"chkBox";
-	    		if($(thisId).is(':checked')){
-	    			m_data[count]["8"] = true;
-	    		}else{
-	    			m_data[count]["8"] = false;
-	    		}
-	    	}
-	    }
-	    
-	    function removeArrayItem(arr, item) {
-	        var removeCounter = 0;
 
-	        for (var index = 0; index < arr.length; index++) {
-	            if (arr[index] === item) {
-	                arr.splice(index, 1);
-	                removeCounter++;
-	                index--;
-	            }
-	        }
-	        return removeCounter;
-	    }
-	    
-	    m_grid.onCellChange.subscribe(function(e, args) {
-			
-			var cell = args.cell;
-			var row = args.row;
-			var isValidBrand = false;
-			sum = 0.0;
-			if(cell == 5){
-				
-				for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-					sum = sum + parseFloat(m_data[count]["3"]);
+		function removeArrayItem(arr, item) {
+			var removeCounter = 0;
+
+			for (var index = 0; index < arr.length; index++) {
+				if (arr[index] === item) {
+					arr.splice(index, 1);
+					removeCounter++;
+					index--;
 				}
-				for(var count = 0; count < m_data.length && m_data[count]["3"] != "" && m_data[count]["3"] != "undefined"; count++){
-					m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
-				}
-	           if(	row+1 >= 5 && m_grid.getDataLength()==row+1){
-	        	   var initMData = (m_data[m_grid.getDataLength()] = {});
-	        	   initMData[0] = "";
-	        	   initMData[1] = "";
-	        	   initMData[2] = "";
-	        	   initMData[3] = "";
-	        	   initMData[4] = "";
-	        	   initMData[5] = "";
-	        	   initMData[6] = "";
-	        	   initMData[7] = "";
-	        	   initMData[8] = false;
-	        	   m_grid.invalidate();
-	        	   m_grid.invalidateRow(m_grid.getSelectedRows());
-	        	   m_grid.updateRowCount();
-	        	   m_grid.render();
-				}
-				m_grid.invalidate();
-				
-			}
-			if(cell == 2 && poOwners.toString().indexOf(m_data[row][7]) == -1){
-				for(var i=0;i< poOwners.length;i++){
-					if(poOwners[i]===m_data[row][1] ){
-						isValidBrand = true;
-						break;
-					}
-				}
-				if(isValidBrand == false){
-					m_data[row][7]="";
-					alert("Please choose a valid project owner.");
-					m_grid.invalidate();
-					return;
-				}
-			}
-			if(cell == 4 ){
-				for(var i=0;i< availableTags.length;i++){
-					if(availableTags[i].toString().trim().toLowerCase()===m_data[row][1].toString().trim().toLowerCase()){
-						m_data[row][1]=availableTags[i].toString();
-						isValidBrand = true;
-						break;
-					}
-				}
-				if(isValidBrand == false){
-					m_data[row][1]="";
-					alert("Enter a valid brand.");
-			        m_grid.gotoCell(row, cell-2, true);
-			      
-			}
-				m_grid.invalidate();
 			}
 			
-		});
-    
-	  }
+			return removeCounter;
+		}
+
+		m_grid.onCellChange
+				.subscribe(function(e, args) {
+					var cell = args.cell;
+					var row = args.row;
+					var isValidBrand = false;
+					sum = 0.0;
+					if (cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>) {
+
+						for (var count = 0; count < m_data.length
+								&& m_data[count]["3"] != ""
+								&& m_data[count]["3"] != "undefined"; count++) {
+							sum = sum + parseFloat(m_data[count]["3"]);
+						}
+						for (var count = 0; count < m_data.length
+								&& m_data[count]["3"] != ""
+								&& m_data[count]["3"] != "undefined"; count++) {
+							m_data[count]["2"] = (m_data[count]["3"] / sum * 100)
+									.toFixed(2);
+						}
+						if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
+							var initMData = (m_data[m_grid.getDataLength()] = {});
+							initMData[0] = "";
+							initMData[1] = "";
+							initMData[2] = "";
+							initMData[3] = "";
+							initMData[4] = "";
+							initMData[5] = "";
+							initMData[6] = "";
+							initMData[7] = "";
+							initMData[8] = false;
+							m_grid.invalidate();
+							m_grid.invalidateRow(m_grid.getSelectedRows());
+							m_grid.updateRowCount();
+							m_grid.render();
+						}
+						m_grid.invalidate();
+					}
+					if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>
+							&& poOwners.toString().indexOf(m_data[row][7]) == -1) {
+						for (var i = 0; i < poOwners.length; i++) {
+							if (poOwners[i] === m_data[row][1]) {
+								isValidBrand = true;
+								break;
+							}
+						}
+						if (isValidBrand == false) {
+							m_data[row][7] = "";
+							alert("Please choose a valid project owner.");
+							m_grid.invalidate();
+							return;
+						}
+					}
+					if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+						for (var i = 0; i < availableTags.length; i++) {
+							if (availableTags[i].toString().trim()
+									.toLowerCase() === m_data[row][1]
+									.toString().trim().toLowerCase()) {
+								m_data[row][1] = availableTags[i].toString();
+								isValidBrand = true;
+								break;
+							}
+						}
+						if (isValidBrand == false) {
+							m_data[row][1] = "";
+							alert("Enter a valid brand.");
+							m_grid.gotoCell(row, <%=BudgetConstants.MB_BRAND_CELL%>, true);
+						}
+						m_grid.invalidate();
+					}
+
+				});
+
+	}
 </script>
 
 
