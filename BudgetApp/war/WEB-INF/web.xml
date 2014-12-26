@@ -6,7 +6,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<servlet>
 		<servlet-name>StoreReport</servlet-name>
-		<servlet-class>com.gene.app.server.StoreReport</servlet-class>
+		<servlet-class>com.gene.app.action.StoreReport</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StoreReport</servlet-name>
@@ -14,17 +14,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>cStoreReport</servlet-name>
-		<servlet-class>com.gene.app.server.StoreReportCreate</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>cStoreReport</servlet-name>
-		<url-pattern>/cstorereport</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
 		<servlet-name>GetReport</servlet-name>
-		<servlet-class>com.gene.app.server.GetReport</servlet-class>
+		<servlet-class>com.gene.app.action.GetReport</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetReport</servlet-name>
@@ -79,7 +70,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	<servlet>
 		<servlet-name>MultiBrandServlet</servlet-name>
-		<servlet-class>com.gene.app.server.MultiBrandServlet</servlet-class>
+		<servlet-class>com.gene.app.action.MultiBrandServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>MultiBrandServlet</servlet-name>
@@ -88,7 +79,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	<servlet>
 		<servlet-name>GetProjectData</servlet-name>
-		<servlet-class>com.gene.app.server.GetProjectData</servlet-class>
+		<servlet-class>com.gene.app.action.GetProjectData</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetProjectData</servlet-name>
@@ -97,7 +88,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>com.gene.app.server.LoginServlet</servlet-class>
+		<servlet-class>com.gene.app.action.LoginServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
@@ -106,7 +97,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	<servlet>
 		<servlet-name>AutoSaveData</servlet-name>
-		<servlet-class>com.gene.app.server.AutoSaveData</servlet-class>
+		<servlet-class>com.gene.app.action.AutoSaveData</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AutoSaveData</servlet-name>
@@ -115,7 +106,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
 	<servlet>
 		<servlet-name>promoteType</servlet-name>
-		<servlet-class>com.gene.app.server.UpdateType</servlet-class>
+		<servlet-class>com.gene.app.action.UpdateType</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>promoteType</servlet-name>
@@ -123,7 +114,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>GetSummaryFromCache</servlet-name>
-		<servlet-class>com.gene.app.server.GetSummaryFromCache</servlet-class>
+		<servlet-class>com.gene.app.action.GetSummaryFromCache</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetSummaryFromCache</servlet-name>
