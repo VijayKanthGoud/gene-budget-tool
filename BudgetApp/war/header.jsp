@@ -1,11 +1,11 @@
-<%@page import="com.gene.app.bean.UserRoleInfo"%>
+<%@page import="com.gene.app.model.UserRoleInfo"%>
 <%@ page import="java.security.Principal"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="java.util.logging.*"%>
 <%@ page import="com.google.appengine.api.memcache.*"%>
-<%@ page import="com.gene.app.util.*" %>
+<%@ page import="com.gene.app.dao.*" %>
 <%@ page import="com.google.appengine.api.memcache.MemcacheService" %>
 <%@ page import="com.google.appengine.api.memcache.MemcacheServiceFactory" %>
 

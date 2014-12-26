@@ -1,5 +1,6 @@
-<%@page import="com.gene.app.bean.*"%>
-<%@page import="com.gene.app.util.*"%>
+<%@page import="com.gene.app.model.*"%>
+<%@page import="com.gene.app.dao.DBUtil"%>
+<%@page import="com.gene.app.util.BudgetConstants"%>
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
 <%@page import="javax.servlet.RequestDispatcher"%>
