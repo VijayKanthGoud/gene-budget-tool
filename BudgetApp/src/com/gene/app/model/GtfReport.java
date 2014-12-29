@@ -88,8 +88,17 @@ public class GtfReport implements Serializable,Cloneable {
 	@Persistent
 	private String year;
 	
-	//@Persistent
+	@Persistent
 	private String costCenter;
+	
+	@Persistent
+	private String qual_Quant;
+	
+	@Persistent
+	private String study_Side;
+	
+	@Persistent
+	private int units;
 	
 	/*public GtfReport(GtfReport gtfReport1) {
 		// TODO Auto-generated constructor stub
@@ -304,5 +313,29 @@ public class GtfReport implements Serializable,Cloneable {
 
 	public void setFlag(int flag) {
 		this.flag = flag;
+	}
+	
+	public String getQual_Quant() {
+		return qual_Quant;
+	}
+
+	public void setQual_Quant(String qual_Quant) {
+		this.qual_Quant = qual_Quant;
+	}
+
+	public String getStudy_Side() {
+		return study_Side;
+	}
+
+	public void setStudy_Side(String study_Side) {
+		this.study_Side = study_Side;
+	}
+
+	public int getUnits() {
+		return units;
+	}
+
+	public void setUnits(int units) {
+		this.units = units;
 	}
 }

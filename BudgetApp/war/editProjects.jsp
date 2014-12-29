@@ -1698,7 +1698,8 @@
 			name : "Total($ in 1000's)",
 			field : 3,
 			width : 140,
-			editor : Slick.Editors.FloatText
+			editor : Slick.Editors.FloatText,
+			formatter : Slick.Formatters.DollarSymbolMB
 		}, {
 			id : 7,
 			name : "Allocation %",

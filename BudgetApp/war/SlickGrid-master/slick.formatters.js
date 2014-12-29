@@ -18,6 +18,7 @@
         "YesNo": YesNoFormatter,
         "Checkmark": CheckmarkFormatter,
         "DollarSymbol" : DollarFormatter,
+        "DollarSymbolMB" : DollarFormatterMB,
         "Remark":RemarkFormatter,
         "HyperLink":HyperLinkFormatter,
         "budget":BudgetFormatter,
@@ -65,11 +66,17 @@
  
   function DollarFormatter(row, cell, value, columnDef, dataContext) {
 	  if(dataContext["35"] != "Buttons"){
-	if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
-		return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'>"+ Number(value).toFixed(2) +"</span>" 
-	}else{
-		return "<span style='color:#005691'>"+ Number(value).toFixed(2) +"</span>" 
-	}
+		if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
+			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> $ "+ Number(value).toFixed(2) +"</span>" 
+		}else{
+			return "<span style='color:#005691'> $ "+ Number(value).toFixed(2) +"</span>" 
+		}
+	  }
+  }
+  
+  function DollarFormatterMB(row, cell, value, columnDef, dataContext) {
+	  if(dataContext[1].trim() != '' || dataContext[2].trim() != ''){
+		  return "<span style='color:#005691'> $ "+ Number(value).toFixed(2) +"</span>";
 	  }
   }
   
