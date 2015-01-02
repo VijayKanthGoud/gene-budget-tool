@@ -104,7 +104,7 @@
     var scope = this;
 
     this.init = function () {
-      $input = $("<INPUT type=text class='editor-text' />")
+      $input = $("<INPUT type=text class='editor-text'  placeholder='Please enter text'/>")
           .appendTo(args.container)
           .bind("keydown.nav", function (e) {
             if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
@@ -173,7 +173,7 @@
     var scope = this;
 
     this.init = function () {
-      $input = $("<INPUT type=text class='editor-text' />");
+      $input = $("<INPUT type=text class='editor-text'/>");
 
       $input.bind("keydown.nav", function (e) {
         if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
@@ -236,7 +236,7 @@
     var calendarOpen = false;
 
     this.init = function () {
-      $input = $("<INPUT type=text class='editor-text' />");
+      $input = $("<INPUT type=text class='editor-text' placeholder='dd\mm\yyyy'/>");
       $input.appendTo(args.container);
       $input.focus().select();
       $input.datepicker({
@@ -659,7 +659,7 @@
 	    var scope = this;
 
 	    this.init = function () {
-	      $input = $("<INPUT type=text class='editor-text' maxlength='6' />");
+	      $input = $("<INPUT type=text class='editor-text' maxlength='6' placeholder='gMemoryID' />");
 
 	      $input.bind("keydown.nav", function (e) {
 	        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
