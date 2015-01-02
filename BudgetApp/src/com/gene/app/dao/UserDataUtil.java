@@ -18,21 +18,21 @@ public class UserDataUtil {
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2"};//,"","","",""};
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags"};//,"","","",""};
 	String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags",
-			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield"};
+			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield", "suchockw", "grabowsa"};
 	// create user email array
 	/*String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
 			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com"};*///,"","","",""};
 	String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
 			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com","savitzky.michael@gene.com",
-			"narasimhan.srihari@gene.com","chen.melissa@gene.com","basurto.kimberly@gene.com","sheffield.jamieson@gene.com"};
+			"narasimhan.srihari@gene.com","chen.melissa@gene.com","basurto.kimberly@gene.com","sheffield.jamieson@gene.com", "suchockw@gene.com", "grabowsa@gene.com"};
 	//String [] userEmail = {"test@example.com"};
 	// create brandmap array
 
 	// create role array
 	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Project Owner","Project Owner","Project Owner",
-			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner"};
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
-	String [] costCenter = {"307680","235031","307677","235032","307677","307680","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004"};
+	String [] costCenter = {"307680","235031","307677","235032","307677","307680","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Onart", 30000.0);
