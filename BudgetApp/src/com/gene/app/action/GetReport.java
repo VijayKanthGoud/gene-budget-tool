@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,33 +30,43 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class GetReport extends HttpServlet {
-	private final static Logger LOGGER = Logger
-			.getLogger(GetReport.class.getName());
+	/*private final static Logger LOGGER = Logger
+			.getLogger(GetReport.class.getName());*/
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 	DBUtil util = new DBUtil();
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		HttpSession session = req.getSession();
+		String queryString = req.getQueryString();
 		resp.setContentType(BudgetConstants.contentType);
 		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
 		UserService userService;
 		String email ="";
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
-		LOGGER.log(Level.INFO, "Inside GetReport");
+		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
 		email = userService.getCurrentUser().getEmail();
 		user = util.readUserRoleInfo(email);
-		LOGGER.log(Level.INFO, "email in userService"+email);
+		//LOGGER.log(Level.INFO, "email in userService"+email);
 		}else{
 		email = user.getEmail();
-		LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
+		//LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
 		gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
-		LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
+		//LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
-		LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
-		Collections.sort( gtfReportList, new Comparator<GtfReport>()
+		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
+		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim())){
+		queryGtfRptList = getQueryGtfReportList(gtfReportList,queryString,req);
+		 req.setAttribute("accessreq", "external");
+		}else{
+			queryGtfRptList = gtfReportList;
+			 req.setAttribute("accessreq", "internal");
+		}
+		//LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
+		String qParam = req.getParameter("gMemoriId");
+		Collections.sort( queryGtfRptList, new Comparator<GtfReport>()
 		        {
 		            public int compare( GtfReport o1, GtfReport o2 )
 		            {
@@ -68,14 +79,14 @@ public class GetReport extends HttpServlet {
 		            	return o1.getFlag() - o2.getFlag();
 		            }
 		        } );
-		gtfReportList = util.calculateVarianceMap(gtfReportList);
-		LOGGER.log(Level.INFO, "gtfReportList from after calculating variance map"+gtfReportList);
-		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, gtfReportList);
+		queryGtfRptList = util.calculateVarianceMap(queryGtfRptList);
+		//LOGGER.log(Level.INFO, "gtfReportList from after calculating variance map"+gtfReportList);
+		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, queryGtfRptList);
 		DBUtil util = new DBUtil();
 		//UserRoleInfo user = util.readUserRoleInfo(email);
 		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
 		BudgetSummary summary = util.readBudgetSummary(user.getCostCenter());
-		LOGGER.log(Level.INFO, "summary from util.readBudgetSummary(user.getCostCenter())"+summary);
+		//LOGGER.log(Level.INFO, "summary from util.readBudgetSummary(user.getCostCenter())"+summary);
 		req.setAttribute("user", user);
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		RequestDispatcher rd = req.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);
@@ -102,4 +113,53 @@ public class GetReport extends HttpServlet {
 		}
 		return gtfReportList;
 	}
+	public List<GtfReport> getQueryGtfReportList(List<GtfReport>gtfReports,String queryString,HttpServletRequest req){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		String qParam = ""; 
+		Iterator<GtfReport> iter = null;
+			if(gtfReports!=null){
+				iter = gtfReports.iterator();
+				
+				qParam = req.getParameter("gMemoriId");
+				//int dotpos = qParam.indexOf(".");
+				/*if(dotpos>0){
+				qParam = qParam.substring(0,dotpos);
+				}*/
+			while(iter.hasNext()){
+			if(queryString.contains("gMemoriId")) {
+				
+					gtfReport = iter.next();
+					if(gtfReport.getgMemoryId().contains(qParam)) {
+					gtfReportList.add(gtfReport);
+					}
+			}else if(queryString.contains("projectName")){
+				qParam = req.getParameter("projectName");
+					gtfReport = iter.next();
+					if(qParam.equalsIgnoreCase(gtfReport.getProjectName())) {
+					gtfReportList.add(gtfReport);
+					}
+			}else if(queryString.contains("brand")){
+				qParam = req.getParameter("brand");
+					gtfReport = iter.next();
+					if(qParam.equalsIgnoreCase(gtfReport.getBrand())) {
+					gtfReportList.add(gtfReport);
+					}
+			}
+	}}
+		return gtfReportList;
+	}
+	/*public List<GtfReport> getRptListByGmemId(List<GtfReport>gtfReports,String qParam){
+		GtfReport gtfReport = null;
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+	if(gtfReports!=null){
+		Iterator<GtfReport> iter = gtfReports.iterator();
+		while(iter.hasNext()){
+			gtfReport = iter.next();
+			if(qParam.equalsIgnoreCase(gtfReport.getgMemoryId())) {
+			gtfReportList.add(gtfReport);
+			}
+		}}
+	return gtfReportList;
+	}*/
 }
