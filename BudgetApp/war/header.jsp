@@ -37,10 +37,10 @@
 		String logoutLink = "";
 		DBUtil util = new DBUtil();
 		String costCenter="307673";
-		 /* UserDataUtil util1 = new UserDataUtil();
+		 /*  UserDataUtil util1 = new UserDataUtil();
 		util1.insertCCMapping();
 		util1.insertUserRoleInfo();
-		util1.insertBudgetSummary();   */
+		util1.insertBudgetSummary();    */ 
 		if (userPrincipal != null) {
 			logoutLink = userService.createLogoutURL("/");
 			User user = userService.getCurrentUser();
@@ -101,7 +101,7 @@
 	<div style="height: 5px;"></div>
 	<div id='cssmenu'>
 		<ul>
-			<li><a href='/'><span>Home</span></a></li>
+			<li><a href='http://memori-dev.appspot.com'  target='_blank'><span>Home</span></a></li>
 			<li class='last'><a href='/displayReports'><span>Reports</span></a></li>
 			<%
 				if (isAdmin) {
