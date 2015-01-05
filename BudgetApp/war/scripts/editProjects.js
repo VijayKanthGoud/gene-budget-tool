@@ -107,9 +107,9 @@ function groupByStatus() {
 				lazyTotalsCalculation : true
 			},
 		    {
-			      getter: 34,
+			      getter: 42,
 			      formatter :function (g) {
-			        return g.value;
+			        return  g.rows[g.count - 1][27];
 			      },
 			      lazyTotalsCalculation: true
 			    }
@@ -140,7 +140,7 @@ function sumTotalsFormatter(totals, columnDef) {
 	return "";
 }
 
-// Filter data acording to search field
+// Filter data according to search field
 function searchProject(item) {
 	var status = true;
 	if (item[33] != "New") {

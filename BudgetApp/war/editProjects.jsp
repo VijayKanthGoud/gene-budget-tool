@@ -353,6 +353,7 @@
         		d[37]=<%=gReport.getMultiBrand()%>;
         		d[38]="<%=gReport.getCreateDate()%>";
         		d[39]="<%=gReport.getYear()%>";
+        		d[42]="<%=gReport.getProjectName()%>";
 				if(gmemoriID.indexOf(".") > -1){
 					d[34]=gmemoriID.split(".")[0];
 				}
