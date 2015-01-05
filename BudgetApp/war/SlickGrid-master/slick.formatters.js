@@ -134,7 +134,7 @@
 	 // console.log("dataContext = "+JSON.stringify(dataContext,null,4));
 	 // alert("columnDef "+JSON.stringify(columnDef));
 	  if(dataContext[35] == "NewProjects"){
-		return "<INPUT type=text class='editor-text' maxlength='6' placeholder="+columnDef["name"]+" />";
+		return "<INPUT type=text class='editor-text' maxlength='6'/>";
 	  }
   }
   

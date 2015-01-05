@@ -109,7 +109,11 @@ function groupByStatus() {
 		    {
 			      getter: 42,
 			      formatter :function (g) {
-			        return  g.rows[g.count - 1][27];
+			    	  var value = g.rows[g.count - 1][27];
+			    	  if(value.indexOf(".") != -1){
+			    		  value = value.split(".")[0];
+			    	  }
+			        return  value;
 			      },
 			      lazyTotalsCalculation: true
 			    }
