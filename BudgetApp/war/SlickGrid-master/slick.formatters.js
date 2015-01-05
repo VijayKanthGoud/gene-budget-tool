@@ -104,7 +104,8 @@
   function gMemoriHyperLinkFormatter(row, cell, value, columnDef, dataContext) {
 	  var val = value.toString();
 	  if(val.length>0 && dataContext[35]!="NewProjects"){
-		  var url = "https://25-dot-budget-mgmt-tool.appspot.com/?gMemoriId="+val;
+		//  var url = "http://25-dot-gbmt-dev.appspot.com/?gMemoriId="+val;
+		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
 		  return "<span ><a href="+url+" target='_blank' style='color:green'>"+value + "</a></span>" ;
 	  }else{
 		  return val;
