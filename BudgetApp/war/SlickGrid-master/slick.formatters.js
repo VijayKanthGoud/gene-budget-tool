@@ -106,7 +106,7 @@
 	  if(val.length>0 && dataContext[35]!="NewProjects"){
 		//  var url = "http://25-dot-gbmt-dev.appspot.com/?gMemoriId="+val;
 		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
-		  return "<span ><a href="+url+" target='_blank' style='color:green'>"+value + "</a></span>" ;
+		  return "<span ><a id='gmem' href="+url+" target='gMem' style='color:green'>"+value + "</a></span>" ;
 	  }else{
 		  return val;
 	  }
