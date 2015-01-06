@@ -42,7 +42,14 @@
     		   autoTags = availableTags
     	   }
 	       $input.autocomplete({
-	    		   source: autoTags
+	    		   source: function (request, response) {
+	    		        var matches = $.map(autoTags, function (autoTags) {
+	    		            if (autoTags.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+	    		                return autoTags;
+	    		            }
+	    		        });
+	    		        response(matches);
+	    		    }
 	        });
 	     };
 
