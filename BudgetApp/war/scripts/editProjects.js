@@ -1,89 +1,105 @@
- var selectedValue = "";
+var selectedValue = "";
 var summaryResult = "";
 var availableTags = [];
 var poOwners=[];
 var ccUsersVar=[];
 function getAvailableTags(){
-availableTags[0] = "Total Products(MB)";
-var j;
-<%for(int i=0;i<brands.length;i++){%>
-j=<%= i+1%>;
-availableTags[j] = '<%= brands[i]%>';
-<%}%>
+	availableTags[0] = "Total Products(MB)";
+	var j;
+	<%for(int i=0;i<brands.length;i++){%>
+		j=<%= i+1%>;
+		availableTags[j] = '<%= brands[i]%>';
+	<%}%>
 } 
+
 function getBrandTotals(){
-
-selectedValue = document.getElementById("brandType").value; 
-$.ajax({
-url : '/GetSummaryFromCache',
-type : 'POST',
-dataType : 'text',
-data : {costCentre: <%=userInfo.getCostCenter()%>
-},
-success : function(result) {
-summaryResult = result;
-getSummaryValues();
-}
-});
+	selectedValue = document.getElementById("brandType").value; 
+	$.ajax({
+		url : '/GetSummaryFromCache',
+		type : 'POST',
+		dataType : 'text',
+		data : {costCentre: <%=userInfo.getCostCenter()%>
+		},
+		success : function(result) {
+			summaryResult = result;
+			getSummaryValues();
+		}
+	});
 } 
 
+
+noOfNew = 0;
+noOfActive = 0;
+noOfClosed = 0;
+var newArr = [];
+var ActiveArr = [];
+var ClosedArr = [];
+var uniqueNames = [];
+var isMatchPresent = false;
 function groupByStatus() {
 	dataView
 			.setGrouping([{
 				getter : 26,
 				formatter : function(g) {
-					noOfNew = 0;
-					noOfActive = 0;
-					noOfClosed = 0;
+			    	  for(var cnt = 0; cnt < g.rows.length; cnt++){
+			    		  var gmemID = g.rows[cnt][0];
+			    		  if(gmemID.trim() != ""){
+			    			  var value = g.rows[cnt][0];
+			    			  if(value.toString().indexOf(".") > -1){
+			    				  value = value.split(".")[0];
+			    			  }
+			    			  if(g.rows[cnt][26] == "New"){
+			    				  newArr.push(value);
+			    			  }
+			    			  if(g.rows[cnt][26] == "Active"){
+			    				  ActiveArr.push(value);
+			    			  }
+			    			  if(g.rows[cnt][26] == "Closed"){
+			    				  ClosedArr.push(value);
+			    			  }
+			    		  }
+			    	  }
+			    	  uniqueNames = [];
+			    	  $.each(newArr, function(i, el){
+						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+					  });
+			    	  noOfNew = uniqueNames.length;
+			    	  
+			    	  uniqueNames = [];
+						$.each(ActiveArr, function(i, el){
+						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+						});
+			    	  noOfActive = uniqueNames.length;
 					
-					var newArr = [];
-					var ActiveArr = [];
-					var ClosedArr = [];
-					var uniqueNames = [];
-					for(var cnt=0; cnt<data.length; cnt++){
-						if(data[cnt][26].indexOf("New") != -1 && data[cnt][0].toString().trim() != ""  && data[cnt][34]!="New projects" ){
-							newArr.push(data[cnt][34]);
-						}
-						if(data[cnt][26].indexOf("Active") != -1 && data[cnt][0].toString().trim() != ""  && data[cnt][34]!="New projects"){
-							ActiveArr.push(data[cnt][34]);
-						}
-						if(data[cnt][26].indexOf("Closed") != -1 && data[cnt][0].toString().trim() != ""  && data[cnt][34]!="New projects"){
-							ClosedArr.push(data[cnt][34]);
-						}
-					}
-					
-					
-					$.each(newArr, function(i, el){
-					    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-					});
-					noOfNew = uniqueNames.length;
-					uniqueNames = [];
-					$.each(ActiveArr, function(i, el){
-					    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-					});
-					noOfActive = uniqueNames.length;
-					uniqueNames = [];
-					$.each(ClosedArr, function(i, el){
-					    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-					});
-					
-					noOfClosed = uniqueNames.length;
-					
-					if (g.value == "Total") {
+			    	  uniqueNames = [];
+						$.each(ClosedArr, function(i, el){
+						    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+						});
+					  noOfClosed = uniqueNames.length;
+					  newArr = [];
+					  ActiveArr = [];
+					  ClosedArr = [];
+					  console.log(noOfNew + noOfActive + noOfClosed);
+					  if((noOfNew > 0 || noOfActive > 0 || noOfClosed > 0) && searchString != ""){
+						  isMatchPresent = true;
+					  }else{
+						  isMatchPresent = false;
+					  }
+					  if (g.value == "Total") {
 						return "<span style='color:green'>"
 							+ g.value + "</span>";
-					} 
-					else if (g.value == "New"){
-						return " " + g.value
-						+ "<span style='color:green'>("
-						+ noOfNew + " items)</span>" 
-						+ "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
-					} 
-					else if (g.value == "Active"){
-						return " " + g.value
-						+ "  <span style='color:green'>("
-						+     noOfActive + " items)</span>";
-					}
+					  } 
+						else if (g.value == "New"){
+							return " " + g.value
+							+ "<span style='color:green'>("
+							+ noOfNew + " items)</span>" 
+							+ "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
+						} 
+						else if (g.value == "Active"){
+							return " " + g.value
+							+ "  <span style='color:green'>("
+							+     noOfActive + " items)</span>";
+						}
 					else if (g.value == "Closed"){
 						return " " + g.value
 						+ "<span style='color:green'>("
@@ -144,23 +160,30 @@ function sumTotalsFormatter(totals, columnDef) {
 	return "";
 }
 
+if ( typeof String.prototype.startsWith != 'function' ) {
+	  String.prototype.startsWith = function( str ) {
+	    return this.substring( 0, str.length ) === str;
+	  }
+};
+	
 // Filter data according to search field
 function searchProject(item) {
+	
 	var status = true;
 	if (item[33] != "New") {
 		status = false;
 	}
 	
-	if (((searchString != "" && item[27].toLowerCase().indexOf(
-			searchString.toLowerCase()) == -1)
-			&& (searchString != "" && item[28].toLowerCase().indexOf(
-					searchString.toLowerCase()) == -1)
-			&& (searchString != "" && item[29].toLowerCase().indexOf(
-					searchString.toLowerCase()) == -1)
-			&& (searchString != "" && item[32].toLowerCase().indexOf(
-					searchString.toLowerCase()) == -1)
-			&& (searchString != "" && item[30].toLowerCase().indexOf(
-					searchString.toLowerCase()) == -1) && item[26] != "Total")
+	if (((searchString != "" && ! item[27].toLowerCase().startsWith(
+			searchString.toLowerCase()))
+			&& (searchString != "" && ! item[28].toLowerCase().startsWith(
+					searchString.toLowerCase()))
+			&& (searchString != "" && ! item[29].toLowerCase().startsWith(
+					searchString.toLowerCase()))
+			&& (searchString != "" && ! item[32].toLowerCase().startsWith(
+					searchString.toLowerCase()))
+			&& (searchString != "" && ! item[30].toLowerCase().startsWith(
+					searchString.toLowerCase())) && item[26] != "Total")
 			|| (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase().indexOf(
 					radioString.toLowerCase()) == -1)) {
 		return false;
@@ -170,20 +193,20 @@ function searchProject(item) {
 		var parent = data[item.parent];
 		while (parent) {
 			if (parent._collapsed
-					|| ((searchString != "" && parent[27].toLowerCase()
-							.indexOf(searchString.toLowerCase()) == -1)
-							&& (searchString != "" && parent[28]
-									.toLowerCase().indexOf(
-											searchString.toLowerCase()) == -1)
-							&& (searchString != "" && parent[29]
-									.toLowerCase().indexOf(
-											searchString.toLowerCase()) == -1)
-							&& (searchString != "" && parent[32]
-									.toLowerCase().indexOf(
-											searchString.toLowerCase()) == -1)
-							&& (searchString != "" && parent[30]
-									.toLowerCase().indexOf(
-											searchString.toLowerCase()) == -1) && (parent[26] != "Total"))
+					|| ((searchString != "" && ! parent[27].toLowerCase()
+							.startsWith(searchString.toLowerCase()))
+							&& (searchString != "" && ! parent[28]
+									.toLowerCase().startsWith(
+											searchString.toLowerCase()))
+							&& (searchString != "" && ! parent[29]
+									.toLowerCase().startsWith(
+											searchString.toLowerCase()))
+							&& (searchString != "" && ! parent[32]
+									.toLowerCase().startsWith(
+											searchString.toLowerCase()))
+							&& (searchString != "" &&  ! parent[30]
+									.toLowerCase().startsWith(
+											searchString.toLowerCase())) && (parent[26] != "Total"))
 					|| (radioString != "All" && item[11]!="undefined" && item[11].toLowerCase()
 							.indexOf(radioString.toLowerCase()) == -1)) {
 				return false;
@@ -193,6 +216,7 @@ function searchProject(item) {
 	}
 	return status;
 }
+
 function updateMemCache(e, args, tempKey) {
 	$('#statusMessage').text("Saving data...").fadeIn(200);
 	var cell = args.cell;
@@ -377,6 +401,7 @@ function getSummaryValues(){
 		}
 	}
 }
+
 function createNewProjects(){
 	$('#displayGrid').show();
 	$('#topCrtNewProjBtn').hide();
@@ -623,6 +648,7 @@ function saveAndClose() {
 		d[7] = "";
 	}
 }
+
 function closeWithoutSave() {
 	availableTags = [];
 	for (var j = 0; j < ccUsersVar.length; j++) {
@@ -700,6 +726,7 @@ function deleteSelectedProjects() {
 	}
 	m_grid.invalidate();
 }
+
 function initDeletionCell(row) {
 	for (var count = 0; count < m_data.length; count++) {
 		var thisId = "#" + count + "chkBox";
@@ -710,6 +737,7 @@ function initDeletionCell(row) {
 		}
 	}
 }
+
 function removeArrayItem(arr, item) {
 	var removeCounter = 0;
 
@@ -732,6 +760,7 @@ function cancelProjects(){
 		return;
 	}
 }
+
 function submitProjects(){
 	var errStr = 0;
 	var storeData=[];

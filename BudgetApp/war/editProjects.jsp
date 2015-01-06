@@ -9,7 +9,7 @@
 
 
 <%
-	String color ="yellow";
+	String color ="";
 	List<GtfReport> gtfReports = (List<GtfReport>) request
 			.getAttribute("gtfreports");
 	for (GtfReport report : gtfReports) {
@@ -131,7 +131,7 @@
 		</table>
 	</div>
 	<div id="statusMessage"></div>
-	<div id="displayGrid" style="width: 100%; height: 51%;  min-height: 300px;"></div>
+	<div id="displayGrid" style="width: 100%; height: 60%;  min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
 			style="width: 100%; height: 20px; background-color: #005691; color: white">&nbsp;Multi-brand:
@@ -165,7 +165,6 @@
 <script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
 <script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 <script>
-	
     // rdoSelectedmode holds the radio(Planned/All) button object
 	var rdoSelectedmode = $('input[name="selectedmode"]');
 	
@@ -1033,14 +1032,18 @@
 			searchString = this.value;
 			
 	    if (searchString != "") {
-				dataView.expandGroup("Active");
-				dataView.expandGroup("Closed");
-				dataView.expandGroup("New");
-			} else {
-				dataView.collapseGroup("Active");
-				dataView.collapseGroup("Closed");
-			}
-			dataView.refresh();
+			dataView.expandGroup("Active");
+			dataView.expandGroup("Closed");
+			dataView.expandGroup("New");
+		} else {
+			dataView.collapseGroup("Active");
+			dataView.collapseGroup("Closed");
+		}
+		dataView.refresh();
+		if(!isMatchPresent && searchString != ""){
+			alert("No Search Results Found!");	
+		}
+		
 		});
 
 		
@@ -1334,6 +1337,11 @@
 				});
 
 	}
+	
+	$( window ).resize(function() {
+		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
+	});
+	
 </script>
 
 
