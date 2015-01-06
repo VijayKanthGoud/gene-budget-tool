@@ -79,7 +79,6 @@ function groupByStatus() {
 					  newArr = [];
 					  ActiveArr = [];
 					  ClosedArr = [];
-					  console.log(noOfNew + noOfActive + noOfClosed);
 					  if((noOfNew > 0 || noOfActive > 0 || noOfClosed > 0) && searchString != ""){
 						  isMatchPresent = true;
 					  }else{
