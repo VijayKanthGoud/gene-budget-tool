@@ -159,61 +159,54 @@ function sumTotalsFormatter(totals, columnDef) {
 	return "";
 }
 
-if ( typeof String.prototype.startsWith != 'function' ) {
-	  String.prototype.startsWith = function( str ) {
-	    return this.substring( 0, str.length ) === str;
-	  }
-};
-	
-// Filter data according to search field
+//Filter data according to search field
 function searchProject(item) {
-	
-	var status = true;
-	if (item[33] != "New") {
-		status = false;
-	}
-	
-	if (((searchString != "" && ! item[27].toLowerCase().startsWith(
-			searchString.toLowerCase()))
-			&& (searchString != "" && ! item[28].toLowerCase().startsWith(
-					searchString.toLowerCase()))
-			&& (searchString != "" && ! item[29].toLowerCase().startsWith(
-					searchString.toLowerCase()))
-			&& (searchString != "" && ! item[32].toLowerCase().startsWith(
-					searchString.toLowerCase()))
-			&& (searchString != "" && ! item[30].toLowerCase().startsWith(
-					searchString.toLowerCase())) && item[26] != "Total")
-			|| (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase().indexOf(
-					radioString.toLowerCase()) == -1)) {
-		return false;
-	}
+        var status = true;
+        if (item[33] != "New") {
+                status = false;
+        }
+        
+        if (((searchString != "" && item[27].toLowerCase().indexOf(
+                        searchString.toLowerCase()) == -1)
+                        && (searchString != "" && item[28].toLowerCase().indexOf(
+                                        searchString.toLowerCase()) == -1)
+                        && (searchString != "" && item[29].toLowerCase().indexOf(
+                                        searchString.toLowerCase()) == -1)
+                        && (searchString != "" && item[32].toLowerCase().indexOf(
+                                        searchString.toLowerCase()) == -1)
+                        && (searchString != "" && item[30].toLowerCase().indexOf(
+                                        searchString.toLowerCase()) == -1) && item[26] != "Total")
+                        || (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase().indexOf(
+                                        radioString.toLowerCase()) == -1)) {
+                return false;
+        }
 
-	if (item.parent != null) {
-		var parent = data[item.parent];
-		while (parent) {
-			if (parent._collapsed
-					|| ((searchString != "" && ! parent[27].toLowerCase()
-							.startsWith(searchString.toLowerCase()))
-							&& (searchString != "" && ! parent[28]
-									.toLowerCase().startsWith(
-											searchString.toLowerCase()))
-							&& (searchString != "" && ! parent[29]
-									.toLowerCase().startsWith(
-											searchString.toLowerCase()))
-							&& (searchString != "" && ! parent[32]
-									.toLowerCase().startsWith(
-											searchString.toLowerCase()))
-							&& (searchString != "" &&  ! parent[30]
-									.toLowerCase().startsWith(
-											searchString.toLowerCase())) && (parent[26] != "Total"))
-					|| (radioString != "All" && item[11]!="undefined" && item[11].toLowerCase()
-							.indexOf(radioString.toLowerCase()) == -1)) {
-				return false;
-			}
-			parent = data[parent.parent];
-		}
-	}
-	return status;
+        if (item.parent != null) {
+                var parent = data[item.parent];
+                while (parent) {
+                        if (parent._collapsed
+                                        || ((searchString != "" && parent[27].toLowerCase()
+                                                        .indexOf(searchString.toLowerCase()) == -1)
+                                                        && (searchString != "" && parent[28]
+                                                                        .toLowerCase().indexOf(
+                                                                                        searchString.toLowerCase()) == -1)
+                                                        && (searchString != "" && parent[29]
+                                                                        .toLowerCase().indexOf(
+                                                                                        searchString.toLowerCase()) == -1)
+                                                        && (searchString != "" && parent[32]
+                                                                        .toLowerCase().indexOf(
+                                                                                        searchString.toLowerCase()) == -1)
+                                                        && (searchString != "" && parent[30]
+                                                                        .toLowerCase().indexOf(
+                                                                                        searchString.toLowerCase()) == -1) && (parent[26] != "Total"))
+                                        || (radioString != "All" && item[11]!="undefined" && item[11].toLowerCase()
+                                                        .indexOf(radioString.toLowerCase()) == -1)) {
+                                return false;
+                        }
+                        parent = data[parent.parent];
+                }
+        }
+        return status;
 }
 
 function updateMemCache(e, args, tempKey) {
