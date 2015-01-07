@@ -49,6 +49,7 @@ public interface BudgetConstants {
 	public static final int CELL_PWBS = -5;
 	public static final int CELL_SUBACTVTY = -4;
 	public static final int CELL_VENDOR = -1;
+	public static final int CELL_GMEMORI_ID = -7;
 	public static final String isMultiBrand = "37";
 	public static final String multiBrandInput = "36";
 	public static final String MAP_TYPE = "mapType";

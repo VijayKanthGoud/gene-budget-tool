@@ -103,12 +103,14 @@
   
   function gMemoriHyperLinkFormatter(row, cell, value, columnDef, dataContext) {
 	  var val = value.toString();
-	  if(val.length>0 && dataContext[35]!="NewProjects"){
-		//  var url = "http://25-dot-gbmt-dev.appspot.com/?gMemoriId="+val;
+	  if(val.indexOf(".") != -1){
+		  val = val.split(".")[0];  
+	  }
+	  if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
 		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
 		  return "<span ><a id='gmem' href="+url+" target='gMem' style='color:green'>"+value + "</a></span>" ;
 	  }else{
-		  return val;
+		  return value;
 	  }
   }
   

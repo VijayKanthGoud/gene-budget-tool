@@ -965,15 +965,17 @@
 				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;
 				}
-				
 				if (args.item["11"] == "Planned"
 					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && args.item["26"] =="New") {
 					return true;
 				}
-
+				var isAnEditableId = false;
+				if(args.item[0].toString().length == 7){
+					isAnEditableId = true;
+				}
 				if (args.item["11"] == "Planned"
 									&& (cols[cell].name == "Project Name" || cols[cell].name == "Project WBS" || 
-											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" ) &&  
+											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || isAnEditableId ) &&  
 											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active")) {
 					return true;
 				}

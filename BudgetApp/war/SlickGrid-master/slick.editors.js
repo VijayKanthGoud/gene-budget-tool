@@ -31,7 +31,7 @@
 	     var scope = this;
 	     var calendarOpen = false;
 	     var autoTags = [];
-	     
+	    
 	     this.init = function () {
 	       $input = $("<INPUT id='tags' class='editor-text' />");
 	       $input.appendTo(args.container);
@@ -44,7 +44,7 @@
 	       $input.autocomplete({
 	    		   source: function (request, response) {
 	    		        var matches = $.map(autoTags, function (autoTags) {
-	    		            if (autoTags.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+	    		            if (autoTags.trim().toLowerCase().indexOf(request.term.toLowerCase()) === 0) {
 	    		                return autoTags;
 	    		            }
 	    		        });
@@ -666,7 +666,7 @@
 	    var scope = this;
 
 	    this.init = function () {
-	      $input = $("<INPUT type=text class='editor-text' maxlength='6'/>");
+	      $input = $("<INPUT type=text class='editor-text' maxlength='7'/>");
 
 	      $input.bind("keydown.nav", function (e) {
 	        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
