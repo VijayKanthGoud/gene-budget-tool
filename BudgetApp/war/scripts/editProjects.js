@@ -127,6 +127,9 @@ function groupByStatus() {
 		    {
 			      getter: 42,
 			      formatter :function (g) {
+			      if(typeof g.value === 'undefined'){
+			    	  return "";
+			      }
 			        return  g.value;
 			      },
 			      lazyTotalsCalculation: true
