@@ -761,9 +761,9 @@ function submitProjects(){
 	var flag = false;
 	for(var i=0;i<addsave;i++){
 
-		if( data[i][0] == 'undefined' || data[i][0].toString().trim() ==""){
+		/*if( data[i][0] == 'undefined' || data[i][0].toString().trim() ==""){
 			errStr += 1;
-		}
+		}*/
 		if( data[i][2] == 'undefined' || data[i][2].toString().trim() ==""){
 			errStr += 2;
 		}
@@ -777,15 +777,15 @@ function submitProjects(){
 		switch(errStr) {
 		case 0:
 	        break;
-	    case 1:
+	  /*  case 1:
 	    	alert('"gMemori ID" can not be blank.');
-	        break;
+	        break;*/
 	    case 2:
 	    	alert('"Project name" can not be blank.');
 	    	break;
-	    case 3:
+	   /* case 3:
 	    	alert('"Project name" and "gMemori ID" can not be blank.');
-	        break;
+	        break;*/
 	    case 4:
 	    	alert('"Brand" can not be blank.');
 	        break;
@@ -795,9 +795,9 @@ function submitProjects(){
 	    case 6:
 	    	alert('"Project name" and "Brand" can not be blank.');
 	        break;
-	    case 7:
+	  /*  case 7:
 	    	alert('"Project name", "Brand" and "Gmemori ID" can not be blank.');
-	        break;
+	        break;*/
 		}
 		storeData[i]=data[i];
 	}
@@ -805,6 +805,8 @@ function submitProjects(){
 		alert("Please add sub-projects to your multibrand project: "+ data[i][2]);
 		return;
 	}
+	alert(JSON.stringify(storeData));
+	//return;
 	if(errStr == 0){
 		 $.ajax({
 			url : '/storereport',

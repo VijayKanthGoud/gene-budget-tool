@@ -110,7 +110,7 @@
 		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
 		  return "<span ><a id='gmem' href="+url+" target='gMem' style='color:green'>"+value + "</a></span>" ;
 	  }else{
-		  return value;
+		  return "";
 	  }
   }
   
@@ -127,7 +127,7 @@
   }
   
   function CheckBoxFormatter(row, cell, value, columnDef, dataContext) {
-	  if(dataContext[4].toString().trim() != ""){
+	  if(dataContext[7].toString().trim() != ""){
 		return "<input type='checkbox' class='checkDeletion' value='true' id = "+ row+"chkBox>";
 	  }
   }

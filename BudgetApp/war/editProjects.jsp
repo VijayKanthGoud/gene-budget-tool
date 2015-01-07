@@ -823,9 +823,9 @@
 							if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
 								error=error+1;
 							}
-							if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
+							/* if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
 								error=error+3;
-							}
+							} */
 							if(itemClicked[1]=='' || itemClicked[1]=='undefined'){
 								error=error+5;
 							}
@@ -835,17 +835,17 @@
 				    			case 1:
 				    				errStrng="Project name can not be blank."
 				        			break;
-				    			case 3:
+				    			/* case 3:
 				    				errStrng="gMemoriID can not be blank."
 				        			break;
 				    			case 4:
 				    				errStrng="gMemoriID or Project name can not be blank."
-				        			break;
+				        			break; */
 				    			case 5:
 				    				errStrng="Project Owner can not be blank."
 				        			break;
-				    			case 9:
-				    				errStrng="gMemoriID or Project name or Project Owner can not be blank."
+				    			case 6:
+				    				errStrng="Project name or Project Owner can not be blank."
 				        			break;
 				    			default:
 				        		break;
@@ -1122,26 +1122,26 @@
 			width : 25,
 			formatter : Slick.Formatters.checkbox
 		},
-		{
+		/* {
 			id : 2,
 			name : "Project name",
 			field : 4,
 			width : 160,
 			editor : Slick.Editors.Text
-		}, {
+		}, */ {
 			id : 3,
 			name : "Project Owner",
 			field : 7,
 			width : 125,
 			editor : Slick.Editors.Auto
 		},
-		{
+		/* {
 			id : 4,
 			name : "gmemori id",
 			field : 5,
 			width : 100,
 			editor : Slick.Editors.Text
-		},
+		}, */
 	    {
 			id : 5,
 			name : "Brand",
@@ -1153,8 +1153,7 @@
 			name : "Total($ in 1000's)",
 			field : 3,
 			width : 140,
-			editor : Slick.Editors.FloatText,
-			formatter : Slick.Formatters.DollarSymbolMB
+			editor : Slick.Editors.FloatText
 		}, {
 			id : 7,
 			name : "Allocation %",
@@ -1231,19 +1230,21 @@
 					}
 				}
 			}
-			if (row == 0){
+			<%-- if (row == 0){
 				if(cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>){
 					return false
 				}
 				return true;
-			}
+			} --%>
+			//alert(row+"::::"+JSON.stringify(m_data));
 			if (row != 0) {
-				if (cell == <%=BudgetConstants.MB_PROJECT_NAME_CELL%>) {
-					m_data[row]["4"] = m_data[row - 1]["4"];
+				<%-- if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
+					m_data[row]["7"] = m_data[row - 1]["7"];
 					m_grid.invalidate();
 					return false;
-				}
-				if (cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>) {
+				} --%>
+				if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
+					m_data[row]["4"]=itemClicked[2];
 					if (m_data[row]["5"] == "") {
 						m_data[row]["5"] = m_data[row - 1]["5"]
 								.split(".")[0]
@@ -1252,13 +1253,13 @@
 										.split(".")[1]) + 1);
 						m_grid.invalidate();
 					}
-					return false;
+				//	return false;
 				}
 				if ((m_data[row]["7"] == 'undefined' || m_data[row]["7"] == "")
 						&& cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
 					m_data[row]["7"] = m_data[row - 1]["7"];
 					m_grid.invalidate();
-					return false;
+					//return false;
 				}
 			}
 			return true;
