@@ -325,7 +325,12 @@ function updateMemCache(e, args, tempKey) {
 		 			d[itemCell] = args.item[itemCell];
 		 			aSave[1] = d[itemCell];
 		 		}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
+		 		//alert(d[fixedCell - 4]);
+		 		if(d[fixedCell - 4].toString().indexOf(".")!=-1){
+		 			d[fixedCell - 4] = args.item[fixedCell - 4] +"." +d[fixedCell - 4].toString().split(".")[1]
+		 		}else{
 		 			d[fixedCell - 4] = args.item[fixedCell - 4];
+		 		}
 		 			aSave[1] = d[fixedCell - 4];
 		 		}
 		 		iCnt++;
@@ -342,7 +347,7 @@ function updateMemCache(e, args, tempKey) {
  			}
 		}
 		}
-		
+	//alert("as "+JSON.stringify(aSaveData));	
 	$.ajax({
 		url : '/AutoSaveData',
 		type : 'POST',
@@ -805,8 +810,7 @@ function submitProjects(){
 		alert("Please add sub-projects to your multibrand project: "+ data[i][2]);
 		return;
 	}
-	alert(JSON.stringify(storeData));
-	//return;
+	//alert(JSON.stringify(storeData));
 	if(errStr == 0){
 		 $.ajax({
 			url : '/storereport',

@@ -100,6 +100,9 @@ public class GtfReport implements Serializable,Cloneable {
 	@Persistent
 	private int units;
 	
+	@Persistent
+	private boolean isDummyGMemoriId;
+	
 	/*public GtfReport(GtfReport gtfReport1) {
 		// TODO Auto-generated constructor stub
 		this.gtfReport = gtfReport1;
@@ -110,6 +113,14 @@ public class GtfReport implements Serializable,Cloneable {
 		super();
 	}*/
 	
+	public boolean isDummyGMemoriId() {
+		return isDummyGMemoriId;
+	}
+
+	public void setDummyGMemoriId(boolean isDummyGMemoriId) {
+		this.isDummyGMemoriId = isDummyGMemoriId;
+	}
+
 	public String getCostCenter() {
 		return costCenter;
 	}

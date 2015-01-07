@@ -28,6 +28,7 @@ import com.gene.app.dao.DBUtil;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.ProjectSequenceGeneratorUtil;
 import com.google.appengine.api.appidentity.AppIdentityService;
 import com.google.appengine.api.appidentity.AppIdentityServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
@@ -43,8 +44,9 @@ public class StoreReport extends HttpServlet {
 			.getLogger(StoreReport.class.getName());
 	Map<String, Double> brandMap = new TreeMap<String, Double>();
 	DBUtil util = new DBUtil();
+	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
-
+	String gMemoriId = "";
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		LOGGER.log(Level.INFO, "Inside store report");
@@ -149,11 +151,11 @@ public class StoreReport extends HttpServlet {
 				}
 			}
 			if(gtfReports.size() != 0){
-				try {
+				/*try {
 					storeRprtTogMemori(req, resp, gtfReports);
 				} catch (IOException e) {
 					e.printStackTrace();
-				}
+				}*/
 				util.generateProjectIdUsingJDOTxn(gtfReports);
 				util.storeProjectsToCache(gtfReports, user.getCostCenter(),
 						BudgetConstants.NEW);
@@ -167,9 +169,19 @@ public class StoreReport extends HttpServlet {
 			GtfReport gtfReport, JSONObject rprtObject, boolean isMultibrand,
 			String timeStamp) {
 		try {
-
-			gtfReport.setgMemoryId(rprtObject
-					.getString(BudgetConstants.New_GTFReport_gMemoriId));
+			
+			if("".equalsIgnoreCase(rprtObject
+					.getString(BudgetConstants.New_GTFReport_gMemoriId).trim())){
+				gMemoriId = ""+generator.nextValue();
+				gtfReport.setDummyGMemoriId(true);
+				gtfReport.setgMemoryId(gMemoriId);
+			}else{
+				gtfReport.setDummyGMemoriId(false);
+				gtfReport.setgMemoryId(rprtObject
+						.getString(BudgetConstants.New_GTFReport_gMemoriId));
+			}
+			//boolean isDummyId = isDummyGMemoriId(gMemoriId);
+			
 			gtfReport.setProjectName(rprtObject
 					.getString(BudgetConstants.New_GTFReport_ProjectName));
 			gtfReport.setBrand(rprtObject.getString(
@@ -245,7 +257,18 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setYear(BudgetConstants.dataYEAR);
 				gtfReport.setProjectName(multiBrandObject.getString("4"));
 				gtfReport.setBrand(multiBrandObject.getString("1").trim());
-				gtfReport.setgMemoryId(multiBrandObject.getString("5"));
+				//gtfReport.setgMemoryId(multiBrandObject.getString("5"));
+				if(multiBrandObject.getString("5").trim().indexOf('.')==0){
+					gtfReport.setDummyGMemoriId(true);
+					gtfReport.setgMemoryId(gMemoriId+multiBrandObject.getString("5"));
+				}else{
+					gtfReport.setDummyGMemoriId(false);
+					gtfReport.setgMemoryId(multiBrandObject.getString("5"));
+				}
+				/*String gMemoriId = multiBrandObject.getString("5");
+				boolean isDummyId = isDummyGMemoriId(gMemoriId);
+				gtfReport.setDummyGMemoriId(isDummyId);
+				gtfReport.setgMemoryId(gMemoriId);*/
 				prj_owner = multiBrandObject.getString("7");
 				prj_owner_email = util.getPrjEmailByName(prj_owner);
 				gtfReport
@@ -263,7 +286,7 @@ public class StoreReport extends HttpServlet {
 				}
 				percent_allocation = Double.parseDouble(multiBrandObject
 						.getString("2"));
-				gtfReport.setgMemoryId(multiBrandObject.getString("5"));
+				//gtfReport.setgMemoryId(multiBrandObject.getString("5"));
 				Map<String, Double> plannedMap = new HashMap<String, Double>();
 				Map<String, Double> setZeroMap = new HashMap<String, Double>();
 				Map<String, Double> parentPlannedMap = gtfReport
@@ -413,4 +436,19 @@ public class StoreReport extends HttpServlet {
 		}
 	}*/
 
+	public boolean isDummyGMemoriId(String gMemoriId){
+		boolean isDummyId = false;
+		if(gMemoriId!=null && !"".equalsIgnoreCase(gMemoriId.trim())){
+			if(gMemoriId.contains(".")){
+				if(gMemoriId.length()!=8){
+					isDummyId = true;
+				}
+			}else{
+				if(gMemoriId.length()!=6){
+					isDummyId = true;
+				}
+			}
+		}
+		return isDummyId;
+	}
 }

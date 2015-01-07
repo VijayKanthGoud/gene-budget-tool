@@ -43,6 +43,7 @@ public class AutoSaveData extends HttpServlet {
 		LOGGER.log(Level.INFO, "mapType : " + mapType);
 		UserService userService;
 		String email="";
+		String gMemoriIdFromStudy = "";
 		//String sessionObjArray = (String)session.getAttribute("objArray");
 		boolean fromSession = false;
 		if (req.getParameter(BudgetConstants.objArray) != null) {
@@ -89,11 +90,13 @@ public class AutoSaveData extends HttpServlet {
 			for (int count = 0; count < jsonArray.length(); count++) {
 				rprtArray = jsonArray.getJSONObject(count);
 				keyNum = rprtArray.getString("0");
+				
 				LOGGER.log(Level.INFO, "KeyNum received : " + keyNum);
 				sessionKey = sessionKey+keyNum+",";
 				cellValue = rprtArray.getString("1");
 				if (keyNum != null && !"".equalsIgnoreCase(keyNum.trim())) {
 					gtfReportObj = gtfReportMap.get(keyNum);
+					
 					if (gtfReportObj != null) {
 						if (Integer.parseInt(cellNum) == BudgetConstants.CELL_REMARKS) {
 							if(cellValue.contains("\"")){
@@ -138,6 +141,17 @@ public class AutoSaveData extends HttpServlet {
 							}
 							gtfReportMap.put(keyNum, gtfReportObj);	
 							
+						}else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_GMEMORI_ID){
+							gtfReportMap.remove(keyNum);
+							//if(!cellValue.contains(".") && gtfReportObj.getgMemoryId().length()==10){
+							keyNum = rprtArray.getString("1");
+							gMemoriIdFromStudy = cellValue;
+							gtfReportObj.setgMemoryId(gMemoriIdFromStudy);
+							/*}else if(cellValue.contains(".") && gtfReportObj.getgMemoryId().length()>10){
+								gtfReportObj.setgMemoryId(gMemoriIdFromStudy+"."+count);
+							}*/
+							gtfReportObj.setDummyGMemoriId(false);
+							gtfReportMap.put(keyNum, gtfReportObj);
 						}
 							else {
 						
