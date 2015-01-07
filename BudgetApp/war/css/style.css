@@ -166,13 +166,14 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 	display: none;
 	position: absolute;
 	top: 25%;
-	left: 20%;
-	width: 840px;
-	height: 300px;
+	left: 30%;
+	width: 580px;
+	height: 260px;
 	align: center;
 	padding: 1px;
 	border: 1px solid #005691;
 	background-color: white;
 	z-index: 1002;
 	overflow: auto;
+    border-radius: 1em;
 }

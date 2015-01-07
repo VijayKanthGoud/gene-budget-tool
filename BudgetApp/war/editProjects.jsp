@@ -134,16 +134,16 @@
 	<div id="displayGrid" style="width: 100%; height: 60%;  min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
-			style="width: 100%; height: 20px; background-color: #005691; color: white">&nbsp;Multi-brand:
+			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> Multi-brand
 		</div>
-		<div id="multibrandGrid" style="width: 100%; height: 230px;"></div>
+		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
-			<button class="myButton" value="" onclick="deleteSelectedProjects();">
-				DELETE SELECTED</button>
+			<button class="myButton" value="" onclick="deleteSelectedProjects();" style="height: 20px; font-size: 12px; letter-spacing:1px;">
+				Delete selected</button>
 			<button id="saveClose" class="myButton" value=""
-				onclick="saveAndClose();">SAVE AND CLOSE</button>
-			<button class="myButton" value="" onclick="closeWithoutSave();">
-				CANCEL</button>
+				onclick="saveAndClose();" style="height: 20px; font-size: 12px; letter-spacing:1px;">Save and close</button>
+			<button class="myButton" value="" onclick="closeWithoutSave();" style="height: 20px; font-size: 12px; letter-spacing:1px;">
+				Cancel</button>
 		</div>
 	</div>
 	<div id="back">	</div>  
@@ -970,7 +970,7 @@
 					return true;
 				}
 				var isAnEditableId = false;
-				if(args.item[0].toString().length == 7){
+				if(args.item[0].toString().length == 10){
 					isAnEditableId = true;
 				}
 				if (args.item["11"] == "Planned"
