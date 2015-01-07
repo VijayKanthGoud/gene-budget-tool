@@ -789,9 +789,9 @@ function submitProjects(){
 	    case 4:
 	    	alert('"Brand" can not be blank.');
 	        break;
-	    case 5:
+	   /* case 5:
 	    	alert('"Brand" and "gMemori Id" can not be blank.');
-	        break;
+	        break;*/
 	    case 6:
 	    	alert('"Project name" and "Brand" can not be blank.');
 	        break;
