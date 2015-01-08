@@ -596,6 +596,10 @@ function saveAndClose() {
 			m_data[i][4] = m_data[0][4];
 		}
 	}
+	var isValidData = validateUserAndBrand();
+	if(isValidData == true){
+		return;
+	}
 	$('#multibrandEdit').hide();
 	$('#back').removeClass('black_overlay').fadeIn(100);
 	var total = 0.0;
@@ -620,7 +624,6 @@ function saveAndClose() {
 	}
 	itemClicked[24] = total;
 	grid.invalidate();
-	
 	if (itemClicked["34"] != "New projects") {
 		$.ajax({
 			url : '/multiBrandServlet',
@@ -649,8 +652,32 @@ function saveAndClose() {
 		d[6] = "";
 		d[7] = "";
 	}
+	
 }
-
+function validateUserAndBrand(){
+	var prj_owner = "";
+	var brand = "";
+	var res = "";
+	var flag = false;
+	for(var i=0;i<m_data.length;i++){
+		prj_owner = m_data[i]["7"];
+		brand = m_data[i]["1"];
+		res ="";
+		for (var j = 0; j < ccUsersVar.length; j++) {
+			if (ccUsersVar[j][0] == prj_owner) {
+				res = ccUsersVar[j][1].substring(1,
+						ccUsersVar[j][1].length - 1);
+				break;
+			}
+		}
+		if(res.toString().indexOf(brand) == -1){
+			alert("User : "+ m_data[i]["7"] +" is not assigned to the brand : "+m_data[i]["1"]);
+			flag = true;
+			return flag;
+		}
+	}
+	return flag;
+}
 function closeWithoutSave() {
 	availableTags = [];
 	for (var j = 0; j < ccUsersVar.length; j++) {
