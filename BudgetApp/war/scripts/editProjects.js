@@ -863,7 +863,9 @@ function submitProjects(){
 
 function exportExcelData(){
 	console.log("Downloading data...");
-	var jsondata = modifyData(data);
+	var dataCopy = [];
+	dataCopy = data.slice(0);
+	var jsondata = modifyData(dataCopy);
 	if(jsondata == ""){
 		return;
 	}
@@ -872,7 +874,6 @@ function exportExcelData(){
 
 function modifyData(data){
 	var modifiedData = [];
-	console.log(data);
 	var modifiedRowData = [];
 	
 	modifiedRowData.prjWBS = "";

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,34 +14,34 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-public class ExcelParsingUtil {
 
+public class ExcelParsingUtil {
+	private final static Logger LOGGER = Logger
+			.getLogger(ExcelParsingUtil.class.getName());
 	public static List<List<Object>> readExcellData(final InputStream fileContent)
 			throws InvalidFormatException, IOException {
 
-		final List<List<Object>> tableList = new ArrayList<List<Object>>();
+		LOGGER.log(Level.INFO, "inside ExcelParsingUtil...");
+		List rowList = new ArrayList();
 		try {
+			
 			final Workbook wb = WorkbookFactory.create(fileContent);
 			final Sheet mySheet = wb.getSheetAt(0);
-			List<Object> rowList;
 			Cell cell;
 			final int rowStart = mySheet.getFirstRowNum();
 			final int rowEnd = mySheet.getLastRowNum();
+			LOGGER.log(Level.INFO, "rowStart : " + rowStart +" rowEnd : " + rowEnd);
 			Row r = null;
-			int lastColumn = 0;
+			int lastColumn = 4;
 			for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
 				r = mySheet.getRow(rowNum);
+				LOGGER.log(Level.INFO, "row : " + r);
 				if (r != null) {
-					rowList = new ArrayList();
-					int a = 0;
-
 					for (int cn = 0; cn < lastColumn; cn++) {
 						cell = r.getCell(cn, r.CREATE_NULL_AS_BLANK);
 						if (rowNum == 0) {
 							System.out.println("cell" + cell);
 							if (cell == null) {
-								// throw new IllegalFormatException(
-								// "Sheet contains invalid data ");
 							}
 						}
 						switch (cell.getCellType()) {
@@ -66,12 +68,8 @@ public class ExcelParsingUtil {
 						// Blank Cell type (3)----CELL_TYPE_BLANK
 						case 3: {
 							rowList.add(null);
-							a++;
 						}
 						}
-					}
-					if (a < rowList.size()) {
-						tableList.add(rowList);
 					}
 				}
 			}
@@ -82,6 +80,7 @@ public class ExcelParsingUtil {
 			e1.printStackTrace();
 			return null;
 		}
-		return tableList;
+		LOGGER.log(Level.INFO, "List created : " + rowList);
+		return null;
 	}
 }

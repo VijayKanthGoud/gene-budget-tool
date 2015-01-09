@@ -1091,7 +1091,7 @@
 			if(typeof popUpWindow === 'undefined'){
 				openUrl('http://memori-dev.appspot.com');
 		    }else{
-		    	var userAccepted = confirm("Window already open. Want to refresh?");
+		    	var userAccepted = confirm("gMemori app is already opened. Want to reload?");
 				if (!userAccepted) {
 					if (window.focus) {popUpWindow.focus()}
 				    return;

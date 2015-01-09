@@ -49,7 +49,7 @@ public class UploadFileServlet extends HttpServlet {
 					InputStream inputStream = fileItemStream.openStream();
 					InputStream stream = new ByteArrayInputStream(
 							IOUtils.toByteArray(inputStream));
-					ExcelParsingUtil.readExcellData(inputStream);
+					ExcelParsingUtil.readExcellData(stream);
 				}
 			}
 		} catch (IOException | FileUploadException | InvalidFormatException exception) {

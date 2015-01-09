@@ -102,7 +102,7 @@
 	<div id='cssmenu'>
 		<ul>
 			<li><a style = "cursor: hand;" id="homeLink" ><span>Home</span></a></li>
-			<li class='last'><a href='/displayReports'><span>Reports</span></a></li>
+			<li class='last'><a href='/'><span>Reports</span></a></li>
 			<%
 				if (isAdmin) {
 			%>
