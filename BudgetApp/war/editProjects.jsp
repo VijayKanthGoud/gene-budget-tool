@@ -131,18 +131,18 @@
 		</table>
 	</div>
 	<div id="statusMessage"></div>
-	<div id="displayGrid" style="width: 100%; height: 60%;  min-height: 300px;"></div>
+	<div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
 			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> Multi-brand
 		</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
-			<button class="myButton" value="" onclick="deleteSelectedProjects();" style="height: 20px; font-size: 12px; letter-spacing:1px;">
+			<button class="myButton" value="" onclick="deleteSelectedProjects();" style="height: 20px; font-size: 11px; letter-spacing:1px;">
 				Delete selected</button>
 			<button id="saveClose" class="myButton" value=""
-				onclick="saveAndClose();" style="height: 20px; font-size: 12px; letter-spacing:1px;">Save and close</button>
-			<button class="myButton" value="" onclick="closeWithoutSave();" style="height: 20px; font-size: 12px; letter-spacing:1px;">
+				onclick="saveAndClose();" style="height: 20px; font-size: 11px; letter-spacing:1px;">Save and close</button>
+			<button class="myButton" value="" onclick="closeWithoutSave();" style="height: 20px; font-size: 11px; letter-spacing:1px;">
 				Cancel</button>
 		</div>
 	</div>
@@ -164,6 +164,7 @@
 <script src="SlickGrid-master/slick.core.js"></script>
 <script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
 <script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
+<script src="scripts/fileHandle.js"></script>
 <script>
     // rdoSelectedmode holds the radio(Planned/All) button object
 	var rdoSelectedmode = $('input[name="selectedmode"]');
@@ -187,6 +188,8 @@
 	
 	// itemclicked global variable is take to use the clicked row (in the grid) data in other methods
 	var itemClicked;
+	
+	var popUpWindow;
 	
 	// initializing the multi-brand popup data with five blank rows for intial display 
 	 for (var i = 0; i < 5; i++) {
@@ -216,55 +219,55 @@
 	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
-		{ id : 1, name : columnNames[0], field : 30, width : 120, editor : Slick.Editors.Text}, 
-		{ id : 2, name : columnNames[1], field : 2, width : 150, editor : Slick.Editors.Text},
-		{ id : 3, name : columnNames[2], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 4, name : columnNames[3], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 5, name : columnNames[4], field : 0, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
-		{ id : 6, name : columnNames[5], field : 1, width : 90},
-		{ id : 7, name : columnNames[6], field : 3, width : 90, editor : Slick.Editors.Text},
-		{ id : 8, name : columnNames[7], field : 5, width : 90, editor : Slick.Editors.Text},
-		{ id : 9, name : columnNames[8], field : 7, width : 90, editor : Slick.Editors.Text},
-		{ id : 10, name : columnNames[9], field : 8, width : 90, editor : Slick.Editors.PONumberText},
-		{ id : 11, name : columnNames[10], field : 10, width : 90, editor : Slick.Editors.Text},
-		{ id : 12, name : columnNames[11], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 13, name : columnNames[12], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 14, name : columnNames[13], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 15, name : columnNames[14], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 16, name : columnNames[15], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 17, name : columnNames[16], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 18, name : columnNames[17], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 19, name : columnNames[18], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 20, name : columnNames[19], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 21, name : columnNames[20], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 22, name : columnNames[21], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 23, name : columnNames[22], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[23], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[24], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[1], field : <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text},
+		{ id : 3, name : columnNames[2], field :  <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
+		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
+		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
+		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text},
+		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text},
+		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text},
+		{ id : 10, name : columnNames[9], field : <%=BudgetConstants.PO_NUMBER_FIELD%>, width : 90, editor : Slick.Editors.PONumberText},
+		{ id : 11, name : columnNames[10], field : <%=BudgetConstants.VENDOR_FIELD%>, width : 90, editor : Slick.Editors.Text},
+		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	} ];
 
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
-		{ id : 1, name : columnNames[0], field : 30, width : 120, editor : Slick.Editors.Text}, 
-		{ id : 2, name : columnNames[1], field : 2, width : 150, editor : Slick.Editors.Text},
-		{ id : 3, name : columnNames[2], field : 6, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
-		{ id : 4, name : columnNames[3], field : 11, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 5, name : columnNames[4], field : 0, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
-		{ id : 6, name : columnNames[5], field : 1, width : 90},
-		{ id : 12, name : columnNames[11], field : 12, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 13, name : columnNames[12], field : 13, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 14, name : columnNames[13], field : 14, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 15, name : columnNames[14], field : 15, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 16, name : columnNames[15], field : 16, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 17, name : columnNames[16], field : 17, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 18, name : columnNames[17], field : 18, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 19, name : columnNames[18], field : 19, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 20, name : columnNames[19], field : 20, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 21, name : columnNames[20], field : 21, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 22, name : columnNames[21], field : 22, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 23, name : columnNames[22], field : 23, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[23], field : 24, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[24], field : 25, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[1], field :  <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text},
+		{ id : 3, name : columnNames[2], field : <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
+		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.HyperLink,groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
+		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
+		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	}]
 	var searchString = "";
 	
@@ -1077,6 +1080,26 @@
 			enableForHeaderCells : true
 		}));
 		grid.render();
+		
+		$('input[name=file]').change(function() {
+			if($(this).val.toString().trim() != ""){
+				$("#fileUploadBtn").prop('disabled', false);
+	        }
+		});
+		
+		$('#homeLink').click(function() {
+			if(typeof popUpWindow === 'undefined'){
+				openUrl('http://memori-dev.appspot.com');
+		    }else{
+		    	var userAccepted = confirm("Window already open. Want to refresh?");
+				if (!userAccepted) {
+				    return;
+				}else{
+					openUrl('http://memori-dev.appspot.com');
+				}
+		    }
+		});
+		
 	})
 
 	// Persist the data to datastore while moving to other page or closing the application
@@ -1345,9 +1368,31 @@
 		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
 	});
 	
+
+	
 </script>
+<div width='100%' align=right>
+    <button class="myButton" value="" onclick="openUploadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Upload excel data</button>
+	<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
+</div>
 
-
+<div id="uploadWindow">
+		<div id="header"
+			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload
+		</div>
+		<div align='right' style='padding-right: 100px;'>
+			<form action="/upload" method="post" enctype="multipart/form-data">
+				<br/>
+				<span style="font-size: 14px;font-weight: bold;">
+					Select File to Upload : &nbsp;&nbsp;&nbsp;
+				</span>
+				<input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"> <br/>
+				<input class='myButton' id="fileUploadBtn" type="submit" value="Upload" disabled = "true">
+				<input class='myButton' type="button" value="Cancel" onclick="closeUploadWindow();">
+			</form>
+			
+		</div>
+	</div>
 <%@ include file="footer.jsp"%>
 </body>
 </html>

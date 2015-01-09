@@ -21,7 +21,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>GetReport</servlet-name>
 		<url-pattern>/getreport</url-pattern>
 	</servlet-mapping>
-
+	<servlet>
+		<servlet-name>gmemstudy</servlet-name>
+		<servlet-class>com.gene.app.action.GmemStudy</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>gmemstudy</servlet-name>
+		<url-pattern>/study</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>ListProject</servlet-name>
 		<jsp-file>/editProjects.jsp</jsp-file>
@@ -119,6 +126,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>GetSummaryFromCache</servlet-name>
 		<url-pattern>/GetSummaryFromCache</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>uploadFile</servlet-name>
+		<servlet-class>com.gene.app.action.UploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>uploadFile</servlet-name>
+		<url-pattern>/upload</url-pattern>
 	</servlet-mapping>
 	
 	<security-constraint>

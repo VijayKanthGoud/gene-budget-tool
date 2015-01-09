@@ -104,6 +104,35 @@ public interface BudgetConstants {
 	public static final String TOTAL_CELL = "23";
 	public static final String REMARK_CELL = "24";
 	
+	//field numbers edit projects
+	
+	public static final String STATUS_FIELD = "30";
+	public static final String PROJECT_NAME_FIELD = "2";
+	public static final String BRAND_FIELD = "6";
+	public static final String $_IN_1000_FIELD = "11";
+	public static final String GMEMORI_ID_FIELD= "0";
+	public static final String PROJECT_OWNER_FIELD = "1";
+	public static final String PROJECT_WBS_FIELD = "3";
+	public static final String SUBACTIVITY_FIELD = "5";
+	public static final String ALLOCATION_PERCENTAGE_FIELD = "7";
+	public static final String PO_NUMBER_FIELD = "8";
+	public static final String VENDOR_FIELD = "10";
+	public static final String JAN_FIELD = "12";
+	public static final String FEB_FIELD = "13";
+	public static final String MAR_FIELD = "14";
+	public static final String APR_FIELD = "15";
+	public static final String MAY_FIELD = "16";
+	public static final String JUN_FIELD = "17";
+	public static final String JUL_FIELD = "18";
+	public static final String AUG_FIELD = "19";
+	public static final String SEP_FIELD = "20";
+	public static final String OCT_FIELD = "21";
+	public static final String NOV_FIELD = "22";
+	public static final String DEC_FIELD = "23";
+	public static final String TOTAL_FIELD = "24";
+	public static final String REMARK_FIELD = "25";
+	
+	
 	// cell numbers edit project multiple brand pop up
 	public static final String MB_CHECKBOX_CELL = "0";
 	//public static final String MB_PROJECT_NAME_CELL = "1";

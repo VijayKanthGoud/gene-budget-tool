@@ -101,7 +101,7 @@
 	<div style="height: 5px;"></div>
 	<div id='cssmenu'>
 		<ul>
-			<li><a href='http://memori-dev.appspot.com'  target='gMemori'><span>Home</span></a></li>
+			<li><a style = "cursor: hand;" id="homeLink" ><span>Home</span></a></li>
 			<li class='last'><a href='/displayReports'><span>Reports</span></a></li>
 			<%
 				if (isAdmin) {

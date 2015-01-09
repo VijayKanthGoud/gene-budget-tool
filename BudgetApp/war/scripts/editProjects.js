@@ -859,3 +859,137 @@ function submitProjects(){
 	}
 
 }
+
+
+function exportExcelData(){
+	console.log("Downloading data...");
+	var jsondata = modifyData(data);
+	if(jsondata == ""){
+		return;
+	}
+	JSONToEXCELConvertor(jsondata, "Budget_Summary", false)
+}
+
+function modifyData(data){
+	var modifiedData = [];
+	console.log(data);
+	var modifiedRowData = [];
+	
+	modifiedRowData.prjWBS = "";
+	modifiedRowData.wbsName = "";
+	modifiedRowData.subAct = "";
+	modifiedRowData.brand = "";
+	modifiedRowData.perAllocation = "";
+	modifiedRowData.poNum = "";
+	modifiedRowData.poDesc = "";
+	modifiedRowData.vendor = "";
+	modifiedRowData.requestor = "";
+	var today = new Date();
+    var month = today.getMonth()+1;
+    month > 0? modifiedRowData.jan = "Actual": modifiedRowData.jan = "Forecast";
+    month > 1? modifiedRowData.feb = "Actual": modifiedRowData.feb = "Forecast";
+    month > 2? modifiedRowData.mar = "Actual": modifiedRowData.mar = "Forecast";
+    month > 3? modifiedRowData.apr = "Actual": modifiedRowData.apr = "Forecast";
+    month > 4? modifiedRowData.may = "Actual": modifiedRowData.may = "Forecast";
+    month > 5? modifiedRowData.jun = "Actual": modifiedRowData.jun = "Forecast";
+    month > 6? modifiedRowData.jul = "Actual": modifiedRowData.jul = "Forecast";
+    month > 7? modifiedRowData.aug = "Actual": modifiedRowData.aug = "Forecast";
+    month > 8? modifiedRowData.sep = "Actual": modifiedRowData.sep = "Forecast";
+    month > 9? modifiedRowData.oct = "Actual": modifiedRowData.oct = "Forecast";
+    month > 10? modifiedRowData.nov = "Actual": modifiedRowData.nov = "Forecast";
+    month > 11? modifiedRowData.dec = "Actual": modifiedRowData.dec = "Forecast";
+	modifiedRowData.total = "FY";
+	modifiedRowData.unit = "FY";
+	modifiedRowData.poTotal = "FY";
+	modifiedRowData.variance = "Check";
+	modifiedRowData.forecast = "Q3-Q4";
+	
+	modifiedData.push(modifiedRowData);
+	
+	modifiedRowData = [];
+	modifiedRowData.prjWBS = "Project WBS";
+	modifiedRowData.wbsName = "WBS Name";
+	modifiedRowData.subAct = "Sub Activity";
+	modifiedRowData.brand = "Brand";
+	modifiedRowData.perAllocation = "Allocation %";
+	modifiedRowData.poNum = "PO Number";
+	modifiedRowData.poDesc = "PO Description";
+	modifiedRowData.vendor = "Vendor";
+	modifiedRowData.requestor = "Requestor";
+	modifiedRowData.jan = "Jan";
+	modifiedRowData.feb = "Feb";
+	modifiedRowData.mar = "Mar";
+	modifiedRowData.apr = "Apr";
+	modifiedRowData.may = "May";
+	modifiedRowData.jun = "Jun";
+	modifiedRowData.jul = "Jul";
+	modifiedRowData.aug = "Aug";
+	modifiedRowData.sep = "Sep";
+	modifiedRowData.oct = "Oct";
+	modifiedRowData.nov = "Nov";
+	modifiedRowData.dec = "Dec";
+	modifiedRowData.total = "Total";
+	modifiedRowData.unit = "Unit";
+	modifiedRowData.poTotal = "PO Total";
+	modifiedRowData.variance = "Variance";
+	modifiedRowData.forecast = "ForeCast";
+	modifiedData.push(modifiedRowData);
+	for(var cnt = 0; cnt < data.length; cnt++){
+		var rowData = data[cnt];
+		modifiedRowData = [];
+		
+		if(rowData[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().trim() != "" &&rowData[<%=BudgetConstants.$_IN_1000_FIELD%>] == "Planned"){
+			
+			modifiedRowData.prjWBS = rowData[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
+			modifiedRowData.wbsName = "";
+			modifiedRowData.subAct = rowData[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
+			modifiedRowData.brand = rowData[<%=BudgetConstants.BRAND_FIELD%>];
+			modifiedRowData.perAllocation = rowData[<%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>];
+			modifiedRowData.poNum = rowData[<%=BudgetConstants.PO_NUMBER_FIELD%>];
+			modifiedRowData.poDesc = "";
+			modifiedRowData.vendor = rowData[<%=BudgetConstants.VENDOR_FIELD%>];
+			modifiedRowData.requestor = rowData[<%=BudgetConstants.PROJECT_OWNER_FIELD%>];
+			modifiedRowData.jan = rowData[<%=BudgetConstants.JAN_FIELD%>];
+			modifiedRowData.feb = rowData[<%=BudgetConstants.FEB_FIELD%>];
+			modifiedRowData.mar = rowData[<%=BudgetConstants.MAR_FIELD%>];
+			modifiedRowData.apr = rowData[<%=BudgetConstants.APR_FIELD%>];
+			modifiedRowData.may = rowData[<%=BudgetConstants.MAY_FIELD%>];
+			modifiedRowData.jun = rowData[<%=BudgetConstants.JUN_FIELD%>];
+			modifiedRowData.jul = rowData[<%=BudgetConstants.JUL_FIELD%>];
+			modifiedRowData.aug = rowData[<%=BudgetConstants.AUG_FIELD%>];
+			modifiedRowData.sep = rowData[<%=BudgetConstants.SEP_FIELD%>];
+			modifiedRowData.oct = rowData[<%=BudgetConstants.OCT_FIELD%>];
+			modifiedRowData.nov = rowData[<%=BudgetConstants.NOV_FIELD%>];
+			modifiedRowData.dec = rowData[<%=BudgetConstants.DEC_FIELD%>];
+			modifiedRowData.total = rowData[<%=BudgetConstants.TOTAL_FIELD%>];
+			modifiedRowData.unit = "";
+			modifiedRowData.poTotal = rowData[<%=BudgetConstants.TOTAL_FIELD%>];
+			modifiedRowData.variance = "";
+			modifiedRowData.forecast = "";
+			
+			modifiedData.push(modifiedRowData);
+		
+		}
+		
+	}
+	
+	return modifiedData;
+}
+
+function openUploadPopUp(){
+	$('#uploadWindow').show().fadeIn(100);
+	$('#back').addClass('black_overlay').fadeIn(100);
+}
+
+function closeUploadWindow(){
+	$('#uploadWindow').hide();
+	$('#back').removeClass('black_overlay').fadeIn(100);
+	$('input[name=file]').replaceWith($('input[name=file]').clone(true));
+}
+
+function openUrl(url){
+	popUpWindow = window.open(url,'gmemori','');
+	if (window.focus) {newwindow.focus()}
+}
+
+
