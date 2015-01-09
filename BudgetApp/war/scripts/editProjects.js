@@ -989,7 +989,6 @@ function closeUploadWindow(){
 
 function openUrl(url){
 	popUpWindow = window.open(url,'gmemori','');
-	if (window.focus) {newwindow.focus()}
 }
 
 

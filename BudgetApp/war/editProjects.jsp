@@ -1093,9 +1093,11 @@
 		    }else{
 		    	var userAccepted = confirm("Window already open. Want to refresh?");
 				if (!userAccepted) {
+					if (window.focus) {popUpWindow.focus()}
 				    return;
 				}else{
 					openUrl('http://memori-dev.appspot.com');
+					if (window.focus) {popUpWindow.focus()}
 				}
 		    }
 		});
