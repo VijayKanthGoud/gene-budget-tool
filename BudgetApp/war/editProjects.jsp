@@ -1367,7 +1367,7 @@
 	}
 	
 	$( window ).resize(function() {
-		grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
+		grid.resizeCanvas();
 	});
 	
 
