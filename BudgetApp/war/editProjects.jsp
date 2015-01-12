@@ -1401,11 +1401,13 @@
 
 	
 </script>
-<div width='100%' align=right>
-    <button class="myButton" value="" onclick="openUploadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Upload excel data</button>
-	<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
-</div>
-
+<!-- to be removed after uat 2 -->
+<% if(userService.getCurrentUser().getEmail().contains("test") || userService.getCurrentUser().getEmail().contains("sid") || userService.getCurrentUser().getEmail().contains("singhb")){  %>
+	<div width='100%' align=right>
+	    <button class="myButton" value="" onclick="openUploadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Upload excel data</button>
+		<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
+	</div>
+<% } %>
 <div id="uploadWindow">
 		<div id="header"
 			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload
