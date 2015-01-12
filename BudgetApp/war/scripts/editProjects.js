@@ -321,7 +321,13 @@ function updateMemCache(e, args, tempKey) {
 					if( item[43]=='undefined' ||item[43]=="" ){
 						item[43]=0.0;
 					}
-					d[itemCell] = parseFloat(d[itemCell]) +  parseFloat(item[43]) - parseFloat(cellValue);
+					for(var iVar=0;iVar<data.length;iVar++){
+						var kData = data[iVar];
+						if(kData[11]=="Benchmark"){
+							d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
+							break;
+						}
+					}
 				}
 				if(item[37]== false){
 					varTotal = 0.0;
