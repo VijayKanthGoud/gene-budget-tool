@@ -92,10 +92,14 @@ function groupByStatus() {
 							+ g.value + "</span>";
 					  } 
 						else if (g.value == "New"){
-							return " " + g.value
+							var returnStr =  " " + g.value
 							+ "<span style='color:green'>("
-							+ noOfNew + " items)</span>" 
-							+ "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
+							+ noOfNew + " items)</span>" ;
+						
+							if(frmStudy == false){
+								returnStr +=  "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
+							}
+						return returnStr;
 						} 
 						else if (g.value == "Active"){
 							return " " + g.value
@@ -315,7 +319,7 @@ function updateMemCache(e, args, tempKey) {
 		}else{
  		for(var i=0;i<data.length;i++){
 			var d = data[i];
-			if(key== d[34] && fixedCell >= 11 && fixedCell< 23 && item[11]=='Accrual'){
+			if(key== d[34] && fixedCell > 11 && fixedCell< 24 && item[11]=='Accrual'){
 				if(d[11]=="Accrual"){
 					d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
 				}else if(d[11]=="Variance"){

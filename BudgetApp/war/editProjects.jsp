@@ -216,6 +216,7 @@
 	var newExist=false;
 	var activeExist=false;
 	var closedExist=false;
+	var frmStudy=false;
 	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
@@ -296,6 +297,23 @@
 	
 	
 	$(function() {
+		
+		if(document.URL.toString().indexOf("getreport?gMemoriId=") != -1){
+			frmStudy=true;
+			closedExist=true;
+			newExist=true;
+			activeExist=true;
+		}
+		
+		if($(window).width() < 900){
+			$('#cautionWindow').show().fadeIn(100);
+			$('#back').addClass('black_overlay').fadeIn(100);
+		}else{
+			$('#cautionWindow').hide();
+			$('#back').removeClass('black_overlay').fadeIn(100);
+		}
+		
+		
 		var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
 		dataView = new Slick.Data.DataView({
 			groupItemMetadataProvider : groupItemMetadataProvider,
@@ -304,7 +322,7 @@
 
 		var indent = 0;
 		var parents = [];
-		
+		if(frmStudy==false){
 		<% 	if(gtfReports == null || gtfReports.isEmpty()) { %>
 		createNewProjects();
 		newExist=true;
@@ -323,7 +341,7 @@
 		if(newExist ==false){
 			dummyNewProjects();
 		}
-		
+		}
 		var jsId = -1;
 		var dLength= data.length;
 		// prepare the data
@@ -1369,8 +1387,15 @@
 
 	}
 	
-	$( window ).resize(function() {
+	$(window).resize(function() {
 		grid.resizeCanvas();
+		if($(window).width() < 900){
+			$('#cautionWindow').show().fadeIn(100);
+			$('#back').addClass('black_overlay').fadeIn(100);
+		}else{
+			$('#cautionWindow').hide();
+			$('#back').removeClass('black_overlay').fadeIn(100);
+		}
 	});
 	
 
@@ -1396,6 +1421,15 @@
 				<input class='myButton' type="button" value="Cancel" onclick="closeUploadWindow();">
 			</form>
 			
+		</div>
+	</div>
+	
+<div id="cautionWindow">
+		<div id="header"
+			style="width: 100%; height: 20px; background-color: red; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> Caution!
+		</div>
+		<div style="font-size: 14px">
+			Window width is not sufficient enough for application to be viewed. Please increase the window width.			
 		</div>
 	</div>
 <%@ include file="footer.jsp"%>

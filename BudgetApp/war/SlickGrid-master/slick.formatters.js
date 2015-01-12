@@ -108,7 +108,7 @@
 	  }
 	  if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
 		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
-		  return "<span ><a id='gmem' href="+url+" target='gMem' style='color:green'>"+value + "</a></span>" ;
+		  return "<span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span>" ;
 	  }else if(dataContext[35]=="NewProjects" && value.toString().trim != "" && value != 0){
 		  return value;
 	  }else{

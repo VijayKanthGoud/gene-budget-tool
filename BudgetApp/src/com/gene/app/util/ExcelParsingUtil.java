@@ -14,30 +14,33 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-
 public class ExcelParsingUtil {
 	private final static Logger LOGGER = Logger
 			.getLogger(ExcelParsingUtil.class.getName());
-	public static List<List<Object>> readExcellData(final InputStream fileContent)
-			throws InvalidFormatException, IOException {
+
+	public static List<List<String>> readExcellData(
+			final InputStream fileContent) throws InvalidFormatException,
+			IOException {
 
 		LOGGER.log(Level.INFO, "inside ExcelParsingUtil...");
-		List rowList = new ArrayList();
+		List<List<String>> rowList = new ArrayList<List<String>>();
+		List<String> rowData = new ArrayList<String>();
 		try {
-			
+
 			final Workbook wb = WorkbookFactory.create(fileContent);
 			final Sheet mySheet = wb.getSheetAt(0);
 			Cell cell;
 			final int rowStart = mySheet.getFirstRowNum();
 			final int rowEnd = mySheet.getLastRowNum();
-			LOGGER.log(Level.INFO, "rowStart : " + rowStart +" rowEnd : " + rowEnd);
+			LOGGER.log(Level.INFO, "rowStart : " + rowStart + " rowEnd : "
+					+ rowEnd);
 			Row r = null;
-			int lastColumn = 4;
+			int lastColumn = 20;
 			for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
 				r = mySheet.getRow(rowNum);
-				LOGGER.log(Level.INFO, "row : " + r);
 				if (r != null) {
 					for (int cn = 0; cn < lastColumn; cn++) {
+						rowData.clear();
 						cell = r.getCell(cn, r.CREATE_NULL_AS_BLANK);
 						if (rowNum == 0) {
 							System.out.println("cell" + cell);
@@ -47,31 +50,30 @@ public class ExcelParsingUtil {
 						switch (cell.getCellType()) {
 						// Numeric Cell type (0)-----CELL_TYPE_NUMERIC
 						case 0: {
-							rowList.add(cell.getNumericCellValue());
+							rowData.add(((Double)cell.getNumericCellValue()).toString());
 							break;
 						}
 						// String Cell type (1)------CELL_TYPE_STRING
 						case 1: {
 							String wrap = cell.getStringCellValue();
-							String wrap2 = wrap.replaceAll("[\r\n]", "");// to get all
-																	// the lines
-																	// of a cell
-							rowList.add(wrap2);
+							String wrap2 = wrap.replaceAll("[\r\n]", "");
+							rowData.add(wrap2);
 							break;
 						}
 						// cell type formula
 						case 2: {
-								rowList.add(cell.getNumericCellValue());
-								break;
-							
+							rowData.add((((Double)cell.getNumericCellValue()).toString()));
+							break;
+
 						}
 						// Blank Cell type (3)----CELL_TYPE_BLANK
 						case 3: {
-							rowList.add(null);
+							rowData.add(null);
 						}
 						}
 					}
 				}
+				rowList.add(rowData);
 			}
 		} catch (InvalidFormatException e1) {
 			e1.printStackTrace();
@@ -81,6 +83,6 @@ public class ExcelParsingUtil {
 			return null;
 		}
 		LOGGER.log(Level.INFO, "List created : " + rowList);
-		return null;
+		return rowList;
 	}
 }
