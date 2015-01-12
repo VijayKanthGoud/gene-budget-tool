@@ -100,7 +100,7 @@ public class MultiBrandServlet extends HttpServlet {
 					paretnGtfReport.setCreateDate(gtfRpt.getCreateDate());
 					paretnGtfReport.setYear(gtfRpt.getYear());
 					paretnGtfReport.setgMemoryId(gtfRpt.getgMemoryId());
-					paretnGtfReport.setBrand(gtfRpt.getBrand());
+					paretnGtfReport.setBrand("Total Products(MB)");
 					paretnGtfReport.setEmail(gtfRpt.getEmail());
 					paretnGtfReport.setFlag(gtfRpt.getFlag());
 					paretnGtfReport.setMultiBrand(true);

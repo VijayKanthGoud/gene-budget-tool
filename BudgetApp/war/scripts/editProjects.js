@@ -252,16 +252,65 @@ function updateMemCache(e, args, tempKey) {
 		}
 	}
 	
-	var cellValue = item[itemCell];
+	var cellValue ;
+	if(cell == <%=BudgetConstants.BRAND_CELL%>){
+	cellValue = item[6];
+	}else{
+		cellValue = item[itemCell];
+	}
 	var cellNum = fixedCell - 11;
 	key = item[34];
 	var aSaveData=[];
 	var iCnt=0;
 	var varTotal = 0.0;
+	//alert(cell+"::::"+cellValue)
 	if( fixedCell == <%=BudgetConstants.REMARK_CELL%>){
 			var aSave = (aSaveData[0] = {});
 			aSave[0] = key;
  		aSave[1] = cellValue;
+		}else if(cell == <%=BudgetConstants.BRAND_CELL%>){
+			if(cellValue.toString().toLowerCase().indexOf("mb")!=-1){
+				//alert(cellValue+"::::"+args.item[37] +"::::"+cellNum);
+				<%
+				//MemcacheService cacheCCJs = MemcacheServiceFactory.getMemcacheService();
+				Map<String,ArrayList<String>> ccUsersJs = util.getCCUsersList(user.getCostCenter());%>
+				// multi brand click
+				
+				var usr=0;
+				var userCnt=0;
+				<% 
+				
+				//Set<String> userListJs = ccUsersJs.keySet();
+				for(Map.Entry<String,ArrayList<String>> userMapDetails: ccUsersJs.entrySet()){%>
+				 poOwners[userCnt] = "<%=userMapDetails.getKey()%>";
+				 var d = (ccUsersVar[userCnt] = {});
+				 d[0]=   poOwners[userCnt];
+				 d[1] = "<%=userMapDetails.getValue()%>";
+				 
+				 userCnt++;
+				<%}%>
+				if(args.item[37] == false){
+					
+					var index = availableTags.indexOf("Total Products(MB)");
+					if (index > -1) {
+						availableTags.splice(index, 1);
+					}
+					
+					m_data[0][4]=args.item[2];
+				 	m_data[0][5]=args.item[0]+'.1';
+				 	m_data[0][7]=args.item[1];
+				 	
+				 	$('#multibrandEdit').show().fadeIn(100);
+					displayMultibrandGrid();
+					$('#back').addClass('black_overlay').fadeIn(100);
+				}
+				
+			}else{
+				var aSave = (aSaveData[0] = {});
+				aSave[0] = key;
+	 		aSave[1] = cellValue;
+			}
+			
 		}else{
  		for(var i=0;i<data.length;i++){
 			var d = data[i];
@@ -629,6 +678,7 @@ function saveAndClose() {
 	}
 	itemClicked[24] = total;
 	grid.invalidate();
+	//alert(JSON.stringify(m_data));
 	if (itemClicked["34"] != "New projects") {
 		$.ajax({
 			url : '/multiBrandServlet',

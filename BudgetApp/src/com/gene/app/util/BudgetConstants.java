@@ -46,6 +46,7 @@ public interface BudgetConstants {
 	public static final int CELL_PONUMBER = -2;
 	public static final int CELL_REMARKS = 13;
 	public static final int CELL_PNAME = -10;
+	public static final int CELL_BRAND = -9;
 	public static final int CELL_PWBS = -5;
 	public static final int CELL_SUBACTVTY = -4;
 	public static final int CELL_VENDOR = -1;

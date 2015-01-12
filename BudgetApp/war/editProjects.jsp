@@ -281,7 +281,7 @@
 		enableAddRow : true,
 		enableCellNavigation : true,
 		asyncEditorLoading : false,
-		autoEdit : false,
+		autoEdit : true,
 		frozenColumn : 3,
 		enableColumnReorder: false
 	};
@@ -646,7 +646,7 @@
 				.subscribe(function(e, args) {
 					var isValidBrand =false;
 					// Code for brand column(dropdown and validation)
-					if(args.item["34"]=="New projects" && args.cell == <%=BudgetConstants.BRAND_CELL%> ){
+					if(/* args.item["34"]=="New projects" && */ args.cell == <%=BudgetConstants.BRAND_CELL%> ){
 						for(var i=0;i< availableTags.length;i++){
 							if(availableTags[i].toString().trim().toLowerCase()===args.item[6].toString().trim().toLowerCase()){
 								args.item[6]=availableTags[i].toString();
@@ -967,6 +967,9 @@
 				}
 				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;
+				}
+				if(cell == 2 && args.item["11"] == "Planned"){
+					return true;
 				}
 				if (args.item["11"] == "Planned"
 					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && args.item["26"] =="New") {

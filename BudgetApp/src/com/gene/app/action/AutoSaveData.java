@@ -120,7 +120,8 @@ public class AutoSaveData extends HttpServlet {
 						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PNAME ||
 								Integer.parseInt(cellNum) == BudgetConstants.CELL_PWBS ||
 								Integer.parseInt(cellNum) == BudgetConstants.CELL_SUBACTVTY ||
-								Integer.parseInt(cellNum) == BudgetConstants.CELL_VENDOR){
+								Integer.parseInt(cellNum) == BudgetConstants.CELL_VENDOR ||
+								Integer.parseInt(cellNum) == BudgetConstants.CELL_BRAND){
 							String strValue = cellValue;
 							switch(Integer.parseInt(cellNum)){
 							case BudgetConstants.CELL_PNAME:
@@ -134,6 +135,9 @@ public class AutoSaveData extends HttpServlet {
 								break;
 							case BudgetConstants.CELL_VENDOR:
 								gtfReportObj.setVendor(strValue);
+								break;
+							case BudgetConstants.CELL_BRAND:
+								gtfReportObj.setBrand(strValue);
 								break;
 							default:
 								break;
