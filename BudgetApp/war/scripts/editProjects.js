@@ -267,7 +267,7 @@ function updateMemCache(e, args, tempKey) {
 	var aSaveData=[];
 	var iCnt=0;
 	var varTotal = 0.0;
-	alert(fixedCell);
+	//alert(fixedCell);
 	//alert(cell+"::::"+cellValue)
 	if( fixedCell == <%=BudgetConstants.REMARK_CELL%>){
 			var aSave = (aSaveData[0] = {});

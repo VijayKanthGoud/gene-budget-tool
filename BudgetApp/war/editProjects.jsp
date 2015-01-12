@@ -685,6 +685,22 @@
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
+					<%boolean foundGmem=false;%>
+					if(cell==4){
+						 <% for(Map.Entry<String,Integer> ccId :  allGmemorIds.entrySet()){%>
+							 if(item[0] == <%=ccId.getKey()%>){
+								 alert(item[0]+" gMemori Id already exists.Enter a valid value.");
+								 args.item[0]="";
+     								grid.invalidate();
+									<%foundGmem=true;%>
+							 }
+							 <%if(foundGmem){
+								 foundGmem=false;
+								 break;
+							 }%>
+						 <%}%>
+						 
+					}
 					if(item[37]=='undefined' || item[37]==false){
 						var temp = 0;
 						for (var j = 0; j < data.length - 1; j++) {
@@ -994,7 +1010,7 @@
 					return true;
 				}
 				var isAnEditableId = false;
-				if(args.item[0].toString().length == 10){
+				if(args.item["11"] == "Planned" && args.item[0].toString().indexOf(".") == -1 && cell==4 ){
 					isAnEditableId = true;
 				}
 				if (args.item["11"] == "Planned"

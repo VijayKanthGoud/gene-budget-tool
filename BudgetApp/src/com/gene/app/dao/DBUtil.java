@@ -57,6 +57,28 @@ public class DBUtil {
 		return ccUsers;
 	}
 	
+	public Map<String,Integer> getAllgMemoriId(){
+		
+		
+		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
+		Map<String,ArrayList<String>> ccUsers = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String,Integer> allCC = new LinkedHashMap<>();
+		Map<String,Integer> allgMems = new LinkedHashMap<>();
+		userMap = readAllUserInfo();
+		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
+			allCC.put(ccMap.getValue().getCostCenter(), 0);
+		}
+		for(Map.Entry<String,Integer> ccId :  allCC.entrySet()){
+			Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(ccId.getKey());
+			
+			for(String gmemoriId: gtfReportFromCache.keySet()){
+				allgMems.put(gmemoriId,0);
+			}
+			
+		}
+		return allgMems;
+	}
+	
 	public UserRoleInfo readUserInfoFromDB(String email){
 		UserRoleInfo user = new UserRoleInfo();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
