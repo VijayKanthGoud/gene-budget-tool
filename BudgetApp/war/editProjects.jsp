@@ -1005,7 +1005,7 @@
 				
 				return false;
 			}else{
-				if( cols[cell].name == "$ in 1000's" ||  cols[cell].name == "Status"){
+				if( cols[cell].name == "$ in 1000's" ||  cols[cell].name == "Status" || cols[cell].name == "Allocation %"){
 					return false;
 				}
 				if( args.item["35"]!="Buttons"){

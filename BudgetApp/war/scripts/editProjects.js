@@ -451,6 +451,9 @@ if(addsave ==0){
 
 // Create a new project
 function createIntProjects(){
+	dataView.expandAllGroups();
+	dataView.collapseGroup("Active");
+	dataView.collapseGroup("Closed");
 	if(newExist == false){
 		dataView.deleteItem("id_0");
 		newExist = true;
