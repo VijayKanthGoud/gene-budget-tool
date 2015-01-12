@@ -395,9 +395,11 @@ function getSummaryValues(){
 				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
 				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
 				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
-					<% color= "yellow"; %>
+					$(varTotalLabel).css('background-color', 'yellow');
+					$(varTotalText).css('background-color', 'yellow');
 				}else{
-					<% color= "#00FFFF" ;%>
+					$(varTotalLabel).css('background-color', '#00FFFF');
+					$(varTotalText).css('background-color', '#00FFFF');
 				}
 			}
 		}

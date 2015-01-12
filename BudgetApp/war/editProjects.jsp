@@ -60,7 +60,7 @@
 						My Projects </span><br/><br/>Cost center : <%=userInfo.getCostCenter()%></td>
 
 				<td style="width: 20%;" rowspan="2">
-					<table class="summarytable" width=100%
+					<table class="summarytable"
 						style="color: #005691; white-space: nowrap; font-weight: bold;">
 						<%
 							BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
@@ -113,8 +113,8 @@
                                 <td>Accrual:</td><td><span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
                         </tr>
                          <tr>
-                               <td><span style="background: <%=color%>;color:black">Variance Total:</span></td>
-                               <td><span style="background: <%=color%>;color:black"><span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+                               <td><span id = "varTotalLabel" style="color:black">Variance Total:</span></td>
+                               <td><span id = "varTotalText" style="color:black"><span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
                                </td>
                          </tr>
 					</table>
@@ -122,7 +122,7 @@
 			</tr>
 			<tr style="">
 				<td style="padding-left: 21.5%"><input type=text
-					style="float: left; align: center; width: 140px;" id="txtSearch">
+					style="float: left; align: center; width: 35%;" id="txtSearch">
 					<img src="images/search.png" height="20" width="20" align="bottom"
 					style="float: left;"
 					title="Search in Project name, gMemori Id, Brand and Remarks.">
