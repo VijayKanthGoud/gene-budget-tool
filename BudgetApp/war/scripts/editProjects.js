@@ -263,6 +263,7 @@ function updateMemCache(e, args, tempKey) {
 	var aSaveData=[];
 	var iCnt=0;
 	var varTotal = 0.0;
+	alert(fixedCell);
 	//alert(cell+"::::"+cellValue)
 	if( fixedCell == <%=BudgetConstants.REMARK_CELL%>){
 			var aSave = (aSaveData[0] = {});
@@ -314,7 +315,7 @@ function updateMemCache(e, args, tempKey) {
 		}else{
  		for(var i=0;i<data.length;i++){
 			var d = data[i];
-			if(key== d[34] && fixedCell > 11 && fixedCell< 24 && item[11]=='Accrual'){
+			if(key== d[34] && fixedCell >= 11 && fixedCell< 23 && item[11]=='Accrual'){
 				if(d[11]=="Accrual"){
 					d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
 				}else if(d[11]=="Variance"){
