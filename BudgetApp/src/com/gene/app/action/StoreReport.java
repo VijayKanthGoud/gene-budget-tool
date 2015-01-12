@@ -171,7 +171,8 @@ public class StoreReport extends HttpServlet {
 		try {
 			
 			if("".equalsIgnoreCase(rprtObject
-					.getString(BudgetConstants.New_GTFReport_gMemoriId).trim())){
+					.getString(BudgetConstants.New_GTFReport_gMemoriId).trim()) || "0".equalsIgnoreCase(rprtObject
+							.getString(BudgetConstants.New_GTFReport_gMemoriId).trim())){
 				gMemoriId = ""+generator.nextValue();
 				gtfReport.setDummyGMemoriId(true);
 				gtfReport.setgMemoryId(gMemoriId);

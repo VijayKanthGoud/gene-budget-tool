@@ -687,7 +687,11 @@
 	    };
 
 	    this.loadValue = function (item) {
-	      defaultValue = item[args.column.field];
+	      if(item[args.column.field] == 0){
+	    	  defaultValue = "";
+	      }else{
+	    	  defaultValue = item[args.column.field];
+	      }
 	      $input.val(defaultValue);
 	      $input[0].defaultValue = defaultValue;
 	      $input.select();
