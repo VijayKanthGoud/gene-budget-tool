@@ -46,7 +46,6 @@
 		util1.insertUserRoleInfo();
 		util1.insertBudgetSummary();    */ 
 		if (userPrincipal != null) {
-			logoutLink = userService.createLogoutURL("/");
 			User user = userService.getCurrentUser();
 			session.setAttribute("loggedInUser",user);
 			isAdmin = userService.isUserAdmin();
@@ -114,7 +113,7 @@
 			<%
 				}
 			%>
-			<li class='last'><a href=<%=logoutLink%>><span>Logout</span></a></li>
+			<li class='last'><a href='/logout'><span>Logout</span></a></li>
 		</ul>
 	</div>
 	<%
