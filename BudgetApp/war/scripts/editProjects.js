@@ -92,7 +92,7 @@ function groupByStatus() {
 							+ g.value + "</span>";
 					  } 
 						else if (g.value == "New"){
-							var returnStr =  " " + g.value
+							var returnStr =  "" + g.value
 							+ "<span style='color:green'>("
 							+ noOfNew + " items)</span>" ;
 						
@@ -102,12 +102,12 @@ function groupByStatus() {
 						return returnStr;
 						} 
 						else if (g.value == "Active"){
-							return " " + g.value
+							return "" + g.value
 							+ "  <span style='color:green'>("
 							+     noOfActive + " items)</span>";
 						}
 					else if (g.value == "Closed"){
-						return " " + g.value
+						return "" + g.value
 						+ "<span style='color:green'>("
 						+ noOfClosed + " items)</span>";
 					}
@@ -475,10 +475,10 @@ function createNewProjects(){
 	$('#topCrtNewProjBtn').hide();
 	$('#noData').hide();
 	var length= data.length;
-	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
+	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:"",4:"",5:"sub_activity",6:"",7:"100.0",8:"",9:"",10:""
 		,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
 	dataView.insertItem(0,item);
 if(addsave ==0){
     var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
@@ -529,10 +529,10 @@ function createIntProjects(){
 	$('#topCrtNewProjBtn').hide();
 	$('#noData').hide();
 	var length= data.length;
-	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:" ",4:" ",5:"sub_activity",6:" ",7:"100.0",8:"",9:"",10:""
+	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:"",4:"",5:"sub_activity",6:"",7:"100.0",8:"",9:"",10:""
 		,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:" ",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
 	dataView.insertItem(0,item);
 	if(addsave ==0){
 	    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
@@ -560,10 +560,10 @@ function createIntProjects(){
 // inserts dummy new projects
 function dummyNewProjects(){
 	var length= data.length;
-	var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:" ",4:" ",5:"",6:" ",7:"",8:"",9:"",10:""
+	var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:" ",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
 	dataView.insertItem(0,item);
     dataView.refresh(); 
     data=dataView.getItems();

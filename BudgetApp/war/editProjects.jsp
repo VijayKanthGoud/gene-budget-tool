@@ -356,20 +356,20 @@
     	   		d["id"] = "id_" + (parseInt(jsId) + parseInt(dLength));
     	    	d["indent"] = indent;
     	    	d["parent"] = parent;
-    	    	d[0]=" ";
+    	    	d[0]="";
     	    	<%GtfReport gReport = gtfReports.get(i);%>
-    	 		d[25]=" ";
+    	 		d[25]="";
        	 		d[26]="<%=gReport.getStatus()%>";
        	 		var gmemoriID = "<%=gReport.getgMemoryId()%>";
         		d[27]=gmemoriID;
         		d[28]="<%=gReport.getBrand()%>";
         		d[29]="<%=gReport.getProjectName()%>";
-        		d[30]=" ";	
+        		d[30]="";	
         		d[31]="<%=gReport.getId()%>";
         		d[32]="<%=gReport.getRemarks()%>";
         		d[33]="New";
         		d[34]=gmemoriID;
-        		d[35]=" ";
+        		d[35]="";
         		d[37]=<%=gReport.getMultiBrand()%>;
         		d[38]="<%=gReport.getCreateDate()%>";
         		d[39]="<%=gReport.getYear()%>";
@@ -429,7 +429,7 @@
     				d[25]="<%=gtfReports.get(i).getRemarks()%>";
   				<%} else{%>  
   				for(var cnt=1;cnt<11;cnt++){
-  						d[cnt]=" "; 
+  						d[cnt]=""; 
   					}
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
@@ -498,7 +498,7 @@
     					for (var j = 12; j < 25; j++) {
     						d[j] = 0.0;
     						}
-    					d[33]=" ";
+    					d[33]="";
     					}
    
    				} if(jsId % 4 == 3){
@@ -533,7 +533,7 @@
     						for (var j = 12; j < 25; j++) {
     							d[j] = 0.0;
     							}
-    						d[33]=" ";
+    						d[33]="";
     						}
    				}
     
@@ -620,20 +620,20 @@
 			}
 			d[25] = "";
 			d[26] = "Total";
-			d[27] = " ";
-			d[28] = " ";
-			d[29] = " ";
-			d[30] = " ";
-			d[31] = " ";
-			d[32] = " ";
+			d[27] = "";
+			d[28] = "";
+			d[29] = "";
+			d[30] = "";
+			d[31] = "";
+			d[32] = "";
 			d[33] = "New";
-			d[34] = " ";
-			d[35]= " ";
-			d[36]= " ";
-			d[37]= " ";
-			d[38]= " ";
-			d[39]= " ";
-			d[0]=" ";
+			d[34] = "";
+			d[35] = "";
+			d[36] = "";
+			d[37] = "";
+			d[38] = "";
+			d[39] = "";
+			d[0] ="";
 
 		}
 
