@@ -452,12 +452,18 @@ function updateMemCache(e, args, tempKey) {
 				window.location.reload(true);
 			}
 		},
-		error: function(result){
+		error : function(result){
 			alert("gMemoriId already exists !!!");
 			$('#statusMessage').text("")
 			.fadeIn(200);
 			$('#statusMessage');
-			item["0"] = item["34"];
+			for(var i=0;i<data.length;i++){
+				var d = data[i];
+				if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+				
+				d["0"] = d["27"];
+			}}
+			//item["0"] = item["34"];
 			grid.invalidate();
 		}
 	});
