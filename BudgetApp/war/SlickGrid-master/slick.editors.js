@@ -542,7 +542,7 @@
 
     this.save = function () {
     	if($input.val().trim().length == 0){
-    	$input.val(" ");
+    	$input.val("");
     	}
       args.commitChanges();
     };
