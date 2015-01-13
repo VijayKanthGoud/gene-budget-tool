@@ -717,8 +717,16 @@ function saveAndClose() {
 			break;
 		}
 	}
+	var d = new Date();
+	var currentMonth = d.getMonth();
+	
 	itemClicked[24] = total;
+	for(i = 12 + currentMonth; i<24; i++){
+		itemClicked[i] =parseFloat(total/(12-currentMonth)).toFixed(2);
+	}
+
 	grid.invalidate();
+	return;
 	//alert(JSON.stringify(m_data));
 	if (itemClicked["34"] != "New projects") {
 		$.ajax({
