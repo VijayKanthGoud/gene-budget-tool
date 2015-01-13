@@ -377,6 +377,7 @@
 					d[34]=gmemoriID.split(".")[0];
 				}
 				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
+				d[44]="<%=gReport.getBrand()%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();

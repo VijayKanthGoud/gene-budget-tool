@@ -775,6 +775,10 @@ function validateUserAndBrand(){
 	return flag;
 }
 function closeWithoutSave() {
+	if(itemClicked[37] == false){
+		itemClicked[6] = itemClicked[44];
+	}
+	
 	availableTags = [];
 	for (var j = 0; j < ccUsersVar.length; j++) {
 		if (ccUsersVar[j][0] == itemClicked[1]) {
@@ -798,6 +802,7 @@ function closeWithoutSave() {
 	}
 	$('#multibrandEdit').hide();
 	$('#back').removeClass('black_overlay').fadeIn(100);
+	grid.invalidate();
 }
 
 function deleteSelectedProjects() {
