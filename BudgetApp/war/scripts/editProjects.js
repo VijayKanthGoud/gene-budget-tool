@@ -968,7 +968,11 @@ function submitProjects(){
 				window.location.reload(true);
 			},
 			error: function(result) {
-				alert(result["statusText"]);
+				if(result["responseText"].toString().indexOf("java.lang.Error:")!= -1){
+				alert(JSON.stringify(result["responseText"].toString().split("java.lang.Error:")[1].substring(1,38)));
+				}else{
+					alert("Unknow server error occured.");
+				}
 	        }
 		});  
 	}
