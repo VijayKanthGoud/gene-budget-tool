@@ -142,4 +142,5 @@ public interface BudgetConstants {
 	public static final String MB_BRAND_CELL = "2";
 	public static final String  MB_$_IN_THOUSAND_CELL= "3";
 	public static final String MB_ALLOCATION_PERCENTAGE_CELL = "4";
+	public static final String GMEMORI_COLLECTION = "gMemoriIdCollection";
 }

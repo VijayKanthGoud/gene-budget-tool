@@ -78,6 +78,7 @@ public class AutoSaveData extends HttpServlet {
 		JSONArray jsonArray = null;
 		JSONObject rprtArray = null;
 		Map<String, GtfReport> gtfReportMap =  new LinkedHashMap<String,GtfReport>();
+		Map<String, GtfReport> completeGtfRptMap =  new LinkedHashMap<String,GtfReport>();
 		Map<String, GtfReport> editedGtfReportMap =  new LinkedHashMap<String,GtfReport>();
 		String keyNum = "";
 		String sessionKey = "";
@@ -87,6 +88,7 @@ public class AutoSaveData extends HttpServlet {
 			jsonArray = new JSONArray(objarray);
 			gtfReportMap = util
 					.getAllReportDataFromCache(user.getCostCenter());
+			completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 			for (int count = 0; count < jsonArray.length(); count++) {
 				rprtArray = jsonArray.getJSONObject(count);
 				keyNum = rprtArray.getString("0");
@@ -105,7 +107,6 @@ public class AutoSaveData extends HttpServlet {
 							String remarks = cellValue;
 							gtfReportObj.setRemarks(remarks);
 							gtfReportMap.put(keyNum, gtfReportObj);
-							//editedGtfReportMap.put(keyNum, gtfReportObj);
 						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
 							LOGGER.log(Level.INFO, "Changing PO NUMBER ... ");
 							String poNumber = cellValue;
@@ -144,18 +145,19 @@ public class AutoSaveData extends HttpServlet {
 								
 							}
 							gtfReportMap.put(keyNum, gtfReportObj);	
-							
 						}else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_GMEMORI_ID){
+							boolean result = util.validategMemoriId(cellValue);
+							if(result){
+								throw new Error("gMemori Id already exists");
+							}
 							gtfReportMap.remove(keyNum);
-							//if(!cellValue.contains(".") && gtfReportObj.getgMemoryId().length()==10){
+							completeGtfRptMap.remove(keyNum);
 							keyNum = rprtArray.getString("1");
 							gMemoriIdFromStudy = cellValue;
 							gtfReportObj.setgMemoryId(gMemoriIdFromStudy);
-							/*}else if(cellValue.contains(".") && gtfReportObj.getgMemoryId().length()>10){
-								gtfReportObj.setgMemoryId(gMemoriIdFromStudy+"."+count);
-							}*/
 							gtfReportObj.setDummyGMemoriId(false);
 							gtfReportMap.put(keyNum, gtfReportObj);
+							completeGtfRptMap.put(keyNum, gtfReportObj);
 						}
 							else {
 						
@@ -209,7 +211,6 @@ public class AutoSaveData extends HttpServlet {
 								}
 								gtfReportObj.setPlannedMap(plannedMap);
 								gtfReportMap.put(keyNum, gtfReportObj);
-								//editedGtfReportMap.put(keyNum, gtfReportObj);
 							}
 						}
 					}
@@ -221,9 +222,7 @@ public class AutoSaveData extends HttpServlet {
 						.getAttribute(BudgetConstants.KEY);
 				util.saveAllReportDataToCache(user.getCostCenter(),
 						gtfReportMap);
-				/*if (key != null && key.isEmpty()) {
-					key = sessionKey;
-				}*/
+				util.saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, gtfReportMap);
 				String[] keys = {};
 				List<GtfReport> gtfList = new ArrayList<GtfReport>();
 				if(sessionKey!=null){
@@ -236,13 +235,6 @@ public class AutoSaveData extends HttpServlet {
 					util.saveAllDataToDataStore(gtfList);
 				}
 
-				/*if ((key != null && sessionKey != null)
-						&& !(key.equals(sessionKey))) {
-					util.saveAllDataToDataStore(gtfList);
-				}				
-				if( key != null && isInt(cellNum) && Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
-					util.saveAllDataToDataStore(gtfList);
-				}*/
 				 session.setAttribute(BudgetConstants.KEY, sessionKey);
 				 session.setAttribute("objArray",objarray);
 		} catch (JSONException e) {

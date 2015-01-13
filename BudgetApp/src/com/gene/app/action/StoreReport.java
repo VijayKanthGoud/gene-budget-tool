@@ -126,8 +126,8 @@ public class StoreReport extends HttpServlet {
 				}
 				gtfReport.setRemarks(remarks);
 				multiBrand = rprtObject.getString(BudgetConstants.isMultiBrand);
-
-				Map<String, Integer> getAllGmemoriIds = util
+		 
+				/*Map<String, Integer> getAllGmemoriIds = util
 						.getAllgMemoriId();
 				if(getAllGmemoriIds.get(rprtObject
 						.getString(BudgetConstants.New_GTFReport_gMemoriId))!=null){
@@ -138,7 +138,7 @@ public class StoreReport extends HttpServlet {
 						e.printStackTrace();
 					}
 					break;
-				}
+				}*/
 
 				if (multiBrand != null
 						&& !"".equalsIgnoreCase(multiBrand.trim())
@@ -180,6 +180,11 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setDummyGMemoriId(false);
 				gtfReport.setgMemoryId(rprtObject
 						.getString(BudgetConstants.New_GTFReport_gMemoriId));
+				
+			}
+			boolean isValidGMemoriId = util.validategMemoriId(gtfReport.getgMemoryId());
+			if(isValidGMemoriId){
+				throw new Error("gMemoriId already exists !!!");
 			}
 			//boolean isDummyId = isDummyGMemoriId(gMemoriId);
 			

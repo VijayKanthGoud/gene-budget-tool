@@ -43,6 +43,7 @@ public class GetReport extends HttpServlet {
 		UserService userService;
 		String email ="";
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
+		Map<String,GtfReport> completeGtfRptMap = new LinkedHashMap<String,GtfReport>();
 		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
@@ -54,6 +55,7 @@ public class GetReport extends HttpServlet {
 		//LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
 		gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
+		completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		//LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();

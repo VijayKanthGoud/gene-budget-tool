@@ -38,9 +38,7 @@
 		String userName = "";
 		String logoutLink = "";
 		DBUtil util = new DBUtil();
-		String costCenter="307673";
-		Map<String,Integer> allGmemorIds=new LinkedHashMap<String,Integer>();
-		allGmemorIds=util.getAllgMemoriId();
+			
 		 /*  UserDataUtil util1 = new UserDataUtil();
 		util1.insertCCMapping();
 		util1.insertUserRoleInfo();

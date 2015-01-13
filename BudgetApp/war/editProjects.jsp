@@ -677,6 +677,7 @@
 							args.item[6]="";
 							alert("Enter a valid brand.");
 							grid.invalidate();
+							return;
 						}
 					}
 					var item = args.item;
@@ -685,22 +686,31 @@
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
-					<%boolean foundGmem=false;%>
-					if(cell==4){
-						 <% for(Map.Entry<String,Integer> ccId :  allGmemorIds.entrySet()){%>
-							 if(item[0] == <%=ccId.getKey()%>){
-								 alert(item[0]+" gMemori Id already exists.Enter a valid value.");
-								 args.item[0]="";
-     								grid.invalidate();
-									<%foundGmem=true;%>
-							 }
-							 <%if(foundGmem){
-								 foundGmem=false;
-								 break;
-							 }%>
-						 <%}%>
-						 
+					/* if(cell==4){
+						var prevGMemId = item["0"];
+				 		//var validationMsg = ValidateGMemoriId(item["0"]);
+				 		var validationMsg = '';
+						$.ajax({
+							url : '/ValidateGMemoriId',
+							type : 'POST',
+							dataType : 'text',
+							data : {gMemoriId: gMemoriId
+							},
+							success : function(result) {
+								validationMsg = result;
+								alert(validationMsg);
+								//getSummaryValues();
+							}
+						});
+						if(validationMsg !=''){
+							alert("grid.invalidate();  "+validationMsg);
+							item["0"] = prevGMemId;
+							grid.invalidate();
+							return;
+						}
 					}
+				 	alert("      :::::"); */
+				 	
 					if(item[37]=='undefined' || item[37]==false){
 						var temp = 0;
 						for (var j = 0; j < data.length - 1; j++) {

@@ -20,6 +20,7 @@ import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.gson.Gson;
 
 public class DBUtil {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
@@ -57,26 +58,17 @@ public class DBUtil {
 		return ccUsers;
 	}
 	
-	public Map<String,Integer> getAllgMemoriId(){
+	public boolean validategMemoriId(String gMemoriId){
 		
 		
-		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
-		Map<String,ArrayList<String>> ccUsers = new LinkedHashMap<String, ArrayList<String>>();
-		Map<String,Integer> allCC = new LinkedHashMap<>();
-		Map<String,Integer> allgMems = new LinkedHashMap<>();
-		userMap = readAllUserInfo();
-		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
-			allCC.put(ccMap.getValue().getCostCenter(), 0);
+		Map<String,GtfReport> completeGtfRptMap = new LinkedHashMap<String,GtfReport>();
+		completeGtfRptMap = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+		String validationMsg = "";
+		boolean isGMemIdExists = false;
+		if(gMemoriId!=null && !"".equals(gMemoriId.trim())){
+		isGMemIdExists = completeGtfRptMap.containsKey(gMemoriId);
 		}
-		for(Map.Entry<String,Integer> ccId :  allCC.entrySet()){
-			Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(ccId.getKey());
-			
-			for(String gmemoriId: gtfReportFromCache.keySet()){
-				allgMems.put(gmemoriId,0);
-			}
-			
-		}
-		return allgMems;
+		return isGMemIdExists;
 	}
 	
 	public UserRoleInfo readUserInfoFromDB(String email){
@@ -385,6 +377,7 @@ public class DBUtil {
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		cache.put(costCenter, gtfReportList);
+		//cache.put(BudgetConstants.GMEMORI_COLLECTION, gtfReportList);
 	}
 	
 	public GtfReport readReportDataFromCache(String key,String costCenter){
@@ -445,6 +438,32 @@ public class DBUtil {
 		}
 		return gtfList;
 	}
+	
+	public Map<String,GtfReport> getAllReportData() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(GtfReport.class);
+		//q.setOrdering(BudgetConstants.GTFReportOrderingParameters_getReport);
+		//q.setFilter("costCenter==costCenterParam");
+		//q.declareParameters("String costCenterParam");
+		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
+		try{
+			List<GtfReport> results = (List<GtfReport>) q.execute();
+			if(!results.isEmpty()){
+			for(GtfReport p : results){
+				gtfList.put(p.getgMemoryId(),p);
+			}
+			}
+			//if(resetCache){
+				saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION,gtfList);
+			//}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
+		}
+		return gtfList;
+	}
 	public List<GtfReport> calculateVarianceMap(List<GtfReport> gtfReports){
 		List<GtfReport> rptList = new ArrayList<GtfReport>();
 		Calendar cal = Calendar.getInstance();
@@ -483,6 +502,16 @@ public class DBUtil {
 		gtfReportList = (Map<String,GtfReport>)cache.get(costCenter);
 		if(gtfReportList==null || gtfReportList.size()==0){
 			gtfReportList = getReport(costCenter, true);
+			}
+		return gtfReportList;
+	}
+	
+	public Map<String,GtfReport> getAllReportDataCollectionFromCache(String gMemoriCollection){
+		Map<String,GtfReport> gtfReportList = new LinkedHashMap<String,GtfReport>();
+		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+		gtfReportList = (Map<String,GtfReport>)cache.get(gMemoriCollection);
+		if(gtfReportList==null || gtfReportList.size()==0){
+			gtfReportList = getAllReportData();
 			}
 		return gtfReportList;
 	}
@@ -742,19 +771,23 @@ public class DBUtil {
 	public void storeProjectsToCache(List<GtfReport> gtfReports,
 			String costCenter, String listType) {
 		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(costCenter);
+		Map<String, GtfReport> gtfAllReportFromCache = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		GtfReport report = new GtfReport();
 		for (int i = 0; i < gtfReports.size(); i++) {
 			report = gtfReports.get(i);
 			if (listType != null && !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.OLD.equalsIgnoreCase(listType.trim())) {
 				gtfReportFromCache.remove(report.getgMemoryId());
+				gtfAllReportFromCache.remove(report.getgMemoryId());
 			} else if (listType != null
 					&& !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.NEW.equalsIgnoreCase(listType.trim())) {
 				gtfReportFromCache.put(report.getgMemoryId(), report);
+				gtfAllReportFromCache.put(report.getgMemoryId(), report);
 			}
 		}
 		cache.put(costCenter, gtfReportFromCache);
+		cache.put(BudgetConstants.GMEMORI_COLLECTION, gtfAllReportFromCache);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -769,6 +802,7 @@ public class DBUtil {
 		int month = cal.get(Calendar.MONTH);
 		try {
 			gtfReports = (List<GtfReport>) q.execute("Active");
+			Map<String, GtfReport> completeGtfRptList = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 			if (!gtfReports.isEmpty()) {
 				for (GtfReport gtfReport : gtfReports) {
 					Map<String, Double> benchMarkMap = new LinkedHashMap<String, Double>();
@@ -790,9 +824,13 @@ public class DBUtil {
 					gtfMap =  getAllReportDataFromCache(gtfReport.getCostCenter());
 					if(gtfMap ==null ){
 						gtfMap = new LinkedHashMap<String, GtfReport>();
+					}if(completeGtfRptList == null){
+						completeGtfRptList = new LinkedHashMap<String, GtfReport>();
 					}
 					gtfMap.put(gtfReport.getgMemoryId(), gtfReport);
+					completeGtfRptList.put(gtfReport.getgMemoryId(), gtfReport);
 					saveAllReportDataToCache(gtfReport.getCostCenter(), gtfMap);
+					saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, completeGtfRptList);
 				}
 			}
 			pm.makePersistentAll(gtfReports);
