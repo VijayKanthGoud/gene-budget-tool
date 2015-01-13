@@ -961,8 +961,8 @@ function submitProjects(){
 				storeData=[];
 				window.location.reload(true);
 			},
-			error: function() {
-	            alert('gMemoriId already exists !!!');
+			error: function(result) {
+				alert(result["statusText"]);
 	        }
 		});  
 	}

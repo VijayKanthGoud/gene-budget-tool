@@ -184,7 +184,7 @@ public class StoreReport extends HttpServlet {
 			}
 			boolean isValidGMemoriId = util.validategMemoriId(gtfReport.getgMemoryId());
 			if(isValidGMemoriId){
-				throw new Error("gMemoriId already exists !!!");
+				throw new Error(gtfReport.getgMemoryId()+" : gMemoriId already exists !!!");
 			}
 			//boolean isDummyId = isDummyGMemoriId(gMemoriId);
 			
