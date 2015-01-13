@@ -686,30 +686,7 @@
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
-					/* if(cell==4){
-						var prevGMemId = item["0"];
-				 		//var validationMsg = ValidateGMemoriId(item["0"]);
-				 		var validationMsg = '';
-						$.ajax({
-							url : '/ValidateGMemoriId',
-							type : 'POST',
-							dataType : 'text',
-							data : {gMemoriId: gMemoriId
-							},
-							success : function(result) {
-								validationMsg = result;
-								alert(validationMsg);
-								//getSummaryValues();
-							}
-						});
-						if(validationMsg !=''){
-							alert("grid.invalidate();  "+validationMsg);
-							item["0"] = prevGMemId;
-							grid.invalidate();
-							return;
-						}
-					}
-				 	alert("      :::::"); */
+					
 				 	
 					if(item[37]=='undefined' || item[37]==false){
 						var temp = 0;
