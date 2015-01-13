@@ -373,10 +373,10 @@
         		d[37]=<%=gReport.getMultiBrand()%>;
         		d[38]="<%=gReport.getCreateDate()%>";
         		d[39]="<%=gReport.getYear()%>";
-        		d[42]="<%=gReport.getProjectName()%>";
 				if(gmemoriID.indexOf(".") > -1){
 					d[34]=gmemoriID.split(".")[0];
 				}
+				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
