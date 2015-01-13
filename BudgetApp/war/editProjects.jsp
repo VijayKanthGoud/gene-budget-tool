@@ -49,8 +49,7 @@
 						</tr>
 						<tr>
 							<td style="padding-left: 20px;"><input type="checkbox"
-								id="hideColumns" name="hideColumns" value="hide" checked>Hide
-								Columns</td>
+								id="hideColumns" name="hideColumns" value="hide" checked>PO Details</td>
 						</tr>
 					</table>
 				</td>				
@@ -1160,7 +1159,7 @@
 	    enableAddRow: true,
 	    enableCellNavigation: true,
 	    asyncEditorLoading: false,
-	    autoEdit: false,
+	    autoEdit: true,
 	    enableColumnReorder: false
 	  };
 	  var sum = 0.0;

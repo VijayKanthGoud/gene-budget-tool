@@ -39,10 +39,10 @@
 		String logoutLink = "";
 		DBUtil util = new DBUtil();
 			
-		 /*  UserDataUtil util1 = new UserDataUtil();
+		/*  UserDataUtil util1 = new UserDataUtil();
 		util1.insertCCMapping();
 		util1.insertUserRoleInfo();
-		util1.insertBudgetSummary();    */ 
+		util1.insertBudgetSummary(); */    
 		if (userPrincipal != null) {
 			User user = userService.getCurrentUser();
 			session.setAttribute("loggedInUser",user);
