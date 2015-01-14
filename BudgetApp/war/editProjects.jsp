@@ -697,25 +697,22 @@
 					var row = args.row;
 					var dataLength = 0;
 					
-				 	
-					if(item[37]=='undefined' || item[37]==false){
-						var temp = 0;
-						for (var j = 0; j < data.length - 1; j++) {
-							if (data[j]["id"] == args.item.id) {
-								temp = j;
-								break;
-							}
-						}
-						data[temp][24] = 0.0;
-						for (var j = 12; j < 24; j++) {
-							if(data[temp][j] == "" || data[temp][j] == "undefined"){
-								data[temp][j] = 0.0;
-							}
-							data[temp][24] = parseFloat(data[temp][24])
-										+ parseFloat(data[temp][j]);
+					var temp = 0;
+					for (var j = 0; j < data.length - 1; j++) {
+						if (data[j]["id"] == args.item.id) {
+							temp = j;
+							break;
 						}
 					}
-						
+					data[temp][24] = 0.0;
+					for (var j = 12; j < 24; j++) {
+						if(data[temp][j] == "" || data[temp][j] == "undefined"){
+							data[temp][j] = 0.0;
+						}
+						data[temp][24] = parseFloat(data[temp][24])
+									+ parseFloat(data[temp][j]);
+					}
+					
 					grid.invalidate();
 			
 					if(args.item["34"] != "New projects"){
