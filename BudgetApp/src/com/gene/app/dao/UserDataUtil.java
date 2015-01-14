@@ -18,21 +18,24 @@ public class UserDataUtil {
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2"};//,"","","",""};
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags"};//,"","","",""};
 	String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags",
-			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield", "suchockw", "grabowsa"};
+			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield", "suchockw", "grabowsa","shwetims","subramb1","kameckip"};
 	// create user email array
 	/*String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
 			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com"};*///,"","","",""};
 	String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
 			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com","savitzky.michael@gene.com",
-			"narasimhan.srihari@gene.com","chen.melissa@gene.com","basurto.kimberly@gene.com","sheffield.jamieson@gene.com", "suchockw@gene.com", "grabowsa@gene.com"};
+			"narasimhan.srihari@gene.com","chen.melissa@gene.com","basurto.kimberly@gene.com","sheffield.jamieson@gene.com", "suchockw@gene.com", "grabowsa@gene.com",
+			"shwetims@gene.com","subramb1@gene.com","kameckip@gene.com"};
 	//String [] userEmail = {"test@example.com"};
 	// create brandmap array
 
 	// create role array
 	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Project Owner","Project Owner","Project Owner",
-			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner"};
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+			"Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
-	String [] costCenter = {"307680","235031","307677","235032","307677","307680","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"};
+	String [] costCenter = {"307680","235031","307677","235032","307677","307676","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"
+			,"307676","307676","307676"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Onart", 30000.0);
@@ -96,6 +99,49 @@ public class UserDataUtil {
 		brand5Map.put("Tarceva", 30000.0);
 		brand5Map.put("Lucentis",  60000.0);
 		brand5Map.put("Xolair", 30000.0);
+
+		
+		Map<String,Double> brand6Map = new LinkedHashMap<String,Double>();
+		brand6Map.put("Avastin", 30000.0);
+		brand6Map.put("Tarceva", 20000.0);
+		brand6Map.put("Pulmozyme", 50000.0);
+		brand6Map.put("Lucentis", 60000.0);
+		brand6Map.put("Bitopertin", 40000.0);
+		brand6Map.put("Kadcyla", 50000.0);
+		brand6Map.put("Actemra", 60000.0);
+		brand6Map.put("Lebrikizumab", 30000.0);
+		brand6Map.put("Rituxan Heme/Onc", 40000.0);
+		brand6Map.put("Rituxan RA", 50000.0);
+		brand6Map.put("Etrolizumab", 40000.0);
+		
+		Map<String,Double> brand7Map = new LinkedHashMap<String,Double>();
+		brand7Map.put("Avastin", 30000.0);
+		brand7Map.put("Tarceva", 20000.0);
+		brand7Map.put("Pulmozyme", 50000.0);
+		brand7Map.put("Lucentis", 60000.0);
+		brand7Map.put("Bitopertin", 40000.0);
+		brand7Map.put("Kadcyla", 50000.0);
+		brand7Map.put("Actemra", 60000.0);
+		brand7Map.put("Lebrikizumab", 30000.0);
+		
+		Map<String,Double> brand8Map = new LinkedHashMap<String,Double>();
+		brand8Map.put("Avastin", 30000.0);
+		brand8Map.put("Tarceva", 20000.0);
+		brand8Map.put("Pulmozyme", 50000.0);
+		brand8Map.put("Lucentis", 60000.0);
+		brand8Map.put("Lebrikizumab", 30000.0);
+		brand8Map.put("Rituxan Heme/Onc", 40000.0);
+		brand8Map.put("Rituxan RA", 50000.0);
+		brand8Map.put("Etrolizumab", 40000.0);
+		
+		Map<String,Double> brand9Map = new LinkedHashMap<String,Double>();
+		brand9Map.put("Avastin", 30000.0);
+		brand9Map.put("Tarceva", 20000.0);
+		brand9Map.put("Pulmozyme", 50000.0);
+		brand9Map.put("Lucentis", 60000.0);
+		brand9Map.put("Bitopertin", 40000.0);
+		brand9Map.put("Kadcyla", 50000.0);
+		brand9Map.put("Actemra", 60000.0);
 		
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	List<UserRoleInfo> userInfoList = new ArrayList<UserRoleInfo>();
@@ -103,12 +149,14 @@ public class UserDataUtil {
 	for(int i=0;i<userName.length;i++){
 	userRoleInfo = new UserRoleInfo();
 	userRoleInfo.setEmail(userEmail[i]);
-	if("makodea".equalsIgnoreCase( userName[i])){
-		userRoleInfo.setBrand(brandMap);
-	}else if("sreedhac".equalsIgnoreCase( userName[i])){
-		userRoleInfo.setBrand(brand1Map);
+	if("makodea".equalsIgnoreCase( userName[i]) || "sreedhac".equalsIgnoreCase( userName[i])){
+		userRoleInfo.setBrand(brand6Map);
 	}else if("challags".equalsIgnoreCase( userName[i])){
-		userRoleInfo.setBrand(brand2Map);
+		userRoleInfo.setBrand(brand7Map);
+	}else if("shwetims".equalsIgnoreCase( userName[i])){
+		userRoleInfo.setBrand(brand8Map);
+	}else if("subramb1".equalsIgnoreCase( userName[i]) || "kameckip".equalsIgnoreCase( userName[i])){
+		userRoleInfo.setBrand(brand9Map);
 	}else if("singhb15".equalsIgnoreCase( userName[i])){
 		userRoleInfo.setBrand(brand3Map);
 	}else if("siddagov".equalsIgnoreCase( userName[i])){
