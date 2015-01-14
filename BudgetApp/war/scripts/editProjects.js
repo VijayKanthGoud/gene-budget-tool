@@ -816,7 +816,7 @@ function validateUserAndBrandExists(){
 			results.push(sortedarr[i]);
 		}
 	}
-	alert(results+": Duplicate Project owner and Brand combination.);
+	alert(results+": Duplicate Project owner and Brand combination.");
 	return flag;
 }
 function closeWithoutSave() {

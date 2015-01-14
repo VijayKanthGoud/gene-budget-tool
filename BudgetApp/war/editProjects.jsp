@@ -663,6 +663,21 @@
 		grid.onCellChange
 				.subscribe(function(e, args) {
 					var isValidBrand =false;
+					var item = args.item;
+					var tempKey = item[27];
+					
+					var cell = args.cell;
+					var row = args.row;
+					var dataLength = 0;
+					
+					var fixedCell = cell;
+					
+					if ($('#hideColumns').is(":checked")) {
+						fixedCell = cell + numHideColumns;
+					} else {
+						fixedCell = cell;
+					}
+					var itemCell = fixedCell + 1;
 					// Code for brand column(dropdown and validation)
 					if(/* args.item["34"]=="New projects" && */ args.cell == <%=BudgetConstants.BRAND_CELL%> ){
 						for(var i=0;i< availableTags.length;i++){
@@ -690,41 +705,45 @@
 							}
 						}
 					}
-					var item = args.item;
-					var tempKey = item[27];
 					
-					var cell = args.cell;
-					var row = args.row;
-					var dataLength = 0;
+				 	
 					
-					var temp = 0;
-					for (var j = 0; j < data.length - 1; j++) {
-						if (data[j]["id"] == args.item.id) {
-							temp = j;
-							break;
+						var temp = 0;
+						for (var j = 0; j < data.length - 1; j++) {
+							if (data[j]["id"] == args.item.id) {
+								temp = j;
+								break;
+							}
+						}
+						if(item[37]=='undefined' || item[37]==false){
+						data[temp][24] = 0.0;
+						for (var j = 12; j < 24; j++) {
+							if(data[temp][j] == "" || data[temp][j] == "undefined"){
+								data[temp][j] = 0.0;
+							}
+							data[temp][24] = parseFloat(data[temp][24])
+										+ parseFloat(data[temp][j]);
+						}
+					}else {
+						var interimTotal=0.0;
+						for (var j = 12; j < 24; j++) {
+							if(data[temp][j] == "" || data[temp][j] == "undefined"){
+								data[temp][j] = 0.0;
+							}
+							interimTotal = parseFloat(interimTotal)
+										+ parseFloat(data[temp][j]);
+						}
+						if(interimTotal>data[temp][24]){
+							alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");
+							data[temp][itemCell]=args.item[45][itemCell-12];
+							grid.invalidate();
+							return;
 						}
 					}
-					data[temp][24] = 0.0;
-					for (var j = 12; j < 24; j++) {
-						if(data[temp][j] == "" || data[temp][j] == "undefined"){
-							data[temp][j] = 0.0;
-						}
-						data[temp][24] = parseFloat(data[temp][24])
-									+ parseFloat(data[temp][j]);
-					}
-					
 					grid.invalidate();
 			
 					if(args.item["34"] != "New projects"){
 						updateMemCache(e, args, tempKey);
-						var fixedCell = cell;
-						
-						if ($('#hideColumns').is(":checked")) {
-							fixedCell = cell + numHideColumns;
-						} else {
-							fixedCell = cell;
-						}
-						var itemCell = fixedCell + 1;
 						for(var counter = 0; counter<data.length; counter++ ){
 							if(data[counter][34] != "New projects"){
 								dataLength++;
@@ -987,6 +1006,13 @@
 				fixedCell = cell + numHideColumns;
 			} else {
 				fixedCell = cell;
+			}
+			if(fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+				var budgetItem=[];
+				for(var iBudget=0;iBudget<12;iBudget++){
+					budgetItem[iBudget]=args.item[iBudget+12];
+				}
+				args.item[45]=budgetItem;
 			}
 			if(args.item["34"]!="New projects" ){
 				if(args.item["11"] == "Accrual" && args.item["26"]=="Active" && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
