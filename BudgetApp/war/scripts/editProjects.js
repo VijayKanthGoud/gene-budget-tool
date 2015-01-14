@@ -698,7 +698,10 @@ function saveAndClose() {
 		}
 	}
 	var isValidData = validateUserAndBrand();
+	var isUserAndBrandAlreadyExists = validateUserAndBrandExists();
 	if(isValidData == true){
+		return;
+	}if(isUserAndBrandAlreadyExists == true){
 		return;
 	}
 	$('#multibrandEdit').hide();
@@ -786,6 +789,34 @@ function validateUserAndBrand(){
 			return flag;
 		}
 	}
+	return flag;
+}
+
+function validateUserAndBrandExists(){
+	var prj_owner = "";
+	var brand = "";
+	var res = "";
+	var flag = false;
+	var arr = [];
+	for(var i=0;i<m_data.length;i++){
+		prj_owner = m_data[i]["7"];
+		brand = m_data[i]["1"];
+		if(prj_owner!='' && brand!=''){
+		res =prj_owner.trim()+":"+brand.trim();
+		}else{
+			break;
+		}
+		arr[i] = res;
+	}
+	var sortedarr = arr.sort();
+
+	var results = [];
+	for(var i=0;i<m_data.length;i++){
+		if(sortedarr[i+1] == sortedarr[i]){
+			results.push(sortedarr[i]);
+		}
+	}
+	alert(results+": Duplicate Project owner and Brand combination.);
 	return flag;
 }
 function closeWithoutSave() {
