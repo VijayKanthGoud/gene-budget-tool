@@ -448,7 +448,7 @@ function updateMemCache(e, args, tempKey) {
 			$("#statusMessage");
 			summaryResult = result;
 			getSummaryValues();
-			if(cellNum == '-2' || cellNum == '-10' || cellNum == '-7'){
+			if(cellNum == '-2' /*|| cellNum == '-10' || cellNum == '-7'*/|| cellNum == '-9'){
 				window.location.reload(true);
 			}
 		},
