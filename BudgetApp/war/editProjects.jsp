@@ -689,7 +689,7 @@
 							}
 						}
 						if(isValidBrand == false){
-							args.item[6]="";
+							args.item[6]=args.item[46][6];
 							alert("Enter a valid brand.");
 							grid.invalidate();
 							return;
@@ -698,7 +698,7 @@
 					if(args.cell==4){
 						for(var j = 0; j < data.length ; j++){
 							if (data[j]["id"] != args.item.id && args.item[0]==data[j][0]) {
-								args.item[0]="";
+								args.item[0]=args.item[46][0];
 								alert("Duplicate gMemoriId !!!");
 								grid.invalidate();
 								return;
@@ -1000,7 +1000,7 @@
 			var cell = args.cell;
 			var row = args.row;
 			var cols = grid.getColumns();
-	
+			args.item[46]=JSON.parse(JSON.stringify(args.item));
 			var fixedCell = cell;
 			if ($('#hideColumns').is(":checked")) {
 				fixedCell = cell + numHideColumns;
