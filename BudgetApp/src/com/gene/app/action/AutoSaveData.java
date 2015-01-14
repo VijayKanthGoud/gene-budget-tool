@@ -94,8 +94,13 @@ public class AutoSaveData extends HttpServlet {
 				keyNum = rprtArray.getString("0");
 				
 				LOGGER.log(Level.INFO, "KeyNum received : " + keyNum);
-				sessionKey = sessionKey+keyNum+",";
+				
 				cellValue = rprtArray.getString("1");
+				if(Integer.parseInt(cellNum) == BudgetConstants.CELL_GMEMORI_ID){
+					sessionKey = sessionKey+cellValue+",";
+				}else{
+					sessionKey = sessionKey+keyNum+",";
+				}
 				if (keyNum != null && !"".equalsIgnoreCase(keyNum.trim())) {
 					gtfReportObj = gtfReportMap.get(keyNum);
 					
@@ -152,12 +157,12 @@ public class AutoSaveData extends HttpServlet {
 							}
 							gtfReportMap.remove(keyNum);
 							completeGtfRptMap.remove(keyNum);
-							keyNum = rprtArray.getString("1");
+							//keyNum = rprtArray.getString("1");
 							gMemoriIdFromStudy = cellValue;
 							gtfReportObj.setgMemoryId(gMemoriIdFromStudy);
 							gtfReportObj.setDummyGMemoriId(false);
-							gtfReportMap.put(keyNum, gtfReportObj);
-							completeGtfRptMap.put(keyNum, gtfReportObj);
+							gtfReportMap.put(gMemoriIdFromStudy, gtfReportObj);
+							completeGtfRptMap.put(gMemoriIdFromStudy, gtfReportObj);
 						}
 							else {
 						
