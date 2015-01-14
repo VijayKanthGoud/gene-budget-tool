@@ -1,5 +1,7 @@
 package com.gene.app.action;
 
+import static com.gene.app.util.Util.roundDoubleValue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,10 +58,11 @@ public class UploadFileServlet extends HttpServlet {
 					InputStream inputStream = fileItemStream.openStream();
 					InputStream stream = new ByteArrayInputStream(
 							IOUtils.toByteArray(inputStream));
-					List<List<String>> rowList = ExcelParsingUtil.readExcellData(stream);
+					List<List<String>> rowList = ExcelParsingUtil
+							.readExcellData(stream);
 					Map<String, GtfReport> gtfReports = new HashMap<String, GtfReport>();
 					createGTFReports(rowList, gtfReports);
-					LOGGER.log(Level.INFO, "RowList received :"	+ rowList);
+					LOGGER.log(Level.INFO, "RowList received :" + rowList);
 				}
 			}
 		} catch (IOException | FileUploadException | InvalidFormatException exception) {
@@ -71,7 +74,7 @@ public class UploadFileServlet extends HttpServlet {
 
 	private void createGTFReports(List<List<String>> rowList,
 			Map<String, GtfReport> gtfReports) {
-		for(List<String> e : rowList){
+		for (List<String> e : rowList) {
 			GtfReport gtfReport = new GtfReport();
 
 			gtfReport.setProject_WBS(e.get(0));
@@ -84,16 +87,27 @@ public class UploadFileServlet extends HttpServlet {
 			gtfReport.setVendor(e.get(7));
 			gtfReport.setRequestor(e.get(8));
 			String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
-			.format(Calendar.getInstance().getTime());
+					.format(Calendar.getInstance().getTime());
 			gtfReport.setCreateDate(timeStamp);
 			gtfReport.setYear(BudgetConstants.dataYEAR);
 			gtfReport.setQual_Quant("Qual_Quant");
 			gtfReport.setStudy_Side("study_Side");
 			gtfReport.setUnits(1);
-			for(int i = 9; i <= 20; i++){
+			Map<String, Double> plannedMap = new HashMap<String, Double>();
+			Map<String, Double> setZeroMap = new HashMap<String, Double>();
+			for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
+				setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+				try {
+					plannedMap.put(
+							BudgetConstants.months[cnt],
+							roundDoubleValue(
+									Double.parseDouble(e.get(cnt + 9)), 2));
+				} catch (NumberFormatException e1) {
+					plannedMap.put(BudgetConstants.months[cnt], 0.0);
+				}
 			}
 		}
-		
+
 	}
 
 }

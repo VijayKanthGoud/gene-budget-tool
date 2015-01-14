@@ -112,6 +112,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>UserDataUpdate</servlet-name>
+		<servlet-class>com.gene.app.action.UploadUserDataServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserDataUpdate</servlet-name>
+		<url-pattern>/updateuserdata</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>AutoSaveData</servlet-name>
 		<servlet-class>com.gene.app.action.AutoSaveData</servlet-class>
 	</servlet>

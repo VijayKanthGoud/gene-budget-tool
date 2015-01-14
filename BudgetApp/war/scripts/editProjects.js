@@ -735,7 +735,6 @@ function saveAndClose() {
 	}
 
 	grid.invalidate();
-	return;
 	//alert(JSON.stringify(m_data));
 	if (itemClicked["34"] != "New projects") {
 		$.ajax({
@@ -809,15 +808,20 @@ function validateUserAndBrandExists(){
 		arr[i] = res;
 	}
 	var sortedarr = arr.sort();
-
 	var results = [];
+	var isDuplicate = false;
 	for(var i=0;i<m_data.length;i++){
-		if(sortedarr[i+1] == sortedarr[i]){
-			results.push(sortedarr[i]);
+		if( (!(typeof sortedarr[i] === 'undefined')) && (!(typeof sortedarr[i+1] === 'undefined'))){
+			if( sortedarr[i].trim() !='' && sortedarr[i+1].trim() != '' && sortedarr[i].trim() == sortedarr[i+1].trim() ){
+				results.push(sortedarr[i]);
+				isDuplicate = true;
+			}
 		}
 	}
-	alert(results+": Duplicate Project owner and Brand combination.");
-	return flag;
+	if(isDuplicate == true){
+		alert(results+": Duplicate Project owner and Brand combination.");
+	}
+	return isDuplicate;
 }
 function closeWithoutSave() {
 	if(itemClicked[37] == false){
