@@ -341,7 +341,7 @@ function updateMemCache(e, args, tempKey) {
 		}else{
  		for(var i=0;i<data.length;i++){
 			var d = data[i];
-			if(key== d[34] && fixedCell > 11 && fixedCell< 24 && item[11]=='Accrual'){
+			if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
 				if(d[11]=="Accrual"){
 					d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
 				}else if(d[11]=="Variance"){
