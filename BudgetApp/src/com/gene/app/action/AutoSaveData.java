@@ -187,11 +187,11 @@ public class AutoSaveData extends HttpServlet {
 								if(summaryObj!=null){// && !(gtfReportObj.getgMemoryId().contains("."))){
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
-								if(!(gtfReportObj.getgMemoryId().contains(".")) && gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
+								if(mapType.equalsIgnoreCase("accrual") && !(gtfReportObj.getgMemoryId().contains(".")) && gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
 									oldAccrualValue = accrualMap.get(BudgetConstants.months[Integer
-									                										.parseInt(cellNum)]);
-								summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldAccrualValue);
-								summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
+									                                                        .parseInt(cellNum)]);
+										summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldAccrualValue);
+										summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
 								}
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
