@@ -264,13 +264,19 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setProjectName(multiBrandObject.getString("4"));
 				gtfReport.setBrand(multiBrandObject.getString("1").trim());
 				//gtfReport.setgMemoryId(multiBrandObject.getString("5"));
+				
 				if(multiBrandObject.getString("5").trim().indexOf('.')==0){
-					gtfReport.setDummyGMemoriId(true);
+					
+					if(!gtfReport.isDummyGMemoriId()){
+						gtfReport.setgMemoryId(gtfReport.getgMemoryId()+multiBrandObject.getString("5"));
+					}else{
 					gtfReport.setgMemoryId(gMemoriId+multiBrandObject.getString("5"));
-				}else{
+					gtfReport.setDummyGMemoriId(true);
+					}
+				}/*else{
 					gtfReport.setDummyGMemoriId(false);
 					gtfReport.setgMemoryId(multiBrandObject.getString("5"));
-				}
+				}*/
 				/*String gMemoriId = multiBrandObject.getString("5");
 				boolean isDummyId = isDummyGMemoriId(gMemoriId);
 				gtfReport.setDummyGMemoriId(isDummyId);
