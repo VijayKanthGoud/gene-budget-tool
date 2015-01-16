@@ -1038,7 +1038,7 @@
 				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;
 				}
-				if(cell == 2 && args.item["11"] == "Planned"){
+				if(cell == 2 && args.item["11"] == "Planned" ){
 					return true;
 				}
 				if (args.item["11"] == "Planned"
@@ -1046,7 +1046,7 @@
 					return true;
 				}
 				var isAnEditableId = false;
-				if(args.item["11"] == "Planned" && args.item[0].toString().indexOf(".") == -1 && cell==4 ){
+				if(args.item["11"] == "Planned" && args.item[0].toString().indexOf(".") == -1 && cell==4 && args.item["26"] =="New"){
 					isAnEditableId = true;
 				}
 				if (args.item["11"] == "Planned"
