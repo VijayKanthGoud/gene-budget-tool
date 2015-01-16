@@ -492,7 +492,11 @@ function getSummaryValues(){
 				$('#budgetLeftToSpend').text((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2));
 				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
 				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
-				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
+				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 == 0){
+					$(varTotalLabel).css('background-color', '#FFFFFF');
+					$(varTotalText).css('background-color', '#FFFFFF');
+				}
+				else if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
 					$(varTotalLabel).css('background-color', 'yellow');
 					$(varTotalText).css('background-color', 'yellow');
 				}else{
