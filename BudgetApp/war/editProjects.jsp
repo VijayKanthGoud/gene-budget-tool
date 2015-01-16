@@ -695,7 +695,7 @@
 							return;
 						}
 					}
-					if(args.cell==4){
+					if(args.cell==<%=BudgetConstants.GMEMORI_ID_CELL%>){
 						for(var j = 0; j < data.length ; j++){
 							if (data[j]["id"] != args.item.id && args.item[0]==data[j][0] && args.item[0]!='') {
 								args.item[0]=args.item[46][0];
@@ -715,17 +715,19 @@
 								break;
 							}
 						}
-						if(item[37]=='undefined' || item[37]==false){
-						data[temp][24] = 0.0;
-						for (var j = 12; j < 24; j++) {
-							if(data[temp][j] == "" || data[temp][j] == "undefined"){
-								data[temp][j] = 0.0;
-							}
-							data[temp][24] = parseFloat(data[temp][24])
-										+ parseFloat(data[temp][j]);
-						}
-					}else {
+						
+						if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){ 
 						var interimTotal=0.0;
+						var actualPlannedTotal=parseFloat(data[temp][24]).toFixed();
+						var calculatedPlannedTotal=0.0;
+						if(data[temp][11] == 'Accrual'){
+							for (var j = 0; j < data.length - 1; j++) {
+								if (data[j][27] == args.item[27] && data[j][11]=="Planned") {
+									actualPlannedTotal=data[j][24];
+									break;
+								}
+							}
+						}
 						for (var j = 12; j < 24; j++) {
 							if(data[temp][j] == "" || data[temp][j] == "undefined"){
 								data[temp][j] = 0.0;
@@ -733,7 +735,7 @@
 							interimTotal = parseFloat(interimTotal)
 										+ parseFloat(data[temp][j]);
 						}
-						if(interimTotal>data[temp][24] && data[temp][11] == 'Planned'){
+						if(interimTotal>actualPlannedTotal ){
 							alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");
 							data[temp][itemCell]=args.item[45][itemCell-12];
 							grid.invalidate();
@@ -758,7 +760,21 @@
 						var verBenchmark=0.0;
 						var verAccrual=0.0;
 						var verVariance=0.0;
+						
 						if(fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+							
+							if((item[37]=='undefined' || item[37]==false) || (item[37]==true && data[temp][11]!="Planned")){
+								rowTotal = 0.0;
+								for (var j = 12; j < 24; j++) {
+									if(data[temp][j] == "" || data[temp][j] == "undefined"){
+										data[temp][j] = 0.0;
+									}
+									rowTotal = parseFloat(rowTotal)
+												+ parseFloat(data[temp][j]);
+								}
+							}
+							data[temp][24]=parseFloat(rowTotal).toFixed(2);
+							
 							for (var j = 0; j < data.length ; j++) {
 								if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
 									if( data[j][11] == "Planned"){

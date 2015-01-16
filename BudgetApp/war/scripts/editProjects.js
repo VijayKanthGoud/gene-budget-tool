@@ -350,7 +350,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 					for(var iVar=0;iVar<data.length;iVar++){
 						var kData = data[iVar];
-						if(kData[11]=="Benchmark"){
+						if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Benchmark"){
 							d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
 							break;
 						}
