@@ -289,6 +289,7 @@ function updateMemCache(e, args, tempKey) {
 	var aSaveData=[];
 	var iCnt=0;
 	var varTotal = 0.0;
+	var singleBrandToMulti = false;
 	//alert(fixedCell);
 	//alert(cell+"::::"+cellValue)
 	if( fixedCell == <%=BudgetConstants.REMARK_CELL%>){
@@ -326,12 +327,11 @@ function updateMemCache(e, args, tempKey) {
 					m_data[0][4]=args.item[2];
 				 	m_data[0][5]=args.item[0]+'.1';
 				 	m_data[0][7]=args.item[1];
-				 	
+				 	singleBrandToMulti=true;
 				 	$('#multibrandEdit').show().fadeIn(100);
 					displayMultibrandGrid();
 					$('#back').addClass('black_overlay').fadeIn(100);
 				}
-				
 			}else{
 				var aSave = (aSaveData[0] = {});
 				aSave[0] = key;
@@ -433,6 +433,7 @@ function updateMemCache(e, args, tempKey) {
 		}
 		}
 	//alert("as "+JSON.stringify(aSaveData));	
+	if(singleBrandToMulti!=true){
 	$.ajax({
 		url : '/AutoSaveData',
 		type : 'POST',
@@ -467,7 +468,8 @@ function updateMemCache(e, args, tempKey) {
 			grid.invalidate();
 		}
 	});
-
+	}
+	singleBrandToMulti=false;
 }
 
 function getSummaryValues(){
