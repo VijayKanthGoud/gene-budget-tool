@@ -513,7 +513,7 @@ function createNewProjects(){
 	$('#topCrtNewProjBtn').hide();
 	$('#noData').hide();
 	var length= data.length;
-	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:"",4:"",5:"sub_activity",6:"",7:"100.0",8:"",9:"",10:""
+	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"",3:"",4:"",5:"",6:"",7:"100.0",8:"",9:"",10:""
 		,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
@@ -567,7 +567,7 @@ function createIntProjects(){
 	$('#topCrtNewProjBtn').hide();
 	$('#noData').hide();
 	var length= data.length;
-	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"project_name",3:"",4:"",5:"sub_activity",6:"",7:"100.0",8:"",9:"",10:""
+	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"",3:"",4:"",5:"",6:"",7:"100.0",8:"",9:"",10:""
 		,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
