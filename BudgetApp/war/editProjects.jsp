@@ -1374,15 +1374,19 @@
 					if (cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>) {
 
 						for (var count = 0; count < m_data.length
-								&& m_data[count]["3"] != ""
+								&& ( m_data[count]["3"] != "" )
 								&& m_data[count]["3"] != "undefined"; count++) {
 							sum = sum + parseFloat(m_data[count]["3"]);
 						}
-						for (var count = 0; count < m_data.length
-								&& m_data[count]["3"] != ""
-								&& m_data[count]["3"] != "undefined"; count++) {
+						
+						for (var count = 0; count < m_data.length; count++) {
+							if(m_data[count]["3"] == "" 
+									|| m_data[count]["3"] == "undefined"){
+								m_data[count]["2"]="";
+							}else{
 							m_data[count]["2"] = (m_data[count]["3"] / sum * 100)
 									.toFixed(2);
+							}
 						}
 						if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
 							var initMData = (m_data[m_grid.getDataLength()] = {});
