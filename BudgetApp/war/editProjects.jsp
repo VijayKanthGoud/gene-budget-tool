@@ -1038,7 +1038,7 @@
 				if(args.item["27"].toString().indexOf(".") != -1){
 					return false;
 				}
-				if(cell == 2 && args.item["11"] == "Planned" ){
+				if(cell == 2 && args.item["11"] == "Planned"  && args.item["26"] =="New" ){
 					return true;
 				}
 				if (args.item["11"] == "Planned"
