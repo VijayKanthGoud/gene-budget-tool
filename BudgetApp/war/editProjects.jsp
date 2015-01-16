@@ -733,7 +733,7 @@
 							interimTotal = parseFloat(interimTotal)
 										+ parseFloat(data[temp][j]);
 						}
-						if(interimTotal>data[temp][24]){
+						if(interimTotal>data[temp][24] && data[temp][11] == 'Planned'){
 							alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");
 							data[temp][itemCell]=args.item[45][itemCell-12];
 							grid.invalidate();
