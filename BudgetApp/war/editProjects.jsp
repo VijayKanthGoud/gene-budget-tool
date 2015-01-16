@@ -1046,7 +1046,7 @@
 					return true;
 				}
 				var isAnEditableId = false;
-				if(args.item["11"] == "Planned" && args.item[0].toString().indexOf(".") == -1 && cell==4 && args.item["26"] =="New"){
+				if(args.item["11"] == "Planned" && args.item[0].toString().indexOf(".") == -1 && cell==4 ){
 					isAnEditableId = true;
 				}
 				if (args.item["11"] == "Planned"
