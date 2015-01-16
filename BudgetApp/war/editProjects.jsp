@@ -697,7 +697,7 @@
 					}
 					if(args.cell==4){
 						for(var j = 0; j < data.length ; j++){
-							if (data[j]["id"] != args.item.id && args.item[0]==data[j][0]) {
+							if (data[j]["id"] != args.item.id && args.item[0]==data[j][0] && args.item[0]!='') {
 								args.item[0]=args.item[46][0];
 								alert("Duplicate gMemoriId !!!");
 								grid.invalidate();
