@@ -262,9 +262,11 @@ function updateMemCache(e, args, tempKey) {
 	if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
 		if (!userAccepted) {
-			data[row][fixedCell]="";
+			args.item["8"]="";
 			grid.invalidate();
 	        grid.gotoCell(row, fixedCell, true);
+	        $('#statusMessage').text("")
+			.fadeOut(100);
 		    return;
 		}
 		poNum = args.item["8"];
@@ -449,7 +451,7 @@ function updateMemCache(e, args, tempKey) {
 			$("#statusMessage");
 			summaryResult = result;
 			getSummaryValues();
-			if(cellNum == '-2' /*|| cellNum == '-10' || cellNum == '-7'*/|| cellNum == '-9'){
+			if(cellNum == '-2' /*|| cellNum == '-10' */ || cellNum == '-7' || cellNum == '-9'){
 				window.location.reload(true);
 			}
 		},
