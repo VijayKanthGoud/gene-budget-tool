@@ -273,10 +273,10 @@ public class StoreReport extends HttpServlet {
 					gtfReport.setgMemoryId(gMemoriId+multiBrandObject.getString("5"));
 					gtfReport.setDummyGMemoriId(true);
 					}
-				}/*else{
+				}else{
 					gtfReport.setDummyGMemoriId(false);
 					gtfReport.setgMemoryId(multiBrandObject.getString("5"));
-				}*/
+				}
 				/*String gMemoriId = multiBrandObject.getString("5");
 				boolean isDummyId = isDummyGMemoriId(gMemoriId);
 				gtfReport.setDummyGMemoriId(isDummyId);
