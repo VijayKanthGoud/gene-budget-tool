@@ -816,6 +816,7 @@
 		});
 
 		grid.onClick.subscribe(function(e, args) {
+				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
 				
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
@@ -1274,6 +1275,7 @@
 		m_grid.getCanvasNode().focus();
 
 		m_grid.onClick.subscribe(function(e, args) {
+			m_grid.gotoCell(args.row, args.cell, false);
 			if (args.cell == <%=BudgetConstants.MB_CHECKBOX_CELL%>) {
 				initDeletionCell(args.row);
 			}
