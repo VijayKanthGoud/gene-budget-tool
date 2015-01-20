@@ -954,7 +954,6 @@ function cancelProjects(){
 }
 
 function submitProjects(){
-	if(errorSave==false){
 	var errStr = 0;
 	var storeData=[];
 	var flag = false;
@@ -1028,9 +1027,6 @@ function submitProjects(){
 	}else{
 		$('#submitProjBtn').prop("disabled",false);
 	}
-	}else{
-		errorSave=false;
-		$('#submitProjBtn').prop("disabled",false);
 	}
 }
 
