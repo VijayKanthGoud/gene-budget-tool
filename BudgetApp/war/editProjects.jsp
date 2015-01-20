@@ -216,6 +216,7 @@
 	var activeExist=false;
 	var closedExist=false;
 	var frmStudy=false;
+	var errorSave=false;
 	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
@@ -671,7 +672,7 @@
 					var dataLength = 0;
 					
 					var fixedCell = cell;
-					
+					errorSave=false;
 					if ($('#hideColumns').is(":checked")) {
 						fixedCell = cell + numHideColumns;
 					} else {
@@ -691,6 +692,7 @@
 						if(isValidBrand == false){
 							args.item[6]=args.item[46][6];
 							alert("Enter a valid brand.");
+							errorSave=true;
 							grid.invalidate();
 							return;
 						}
@@ -700,6 +702,7 @@
 							if (data[j]["id"] != args.item.id && args.item[0]==data[j][0] && args.item[0]!='') {
 								args.item[0]=args.item[46][0];
 								alert("Duplicate gMemoriId !!!");
+								errorSave=true;
 								grid.invalidate();
 								return;
 							}
@@ -737,6 +740,7 @@
 						}
 						if(interimTotal>actualPlannedTotal ){
 							alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");
+							errorSave=true;
 							data[temp][itemCell]=args.item[45][itemCell-12];
 							grid.invalidate();
 							return;
