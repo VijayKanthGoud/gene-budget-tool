@@ -710,7 +710,7 @@
 	    };
 
 	    this.validate = function () {
-	      if ( ($input.val() != "") && (isNaN($input.val()) ||  $input.val().trim().length < 6)) {
+	      if ( ($input.val() != "") && (isNaN($input.val()) ||  $input.val().trim().length < 6 ||  $input.val().indexOf(".") != -1)) {
 	        return {
 	          valid: false,
 	          msg: "Please enter 6 digit integer."
@@ -772,7 +772,7 @@
 	    };
 
 	    this.validate = function () {
-	      if (isNaN($input.val())) {
+	    	 if ( ($input.val() != "") && (isNaN($input.val()) ||  $input.val().indexOf(".") != -1)) {
 	        return {
 	          valid: false,
 	          msg: "Please enter a valid integer"
