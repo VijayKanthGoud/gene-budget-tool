@@ -1016,8 +1016,11 @@ function submitProjects(){
 				}else{
 					alert("Unknow server error occured.");
 				}
+				$('#submitProjBtn').prop("disabled",false);
 	        }
 		});  
+	}else{
+		$('#submitProjBtn').prop("disabled",false);
 	}
 
 }

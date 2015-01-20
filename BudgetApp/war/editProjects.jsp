@@ -977,6 +977,7 @@
 		// Handeler for click on submit and cancel button under new project creation
 		$(document).on('click', '#submitProjBtn',
 		    function() {
+				$('#submitProjBtn').prop("disabled",true);
 			 	submitProjects();
 		    }
 		);
