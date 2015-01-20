@@ -49,7 +49,7 @@
 						</tr>
 						<tr>
 							<td style="padding-left: 20px;"><input type="checkbox"
-								id="hideColumns" name="hideColumns" value="hide" checked>PO Details</td>
+								id="hideColumns" name="hideColumns" value="hide" checked>Hide PO Details</td>
 						</tr>
 					</table>
 				</td>				
