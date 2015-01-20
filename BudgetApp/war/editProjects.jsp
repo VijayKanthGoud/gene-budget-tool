@@ -819,7 +819,7 @@
 				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
 				
-				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toLowerCase().indexOf("mb")!=-1){
+				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("mb")!=-1){
 					
 					<%
 					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();

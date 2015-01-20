@@ -832,6 +832,11 @@ function validateUserAndBrandExists(){
 	return isDuplicate;
 }
 function closeWithoutSave() {
+	var userAccepted = confirm(" Warning: The brand allocations if entered will not be saved by the system. \n\nDo you want to continue?");
+	if (!userAccepted) {
+		return false;
+	}
+	
 	if(itemClicked[37] == false){
 		itemClicked[6] = itemClicked[44];
 	}
