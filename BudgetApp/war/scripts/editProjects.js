@@ -1028,7 +1028,7 @@ function submitProjects(){
 		$('#submitProjBtn').prop("disabled",false);
 	}
 	}
-}
+
 
 
 function exportExcelData(){
