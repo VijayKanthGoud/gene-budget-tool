@@ -75,7 +75,7 @@ public class MultiBrandServlet extends HttpServlet {
 			gMemoriId = rptObject.getString("5").split("\\.")[0];
 			JSONObject rprtObject = null;
 			Map<String, GtfReport> rptList = util.getAllReportsByPrjName(
-					user.getCostCenter(), projectName, email);
+					user.getCostCenter(), projectName, email,gMemoriId);
 			for (Map.Entry<String, GtfReport> rptMap : rptList.entrySet()) {
 				oldGtfReportList.add(rptMap.getValue());
 			}

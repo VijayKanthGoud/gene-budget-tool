@@ -516,7 +516,7 @@ public class DBUtil {
 		return gtfReportList;
 	}
 	
-	public Map<String,GtfReport> getAllReportsByPrjName(String costCenter,String prjName,String email){
+	public Map<String,GtfReport> getAllReportsByPrjName(String costCenter,String prjName,String email,String gMemoriId){
 		Map<String,GtfReport> rptList = getAllReportDataFromCache(costCenter);
 		Map<String,GtfReport> newRptList = new LinkedHashMap<String, GtfReport>(); 
 		GtfReport gtfRpt = new GtfReport();
@@ -524,15 +524,17 @@ public class DBUtil {
 		if(rptList==null || rptList.isEmpty()){
 			listReports=readProjectDataByProjectName(email,prjName,costCenter) ;
 			for(GtfReport nReport:listReports){
-			newRptList.put(nReport.getgMemoryId(),nReport);
+				if(nReport.getgMemoryId().contains(gMemoriId)){
+					newRptList.put(nReport.getgMemoryId(),nReport);
+				}
 			}
 		}else{
-		for(Map.Entry<String, GtfReport> rptMap: rptList.entrySet()){
-			gtfRpt = rptMap.getValue();
-		if(prjName!=null && !"".equals(prjName) && prjName.equalsIgnoreCase(gtfRpt.getProjectName())){
-			newRptList.put(rptMap.getKey(), gtfRpt);
-		}
-		}
+			for(Map.Entry<String, GtfReport> rptMap: rptList.entrySet()){
+				gtfRpt = rptMap.getValue();
+				if(prjName!=null && !"".equals(prjName) && prjName.equalsIgnoreCase(gtfRpt.getProjectName()) && rptMap.getKey().contains(gMemoriId)){
+					newRptList.put(rptMap.getKey(), gtfRpt);
+				}
+			}
 		}
 		return newRptList;
 	}
