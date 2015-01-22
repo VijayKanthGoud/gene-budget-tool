@@ -24,8 +24,10 @@
         "budget":BudgetFormatter,
         "button": ButtonFormatter,
         "checkbox": CheckBoxFormatter,
-        "gMemori": gMemoriFormatter,
-        "gMemoriHyperLink":gMemoriHyperLinkFormatter
+        "gMemoriHyperLink":gMemoriHyperLinkFormatter,
+        "editableField":editableFieldFormatter,
+        "cancelButton":cancelButtonFormatter,
+        "poField":poFieldFormatter
       }
     }
   });
@@ -70,8 +72,10 @@
 	  if(dataContext["35"] != "Buttons"){
 		if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> "+ Number(value).toFixed(2) +"</span>" 
+		}else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
+			return "<div width = '100%' style='background:#C0CCED'><span style='color:#005691'> "+ Number(value).toFixed(2) +"</span></div>" ;
 		}else{
-			return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>" 
+			return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>"; 
 		}
 	  }
   }
@@ -91,12 +95,23 @@
   function HyperLinkFormatter(row, cell, value, columnDef, dataContext) {
 	  if(typeof value == "string"){
 		  if(value.toLowerCase().indexOf("mb") >= 0){
-			  return "<span ><a href='#' style='color:green'>"+value + "</a></span>" ;		
+			  return "<div width = '100%' style='background:#C0CCED'><span ><a href='#' style='color:green'>"+value + "</a></span></div>" ;		
 		  }else if(value=="Save"   && dataContext["35"] == "Buttons"){
 			  return  "<input type='button' value='"+value+"' id='submitProjBtn' style='font-size: 12px; width:80px; height: 20px; background:#005691; color:#FFFFFF'/>";
 		  }else if( value=="Cancel"  && dataContext["35"] == "Buttons"){
 			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#005691; color:#FFFFFF' />";
+		  }else if(dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1 && dataContext["26"] != "Total" ){
+			  return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>" ;		
 		  }
+	  }
+	  return value;
+  }
+  
+  function cancelButtonFormatter(row, cell, value, columnDef, dataContext) {
+	  if(typeof value == "string"){
+		 if( value=="Cancel"  && dataContext["35"] == "Buttons"){
+			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#005691; color:#FFFFFF' />";
+		 }
 	  }
 	  return value;
   }
@@ -108,9 +123,16 @@
 	  }
 	  if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
 		  var url = "http://memori-qa.appspot.com/editProject?gMemoriId="+val;
-		  return "<span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span>" ;
+		  if(dataContext["0"].toString().indexOf(".") == -1){
+			  return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span></div>" ;
+		  }else{
+			  return "<span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span>" ;
+		  }
+		  
 	  }else if(dataContext[35]=="NewProjects" && value.toString().trim != "" && value != 0){
-		  return value;
+		  return "<div width = '100%' style='background:#C0CCED'>" + value +"</div>";
+	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" ){
+		  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
 	  }else{
 		  return "";
 	  }
@@ -135,11 +157,23 @@
   }
 
   function gMemoriFormatter(row, cell, value, columnDef, dataContext) {
-	 // console.log("dataContext = "+JSON.stringify(dataContext,null,4));
-	 // alert("columnDef "+JSON.stringify(columnDef));
 	  if(dataContext[35] == "NewProjects"){
 		return "<INPUT type=text class='editor-text' maxlength='6'/>";
 	  }
+  }
+  
+  function editableFieldFormatter(row, cell, value, columnDef, dataContext) {
+	  if(dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" )){
+		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
+	  }
+	  return value;
+  }
+  
+  function poFieldFormatter(row, cell, value, columnDef, dataContext) {
+	  if(dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total"  && dataContext["26"] != "Active" )){
+		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
+	  }
+	  return value;
   }
   
 })(jQuery);
