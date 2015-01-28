@@ -40,6 +40,7 @@ public interface BudgetConstants {
 	public static final String REQUEST_ATTR_SUMMARY = "summary";
 	public static final String GetReport_REDIRECTURL = "/listProjects";
 	public static final String USER_ROLE_PRJ_OWNER = "prjOwner";
+	public static final String USER_ROLE_BRAND_OWNER = "brandOwner";
 	public static final String KEY = "key";
 	public static final String CELL_VALUE = "cellValue";
 	public static final String CELL_NUM = "celNum";
