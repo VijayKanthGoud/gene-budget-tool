@@ -1178,7 +1178,7 @@ function closeUploadWindow(){
 function selectUserView(){
 	var val = $('#selectedUserView').val();
 	var ccVal = $('#getCostCenter').val();
-	alert(ccVal);
+	
 	if($('#selectedUserView').val()=='My Brands'){
 		$('#selectedView3').val(val);
 		$('#getCostCenter3').val(ccVal);
