@@ -76,7 +76,7 @@ public class GetReport extends HttpServlet {
 					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
 				selectedView = "My Brands";
 				selectedBrand = "Avastin";
-				selectedCC = "7034";
+				selectedCC = "7135";
 				//user.setCostCenter(selectedCC);
 				}
 			gtfReports = util.getAllReportDataFromCache(selectedCC);
