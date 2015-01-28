@@ -12,6 +12,25 @@ function getAvailableTags(){
 	<%}%>
 } 
 
+function getProjectsBrandwise(){
+	var val = $('#selectedUserView').val();
+	$('#selectedView').val(val);
+	selectedBrandValue = document.getElementById("getBrand").value; 
+	/*$.ajax({
+		url : '/getreport',
+		type : 'GET',
+		dataType : 'text',
+		data : {brandValue: selectedBrandValue
+		},
+		success : function(result) {
+			summaryResult = result;
+			getSummaryValues();
+		}
+	});*/
+	
+	$('#getBrand').submit();;
+} 
+
 function getBrandTotals(){
 	selectedValue = document.getElementById("brandType").value; 
 	$.ajax({
@@ -149,6 +168,12 @@ function groupByStatus() {
 		    {
 			      getter: 42,
 			      formatter :function (g) {
+//			    	  var value = g.rows[g.count - 1][27];
+//			    	  if(value.indexOf(".") != -1){
+//			    		  value = value.split(".")[0];
+//			    	  }
+//			        return  value;
+//			      },
 			      if(typeof g.value === 'undefined'){
 			    	  return "";
 			      }
@@ -1150,8 +1175,37 @@ function closeUploadWindow(){
 	$('input[name=file]').replaceWith($('input[name=file]').clone(true));
 }
 
+function selectUserView(){
+	var val = $('#selectedUserView').val();
+	var ccVal = $('#getCostCenter').val();
+	alert(ccVal);
+	if($('#selectedUserView').val()=='My Brands'){
+		$('#selectedView3').val(val);
+		$('#getCostCenter3').val(ccVal);
+	$('#selectthebrand').show().fadeIn(100);
+	$('#back').addClass('black_overlay').fadeIn(100);
+	}else if($('#selectedUserView').val()=='My Projects'){
+		$('#selectedView2').val(val);
+		$('#getCostCenter2').val(ccVal);
+		$('#getProjects').submit();
+	}else if($('#selectedUserView').val()=='My Cost Center'){
+		$('#selectedView1').val(val);
+		$('#getCostCenter1').val(ccVal);
+		$('#getCostCentre').submit();
+	}
+}
+
+function closepopup(){
+	$('#selectthebrand').hide();
+	$('#back').removeClass('black_overlay').fadeIn(100);
+}
+function closeUploadWindow(){
+	$('#selectthebrand').hide();
+	$('#back').removeClass('black_overlay').fadeIn(100);
+
+}
+
 function openUrl(url){
 	popUpWindow = window.open(url,'gmemori','');
 }
-
 
