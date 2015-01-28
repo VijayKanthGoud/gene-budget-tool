@@ -36,6 +36,7 @@ public class UserDataUtil {
 	//String [] role = {"Project Owner"};
 	String [] costCenter = {"307680","235031","307677","235032","307677","307676","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"
 			,"307676","307676","307676"};
+	String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Onart", 30000.0);
@@ -214,28 +215,16 @@ public class UserDataUtil {
 	
 	
 	public void insertCCMapping(){
-		Double[] budgetArray = {7000.0,10000.0,30000.0,60000.0,6000.0,2000.0,7000.0,30000.0,6000.0};
-		//Double[] budgetArray = {7000.0};
+	//	Double[] budgetArray = {7000.0,10000.0,30000.0,60000.0,6000.0,2000.0,7000.0,30000.0,6000.0};
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		CostCenter_Brand cc = new CostCenter_Brand();
-		//List<BudgetSummary> budgetSummaryList = new ArrayList<BudgetSummary>();
-		/*BudgetSummary budgetSummary = null;
-		for(int i=0;i<budgetArray.length;i++){
-		budgetSummary = new BudgetSummary();
-		budgetSummary.setProjectOwnerEmail(userEmail[i]);
-		budgetSummary.setTotalBudget(budgetArray[i]);
-		budgetSummaryList.add(budgetSummary);
-		}*/
 		List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
-		for(int i=0;i<costCenter.length;i++){
+		for(int i=0;i<costCenter1.length;i++){
 			cc = new CostCenter_Brand();
-			//cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
 			cc.setBrandFromDB("Perjeta:total=30000.0;Avastin:total=40000.0;Tarceva:total=50000.0;Onart:total=60000.0;Rituxan Heme/Onc:total=30000.0;Kadcyla:total=40000.0;Actemra:total=50000.0;Rituxan RA:total=60000.0;Lucentis:total=30000.0;Bitopertin:total=40000.0;Ocrelizumab:total=50000.0;BioOnc Pipeline:total=60000.0;Lebrikizumab:total=30000.0;Pulmozyme:total=40000.0;Xolair:total=50000.0;Oral Octreotide:total=60000.0;Etrolizumab:total=30000.0;GDC-0199:total=40000.0;Neuroscience Pipeline:total=50000.0;");
-			cc.setCostCenter(costCenter[i]);
+			cc.setCostCenter(costCenter1[i]);
 			ccList.add(cc);
 		}
-		//cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
-		//cc.setCostCenter("307673");
 		try{
 			pm.makePersistentAll(ccList);
 		}catch(Exception e){
