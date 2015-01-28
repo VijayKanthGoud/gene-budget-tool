@@ -44,6 +44,9 @@ public class GetReport extends HttpServlet {
 		String email ="";
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
 		Map<String,GtfReport> completeGtfRptMap = new LinkedHashMap<String,GtfReport>();
+		String selectedBrand = req.getParameter("brandValue");
+		String selectedView = req.getParameter("selectedView");
+		String selectedCC = req.getParameter("getCCValue");
 		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
@@ -54,12 +57,35 @@ public class GetReport extends HttpServlet {
 		email = user.getEmail();
 		//LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
-		gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
+		
+		
 		completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		//LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
-		List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
+		List<GtfReport> gtfReportList = null;
+		//gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
+		
+		// for project owner role
+		if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && !user.getRole().contains("Admin")){
+			gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
+			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports);
+		}
+		// for admin role
+		else if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && user.getRole().contains("Admin")){
+			
+			if(selectedView==null || "".equalsIgnoreCase(selectedView.trim()) 
+					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
+				selectedView = "My Brands";
+				selectedBrand = "Avastin";
+				selectedCC = "7034";
+				//user.setCostCenter(selectedCC);
+				}
+			gtfReports = util.getAllReportDataFromCache(selectedCC);
+			gtfReportList = getRptListForLoggedInUser(user, selectedView, selectedBrand, gtfReports);
+		}
+		req.setAttribute("selectedView", selectedView);
+		req.setAttribute("getCCValue", selectedCC);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
-		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim())){
+		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim()) && ("".equalsIgnoreCase(selectedView.trim()))){
 		queryGtfRptList = getQueryGtfReportList(gtfReportList,queryString,req);
 		 req.setAttribute("accessreq", "external");
 		}else{
@@ -99,7 +125,69 @@ public class GetReport extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	public List<GtfReport> getReportListByBrand(Map<String,GtfReport>gtfReports,String userType,String selectedBrand){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		
+		if(gtfReports!=null){
+			
+			for(Map.Entry<String, GtfReport> gtfEntry:gtfReports.entrySet()){
+				gtfReport = gtfEntry.getValue();
+				if((selectedBrand !=null && !"".equals(selectedBrand.trim())) && (gtfReport.getBrand().trim().toLowerCase()).equalsIgnoreCase(selectedBrand.toLowerCase().trim())){
+				gtfReportList.add(gtfReport);
+			}}
+		}
+		return gtfReportList;
+	}
+	public List<GtfReport> getReportListCC(Map<String,GtfReport>gtfReports){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		
+		if(gtfReports!=null){
+			
+			for(Map.Entry<String, GtfReport> gtfEntry:gtfReports.entrySet()){
+				gtfReport = gtfEntry.getValue();
+				gtfReportList.add(gtfReport);
+			}
+		}
+		return gtfReportList;
+	}
 	
+	public List<GtfReport> getRptListForLoggedInUser(UserRoleInfo user,String selectedView, String selectedBrand,Map<String,GtfReport> gtfReports){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		if(selectedView==null || "".equalsIgnoreCase(selectedView.trim())){
+			if(selectedBrand!=null && !"".equalsIgnoreCase(selectedBrand.trim())){
+				selectedView="My Brands";
+			}else{
+				selectedView="";
+			}
+		}
+		switch(selectedView){
+		case "My Projects":
+			gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,user.getEmail());
+			break;
+		case "My Brands":
+			if(selectedBrand!=null && !"".equalsIgnoreCase(selectedBrand.trim())){
+				gtfReportList = getReportListByBrand(gtfReports,BudgetConstants.USER_ROLE_BRAND_OWNER,selectedBrand);
+			}
+			break;
+		case "My Cost Center":
+			gtfReportList = getReportListCC(gtfReports);
+			break;
+		default:
+			gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,user.getEmail());
+			selectedView="My Projects";
+		}
+		return gtfReportList;
+	}
+	
+	public List<GtfReport> getRptListForAdmin(UserRoleInfo user,String selectedView, String selectedBrand,Map<String,GtfReport> gtfReports){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		
+		gtfReportList = getReportListCC(gtfReports);
+		
+		return gtfReportList;
+	}
 	
 	public List<GtfReport> getReportList(Map<String,GtfReport>gtfReports,String userType,String email){
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
