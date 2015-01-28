@@ -30,7 +30,7 @@ public class UserDataUtil {
 	// create brandmap array
 
 	// create role array
-	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Admin","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
@@ -227,7 +227,7 @@ public class UserDataUtil {
 		budgetSummaryList.add(budgetSummary);
 		}*/
 		List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
-		for(int i=0;i<userName.length;i++){
+		for(int i=0;i<costCenter.length;i++){
 			cc = new CostCenter_Brand();
 			//cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
 			cc.setBrandFromDB("Perjeta:total=30000.0;Avastin:total=40000.0;Tarceva:total=50000.0;Onart:total=60000.0;Rituxan Heme/Onc:total=30000.0;Kadcyla:total=40000.0;Actemra:total=50000.0;Rituxan RA:total=60000.0;Lucentis:total=30000.0;Bitopertin:total=40000.0;Ocrelizumab:total=50000.0;BioOnc Pipeline:total=60000.0;Lebrikizumab:total=30000.0;Pulmozyme:total=40000.0;Xolair:total=50000.0;Oral Octreotide:total=60000.0;Etrolizumab:total=30000.0;GDC-0199:total=40000.0;Neuroscience Pipeline:total=50000.0;");
