@@ -79,10 +79,12 @@ public class GetReport extends HttpServlet {
 				selectedCC = "7135";
 				//user.setCostCenter(selectedCC);
 				}
+			
 			gtfReports = util.getAllReportDataFromCache(selectedCC);
 			gtfReportList = getRptListForLoggedInUser(user, selectedView, selectedBrand, gtfReports);
 		}
 		req.setAttribute("selectedView", selectedView);
+		req.setAttribute("brandValue", selectedBrand);
 		req.setAttribute("getCCValue", selectedCC);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
 		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim()) && ("".equalsIgnoreCase(selectedView.trim()))){

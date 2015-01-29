@@ -60,7 +60,7 @@ String ccView="";
 				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); 
 				
 				%>
-				<td style="padding-left: 1.5%; width: 50%; height: 55px; text-align: center;">
+				<td style="padding-left: 1.5%; width: 50%; text-align: center;">
 				<span style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
 						<%String viewSelected = (String)request.getAttribute("selectedView");
 							if(viewSelected==null || "".equalsIgnoreCase(viewSelected.trim())){
@@ -74,14 +74,14 @@ String ccView="";
 							}
 							
 						%></span>
-						<span style="font-size: 16px; font-weight: bold">View : </span><select  id="selectedUserView" name="selectedUserView" onchange= "selectUserView()" autofocus style=" width: 170px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" >
+						<span style="font-size: 16px; font-weight: bold">View : </span><select  id="selectedUserView" name="selectedUserView" onchange= "selectUserView()" autofocus style=" width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" >
 						<option <%= prjView%>>My Projects</options>
 						<option <%= brandView%>>My Brands</options>
 						<option <%= ccView%>>My Cost Center</options>
 						</select> 
-						<br/><br/><%if(!userInfo.getRole().contains("Admin")) {%>Cost center : <%=userInfo.getCostCenter()%> 
+						<br/><br/><%if(!userInfo.getRole().contains("Admin")) {%><span style="font-size: 16px; font-weight: bold"> Cost center : </span><%=userInfo.getCostCenter()%>
 						<% }else{%>
-							<span style="font-size: 16px; font-weight: bold">Cost center : </span><select id="getCostCenter" name="ccValue">
+							<span style="font-size: 16px; font-weight: bold">Cost center : </span><select id="getCostCenter" name="ccValue" style="width: 100px;" onchange="getCostCenterDetails()">
 						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
 						String ccSelected = (String)request.getAttribute("getCCValue");
 						CostCenter_Brand cc_brand = new CostCenter_Brand();
@@ -96,7 +96,14 @@ String ccView="";
 						<%} else if(cc_brand.getCostCenter()!=null 
 								&& !"".equals(cc_brand.getCostCenter())){%>
 						<option value="<%= cc_brand.getCostCenter()%>"><%= cc_brand.getCostCenter()%></option>
-						<%} } }}%>
+						<%} } }%>
+						</select>
+						<% }String selectedView = (String)request.getAttribute("selectedView");
+						String selectedBrand = (String)request.getAttribute("brandValue");
+						
+						if(selectedView!=null && "My Brands".equalsIgnoreCase(selectedView)){%>
+						<br/><br/><span style="font-size: 16px; font-weight: bold;text-align: right;"> Brand&nbsp;&nbsp;&nbsp;&nbsp; : </span><a href="#" onclick="openBrandPopUp()"><%=selectedBrand%></a>
+						<% }%>
 				</td>
 			
 	<div id="getCostCentreProjects">
@@ -122,7 +129,7 @@ String ccView="";
 			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> My Brands
 		</div>
 		<div align='center' style='padding-right: 50px;'>
-			<form method="GET" id="getBrand" action="/getreport">
+			<form method="GET" id="getBrand" action="/getreport" >
 			<input type="hidden" name="selectedView" id="selectedView3"/>
 			<input type="hidden" name="getCCValue" id="getCostCenter3"/>
 				<br/>
@@ -132,16 +139,19 @@ String ccView="";
 				<select id="getBrand" name="brandValue">
 				<%Map<String,Double> userBrandMap= userInfo.getBrand(); 
 				Object[] myBrands = {}; 
-				
-				String brandValue="";
+				String brandValue1="";
+				String brandValue=(String)request.getAttribute("brandValue");
+				if(brandValue==null || brandValue==""){
+					brandValue = "Avastin";
+				}
 				if(userBrandMap!=null && !userBrandMap.isEmpty()){
 					myBrands = userBrandMap.keySet().toArray();
 					for(int i=0;i<myBrands.length;i++){ 
-                        brandValue = myBrands[i].toString();
-                        if(i==1){%>
-                        <option value="<%=brandValue %>" selected><%=brandValue %></option>
+                        brandValue1 = myBrands[i].toString();
+                        if(brandValue.equals(brandValue1)){%>
+                        <option value="<%=brandValue1 %>" selected><%=brandValue1 %></option>
                         <%}else{ %>
-                        <option value="<%=brandValue %>"><%=brandValue %></option>
+                        <option value="<%=brandValue1 %>"><%=brandValue1 %></option>
                         <%}}
 				}
 				%>
@@ -149,8 +159,8 @@ String ccView="";
 				</select>
 				<br/>
 				<br/>
-				<button onclick="getProjectsBrandwise()" value="" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'center'> Ok</button> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-				<button  value="" onclick="closepopup()" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'center'> cancel</button>
+				<input type="button" onclick="getProjectsBrandwise(this)" value="ok" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'center'> 
+				<input type="button" onclick="closepopup(this)" value="cancel" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'center'>
 			</form>
 			
 		</div>
@@ -472,6 +482,7 @@ String ccView="";
 				}
 				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
 				d[44]="<%=gReport.getBrand()%>";
+				d[47]="<%= gReport.getCostCenter()%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -966,13 +977,15 @@ String ccView="";
     							d["5"] =  "<%=gtfReport.getgMemoryId()%>";
     							d["7"] = "<%=requestor%>";
 							}
-						<%}%>
-						
+						<%}if(user.getUserName()!=requestor){%>
+						return;
+						<%}else{%>
 						$('#multibrandEdit').show().fadeIn(100);
 						displayMultibrandGrid();
 						$('#back').addClass('black_overlay').fadeIn(100);
 						// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
-					}
+						<%}%>
+						}
 					//code for newly added projects 
 					else if(itemClicked[34]=="New projects"){
 						// Start : Code for newly added projects
@@ -1110,12 +1123,19 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row;
 			var cols = grid.getColumns();
+			//console.log(args.item);
 			args.item[46]=JSON.parse(JSON.stringify(args.item));
 			var fixedCell = cell;
 			if ($('#hideColumns').is(":checked")) {
 				fixedCell = cell + numHideColumns;
 			} else {
 				fixedCell = cell;
+			}
+			var userName = '<%= user.getUserName()%>';
+			var role = '<%= user.getRole()%>';
+			if((role!='Admin') && (args.item["1"]!=null && args.item["1"]!='' && args.item["1"] != userName)){
+				alert("You are not authorised to edit this project !!!");
+				return false;
 			}
 			if(fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 				var budgetItem=[];

@@ -35,8 +35,8 @@ public class UserDataUtil {
 			"Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
 	String [] costCenter = {"307680","235031","307677","235032","307677","307676","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"
-			,"307676","307676","307676"};
-	String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004"};
+			,"307676","307676","307676","7135"};
+	String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004","7135"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Onart", 30000.0);
