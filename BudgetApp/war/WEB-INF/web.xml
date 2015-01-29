@@ -43,17 +43,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<jsp-file>/reports.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>DisplayReport</servlet-name>
+		<servlet-name>Admin</servlet-name>
 		<url-pattern>/displayReports</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>Developer</servlet-name>
-		<jsp-file>/developer.jsp</jsp-file>
+		<servlet-name>Admin</servlet-name>
+		<jsp-file>/admin.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Developer</servlet-name>
-		<url-pattern>/developer</url-pattern>
+		<servlet-name>Admin</servlet-name>
+		<url-pattern>/admin</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -146,12 +146,39 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/GetSummaryFromCache</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>uploadFile</servlet-name>
-		<servlet-class>com.gene.app.action.UploadFileServlet</servlet-class>
+		<servlet-name>AdminUpload</servlet-name>
+		<servlet-class>com.gene.app.action.AdminUploadServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>uploadFile</servlet-name>
-		<url-pattern>/upload</url-pattern>
+		<servlet-name>AdminUpload</servlet-name>
+		<url-pattern>/adminupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AdminJSONUpload</servlet-name>
+		<servlet-class>com.gene.app.action.AdminUploadJSONServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminJSONUpload</servlet-name>
+		<url-pattern>/adminjsonupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>UserUpload</servlet-name>
+		<servlet-class>com.gene.app.action.UserUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserUpload</servlet-name>
+		<url-pattern>/userupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>downloadFile</servlet-name>
+		<servlet-class>com.gene.app.action.DownloadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadFile</servlet-name>
+		<url-pattern>/download</url-pattern>
 	</servlet-mapping>
 	
 	<security-constraint>
