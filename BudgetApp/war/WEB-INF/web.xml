@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<servlet>
+		<servlet-name>StoreReport</servlet-name>
+		<servlet-class>com.gene.app.action.StoreReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StoreReport</servlet-name>
+		<url-pattern>/storereport</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GetReport</servlet-name>
+		<servlet-class>com.gene.app.action.GetReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetReport</servlet-name>
+		<url-pattern>/getreport</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>gmemstudy</servlet-name>
+		<servlet-class>com.gene.app.action.GmemStudy</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>gmemstudy</servlet-name>
+		<url-pattern>/study</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ListProject</servlet-name>
+		<jsp-file>/editProjects.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ListProject</servlet-name>
+		<url-pattern>/listProjects</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DisplayReport</servlet-name>
+		<jsp-file>/reports.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Admin</servlet-name>
+		<url-pattern>/displayReports</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Admin</servlet-name>
+		<jsp-file>/admin.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Admin</servlet-name>
+		<url-pattern>/admin</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>createProjects</servlet-name>
+		<jsp-file>/createProjects.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>createProjects</servlet-name>
+		<url-pattern>/createProjects</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>multiBrand</servlet-name>
+		<jsp-file>/multiBrand.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>multiBrand</servlet-name>
+		<url-pattern>/multiBrand</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>MultiBrandServlet</servlet-name>
+		<servlet-class>com.gene.app.action.MultiBrandServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MultiBrandServlet</servlet-name>
+		<url-pattern>/multiBrandServlet</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
+		<servlet-name>GetProjectData</servlet-name>
+		<servlet-class>com.gene.app.action.GetProjectData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetProjectData</servlet-name>
+		<url-pattern>/getprojectdata</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>com.gene.app.action.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/loginServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LogoutServlet</servlet-name>
+		<servlet-class>com.gene.app.action.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LogoutServlet</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>UserDataUpdate</servlet-name>
+		<servlet-class>com.gene.app.action.UploadUserDataServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserDataUpdate</servlet-name>
+		<url-pattern>/updateuserdata</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AutoSaveData</servlet-name>
+		<servlet-class>com.gene.app.action.AutoSaveData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AutoSaveData</servlet-name>
+		<url-pattern>/AutoSaveData</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>promoteType</servlet-name>
+		<servlet-class>com.gene.app.action.UpdateType</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>promoteType</servlet-name>
+		<url-pattern>/cron/promote</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetSummaryFromCache</servlet-name>
+		<servlet-class>com.gene.app.action.GetSummaryFromCache</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetSummaryFromCache</servlet-name>
+		<url-pattern>/GetSummaryFromCache</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AdminUpload</servlet-name>
+		<servlet-class>com.gene.app.action.AdminUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminUpload</servlet-name>
+		<url-pattern>/adminupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AdminJSONUpload</servlet-name>
+		<servlet-class>com.gene.app.action.AdminUploadJSONServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminJSONUpload</servlet-name>
+		<url-pattern>/adminjsonupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>UserUpload</servlet-name>
+		<servlet-class>com.gene.app.action.UserUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserUpload</servlet-name>
+		<url-pattern>/userupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>downloadFile</servlet-name>
+		<servlet-class>com.gene.app.action.DownloadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadFile</servlet-name>
+		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
+	
+	<security-constraint>
+		<web-resource-collection>
+		    <url-pattern>/</url-pattern>
+			<url-pattern>/listProjects</url-pattern>
+			<url-pattern>/displayReports</url-pattern>
+			<url-pattern>/getreport</url-pattern>
+			<url-pattern>/storereport</url-pattern>
+			<url-pattern>/getprojectdata</url-pattern>
+			<url-pattern>/createProjects</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/developer</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>cron</web-resource-name>
+			<url-pattern>/cron/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<welcome-file-list>
+		<welcome-file>getreport</welcome-file>
+	</welcome-file-list>
+</web-app>
