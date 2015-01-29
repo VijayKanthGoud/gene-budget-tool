@@ -131,7 +131,7 @@
 		  
 	  }else if(dataContext[35]=="NewProjects" && value.toString().trim != "" && value != 0){
 		  return "<div width = '100%' style='background:#C0CCED'>" + value +"</div>";
-	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" ){
+	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" && dataContext["0"].toString().indexOf(".") == -1 ){
 		  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
 	  }else{
 		  return "";

@@ -1016,6 +1016,7 @@ function submitProjects(){
 				window.location.reload(true);
 			},
 			error: function(result) {
+				alert(result["responseText"].toString().indexOf("java.lang.Error:"));
 				if(result["responseText"].toString().indexOf("java.lang.Error:")!= -1){
 				alert(JSON.stringify(result["responseText"].toString().split("java.lang.Error:")[1].substring(1,38)));
 				}else{
@@ -1027,19 +1028,23 @@ function submitProjects(){
 	}else{
 		$('#submitProjBtn').prop("disabled",false);
 	}
-	}
+}
 
 
 
 function exportExcelData(){
+	//code for server side export
 	console.log("Downloading data...");
-	var dataCopy = [];
+	oIFrm = document.getElementById('myIFrm');
+    oIFrm.src = window.location.pathname.split( '/' )[0] + "/download";
+    //code for client side export
+	/*var dataCopy = [];
 	dataCopy = data.slice(0);
 	var jsondata = modifyData(dataCopy);
 	if(jsondata == ""){
 		return;
 	}
-	JSONToEXCELConvertor(jsondata, "Budget_Summary", false)
+	JSONToEXCELConvertor(jsondata, "Budget_Summary", false)*/
 }
 
 function modifyData(data){

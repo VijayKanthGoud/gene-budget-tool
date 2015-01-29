@@ -58,15 +58,12 @@ public class DBUtil {
 		return ccUsers;
 	}
 	
-	public boolean validategMemoriId(String gMemoriId){
-		
-		
-		Map<String,GtfReport> completeGtfRptMap = new LinkedHashMap<String,GtfReport>();
+	public boolean validategMemoriId(String gMemoriId) {
+		Map<String, GtfReport> completeGtfRptMap = new LinkedHashMap<String, GtfReport>();
 		completeGtfRptMap = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
-		String validationMsg = "";
 		boolean isGMemIdExists = false;
-		if(gMemoriId!=null && !"".equals(gMemoriId.trim())){
-		isGMemIdExists = completeGtfRptMap.containsKey(gMemoriId);
+		if (gMemoriId != null && !"".equals(gMemoriId.trim())) {
+			isGMemIdExists = completeGtfRptMap.containsKey(gMemoriId);
 		}
 		return isGMemIdExists;
 	}

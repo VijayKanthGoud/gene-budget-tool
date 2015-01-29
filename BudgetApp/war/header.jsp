@@ -107,7 +107,7 @@
 			<%
 				if (isAdmin) {
 			%>
-			<li class='last'><a href='/developer'><span>Admin</span></a></li>
+			<li class='last'><a href='/admin'><span>Admin</span></a></li>
 			<%
 				}
 			%>

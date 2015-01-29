@@ -133,7 +133,7 @@
 	<div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
-			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> Multi-brand
+			style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"  align = center> Multi-brand
 		</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
@@ -947,7 +947,11 @@
 			}
 		});
 		
+		var errExist = false;
 		grid.onValidationError.subscribe(function(e, args) {
+			if(errExist){
+				return;
+			}
 	        var validationResult = args.validationResults;
 	        var activeCellNode = args.cellNode;
 	        var editor = args.editor;
@@ -955,13 +959,14 @@
 	        var valid_result = validationResult.valid;
 	        if (!valid_result) {
 	        	alert(errorMessage);
+	        	errExist = true;
 	          	$(activeCellNode).attr("title", errorMessage);
 	        }
 	        else {
 	           $(activeCellNode).attr("title", "");
 	        }
 
-	    });
+	    }); 
 		
 		// Handeler for Create New Project button
 		$(document).on('click', '#crtNewProjBtn',
@@ -1471,7 +1476,7 @@
 			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload
 		</div>
 		<div align='right' style='padding-right: 100px;'>
-			<form action="/upload" method="post" enctype="multipart/form-data">
+			<form action="/userupload" method="post" enctype="multipart/form-data">
 				<br/>
 				<span style="font-size: 14px;font-weight: bold;">
 					Select File to Upload : &nbsp;&nbsp;&nbsp;
@@ -1494,4 +1499,6 @@
 	</div>
 <%@ include file="footer.jsp"%>
 </body>
+<iframe id="myIFrm" src="" style="visibility:hidden">
+</iframe>
 </html>
