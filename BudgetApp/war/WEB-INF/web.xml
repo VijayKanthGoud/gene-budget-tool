@@ -137,6 +137,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>promoteType</servlet-name>
 		<url-pattern>/cron/promote</url-pattern>
 	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>GetSummaryFromCache</servlet-name>
 		<servlet-class>com.gene.app.action.GetSummaryFromCache</servlet-class>
@@ -144,14 +145,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>GetSummaryFromCache</servlet-name>
 		<url-pattern>/GetSummaryFromCache</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>AdminUpload</servlet-name>
-		<servlet-class>com.gene.app.action.AdminUploadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AdminUpload</servlet-name>
-		<url-pattern>/adminupload</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

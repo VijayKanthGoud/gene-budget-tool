@@ -31,7 +31,7 @@ ng\:form {
 			</div>
 
 			<div ng-show="isProcessing" style="display: none;">
-				<span>Processing ...</span>
+				<span style="color: blue">Please wait while processing the sheet ...<img alt="" src=""></span>
 			</div>
 
 			<div class="form-group">
