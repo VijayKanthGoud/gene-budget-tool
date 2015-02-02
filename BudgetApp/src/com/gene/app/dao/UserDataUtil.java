@@ -30,7 +30,7 @@ public class UserDataUtil {
 	// create brandmap array
 
 	// create role array
-	String [] role = {"Project Owner","Project Owner","Brand Owner","Project Owner","Admin","Project Owner","Project Owner",
+	String [] role = {"Project Owner","Admin","Admin","Admin","Admin","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
