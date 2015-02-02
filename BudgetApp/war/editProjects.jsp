@@ -9,6 +9,9 @@
 
 
 <%
+String prjView="";
+String brandView="";
+String ccView="";
 	String color ="";
 	List<GtfReport> gtfReports = (List<GtfReport>) request
 			.getAttribute("gtfreports");
@@ -54,10 +57,112 @@
 					</table>
 				</td>				
 				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); %>
-				<td style="width: 50%; height: 55px; text-align: center;"><span
-						style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
-						My Projects </span><br/><br/>Cost center : <%=userInfo.getCostCenter()%></td>
-
+				<td style="padding-left: 1.5%; width: 50%; text-align: center;">
+				<span style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
+						<%String viewSelected = (String)request.getAttribute("selectedView");
+							if(viewSelected==null || "".equalsIgnoreCase(viewSelected.trim())){
+								viewSelected = "My Projects";
+							}if("My Projects".equalsIgnoreCase(viewSelected)){
+								prjView = "selected";
+							}else if("My Brands".equalsIgnoreCase(viewSelected)){
+								brandView = "selected";
+							}else{
+								ccView = "selected";
+							}
+							
+						%></span>
+						<span style="font-size: 16px; font-weight: bold">View : </span><select  id="selectedUserView" name="selectedUserView" onchange= "selectUserView()" autofocus style=" width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" >
+						<option <%= prjView%>>My Projects</options>
+						<option <%= brandView%>>My Brands</options>
+						<option <%= ccView%>>My Cost Center</options>
+						</select> 
+						<br/><br/><%if(!userInfo.getRole().contains("Admin")) {%><span style="font-size: 16px; font-weight: bold"> Cost center : </span><%=userInfo.getCostCenter()%>
+						<% }else{%>
+							<span style="font-size: 16px; font-weight: bold">Cost center : </span><select id="getCostCenter" name="ccValue" style="width: 100px;" onchange="getCostCenterDetails()">
+						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
+						String ccSelected = (String)request.getAttribute("getCCValue");
+						CostCenter_Brand cc_brand = new CostCenter_Brand();
+							if(cc_brandList!=null && !cc_brandList.isEmpty()){
+								for(int i=0;i<cc_brandList.size();i++){
+									cc_brand = cc_brandList.get(i);
+									if(cc_brand.getCostCenter()!=null 
+											&& !"".equals(cc_brand.getCostCenter()) 
+											&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
+						%>
+						<option value="<%= cc_brand.getCostCenter()%>" selected><%= cc_brand.getCostCenter()%></option>
+						<%} else if(cc_brand.getCostCenter()!=null 
+								&& !"".equals(cc_brand.getCostCenter())){%>
+						<option value="<%= cc_brand.getCostCenter()%>"><%= cc_brand.getCostCenter()%></option>
+						<%} } }%>
+						</select>
+						<% }String selectedView = (String)request.getAttribute("selectedView");
+						String selectedBrand = (String)request.getAttribute("brandValue");
+						
+						if(selectedView!=null && "My Brands".equalsIgnoreCase(selectedView)){%>
+						<br/><br/><span style="font-size: 16px; font-weight: bold;text-align: right;"> Brand&nbsp;&nbsp;&nbsp;&nbsp; : </span><a href="#" onclick="openBrandPopUp()"><%=selectedBrand%></a>
+						<% }%>
+				</td>
+			
+	<div id="getCostCentreProjects">
+		
+			<form method="GET" id="getCostCentre" action="/getreport">
+			<input type="hidden" name="selectedView" id="selectedView1"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter1"/>
+				
+			</form>
+			
+		</div>
+	<div id="getMyProjects">
+		
+			<form method="GET" id="getProjects" action="/getreport">
+			<input type="hidden" name="selectedView" id="selectedView2"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter2"/>
+				
+			</form>
+			
+		</div>	
+		
+	<div id="selectthebrand">
+		<div id="header"
+			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> My Brands
+		</div>
+		<div align='center' style='padding-right: 50px;'>
+			<form method="GET" id="getBrand" action="/getreport" >
+			<input type="hidden" name="selectedView" id="selectedView3"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter3"/>
+				<br/>
+				<span style="font-size: 14px;font-weight: bold;">
+					Select Brand : &nbsp;&nbsp;&nbsp;
+				</span>
+				<select id="getBrand" name="brandValue">
+				<%Map<String,Double> userBrandMap= userInfo.getBrand(); 
+				Object[] myBrands = {}; 
+				String brandValue1="";
+				String brandValue=(String)request.getAttribute("brandValue");
+				if(brandValue==null || brandValue==""){
+					brandValue = "Avastin";
+				}
+				if(userBrandMap!=null && !userBrandMap.isEmpty()){
+					myBrands = userBrandMap.keySet().toArray();
+					for(int i=0;i<myBrands.length;i++){ 
+                        brandValue1 = myBrands[i].toString();
+                        if(brandValue.equals(brandValue1)){%>
+                        <option value="<%=brandValue1 %>" selected><%=brandValue1 %></option>
+                        <%}else{ %>
+                        <option value="<%=brandValue1 %>"><%=brandValue1 %></option>
+                        <%}}
+				}
+				%>
+				
+				</select>
+				<br/>
+				<br/>
+				<input type="button" onclick="getProjectsBrandwise(this)" value="ok" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'center'> 
+				<input type="button" onclick="closepopup(this)" value="cancel" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'center'>
+			</form>
+			
+		</div>
+	</div>
 				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable"
 						style="color: #005691; white-space: nowrap; font-weight: bold;">
