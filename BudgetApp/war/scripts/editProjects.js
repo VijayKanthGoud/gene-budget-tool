@@ -33,7 +33,14 @@ function getProjectsBrandwise(){
 
 function getBrandTotals(){
 	selectedValue = document.getElementById("brandType").value;
-	var ccVal = $('#getCostCenter').val();
+	var ccVal = "";
+	if(<%=userInfo.getRole().contains("Admin")%>){
+		ccVal = $('#getCostCenter').val();
+	}else{
+		ccVal = <%=userInfo.getCostCenter()%>;
+	}
+	
+	//alert("ccVal = "+ccVal);
 	$.ajax({
 		url : '/GetSummaryFromCache',
 		type : 'POST',
@@ -47,7 +54,7 @@ function getBrandTotals(){
 } 
 function ValidateGMemoriId(gMemoriId){
 	//var gMemoriId = document.getElementById("brandType").value; 
-	alert(gMemoriId);
+	
 	var validationMsg = '';
 	$.ajax({
 		url : '/ValidateGMemoriId',
@@ -266,7 +273,9 @@ function updateMemCache(e, args, tempKey) {
 	var projName = "";
 	var projWBS = "";
 	var subactivity = "";
-	
+	var costCenter = item["47"];
+	//console.log(item);
+	//alert("costCenter = "+costCenter);
 	if ($('#hideColumns').is(":checked")) {
 		fixedCell = cell + numHideColumns;
 	} else {
@@ -317,6 +326,7 @@ function updateMemCache(e, args, tempKey) {
 			var aSave = (aSaveData[0] = {});
 			aSave[0] = key;
  		aSave[1] = cellValue;
+ 		aSave[2] = d["47"];
 		}else if(cell == <%=BudgetConstants.BRAND_CELL%>){
 			if(cellValue.toString().toLowerCase().indexOf("mb")!=-1){
 				//alert(cellValue+"::::"+args.item[37] +"::::"+cellNum);
@@ -357,6 +367,7 @@ function updateMemCache(e, args, tempKey) {
 				var aSave = (aSaveData[0] = {});
 				aSave[0] = key;
 	 		aSave[1] = cellValue;
+	 		aSave[2] = d["47"];
 			}
 			
 		}else{
@@ -400,6 +411,7 @@ function updateMemCache(e, args, tempKey) {
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 				}
 		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+		 		aSave[2] = d["47"];
 		 		d[itemCell]=aSave[1];
 		 		if(item[37]== false){
 		 			varTotal = 0.0;
@@ -439,6 +451,7 @@ function updateMemCache(e, args, tempKey) {
 		 		}
 		 			aSave[1] = d[fixedCell - 4];
 		 		}
+		 		aSave[2] = d["47"];
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Benchmark" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
 	 			d[itemCell]=parseFloat(cellValue).toFixed(2);
@@ -453,7 +466,7 @@ function updateMemCache(e, args, tempKey) {
  			}
 		}
 		}
-	//alert("as "+JSON.stringify(aSaveData));	
+		
 	if(singleBrandToMulti!=true){
 	$.ajax({
 		url : '/AutoSaveData',
@@ -462,6 +475,7 @@ function updateMemCache(e, args, tempKey) {
 		data : {
 			celNum : cellNum,
 			objarray : JSON.stringify(aSaveData),
+			costCenter : costCenter,
 			mapType : item[11]
 		},
 		success : function(result) {

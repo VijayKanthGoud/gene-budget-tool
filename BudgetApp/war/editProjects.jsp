@@ -482,6 +482,7 @@ String ccView="";
 				}
 				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
 				d[44]="<%=gReport.getBrand()%>";
+				d[47]="<%= gReport.getCostCenter()%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -975,13 +976,15 @@ String ccView="";
     							d["5"] =  "<%=gtfReport.getgMemoryId()%>";
     							d["7"] = "<%=requestor%>";
 							}
-						<%}%>
-						
+						<%}if(user.getUserName()!=requestor){%>
+						return;
+						<%}else{%>
 						$('#multibrandEdit').show().fadeIn(100);
 						displayMultibrandGrid();
 						$('#back').addClass('black_overlay').fadeIn(100);
 						// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
-					}
+						<%}%>
+						}
 					//code for newly added projects 
 					else if(itemClicked[34]=="New projects"){
 						// Start : Code for newly added projects
@@ -1133,6 +1136,12 @@ String ccView="";
 				fixedCell = cell + numHideColumns;
 			} else {
 				fixedCell = cell;
+			}
+			var userName = '<%= user.getUserName()%>';
+			var role = '<%= user.getRole()%>';
+			if((role!='Admin') && (args.item["1"]!=null && args.item["1"]!='' && args.item["1"] != userName)){
+				alert("You are not authorised to edit this project !!!");
+				return false;
 			}
 			if(fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 				var budgetItem=[];
