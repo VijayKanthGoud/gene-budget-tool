@@ -44,6 +44,7 @@ public class AutoSaveData extends HttpServlet {
 		UserService userService;
 		String email="";
 		String gMemoriIdFromStudy = "";
+		String costCenter = req.getParameter("costCenter").toString();
 		//String sessionObjArray = (String)session.getAttribute("objArray");
 		boolean fromSession = false;
 		if (req.getParameter(BudgetConstants.objArray) != null) {
@@ -64,15 +65,17 @@ public class AutoSaveData extends HttpServlet {
 		double newPlannedValue = 0.0;
 		double plannedTotal = 0.0;
 		double oldAccrualValue = 0.0;
+		
 		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
 		BudgetSummary summary = new BudgetSummary();
-		if(user != null && user.getCostCenter() != null &&util.getSummaryFromCache(user.getCostCenter()) != null){
-			summary = util.getSummaryFromCache(user.getCostCenter());
+		if(user != null && costCenter != null &&util.getSummaryFromCache(costCenter) != null){
+			summary = util.getSummaryFromCache(costCenter);
 		}else{
 			userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
 			email = userService.getCurrentUser().getEmail();
 			user = util.readUserRoleInfo(email);
 		}
+		
 		Map<String,BudgetSummary> budgetMap = summary.getBudgetMap();
 		BudgetSummary summaryObj = new BudgetSummary();
 		JSONArray jsonArray = null;
@@ -87,12 +90,12 @@ public class AutoSaveData extends HttpServlet {
 		try {
 			jsonArray = new JSONArray(objarray);
 			gtfReportMap = util
-					.getAllReportDataFromCache(user.getCostCenter());
+					.getAllReportDataFromCache(costCenter);
 			completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 			for (int count = 0; count < jsonArray.length(); count++) {
 				rprtArray = jsonArray.getJSONObject(count);
 				keyNum = rprtArray.getString("0");
-				
+				//costCenter = rprtArray.getString("2");
 				LOGGER.log(Level.INFO, "KeyNum received : " + keyNum);
 				
 				cellValue = rprtArray.getString("1");
@@ -195,7 +198,7 @@ public class AutoSaveData extends HttpServlet {
 								}
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
-								util.putSummaryToCache(summary, user.getCostCenter());
+								util.putSummaryToCache(summary, costCenter);
 								}
 								plannedMap.put(BudgetConstants.months[Integer
 										.parseInt(cellNum)], Double
@@ -225,7 +228,7 @@ public class AutoSaveData extends HttpServlet {
 			}
 				String key = (String) session
 						.getAttribute(BudgetConstants.KEY);
-				util.saveAllReportDataToCache(user.getCostCenter(),
+				util.saveAllReportDataToCache(costCenter,
 						gtfReportMap);
 				util.saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, gtfReportMap);
 				String[] keys = {};
@@ -246,7 +249,7 @@ public class AutoSaveData extends HttpServlet {
 			e.printStackTrace();
 		}
 		if(user != null && user.getCostCenter() != null){
-			util.putSummaryToCache(summary,user.getCostCenter());
+			util.putSummaryToCache(summary,costCenter);
 		}
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		Gson gson = new Gson();
