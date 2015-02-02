@@ -12,14 +12,33 @@ function getAvailableTags(){
 	<%}%>
 } 
 
+function getProjectsBrandwise(){
+	var val = $('#selectedUserView').val();
+	$('#selectedView').val(val);
+	selectedBrandValue = document.getElementById("getBrand").value; 
+	/*$.ajax({
+		url : '/getreport',
+		type : 'GET',
+		dataType : 'text',
+		data : {brandValue: selectedBrandValue
+		},
+		success : function(result) {
+			summaryResult = result;
+			getSummaryValues();
+		}
+	});*/
+	
+	$('#getBrand').submit();
+} 
+
 function getBrandTotals(){
-	selectedValue = document.getElementById("brandType").value; 
+	selectedValue = document.getElementById("brandType").value;
+	var ccVal = $('#getCostCenter').val();
 	$.ajax({
 		url : '/GetSummaryFromCache',
 		type : 'POST',
 		dataType : 'text',
-		data : {costCentre: <%=userInfo.getCostCenter()%>
-		},
+		data : {costCentre: ccVal},
 		success : function(result) {
 			summaryResult = result;
 			getSummaryValues();
@@ -1166,5 +1185,69 @@ function closeUploadWindow(){
 function openUrl(url){
 	popUpWindow = window.open(url,'gmemori','');
 }
+function selectUserView(){
+	var val = $('#selectedUserView').val();
+	var ccVal = $('#getCostCenter').val();
+	
+	if($('#selectedUserView').val()=='My Brands'){
+		$('#selectedView3').val(val);
+		$('#getCostCenter3').val(ccVal);
+	$('#selectthebrand').show().fadeIn(100);
+	$('#back').addClass('black_overlay').fadeIn(100);
+	}else if($('#selectedUserView').val()=='My Projects'){
+		$('#selectedView2').val(val);
+		$('#getCostCenter2').val(ccVal);
+		$('#getProjects').submit();
+	}else if($('#selectedUserView').val()=='My Cost Center'){
+		$('#selectedView1').val(val);
+		$('#getCostCenter1').val(ccVal);
+		$('#getCostCentre').submit();
+	}
+}
 
+function closepopup(){
+	$('#selectthebrand').hide();
+	$('#back').removeClass('black_overlay').fadeIn(100);
+}
+function toSubmit(){
+    alert('I will not submit');
+    return false;
+ }
+function getCostCenterDetails(){
+	var ccVal = $('#getCostCenter').val();
+	var val = $('#selectedUserView').val();
+	
+	if(val=="My Brands"){
+		var brandVal = 	document.getElementById("getBrand").value;
+		 $('#selectedView3').val(val);
+		 $('#getCostCenter3').val(ccVal);
+		$('#getBrand').submit();
+	}else if(val=="My Cost Center"){
+		$('#getCostCenter1').val(ccVal);
+		$('#selectedView1').val(val);
+		$('#getCostCentre').submit();
+	}else if ("My Projects"){
+		$('#getCostCenter2').val(ccVal);
+		$('#selectedView2').val(val);
+		$('#getProjects').submit();	
+	}
+	 
+	/*alert(brandVal);
+	alert(ccVal);
+	$('#selectedView1').val("My Brands");
+	*/
+	
+	
+}
+
+function openBrandPopUp(){
+	var val = $('#selectedUserView').val();
+	var ccVal = $('#getCostCenter').val();
+	if($('#selectedUserView').val()=='My Brands'){
+		$('#selectedView3').val(val);
+		$('#getCostCenter3').val(ccVal);
+	$('#selectthebrand').show().fadeIn(100);
+	$('#back').addClass('black_overlay').fadeIn(100);
+	}
+}
 
