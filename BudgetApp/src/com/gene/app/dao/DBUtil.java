@@ -1,12 +1,14 @@
 package com.gene.app.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
@@ -20,7 +22,6 @@ import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.gson.Gson;
 
 public class DBUtil {
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
@@ -633,6 +634,7 @@ public class DBUtil {
 			List<CostCenter_Brand> costCenterList = new ArrayList<CostCenter_Brand>();
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 			Query q = pm.newQuery(CostCenter_Brand.class);
+			q.setOrdering("costCenter asc");
 			//q.declareParameters("String emailParam");
 			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
 			if(!results.isEmpty()){
@@ -652,6 +654,7 @@ public class DBUtil {
 			//Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;
 			//Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;
 			String[] brandsArray = brands.split(";"); 
+			Arrays.sort(brandsArray);
 			String[] budgetArray = null;
 			String[] valueArray = null;
 			String value = "";
@@ -680,7 +683,8 @@ public class DBUtil {
 				}
 				brandMap.put(budgetArray[0], summary);
 			}
-			return brandMap;
+			Map<String,BudgetSummary> sortedMap = new TreeMap<String,BudgetSummary>(brandMap);
+			return sortedMap;
 		}
 		public Map<String,Map<String,BudgetSummary>> prepareBrandData(List<CostCenter_Brand> costCenterList){
 			CostCenter_Brand costCenter_Brand = null; 

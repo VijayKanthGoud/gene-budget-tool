@@ -136,6 +136,7 @@ String ccView="";
 				</span>
 				<select id="getBrand" name="brandValue">
 				<%Map<String,Double> userBrandMap= userInfo.getBrand(); 
+				
 				Object[] myBrands = {}; 
 				String brandValue1="";
 				String brandValue=(String)request.getAttribute("brandValue");
@@ -143,7 +144,8 @@ String ccView="";
 					brandValue = "Avastin";
 				}
 				if(userBrandMap!=null && !userBrandMap.isEmpty()){
-					myBrands = userBrandMap.keySet().toArray();
+					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
+					myBrands = sortedMap.keySet().toArray();
 					for(int i=0;i<myBrands.length;i++){ 
                         brandValue1 = myBrands[i].toString();
                         if(brandValue.equals(brandValue1)){%>
