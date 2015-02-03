@@ -326,7 +326,7 @@ function updateMemCache(e, args, tempKey) {
 			var aSave = (aSaveData[0] = {});
 			aSave[0] = key;
  		aSave[1] = cellValue;
- 		aSave[2] = d["47"];
+ 		//aSave[2] = d["47"];
 		}else if(cell == <%=BudgetConstants.BRAND_CELL%>){
 			if(cellValue.toString().toLowerCase().indexOf("mb")!=-1){
 				//alert(cellValue+"::::"+args.item[37] +"::::"+cellNum);
@@ -367,7 +367,7 @@ function updateMemCache(e, args, tempKey) {
 				var aSave = (aSaveData[0] = {});
 				aSave[0] = key;
 	 		aSave[1] = cellValue;
-	 		aSave[2] = d["47"];
+	 		//aSave[2] = d["47"];
 			}
 			
 		}else{
@@ -411,7 +411,7 @@ function updateMemCache(e, args, tempKey) {
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 				}
 		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
-		 		aSave[2] = d["47"];
+		 		//aSave[2] = d["47"];
 		 		d[itemCell]=aSave[1];
 		 		if(item[37]== false){
 		 			varTotal = 0.0;
@@ -451,7 +451,7 @@ function updateMemCache(e, args, tempKey) {
 		 		}
 		 			aSave[1] = d[fixedCell - 4];
 		 		}
-		 		aSave[2] = d["47"];
+		 		//aSave[2] = d["47"];
 		 		iCnt++;
 	 		}else if(key== d[34] && d[11]=="Benchmark" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
 	 			d[itemCell]=parseFloat(cellValue).toFixed(2);
