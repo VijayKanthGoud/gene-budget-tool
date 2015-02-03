@@ -26,6 +26,17 @@ public class UserRoleInfo implements Serializable {
 	@Persistent
 	private Map<String,Double> cost_center;
 
+	@Persistent
+	private String fullName;
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 	private String costCenter;
 	public String getCostCenter() {
 		return costCenter;

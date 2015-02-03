@@ -43,6 +43,31 @@ public class DBUtil {
 		System.out.println("ccUsers:::"+ccUsers);
 		return user;
 	}
+	public UserRoleInfo readUserRoleInfoByName(String userName) {
+		boolean isGeneUser = false;
+		ArrayList<String> ccUsers = new ArrayList<>();
+		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
+		userMap = readAllUserInfo();
+		UserRoleInfo user = new UserRoleInfo();
+		if(userMap!=null && !userMap.isEmpty()){
+			user = getUserByName(userMap,userName);
+		}
+		System.out.println("readUserRoleInfoByName:::"+userName);
+		return user;
+	}
+	
+	public UserRoleInfo getUserByName(Map<String,UserRoleInfo> userMap,String userName){
+		UserRoleInfo user = new UserRoleInfo();
+		UserRoleInfo tempUser;
+		for(Map.Entry<String, UserRoleInfo> userEntry:userMap.entrySet()){
+			tempUser = userEntry.getValue();
+			if(userName!=null && !"".equalsIgnoreCase(userName.trim()) && userName.equalsIgnoreCase(tempUser.getUserName())){
+				user = tempUser;
+				break;
+			}
+		}
+		return user;
+	}
 	public Map<String,ArrayList<String>> getCCUsersList(String costCenter){
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
 		Map<String,ArrayList<String>> ccUsers = new LinkedHashMap<String, ArrayList<String>>();

@@ -18,24 +18,34 @@ public class UserDataUtil {
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2"};//,"","","",""};
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags"};//,"","","",""};
 	String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags",
-			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield", "suchockw", "grabowsa","shwetims","subramb1","kameckip"};
+			"michasav","narasims","Melissa Chen","Kim Basurto","Jamieson Sheffield", "suchockw", "grabowsa","shwetims",
+			"subramb1","kameckip","Lluis Lagarda","Micole Doyle","Melissa Williams","Tom Armet","Hao Zhou","Jason Sole","Lily Chou","Natalie Savin"};
+	
+	String [] fullName = {"Anup Mathur","Sreejith NellurKorachanvittil","Vijay Kanth Goud Siddagowni Balram",
+			"Yelena Gold","Vasuda Gayathri Kavi","Sreedhar Challapalli","Akansha Makode","Babajyoti Singh","Bhaswanth Reddy Chinthala","test",
+			"Sunil Guptha Challagandla",
+			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield", "Witold Suchocki", "Adam Grabowski","Shwetima Shwetima",
+			"Balaji Subramaniam","Piotr Kamecki","Lluis Lagarda","Micole Doyle","Melissa Williams","Tom Armet","Hao Zhou","Jason Sole","Lily Chou","Natalie Savin"};
 	// create user email array
 	/*String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
 			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com"};*///,"","","",""};
 	String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
-			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com","savitzky.michael@gene.com",
-			"narasimhan.srihari@gene.com","chen.melissa@gene.com","basurto.kimberly@gene.com","sheffield.jamieson@gene.com", "suchockw@gene.com", "grabowsa@gene.com",
-			"shwetims@gene.com","subramb1@gene.com","kameckip@gene.com"};
+			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com","michasav@gene.com",
+			"narasims@gene.com","chenm30@gene.com","basurtok@gene.com","jamiesos@gene.com", "suchockw@gene.com", 
+			"grabowsa@gene.com","shwetims@gene.com","subramb1@gene.com","kameckip@gene.com","lagardal@gene.com","micoleh@gene.com",
+			"willim58@gene.com","armett@gene.com","haoz@gene.com","jasonso@gene.com","choul6@gene.com","savinn@gene.com"};
 	//String [] userEmail = {"test@example.com"};
 	// create brandmap array
 
 	// create role array
 	String [] role = {"Project Owner","Admin","Admin","Admin","Admin","Project Owner","Project Owner",
-			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
-			"Project Owner","Project Owner","Project Owner"};
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+			"Project Owner","Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
 	String [] costCenter = {"307680","235031","307677","235032","307677","307676","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"
-			,"307676","307676","307676","7135"};
+			,"307676","307676","307676","7135","7034","7034","7034","7034","7034","7034","7034","7034"};
 	String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004","7135"};
 	public void insertUserRoleInfo(){
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
@@ -180,6 +190,7 @@ public class UserDataUtil {
 	userRoleInfo.setUserName(userName[i]);
 	userRoleInfo.setRole(role[i]);
 	userRoleInfo.setCostCenter(costCenter[i]);
+	userRoleInfo.setFullName(fullName[i]);
 	userInfoList.add(userRoleInfo);
 	}
 	try{

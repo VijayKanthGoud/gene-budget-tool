@@ -40,11 +40,18 @@ public class AdminUploadJSONServlet extends HttpServlet {
 		User userLoggedIn = userService.getCurrentUser();
 		UserRoleInfo user = util.readUserRoleInfo(userLoggedIn.getEmail());
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
-
+		String [] objArrayStr = objarray.split("],");
+		System.out.println("objArrayStr = "+objArrayStr.length);
+		String costCentre = "";
+		for(int i=0;i<objArrayStr.length;i++){
+			System.out.println("objArrayStr values "+i+ " ::: "+objArrayStr[i]);
+		}
 		List<List<String>> rowList = new ArrayList();
 
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
+			costCentre = jsonArray.getJSONArray(19).get(3)
+					.toString().split("\\s")[0];
 			for (int count = 23; count < jsonArray.length(); count++) {
 				List list = new ArrayList();
 				for (int k = 3; k < jsonArray.getJSONArray(count).length(); k++) {
@@ -62,16 +69,38 @@ public class AdminUploadJSONServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
-		createGTFReports(user, rowList, gtfReports);
+		createGTFReports(user, user,rowList, gtfReports,costCentre);
 	}
 
-	private void createGTFReports(UserRoleInfo user,
-			List<List<String>> rowList, List<GtfReport> gtfReports) {
+	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
+			List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre) {
 		boolean isMultibrand = false;
-
+		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
 		for (List recvdRow : rowList) {
 			GtfReport gtfReport = new GtfReport();
-			gtfReport.setCostCenter(user.getCostCenter());
+			if (recvdRow.get(2) != null && !recvdRow.get(2).equals("#")
+					&& !recvdRow.get(2).toString().trim().equals("")) {
+				gtfReport.setSubActivity(recvdRow.get(2).toString());
+			} else {
+				gtfReport.setSubActivity("");
+				continue;
+			}
+			if (recvdRow.get(8) != null && !recvdRow.get(8).equals("#")
+					&& !recvdRow.get(8).toString().trim().equals("")) {
+				gtfReport.setRequestor(recvdRow.get(8).toString());
+				//user = new UserRoleInfo();
+				if(userMap!=null && !userMap.isEmpty()){
+					user = util.getUserByName(userMap,recvdRow.get(8).toString());
+					if(user==null || user.getEmail()==null){
+						user = orgUser;
+						gtfReport.setRequestor(user.getFullName());
+					}
+				}
+			} else {
+				user = orgUser;
+				gtfReport.setRequestor(user.getFullName());
+			}
+			gtfReport.setCostCenter(costCentre);
 
 			if (recvdRow.get(0) != null && !recvdRow.get(0).equals("#")
 					&& !recvdRow.get(0).toString().trim().equals("")) {
@@ -87,12 +116,7 @@ public class AdminUploadJSONServlet extends HttpServlet {
 				gtfReport.setWBS_Name(recvdRow.get(1).toString());
 			}
 
-			if (recvdRow.get(2) != null && !recvdRow.get(2).equals("#")
-					&& !recvdRow.get(2).toString().trim().equals("")) {
-				gtfReport.setSubActivity(recvdRow.get(2).toString());
-			} else {
-				gtfReport.setSubActivity("");
-			}
+			
 
 			if (recvdRow.get(3) != null && !recvdRow.get(3).equals("#")
 					&& !recvdRow.get(3).toString().trim().equals("")) {
@@ -138,12 +162,12 @@ public class AdminUploadJSONServlet extends HttpServlet {
 				gtfReport.setVendor("");
 			}
 
-			if (recvdRow.get(8) != null && !recvdRow.get(8).equals("#")
+			/*if (recvdRow.get(8) != null && !recvdRow.get(8).equals("#")
 					&& !recvdRow.get(8).toString().trim().equals("")) {
 				gtfReport.setRequestor(recvdRow.get(8).toString());
 			} else {
 				gtfReport.setRequestor("");
-			}
+			}*/
 
 			String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 					.format(Calendar.getInstance().getTime());
@@ -187,10 +211,15 @@ public class AdminUploadJSONServlet extends HttpServlet {
 			gtfReport.setProjectName(poDesc);
 			String gMemoriId;
 			try {
+				if(gtfReport.getPoDesc().indexOf("_")==6){
 				gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
 						Math.min(poDesc.length(), 6)))
 						+ "";
 				gtfReport.setDummyGMemoriId(false);
+				}else{
+					gMemoriId = "" + generator.nextValue();
+					gtfReport.setDummyGMemoriId(true);
+				}
 			} catch (NumberFormatException ne) {
 				gMemoriId = "" + generator.nextValue();
 				gtfReport.setDummyGMemoriId(true);
