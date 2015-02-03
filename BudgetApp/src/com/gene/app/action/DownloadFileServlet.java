@@ -64,6 +64,9 @@ public class DownloadFileServlet extends HttpServlet {
 		int rowCount = 3, cellCount = 0;
 		createHeader(sheet);
 		for (GtfReport gtfReport : gtfReportMap.values()) {
+			if("Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand())){
+				continue;
+			}
 			Row row = sheet.createRow(rowCount++);
 			row.createCell(cellCount++)
 					.setCellValue(gtfReport.getProject_WBS());
@@ -80,7 +83,13 @@ public class DownloadFileServlet extends HttpServlet {
 			row.createCell(cellCount++).setCellValue(gtfReport.getRequestor());
 			Map<String, Double> map = gtfReport.getAccrualsMap();
 			double total = 0.0;
+			boolean hasEntered=false;
+			int currMonth = Calendar.getInstance().get(Calendar.MONTH);
 			for(int count = 0; count < map.size() - 1; count++){
+				if(!hasEntered && currMonth<count){
+					map = gtfReport.getPlannedMap();
+					hasEntered=true;
+				}
 				row.createCell(cellCount++).setCellValue(map.get(BudgetConstants.months[count]));
 				total += map.get(BudgetConstants.months[count]);
 			}
