@@ -1,11 +1,14 @@
+<%@page import="java.util.*"%>
+<%@page import="com.gene.app.dao.DBUtil"%>
+<%@page import="com.gene.app.util.BudgetConstants"%>
+<%@page import="com.gene.app.model.*"%>
 <%@ include file="header.jsp"%>
-
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
-	href="http://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
+	href="css/prism.min.css">
 <style type="text/css">
 @charset "UTF-8";
 
@@ -21,10 +24,27 @@ ng\:form {
 </head>
 
 <body>
-	<div ng-app="App" class="container ng-scope">
+
+
+
+</br>
+</br>
+<table border="#FFFFFF" align="center" width="250px" >
+<!-- <tr style="padding-left:100px" bgcolor="">
+<td> -->
+<div align="center">
+<button type="button" class="form-control-header">Upload project data: </button>
+</div>
+<!-- </td>
+</tr>
+
+<tr >
+<td > -->
+<!-- <div style="padding-left: 250px; padding-bottom: 100px;" > -->
+	<div style="padding-left: 400px; padding-top: 30px;" ng-app="App" class="container ng-scope">
 		<div ng-controller="PreviewController" class="ng-scope">
 			<div class="form-group">
-				<label for="excel_file">Excel File</label> <input type="file"
+				<span style="font-size: 14px; font-weight: bold">Excel File :</span> <input class="form-control-button" type="file"
 					name="excel_file" accept=".xlsx"
 					onchange="angular.element(this).scope().fileChanged(this.files);"
 					required="true">
@@ -35,18 +55,50 @@ ng\:form {
 			</div>
 
 			<div class="form-group">
-				<label for="sheet_name">Sheet Name</label> <select id="sheet_name"
+				<span style="font-size: 14px; font-weight: bold">Sheet Name :</span> <select id="sheet_name"
 					class="form-control ng-pristine ng-invalid ng-invalid-required"
 					ng-change="showPreviewChanged()" ng-model="selectedSheetName"
 					required="required" ng-required="true"
 					ng-options="sheetName as sheetName for (sheetName, sheetData) in sheets"><option
 						value="" class="">---- Select a sheet ----</option></select>
 			</div>
-			<button type="button" onclick="uploadData()">Upload data</button>
+			
+			<div class="form-group">
+			<span style="font-size: 14px; font-weight: bold">Cost  centre :</span><select id="getCostCenter" class="form-control ng-pristine ng-invalid ng-invalid-required" name="ccValue" style="width: 100px;">
+						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
+						String ccSelected = "7135";
+						CostCenter_Brand cc_brand = new CostCenter_Brand();
+							if(cc_brandList!=null && !cc_brandList.isEmpty()){
+								for(int i=0;i<cc_brandList.size();i++){
+									cc_brand = cc_brandList.get(i);
+									if(cc_brand.getCostCenter()!=null 
+											&& !"".equals(cc_brand.getCostCenter()) 
+											&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
+						%>
+						<option value="<%= cc_brand.getCostCenter()%>" selected><%= cc_brand.getCostCenter()%></option>
+						<%} else if(cc_brand.getCostCenter()!=null 
+								&& !"".equals(cc_brand.getCostCenter())){%>
+						<option value="<%= cc_brand.getCostCenter()%>"><%= cc_brand.getCostCenter()%></option>
+						<%} } }%>
+						</select>
+			</div>
+			<!-- </br></br> -->
+			<div class="form-group">
+			<span style="font-size: 14px; font-weight: bold"> From Line number: </span><input  class="form-control-textbox" type="number" name="frmLine" id="From"><br>
+  			<span style="font-size: 14px; font-weight: bold">To Line number: </span> <input class="form-control-textbox" type="number" name="toLine" id="To"><br>
+			
+			</div>
+			</br>
+			<div style="padding-left: 100px;">
+			<button type="button" class="form-control-submit" onclick="uploadData()">Upload data</button>
+			</div>
 		</div>
 	</div>
+	<!-- </div> -->
+<!-- </td>
+</tr> -->
 
-
+</table>
 	<script>
 	function uploadData(){
 		console.log(JSON.stringify(excelValue.sheets["Main"].data));
@@ -54,7 +106,10 @@ ng\:form {
 				url : '/adminjsonupload',
 				type : 'POST',
 				dataType : 'text',
-				data : {objarray: JSON.stringify(excelValue.sheets["Main"].data) },
+				data : {objarray: JSON.stringify(excelValue.sheets["Main"].data),
+					costCenter : $('#getCostCenter').val(),
+					inputFrom :  $('#From').val(),
+					inputTo :  $('#To').val()},
 				success : function(result) {
 					alert("Uploaded successfully");
 					console.log('Data saved successfully');

@@ -19,6 +19,7 @@ import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.ProjectSequenceGeneratorUtil;
+import com.gene.app.util.Util;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -42,7 +43,9 @@ public class AdminUploadJSONServlet extends HttpServlet {
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		String [] objArrayStr = objarray.split("],");
 		System.out.println("objArrayStr = "+objArrayStr.length);
-		String costCentre = "";
+		String costCentre = req.getParameter("costCenter");
+		int fromLine = Integer.parseInt(req.getParameter("inputFrom"));
+		int toLine = Integer.parseInt(req.getParameter("inputTo"));
 		for(int i=0;i<objArrayStr.length;i++){
 			System.out.println("objArrayStr values "+i+ " ::: "+objArrayStr[i]);
 		}
@@ -50,9 +53,9 @@ public class AdminUploadJSONServlet extends HttpServlet {
 
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
-			costCentre = jsonArray.getJSONArray(19).get(3)
-					.toString().split("\\s")[0];
-			for (int count = 23; count < jsonArray.length(); count++) {
+			/*costCentre = jsonArray.getJSONArray(18).get(3)
+					.toString().split("\\s")[0];*/
+			for (int count = fromLine; count < toLine; count++) {
 				List list = new ArrayList();
 				for (int k = 3; k < jsonArray.getJSONArray(count).length(); k++) {
 					String varCol = jsonArray.getJSONArray(count).get(k)
@@ -74,6 +77,8 @@ public class AdminUploadJSONServlet extends HttpServlet {
 
 	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
 			List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre) {
+		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
+		
 		boolean isMultibrand = false;
 		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
 		for (List recvdRow : rowList) {
@@ -226,13 +231,24 @@ public class AdminUploadJSONServlet extends HttpServlet {
 			}
 
 			gtfReport.setgMemoryId(gMemoriId);
-
+			String gtfParam = gtfReport.getBrand()+":"+gtfReport.getRequestor()+":"+gtfReport.getPoDesc()+":"+gtfReport.getProject_WBS();
+			GtfReport gtfRpt = uniqueGtfRptMap.get(gtfParam);
+			if(gtfRpt != null){
+				gtfReport.setId(gtfRpt.getId());
+				gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
+			}
+			uniqueGtfRptMap.put(gtfParam, gtfReport);
 			gtfReports.add(gtfReport);
 		}
 		if (gtfReports.size() != 0) {
 			util.generateProjectIdUsingJDOTxn(gtfReports);
 			util.storeProjectsToCache(gtfReports, user.getCostCenter(),
 					BudgetConstants.NEW);
+			
 		}
+	}
+	
+	public boolean isProjectExists(Map<String,GtfReport> gtfRptMap,GtfReport gtfReport){
+		return false;
 	}
 }

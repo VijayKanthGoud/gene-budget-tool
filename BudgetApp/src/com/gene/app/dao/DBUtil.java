@@ -19,6 +19,7 @@ import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.Util;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
@@ -800,24 +801,39 @@ public class DBUtil {
 			String costCenter, String listType) {
 		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(costCenter);
 		Map<String, GtfReport> gtfAllReportFromCache = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+		Map<String, GtfReport> uniqueGtfReportMap = prepareUniqueGtfRptMap(costCenter);
 		GtfReport report = new GtfReport();
+		String uniqueGtfRptKey = "";
 		for (int i = 0; i < gtfReports.size(); i++) {
 			report = gtfReports.get(i);
 			if (listType != null && !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.OLD.equalsIgnoreCase(listType.trim())) {
 				gtfReportFromCache.remove(report.getgMemoryId());
 				gtfAllReportFromCache.remove(report.getgMemoryId());
+				uniqueGtfRptKey = createKeyForXlPrjUpload(report);
+				uniqueGtfReportMap.remove(uniqueGtfRptKey);
 			} else if (listType != null
 					&& !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.NEW.equalsIgnoreCase(listType.trim())) {
 				gtfReportFromCache.put(report.getgMemoryId(), report);
 				gtfAllReportFromCache.put(report.getgMemoryId(), report);
+				uniqueGtfRptKey = createKeyForXlPrjUpload(report);
+				uniqueGtfReportMap.put(uniqueGtfRptKey, report);
 			}
 		}
 		cache.put(costCenter, gtfReportFromCache);
 		cache.put(BudgetConstants.GMEMORI_COLLECTION, gtfAllReportFromCache);
+		updateUniqueGtfMap(costCenter, uniqueGtfReportMap);
+		
 	}
 
+	public String createKeyForXlPrjUpload(GtfReport report){
+		String brand = Util.isNullOrEmpty(report.getBrand())?report.getBrand():"";
+		String requestor = Util.isNullOrEmpty(report.getRequestor())?report.getRequestor():"";
+		String poDesc = Util.isNullOrEmpty(report.getPoDesc())?report.getPoDesc():"";
+		String project_WBS = Util.isNullOrEmpty(report.getProject_WBS())?report.getProject_WBS():"";
+		return brand+":"+requestor+":"+poDesc+":"+project_WBS;
+	}
 	@SuppressWarnings("unchecked")
 	public void updateReports() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -871,5 +887,34 @@ public class DBUtil {
 			pm.close();
 		}
 	}
-		
+	public Map<String, GtfReport> prepareUniqueGtfRptMap(String costCentre){
+		Map<String,GtfReport> gtfReportMap = (Map<String, GtfReport>) cache.get("UniqueProjectUpload"+costCentre);
+		String uniqueGtfRptKey="";
+		GtfReport gtfReport = null;
+		if(gtfReportMap==null || gtfReportMap.isEmpty() || gtfReportMap.size()==0){
+			Map<String,GtfReport> gtfRptMap = getAllReportDataFromCache(costCentre);
+			 gtfReportMap = new HashMap<String,GtfReport>();
+		if(gtfRptMap!=null && !gtfRptMap.isEmpty()){
+			for(Map.Entry<String, GtfReport> gtfMapEntry: gtfRptMap.entrySet()){
+				gtfReport = gtfMapEntry.getValue();
+				if(Util.isNullOrEmpty(gtfReport.getBrand())){
+					uniqueGtfRptKey = gtfReport.getBrand() + ":";
+				}if(Util.isNullOrEmpty(gtfReport.getRequestor())){
+					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getRequestor() + ":";
+				}if(Util.isNullOrEmpty(gtfReport.getPoDesc())){
+					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getPoDesc() + ":";
+				}if(Util.isNullOrEmpty(gtfReport.getProject_WBS())){
+					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getProject_WBS();
+				}
+				gtfReportMap.put(uniqueGtfRptKey, gtfReport);
+			}
+		}
+		cache.put("UniqueProjectUpload"+costCentre, gtfReportMap);
+		}
+		return gtfReportMap;
+	}	
+	
+	public void updateUniqueGtfMap(String costCenter, Map<String,GtfReport> uniqueGtfReportMap){
+		cache.put("UniqueProjectUpload"+costCenter, uniqueGtfReportMap);
+	}
 }

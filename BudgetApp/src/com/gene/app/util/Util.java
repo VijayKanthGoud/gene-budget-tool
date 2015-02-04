@@ -30,4 +30,12 @@ public class Util {
 		return value.matches("[-+]?[0-9]+");
 	}
 	
+	public static boolean isNullOrEmpty(String value){
+		if(value!=null && !"".equals(value)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 }
