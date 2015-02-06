@@ -5,7 +5,7 @@
 <%@ include file="header.jsp"%>
 <html>
 <head>
-<link rel="stylesheet" type="text/css"
+ <link rel="stylesheet" type="text/css"
 	href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="css/prism.min.css">
@@ -20,7 +20,24 @@
 ng\:form {
 	display: block;
 }
-</style>
+</style> 
+  <script>
+  var selectedTab=0;
+  $(function() {
+	 
+	  if(document.URL.split("?")[1].toString().split("=")[1] == 1){
+		  selectedTab=1;
+		  document.getElementById("headerid").innerHTML="Upload project data";
+		}else{
+			selectedTab=2;
+			document.getElementById("headerid").innerHTML="Upload accural data";
+		}
+  });
+  
+	
+
+  </script>
+
 </head>
 
 <body>
@@ -29,25 +46,26 @@ ng\:form {
 
 </br>
 </br>
-<table border="#FFFFFF" align="center" width="250px" >
-<!-- <tr style="padding-left:100px" bgcolor="">
-<td> -->
+
+ <table border="1.5" align="center" width="700px" height="500px" autofocus>
+
+<tr>
+<td id='cssmenu'>
 <div align="center">
-<button type="button" class="form-control-header">Upload project data: </button>
+<button id = "headerid" type="button" class="form-control-header" >Upload project data: </button>
 </div>
-<!-- </td>
+</td>
 </tr>
 
-<tr >
-<td > -->
-<!-- <div style="padding-left: 250px; padding-bottom: 100px;" > -->
-	<div style="padding-left: 400px; padding-top: 30px;" ng-app="App" class="container ng-scope">
+<tr>
+<td id='cssmenu1'>
+<div style="padding-left: 100px; padding-top: 30px;" ng-app="App"  >
 		<div ng-controller="PreviewController" class="ng-scope">
 			<div class="form-group">
-				<span style="font-size: 14px; font-weight: bold">Excel File :</span> <input class="form-control-button" type="file"
-					name="excel_file" accept=".xlsx"
-					onchange="angular.element(this).scope().fileChanged(this.files);"
-					required="true">
+ 					<span style="font-size: 14px; font-weight: bold" >Excel File :</span> <input class="form-control-button" type="file"
+					name="excel_file" accept=".xlsx" onchange="angular.element(this).scope().fileChanged(this.files);"
+					required="true" style=" color: black; "> 					
+ 
 			</div>
 
 			<div ng-show="isProcessing" style="display: none;">
@@ -88,25 +106,47 @@ ng\:form {
   			<span style="font-size: 14px; font-weight: bold">To Line number: </span> <input class="form-control-textbox" type="number" name="toLine" id="To"><br>
 			
 			</div>
-			</br>
-			<div style="padding-left: 100px;">
-			<button type="button" class="form-control-submit" onclick="uploadData()">Upload data</button>
+			
+			<div style="padding-left: 180px; padding-bottom: 20px ">
+			<button type="button" class="form-control-submit" onclick="uploadData()" autofocus>Upload data</button>
 			</div>
 		</div>
 	</div>
-	<!-- </div> -->
-<!-- </td>
-</tr> -->
 
+</td>
+</tr>
 </table>
-	<script>
+
+
+<%-- <%@ include file="uploadpopUp.jsp" %>
+ --%><script>
 	function uploadData(){
-		console.log(JSON.stringify(excelValue.sheets["Main"].data));
+		alert(selectedTab);
+		//console.log(JSON.stringify(excelValue.sheets["Main"].data));
+		if(selectedTab==1){
+			  $.ajax({
+					url : '/adminjsonupload',
+					type : 'POST',
+					dataType : 'text',
+					data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
+						costCenter : $('#getCostCenter').val(),
+						inputFrom :  $('#From').val(),
+						inputTo :  $('#To').val()},
+					success : function(result) {
+						alert("Uploaded successfully");
+						console.log('Data saved successfully');
+					},
+					error: function(result) {
+						alert("fail");
+						console.log(result);
+			        }
+				}); 
+		}else{
 		  $.ajax({
-				url : '/adminjsonupload',
+				url : '/userupload',
 				type : 'POST',
 				dataType : 'text',
-				data : {objarray: JSON.stringify(excelValue.sheets["Main"].data),
+				data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
 					costCenter : $('#getCostCenter').val(),
 					inputFrom :  $('#From').val(),
 					inputTo :  $('#To').val()},
@@ -118,7 +158,8 @@ ng\:form {
 					alert("fail");
 					console.log(result);
 		        }
-			});   
+			}); 
+		}
 	}
 	</script>
 

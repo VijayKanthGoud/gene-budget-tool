@@ -107,7 +107,12 @@
 			<%
 				if (isAdmin) {
 			%>
-			<li class='last'><a href='/admin'><span>Admin</span></a></li>
+			<li class='last'><a href='#'><span>Admin</span></a>
+			<ul>
+                        <li class='last'> <a href ="/admin?tab_sel=1" id="tabs-1">Upload project data</a></li>
+                        <li class='last'><a href ="/admin?tab_sel=2" id="#tabs-2">Upload accural data</a></li>
+                    </ul>  
+                    </li>  
 			<%
 				}
 			%>
