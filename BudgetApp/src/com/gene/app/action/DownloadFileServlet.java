@@ -3,7 +3,10 @@ package com.gene.app.action;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,6 +28,7 @@ import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+
 
 @SuppressWarnings("serial")
 public class DownloadFileServlet extends HttpServlet {
@@ -50,20 +54,84 @@ public class DownloadFileServlet extends HttpServlet {
 			// LOGGER.log(Level.INFO, "email in userService"+email);
 		} else {
 			email = user.getEmail();
+		
 			// LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
 		// LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		Map<String, GtfReport> gtfReportMap = util
 				.getAllReportDataFromCache(user.getCostCenter());
+		
+		
+		  List <GtfReport> list =util.getReportList(gtfReportMap, BudgetConstants.USER_ROLE_PRJ_OWNER, email);
+		  
+		  Collections.sort(list, new Comparator<GtfReport>() {
+			  
+			 UserRoleInfo user=new UserRoleInfo();
+			@Override
+			public int compare(GtfReport gtfReport1, GtfReport gtfReport2) {
+				int val=0;
+				if(gtfReport1.getMultiBrand()==true && gtfReport2.getMultiBrand()==true){
+					return -(gtfReport1.getProject_WBS().compareTo(gtfReport2.getProject_WBS())) ;
+					
+				}
+				
+				if(gtfReport1.getMultiBrand()==true && gtfReport2.getMultiBrand()==true){
+					
+					if(!gtfReport1.getProject_WBS().isEmpty() && !gtfReport2.getProject_WBS().isEmpty()){
+						return gtfReport1.getBrand().compareTo(gtfReport2.getBrand());
+					}else{
+						if((gtfReport1.getProject_WBS().isEmpty() && !gtfReport2.getProject_WBS().isEmpty()) ||
+								(!gtfReport1.getProject_WBS().isEmpty() && gtfReport2.getProject_WBS().isEmpty())	){
+							return -(gtfReport1.getProject_WBS().compareTo(gtfReport2.getProject_WBS())) ;
+						}else{
+							return (gtfReport1.getBrand().compareTo(gtfReport2.getBrand())) ;
+						}
+						
+					}
+					
+					
+				}
+				
+				else if(gtfReport1.getMultiBrand()==false && gtfReport2.getMultiBrand()==true){
+					
+					return -1;	 
+				}
+                 else if(gtfReport1.getMultiBrand()==false && gtfReport2.getMultiBrand()==false){
+					if(!gtfReport1.getProject_WBS().isEmpty() && !gtfReport2.getProject_WBS().isEmpty()){
+						return gtfReport1.getBrand().compareTo(gtfReport2.getBrand());
+					}else{
+						if((gtfReport1.getProject_WBS().isEmpty() && !gtfReport2.getProject_WBS().isEmpty()) ||
+								(!gtfReport1.getProject_WBS().isEmpty() && gtfReport2.getProject_WBS().isEmpty())	){
+							return -(gtfReport1.getProject_WBS().compareTo(gtfReport2.getProject_WBS())) ;
+						}else{
+							return (gtfReport1.getBrand().compareTo(gtfReport2.getBrand())) ;
+						}
+						
+					}
+				}
+				else if(gtfReport1.getMultiBrand()==true && gtfReport2.getMultiBrand()==false){
+					return  1;
+				}
+				if(gtfReport1.getBrand().compareTo(gtfReport2.getBrand())==0){
+					return gtfReport1.getRequestor().compareTo(gtfReport2.getRequestor());
+				}
+				else {
+					return gtfReport1.getBrand().compareTo(gtfReport2.getBrand());
+				}
+			} 
+		  });
 		response.setHeader("Content-Disposition",
 				"attachment; filename=Report.xlsx");
 		response.setContentType("application/vnd.ms-excel");
 		OutputStream outStream = response.getOutputStream();
+		String filename = "d:/excel.xls";
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("Sample sheet");
 		int rowCount = 3, cellCount = 0;
 		createHeader(sheet);
-		for (GtfReport gtfReport : gtfReportMap.values()) {
+		
+		for (int i=0;i<list.size();i++) {
+			GtfReport gtfReport = list.get(i);
 			if("Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand())){
 				continue;
 			}
