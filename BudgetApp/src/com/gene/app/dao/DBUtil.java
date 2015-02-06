@@ -917,4 +917,18 @@ public class DBUtil {
 	public void updateUniqueGtfMap(String costCenter, Map<String,GtfReport> uniqueGtfReportMap){
 		cache.put("UniqueProjectUpload"+costCenter, uniqueGtfReportMap);
 	}
+	public List<GtfReport> getReportList(Map<String,GtfReport>gtfReports,String userType,String email){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		
+		if(gtfReports!=null){
+			
+			for(Map.Entry<String, GtfReport> gtfEntry:gtfReports.entrySet()){
+				gtfReport = gtfEntry.getValue();
+				if((email !=null && !"".equals(email.trim())) && (gtfReport.getEmail().trim().toLowerCase()).contains(email.toLowerCase())){
+				gtfReportList.add(gtfReport);
+			}}
+		}
+		return gtfReportList;
+	}
 }
