@@ -2,9 +2,7 @@ package com.gene.app.action;
 
 import static com.gene.app.util.Util.roundDoubleValue;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,20 +20,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.gene.app.dao.DBUtil;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
-import com.gene.app.util.ExcelParsingUtil;
 import com.gene.app.util.ProjectSequenceGeneratorUtil;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 
 @SuppressWarnings("serial")
 public class UserUploadServlet extends HttpServlet {
@@ -58,7 +54,40 @@ public class UserUploadServlet extends HttpServlet {
 		final FileItemFactory fileItemFactory = new DiskFileItemFactory();
 		final ServletFileUpload servletFileUpload = new ServletFileUpload(
 				fileItemFactory);
+		String costCenter = req.getParameter("costCenter");
+		int startRow = Integer.parseInt(req.getParameter("inputFrom"));
+		int endRow = Integer.parseInt(req.getParameter("inputTo"));
+		String objArray = req.getParameter(BudgetConstants.objArray).toString();
+		List<List<String>> rowList = new ArrayList();
 		try {
+			JSONArray jsonArray = new JSONArray(objArray);
+			/*costCentre = jsonArray.getJSONArray(18).get(3)
+					.toString().split("\\s")[0];*/
+			for (int count = startRow-1; count < endRow; count++) {
+				List list = new ArrayList();
+				for (int k = 0; k < jsonArray.getJSONArray(count).length(); k++) {
+					String varCol = jsonArray.getJSONArray(count).get(k)
+							.toString();
+					if (!varCol.equalsIgnoreCase("null")) {
+						list.add(jsonArray.getJSONArray(count).get(k));
+					} else {
+						list.add("");
+					}
+				}
+				rowList.add(list);
+			}
+			List<GtfReport> gtfReports = new ArrayList<GtfReport>();
+			Map<String, GtfReport> costCenterWiseGtfRptMap = new LinkedHashMap<String, GtfReport>();
+			costCenterWiseGtfRptMap = util
+					.getAllReportDataFromCache(costCenter);
+			createOrUpdateGTFReports(user, rowList, gtfReports,
+					costCenterWiseGtfRptMap,costCenter);
+		}catch (JSONException exception) {
+			LOGGER.log(Level.SEVERE,
+					"ERROR OCCURED DURING  FILE UPLOAD. eRROR DETAILS : "
+							+ exception);
+		}
+		/*try {
 			final FileItemIterator fileItemIterator = servletFileUpload
 					.getItemIterator(req);
 			while (fileItemIterator.hasNext()) {
@@ -75,11 +104,11 @@ public class UserUploadServlet extends HttpServlet {
 					InputStream stream = new ByteArrayInputStream(
 							IOUtils.toByteArray(inputStream));
 					List<List<String>> rowList = ExcelParsingUtil
-							.readExcellData(stream, "PO Detail By PM", 6, 21);
+							.readExcellData(stream, "PO Detail By PM", startRow, 21,endRow);
 					List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 					Map<String, GtfReport> costCenterWiseGtfRptMap = new LinkedHashMap<String, GtfReport>();
 					costCenterWiseGtfRptMap = util
-							.getAllReportDataFromCache(user.getCostCenter());
+							.getAllReportDataFromCache(costCenter);
 					createOrUpdateGTFReports(user, rowList, gtfReports,
 							costCenterWiseGtfRptMap);
 				}
@@ -88,40 +117,99 @@ public class UserUploadServlet extends HttpServlet {
 			LOGGER.log(Level.SEVERE,
 					"ERROR OCCURED DURING  FILE UPLOAD. eRROR DETAILS : "
 							+ exception);
-		}
-		resp.sendRedirect("/getreport");
+		}*/
+		//resp.sendRedirect("/getreport");
 	}
 
 	private void createOrUpdateGTFReports(UserRoleInfo user,
 			List<List<String>> rowList, List<GtfReport> gtfReports,
-			Map<String, GtfReport> costCenterWiseGtfRptMap) {
+			Map<String, GtfReport> costCenterWiseGtfRptMap, String costCentre) {
 		Set<String> completeGMemoriIds = costCenterWiseGtfRptMap.keySet();
+		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
 		for (List<String> rcvdRow : rowList) {
 			String receivedGmemoriId = "";
 			try {
-				receivedGmemoriId = Integer.parseInt(rcvdRow.get(6).substring(
+				if(rcvdRow.get(6).indexOf("_")==6){
+					receivedGmemoriId = Integer.parseInt(rcvdRow.get(6).substring(
+							0, Math.min(rcvdRow.get(6).length(), 6)))
+							+ "";
+				}else{
+					if(!rcvdRow.get(1).contains(" Total") && !rcvdRow.get(2).contains(" Total")){
+						String gtfParam = rcvdRow.get(1).toString()+":"+rcvdRow.get(2).toString()+":"+rcvdRow.get(6).toString()+":"+rcvdRow.get(3).toString();
+						GtfReport collectGtf = uniqueGtfRptMap.get(gtfParam);
+						if(collectGtf != null){
+							receivedGmemoriId = collectGtf.getgMemoryId();
+						}
+					}else{
+						continue;
+					}
+				}
+				/*receivedGmemoriId = Integer.parseInt(rcvdRow.get(6).substring(
 						0, Math.min(rcvdRow.get(6).length(), 6)))
-						+ "";
+						+ "";*/
 				if (completeGMemoriIds.contains(receivedGmemoriId)) {
 					GtfReport receivedGtfReport = costCenterWiseGtfRptMap
 							.get(receivedGmemoriId);
-					updateAccrual(rcvdRow, user, gtfReports, receivedGtfReport);
+					updateAccrual(rcvdRow, user, gtfReports, receivedGtfReport,costCenter);
 				} else {
-					createNewReport(user, rcvdRow, gtfReports);
+					createNewReport(user, rcvdRow, gtfReports,costCentre);
 				}
 			} catch (NumberFormatException ne) {
-				createNewReport(user, rcvdRow, gtfReports);
+				createNewReport(user, rcvdRow, gtfReports,costCentre);
 			}
 			if (gtfReports.size() != 0) {
 				util.generateProjectIdUsingJDOTxn(gtfReports);
-				util.storeProjectsToCache(gtfReports, user.getCostCenter(),
+				util.storeProjectsToCache(gtfReports, costCentre,
 						BudgetConstants.NEW);
 			}
 		}
 	}
 
 	private void updateAccrual(List<String> rcvdRow, UserRoleInfo user,
-			List<GtfReport> gtfReports, GtfReport receivedGtfReport) {
+			List<GtfReport> gtfReports, GtfReport receivedGtfReport,String costCenter) {
+		receivedGtfReport.setCostCenter(costCenter);
+
+		if (rcvdRow.get(1).contains(" Total")) {
+			return;
+		} else if (!rcvdRow.get(1).trim().equals("NO DATA")) {
+			brand = rcvdRow.get(1);
+		}
+		receivedGtfReport.setBrand(brand);
+
+		if (rcvdRow.get(2).contains(" Total")) {
+			return;
+		} else if (!rcvdRow.get(2).trim().equals("NO DATA")) {
+			PM = rcvdRow.get(2);
+		}
+		receivedGtfReport.setRequestor(PM);
+
+		if (!rcvdRow.get(3).trim().equals("NO DATA")) {
+			WBS = rcvdRow.get(3);
+		}
+		receivedGtfReport.setProject_WBS(WBS);
+
+		if (!rcvdRow.get(4).trim().equals("NO DATA")) {
+			WBSName = rcvdRow.get(4);
+		}
+		receivedGtfReport.setWBS_Name(WBSName);
+
+		receivedGtfReport.setPoNumber(rcvdRow.get(5));
+		receivedGtfReport.setPoDesc(rcvdRow.get(6));
+		receivedGtfReport.setVendor(rcvdRow.get(7));
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
+				.format(Calendar.getInstance().getTime());
+		receivedGtfReport.setCreateDate(timeStamp);
+		receivedGtfReport.setYear(BudgetConstants.dataYEAR);
+		receivedGtfReport.setQual_Quant("Qual_Quant");
+		receivedGtfReport.setStudy_Side("study_Side");
+		receivedGtfReport.setUnits(1);
+		receivedGtfReport.setMultiBrand(isMultibrand);
+		receivedGtfReport.setPercent_Allocation(100);
+		receivedGtfReport.setStatus("New");
+		String poDesc = receivedGtfReport.getPoDesc();
+		receivedGtfReport.setProjectName(poDesc);
+		receivedGtfReport.setFlag(1);
+		receivedGtfReport.setSubActivity("");
 		Map<String, Double> receivedAccrualMap = receivedGtfReport
 				.getAccrualsMap();
 		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
@@ -138,12 +226,10 @@ public class UserUploadServlet extends HttpServlet {
 	}
 
 	private void createNewReport(UserRoleInfo user, List<String> rcvdRow,
-			List<GtfReport> gtfReports) {
+			List<GtfReport> gtfReports,String costCentre) {
 		GtfReport gtfReport = new GtfReport();
-		if (!rcvdRow.get(0).trim().equals("NO DATA")) {
-			costCenter = rcvdRow.get(0);
-		}
-		gtfReport.setCostCenter(costCenter);
+		
+		gtfReport.setCostCenter(costCentre);
 
 		if (rcvdRow.get(1).contains(" Total")) {
 			return;

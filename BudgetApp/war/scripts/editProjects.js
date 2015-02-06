@@ -32,6 +32,7 @@ function getProjectsBrandwise(){
 } 
 
 function getBrandTotals(){
+	document.getElementById("myIFrm").style.display="none";
 	selectedValue = document.getElementById("brandType").value;
 	var ccVal = "";
 	if(<%=userInfo.getRole().contains("Admin")%>){

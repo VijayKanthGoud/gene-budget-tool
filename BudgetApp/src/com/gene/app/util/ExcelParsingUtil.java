@@ -19,7 +19,7 @@ public class ExcelParsingUtil {
 			.getLogger(ExcelParsingUtil.class.getName());
 	public final static String NO_DATA = "NO DATA";
 	public static List<List<String>> readExcellData(
-			final InputStream fileContent, String sheetName, final int rowStart, final int lastColumn)
+			final InputStream fileContent, String sheetName, final int rowStart, final int lastColumn, final int rowEnd)
 			throws InvalidFormatException, IOException {
 		LOGGER.log(Level.INFO, "inside ExcelParsingUtil...");
 		List<List<String>> rowList = new ArrayList<List<String>>();
@@ -35,7 +35,7 @@ public class ExcelParsingUtil {
 			}
 			Cell cell;
 			
-			final int rowEnd = mySheet.getLastRowNum();
+			//final int rowEnd = mySheet.getLastRowNum();
 			Row r = null;
 			for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
 				boolean nonEmptyRow = true;

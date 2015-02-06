@@ -237,18 +237,16 @@ public class AdminUploadJSONServlet extends HttpServlet {
 				gtfReport.setId(gtfRpt.getId());
 				gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 			}
-			uniqueGtfRptMap.put(gtfParam, gtfReport);
 			gtfReports.add(gtfReport);
 		}
+
 		if (gtfReports.size() != 0) {
 			util.generateProjectIdUsingJDOTxn(gtfReports);
-			util.storeProjectsToCache(gtfReports, user.getCostCenter(),
+			util.storeProjectsToCache(gtfReports, costCentre,
 					BudgetConstants.NEW);
 			
 		}
 	}
 	
-	public boolean isProjectExists(Map<String,GtfReport> gtfRptMap,GtfReport gtfReport){
-		return false;
-	}
+	
 }
