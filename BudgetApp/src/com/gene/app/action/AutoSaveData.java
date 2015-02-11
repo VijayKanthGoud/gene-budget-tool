@@ -69,6 +69,7 @@ public class AutoSaveData extends HttpServlet {
 		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
 		BudgetSummary summary = new BudgetSummary();
 		if(user != null && costCenter != null &&util.getSummaryFromCache(costCenter) != null){
+			user.setSelectedCostCenter(costCenter);
 			summary = util.getSummaryFromCache(costCenter);
 		}else{
 			userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
@@ -248,7 +249,7 @@ public class AutoSaveData extends HttpServlet {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		if(user != null && user.getCostCenter() != null){
+		if(user != null && user.getSelectedCostCenter() != null){
 			util.putSummaryToCache(summary,costCenter);
 		}
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);

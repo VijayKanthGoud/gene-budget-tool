@@ -47,6 +47,7 @@ public class GetReport extends HttpServlet {
 		String selectedBrand = req.getParameter("brandValue");
 		String selectedView = req.getParameter("selectedView");
 		String selectedCC = req.getParameter("getCCValue");
+		
 		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
@@ -57,6 +58,7 @@ public class GetReport extends HttpServlet {
 		email = user.getEmail();
 		//LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
+		user.setSelectedCostCenter((selectedCC==null || "".equalsIgnoreCase(selectedCC.trim()))?user.getSelectedCostCenter():selectedCC);
 	//	gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
 		completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		//LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
@@ -65,7 +67,7 @@ public class GetReport extends HttpServlet {
 		//gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
 		// for project owner role
 		if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && !user.getRole().contains("Admin")){
-			gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
+			gtfReports = util.getAllReportDataFromCache(user.getSelectedCostCenter());
 			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports);
 		}
 		// for admin role
@@ -112,7 +114,7 @@ public class GetReport extends HttpServlet {
 		DBUtil util = new DBUtil();
 		//UserRoleInfo user = util.readUserRoleInfo(email);
 		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
-		BudgetSummary summary = util.readBudgetSummary(user.getCostCenter());
+		BudgetSummary summary = util.readBudgetSummary(user.getSelectedCostCenter());
 		//LOGGER.log(Level.INFO, "summary from util.readBudgetSummary(user.getCostCenter())"+summary);
 		req.setAttribute("user", user);
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);

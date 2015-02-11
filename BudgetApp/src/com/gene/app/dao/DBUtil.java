@@ -74,7 +74,7 @@ public class DBUtil {
 		Map<String,ArrayList<String>> ccUsers = new LinkedHashMap<String, ArrayList<String>>();
 		userMap = readAllUserInfo();
 		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
-			if(ccMap.getValue().getCostCenter().equalsIgnoreCase(costCenter)){
+			if(ccMap.getValue().getSelectedCostCenter().equalsIgnoreCase(costCenter)){
 				ArrayList<String> validBrands =new ArrayList<String>();
 				for(Map.Entry<String,Double> brandName: ccMap.getValue().getBrand().entrySet()){
 					validBrands.add(brandName.getKey());

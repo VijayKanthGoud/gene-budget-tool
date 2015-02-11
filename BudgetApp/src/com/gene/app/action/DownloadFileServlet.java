@@ -59,7 +59,7 @@ public class DownloadFileServlet extends HttpServlet {
 		}
 		// LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		Map<String, GtfReport> gtfReportMap = util
-				.getAllReportDataFromCache(user.getCostCenter());
+				.getAllReportDataFromCache(user.getSelectedCostCenter());
 		
 		
 		  List <GtfReport> list =util.getReportList(gtfReportMap, BudgetConstants.USER_ROLE_PRJ_OWNER, email);

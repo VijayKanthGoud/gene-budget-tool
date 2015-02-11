@@ -25,9 +25,20 @@ public class UserRoleInfo implements Serializable {
 	// holds cost center level budget
 	@Persistent
 	private Map<String,Double> cost_center;
+	
+	@Persistent
+	private String selectedCostCenter;
 
 	@Persistent
 	private String fullName;
+	
+	public String getSelectedCostCenter() {
+		return selectedCostCenter;
+	}
+
+	public void setSelectedCostCenter(String selectedCostCenter) {
+		this.selectedCostCenter = selectedCostCenter;
+	}
 
 	public String getFullName() {
 		return fullName;

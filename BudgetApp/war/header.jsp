@@ -105,7 +105,7 @@
 			<li><a style = "cursor: hand;" id="homeLink" ><span>Home</span></a></li>
 			<li class='last'><a href='/'><span>Reports</span></a></li>
 			<%
-				if (isAdmin) {
+				if (role!=null && !"".equalsIgnoreCase(role) && ("Admin".equals(role))) {
 			%>
 			<li class='last'><a href='#'><span>Admin</span></a>
 			<ul>

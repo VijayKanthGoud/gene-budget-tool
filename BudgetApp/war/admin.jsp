@@ -121,7 +121,6 @@ ng\:form {
 <%-- <%@ include file="uploadpopUp.jsp" %>
  --%><script>
 	function uploadData(){
-		alert(selectedTab);
 		//console.log(JSON.stringify(excelValue.sheets["Main"].data));
 		if(selectedTab==1){
 			  $.ajax({

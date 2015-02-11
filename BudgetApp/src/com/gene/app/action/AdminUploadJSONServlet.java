@@ -46,9 +46,9 @@ public class AdminUploadJSONServlet extends HttpServlet {
 		String costCentre = req.getParameter("costCenter");
 		int fromLine = Integer.parseInt(req.getParameter("inputFrom"));
 		int toLine = Integer.parseInt(req.getParameter("inputTo"));
-		for(int i=0;i<objArrayStr.length;i++){
+		/*for(int i=0;i<objArrayStr.length;i++){
 			System.out.println("objArrayStr values "+i+ " ::: "+objArrayStr[i]);
-		}
+		}*/
 		List<List<String>> rowList = new ArrayList();
 
 		try {
@@ -78,7 +78,7 @@ public class AdminUploadJSONServlet extends HttpServlet {
 	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
 			List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre) {
 		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
-		
+		//System.out.println("uniqueGtfRptMap = "+uniqueGtfRptMap);
 		boolean isMultibrand = false;
 		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
 		for (List recvdRow : rowList) {
@@ -232,8 +232,10 @@ public class AdminUploadJSONServlet extends HttpServlet {
 
 			gtfReport.setgMemoryId(gMemoriId);
 			String gtfParam = gtfReport.getBrand()+":"+gtfReport.getRequestor()+":"+gtfReport.getPoDesc()+":"+gtfReport.getProject_WBS();
+			//System.out.println("gtfParam = "+gtfParam);
 			GtfReport gtfRpt = uniqueGtfRptMap.get(gtfParam);
 			if(gtfRpt != null){
+				//System.out.println("gtfRpt is not null");
 				gtfReport.setId(gtfRpt.getId());
 				gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 			}

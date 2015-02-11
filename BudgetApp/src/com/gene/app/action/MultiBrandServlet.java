@@ -42,6 +42,7 @@ public class MultiBrandServlet extends HttpServlet {
 		LOGGER.log(Level.INFO, "Received from client m_data : " + m_data);
 		String sumTotal = req.getParameter("sumTotal")
 				.toString();
+		String costCenter = req.getParameter("costCenter").toString();
 		LOGGER.log(Level.INFO, "sumTotal : " + sumTotal);
 		String project_id = "";
 		String projectName = "";
@@ -68,6 +69,7 @@ public class MultiBrandServlet extends HttpServlet {
 					"Issue in directly reading email, retrieved from UserService : "
 							+ email);
 		}
+		user.setSelectedCostCenter(costCenter);
 		try {
 			JSONArray jsonArray = new JSONArray(m_data);
 			JSONObject rptObject = jsonArray.getJSONObject(0);
@@ -75,7 +77,7 @@ public class MultiBrandServlet extends HttpServlet {
 			gMemoriId = rptObject.getString("5").split("\\.")[0];
 			JSONObject rprtObject = null;
 			Map<String, GtfReport> rptList = util.getAllReportsByPrjName(
-					user.getCostCenter(), projectName, email,gMemoriId);
+					user.getSelectedCostCenter(), projectName, email,gMemoriId);
 			for (Map.Entry<String, GtfReport> rptMap : rptList.entrySet()) {
 				oldGtfReportList.add(rptMap.getValue());
 			}
@@ -125,7 +127,7 @@ public class MultiBrandServlet extends HttpServlet {
 					paretnGtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 					paretnGtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 					paretnGtfReport.setPercent_Allocation(percentageAllocation);
-					paretnGtfReport.setCostCenter(user.getCostCenter());
+					paretnGtfReport.setCostCenter(user.getSelectedCostCenter());
 					masterGtfReportList.add(paretnGtfReport);
 					LOGGER.log(Level.INFO, "New parent created : "
 							+ paretnGtfReport.getgMemoryId());
@@ -190,7 +192,7 @@ public class MultiBrandServlet extends HttpServlet {
 						childGtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 						childGtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 						childGtfReport.setProjectName(projectName);
-						childGtfReport.setCostCenter(user.getCostCenter());
+						childGtfReport.setCostCenter(user.getSelectedCostCenter());
 						for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
@@ -249,7 +251,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newChildGtfReport.setAccrualsMap(setZeroMap);
 						newChildGtfReport.setVariancesMap(setZeroMap);
 						newChildGtfReport.setBenchmarkMap(setZeroMap);
-						newChildGtfReport.setCostCenter(user.getCostCenter());
+						newChildGtfReport.setCostCenter(user.getSelectedCostCenter());
 						Double per_allocation = newChildGtfReport
 								.getPercent_Allocation();
 						newChildGtfReport.setProjectName(projectName);
@@ -284,12 +286,13 @@ public class MultiBrandServlet extends HttpServlet {
 					"Number of reports removed from the datastore : "
 							+ oldGtfReportList.size());
 			util.removeExistingProject(oldGtfReportList);
-			util.storeProjectsToCache(oldGtfReportList,user.getCostCenter(), BudgetConstants.OLD);
+			util.storeProjectsToCache(oldGtfReportList,user.getSelectedCostCenter(), BudgetConstants.OLD);
 			LOGGER.log(Level.INFO,
 					"Number of reports new report(s) inserted in to the datastore : "
 							+ masterGtfReportList.size());
 			util.generateProjectIdUsingJDOTxn(masterGtfReportList);
-			util.storeProjectsToCache(masterGtfReportList,user.getCostCenter(),BudgetConstants.NEW);
+			util.storeProjectsToCache(masterGtfReportList,user.getSelectedCostCenter(),BudgetConstants.NEW);
+			session.setAttribute("userInfo",user);
 		} catch (JSONException e) {
 			LOGGER.log(Level.SEVERE, "JSONException caught in Multibrand Servlet :" + e);
 		}

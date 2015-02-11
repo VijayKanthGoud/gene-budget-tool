@@ -54,8 +54,11 @@ public class StoreReport extends HttpServlet {
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
 		resp.setContentType(BudgetConstants.contentType);
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
+		String costCenter = req.getParameter("costCenter").toString();
+		user.setSelectedCostCenter(costCenter);
 		LOGGER.log(Level.INFO, "objarray : " + objarray +"\nUser is : "+user);
 		storeProjectData(objarray, user, req, resp);
+		session.setAttribute("userInfo", user);
 	}
 
 	public void storeProjectData(String objarray, UserRoleInfo user, HttpServletRequest req,
@@ -108,7 +111,7 @@ public class StoreReport extends HttpServlet {
 						.getString(BudgetConstants.New_GTFReport_Vendor));
 				gtfReport.setCreateDate(timeStamp);
 				gtfReport.setYear(BudgetConstants.dataYEAR);
-				gtfReport.setCostCenter(user.getCostCenter());
+				gtfReport.setCostCenter(user.getSelectedCostCenter());
 				try {
 					remarks = ((rprtObject
 							.getString(BudgetConstants.New_GTFReport_Remarks) != null) && (!""
@@ -157,7 +160,7 @@ public class StoreReport extends HttpServlet {
 					e.printStackTrace();
 				}*/
 				util.generateProjectIdUsingJDOTxn(gtfReports);
-				util.storeProjectsToCache(gtfReports, user.getCostCenter(),
+				util.storeProjectsToCache(gtfReports, user.getSelectedCostCenter(),
 						BudgetConstants.NEW);
 			}
 		} catch (JSONException e1) {

@@ -44,10 +44,11 @@ public class UserDataUtil {
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
-	String [] costCenter = {"307680","235031","307677","235032","307677","307676","307676","307677","307678","307680","307676","7034","7035","7004","7035","7004","7034","7034"
+	String [] costCenter = {"307680","235031","307677:235032:235031","235032","307677:235032:235031","307676","307676","307677:307678:307680","307678:307677:307680","307680:307677:307678","307676","7034","7035","7004","7035","7004","7034","7034"
 			,"307676","307676","307676","7135","7034","7034","7034","7034","7034","7034","7034","7034"};
 	String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004","7135"};
 	public void insertUserRoleInfo(){
+		String selectedCostCenter = "";
 		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Onart", 30000.0);
 		brandMap.put("Perjeta", 20000.0);
@@ -187,9 +188,12 @@ public class UserDataUtil {
 	}else{
 	userRoleInfo.setBrand(brandMap);
 	}
+	selectedCostCenter = costCenter[i];
 	userRoleInfo.setUserName(userName[i]);
 	userRoleInfo.setRole(role[i]);
 	userRoleInfo.setCostCenter(costCenter[i]);
+	selectedCostCenter = (selectedCostCenter.indexOf(":")==-1)?selectedCostCenter:selectedCostCenter.substring(0,selectedCostCenter.indexOf(":"));
+	userRoleInfo.setSelectedCostCenter(selectedCostCenter);
 	userRoleInfo.setFullName(fullName[i]);
 	userInfoList.add(userRoleInfo);
 	}
