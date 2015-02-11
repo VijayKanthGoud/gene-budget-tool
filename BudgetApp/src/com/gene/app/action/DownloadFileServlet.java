@@ -2,6 +2,7 @@ package com.gene.app.action;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,6 +29,9 @@ import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 
 @SuppressWarnings("serial")
@@ -38,7 +42,7 @@ public class DownloadFileServlet extends HttpServlet {
 	Map<String, GtfReport> completeGtfRptMap = new LinkedHashMap<String, GtfReport>();
 	DBUtil util = new DBUtil();
 
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
@@ -46,6 +50,9 @@ public class DownloadFileServlet extends HttpServlet {
 		String email = "";
 		Map<String, GtfReport> gtfReports = new LinkedHashMap<String, GtfReport>();
 		Map<String, GtfReport> completeGtfRptMap = new LinkedHashMap<String, GtfReport>();
+		String objarray = request.getParameter(BudgetConstants.objArray).toString();
+		String costCenter = request.getParameter("costCenter").toString();
+		
 		// LOGGER.log(Level.INFO, "Inside GetReport");
 		if (user == null) {
 			userService = UserServiceFactory.getUserService();// (User)session.getAttribute("loggedInUser");
@@ -57,12 +64,37 @@ public class DownloadFileServlet extends HttpServlet {
 		
 			// LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
 		}
+		
+		
+		user.setSelectedCostCenter(costCenter);
 		// LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		Map<String, GtfReport> gtfReportMap = util
 				.getAllReportDataFromCache(user.getSelectedCostCenter());
 		
+		JSONArray jsonArray = null;
+		//GtfReport gtfJSONReport = null;
+		JSONObject rprtObject = null;
+		List <GtfReport> list = new ArrayList<GtfReport>();
+		try {
+			jsonArray = new JSONArray(objarray);
 		
-		  List <GtfReport> list =util.getReportList(gtfReportMap, BudgetConstants.USER_ROLE_PRJ_OWNER, email);
+		if(objarray!=null && !"".equalsIgnoreCase(objarray)){
+		for (int count = 0; count < jsonArray.length(); count++) {
+			//gtfJSONReport = new GtfReport();
+			rprtObject = jsonArray.getJSONObject(count);
+			if(rprtObject.getString("0")!=null && !"".equalsIgnoreCase(rprtObject.getString("0")) ){
+			if(rprtObject.getString("37")!=null && !"".equalsIgnoreCase(rprtObject.getString("37")) && "false".equalsIgnoreCase(rprtObject.getString("37"))){
+			list.add(gtfReportMap.get(rprtObject.getString("0")));
+			}
+			}
+			
+		}}else{
+			list = getReportListCC(gtfReportMap);
+		}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
 		  
 		  Collections.sort(list, new Comparator<GtfReport>() {
 			  
@@ -121,10 +153,9 @@ public class DownloadFileServlet extends HttpServlet {
 			} 
 		  });
 		response.setHeader("Content-Disposition",
-				"attachment; filename=Report.xlsx");
+				"attachment; filename= "+costCenter+" Fact Worksheet.xlsx");
 		response.setContentType("application/vnd.ms-excel");
 		OutputStream outStream = response.getOutputStream();
-		String filename = "d:/excel.xls";
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("Sample sheet");
 		int rowCount = 3, cellCount = 0;
@@ -226,5 +257,17 @@ public class DownloadFileServlet extends HttpServlet {
 			cellR1.setCellValue(m);
 		}
 	}
-
+	public List<GtfReport> getReportListCC(Map<String, GtfReport> gtfReports) {
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		if (gtfReports != null) {
+			for (Map.Entry<String, GtfReport> gtfEntry : gtfReports.entrySet()) {
+				gtfReport = gtfEntry.getValue();
+				if(!gtfReport.getMultiBrand()){
+				gtfReportList.add(gtfReport);
+				}
+			}
+		}
+		return gtfReportList;
+	}
 }

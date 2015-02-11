@@ -1099,20 +1099,17 @@ function submitProjects(){
 }
 
 
-
 function exportExcelData(){
 	//code for server side export
 	console.log("Downloading data...");
-	oIFrm = document.getElementById('myIFrm');
-    oIFrm.src = window.location.pathname.split( '/' )[0] + "/download";
-    //code for client side export
-	/*var dataCopy = [];
-	dataCopy = data.slice(0);
-	var jsondata = modifyData(dataCopy);
-	if(jsondata == ""){
+	if(data[0][0]==null || data[0][0]==''){
+		alert("No data to Upload !!!");
 		return;
+	}else{
+	$('#objArrayId').val(JSON.stringify(data,null,4));
+	$('#ccId').val($('#getCostCenter').val());
+    document.getElementById('exportExcel').submit();
 	}
-	JSONToEXCELConvertor(jsondata, "Budget_Summary", false)*/
 }
 
 function modifyData(data){

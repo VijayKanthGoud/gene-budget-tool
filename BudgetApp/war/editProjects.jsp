@@ -1615,7 +1615,6 @@ String ccView="";
 		}
 	});
 	
-
 	
 </script>
 <!-- to be removed after uat 2 -->
@@ -1653,6 +1652,12 @@ String ccView="";
 	</div>
 <%@ include file="footer.jsp"%>
 </body>
-<iframe id="myIFrm" src="" style="visibility:hidden">
+<form id="exportExcel" name="exportExcel" method="post" action="/download" target="myIFrm">
+<input type="hidden" name="objarray" id="objArrayId"/>
+<input type="hidden" name="costCenter" id="ccId"/>
+</form>
+<iframe id="myIFrm" name="myIFrm" src="" style="visibility:hidden">
+
 </iframe>
+
 </html>
