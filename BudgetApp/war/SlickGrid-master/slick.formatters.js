@@ -69,9 +69,28 @@
   }
  
   function DollarFormatter(row, cell, value, columnDef, dataContext) {
+		 
+	//  console.log(dataContext);
+	  var d= new Date();
+	  var month = d.getMonth();
+	  var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
+	 
 	  if(dataContext["35"] != "Buttons"){
 		if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> "+ Number(value).toFixed(2) +"</span>" 
+		}else if((dataContext["11"] == "Planned" || (dataContext["11"] == "Accrual")) ){
+			for(var i=0;i<month;i++){
+				if(columnDef["name"]==monthArray[i]){
+				return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>";
+				}
+			}
+			for(var i=month;i<12;i++){
+				if(columnDef["name"]==monthArray[i]){
+					return "<div width = '100%' style='background:#C0CCED'><span style='color:#005691'> "+ Number(value).toFixed(2) +"</span></div>" ;		
+				}
+			
+		}
+			
 		}else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
 			return "<div width = '100%' style='background:#C0CCED'><span style='color:#005691'> "+ Number(value).toFixed(2) +"</span></div>" ;
 		}else{
