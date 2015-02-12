@@ -1239,8 +1239,10 @@ function selectUserView(){
 		$('#selectedView3').val(val);
 		$('#getCostCenter3').val(ccVal);
 		$("#dropdown").show();
-	//$('#selectthebrand').show().fadeIn(100);
-	//$('#back').addClass('black_overlay').fadeIn(100);
+		selectedBrandValue = $('#getBrand1').val(); 
+		$('#getBrand3').val(selectedBrandValue);
+		$('#getBrand').submit();
+		
 	}else if($('#selectedUserView').val()=='My Projects'){
 		$('#selectedView2').val(val);
 		$('#getCostCenter2').val(ccVal);
