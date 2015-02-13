@@ -140,8 +140,6 @@ String ccView="";
 				for(CostCenter_Brand cc: ccList){
 					if(cc!=null && cc.getCostCenter()!=null && !"".equalsIgnoreCase(cc.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc.getCostCenter())){
 						userBrandMap = util.getBrandMap(cc.getBrandFromDB());
-						System.out.println("userBrandMap"+userBrandMap);
-						System.out.println("selectedCostCenter"+selectedCostCenter);
 					}
 				}
 				//Map<String,Double> userBrandMap= userInfo.getCCBrandMap().get(selectedCostCenter); 
@@ -994,6 +992,9 @@ String ccView="";
 					
 					<%
 					selectedCostCenter = (String)request.getAttribute("getCCValue");
+					if(selectedCostCenter==null || "".equals(selectedCostCenter)){
+						selectedCostCenter = userInfo.getSelectedCostCenter();
+					}
 					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
 					Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(selectedCostCenter);%>
 					// multi brand click
