@@ -6,13 +6,14 @@ var ccUsersVar=[];
 function getAvailableTags(){
 	availableTags[0] = "Total Products(MB)";
 	var j;
-	<%for(int i=0;i<brands.length;i++){%>
+	<%for(int i=0;i<myBrands.length;i++){%>
 		j=<%= i+1%>;
-		availableTags[j] = '<%= brands[i]%>';
+		availableTags[j] = '<%= myBrands[i]%>';
 	<%}%>
 } 
 
 function getProjectsBrandwise(){
+	getAvailableTags();
 	//alert("getProjectsBrandwise()");
 	var val = $('#selectedUserView').val();
 	var ccVal = $('#getCostCenter').val();
@@ -51,7 +52,8 @@ function getBrandTotals(){
 	if(<%=userInfo.getRole().contains("Admin")%>){
 		ccVal = $('#getCostCenter').val();
 	}else{
-		ccVal = <%=userInfo.getSelectedCostCenter()%>;
+		//ccVal = <%=userInfo.getSelectedCostCenter()%>;
+		ccVal = $('#getCostCenter').val();
 	}
 	
 	//alert("ccVal = "+ccVal);
