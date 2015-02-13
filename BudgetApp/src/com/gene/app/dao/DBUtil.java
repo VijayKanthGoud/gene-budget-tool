@@ -69,17 +69,46 @@ public class DBUtil {
 		}
 		return user;
 	}
+	
+	public Map<String,Double> getBrandMap(String brands){
+		Map<String,Double> brandMap = new HashMap<String,Double>();
+		String[] brandsArray = brands.split(";"); 
+		Arrays.sort(brandsArray);
+		String[] budgetArray = null;
+		String value = "";
+		for(int i=0;i<brandsArray.length;i++){
+			value = brandsArray[i];
+			budgetArray = value.split(":");
+			brandMap.put(budgetArray[0], 50000.0);
+		}
+		Map<String,Double> sortedMap = new TreeMap<String,Double>(brandMap);
+		return sortedMap;
+	}
+	
 	public Map<String,ArrayList<String>> getCCUsersList(String costCenter){
 		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
 		Map<String,ArrayList<String>> ccUsers = new LinkedHashMap<String, ArrayList<String>>();
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		
+		List<CostCenter_Brand> costCenterList = (List<CostCenter_Brand>)cache.get(key);
+		CostCenter_Brand ccBrandMap = new CostCenter_Brand();
 		userMap = readAllUserInfo();
+
 		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
 			if(ccMap.getValue().getSelectedCostCenter().equalsIgnoreCase(costCenter)){
 				ArrayList<String> validBrands =new ArrayList<String>();
-				for(Map.Entry<String,Double> brandName: ccMap.getValue().getBrand().entrySet()){
+				for(CostCenter_Brand ccBrand : costCenterList){
+					if(ccBrand.getCostCenter().equalsIgnoreCase(costCenter)){
+						ccBrandMap = ccBrand;
+						break;
+					}
+				}
+				Map<String,Double> brandMap = getBrandMap(ccBrandMap.getBrandFromDB());
+				for(Map.Entry<String,Double> brandName: brandMap.entrySet()){
 					validBrands.add(brandName.getKey());
 				}
 				ccUsers.put(ccMap.getValue().getUserName(),validBrands);
+				ccBrandMap = new CostCenter_Brand();
 			}	
 		}
 		return ccUsers;
