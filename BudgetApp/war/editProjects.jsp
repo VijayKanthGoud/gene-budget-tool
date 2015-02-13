@@ -992,6 +992,7 @@ String ccView="";
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("mb")!=-1){
 					
 					<%
+					selectedCostCenter = (String)request.getAttribute("getCCValue");
 					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
 					Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(selectedCostCenter);%>
 					// multi brand click
