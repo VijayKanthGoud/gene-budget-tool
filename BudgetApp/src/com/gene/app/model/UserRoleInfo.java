@@ -10,7 +10,7 @@ import javax.jdo.annotations.Persistent;
 public class UserRoleInfo implements Serializable {
 	@Override
 	public String toString() {
-		return "UserRoleInfo [UserName=" + UserName + ", brand=" + brand
+		return "UserRoleInfo [UserName=" + UserName + ", brand=" //+ ccBrandMap
 				+ ", cost_center=" + cost_center + ", email=" + email
 				+ ", role=" + role + "]";
 	}
@@ -19,9 +19,9 @@ public class UserRoleInfo implements Serializable {
 	private String UserName;
 
 	// holds brand level budget
-	@Persistent
-	private Map<String,Double> brand;
-
+	/*@Persistent
+	private Map<String,Map<String,Double>> ccBrandMap;
+*/
 	// holds cost center level budget
 	@Persistent
 	private Map<String,Double> cost_center;
@@ -57,9 +57,9 @@ public class UserRoleInfo implements Serializable {
 		this.costCenter = costCenter;
 	}
 
-	public void setBrand(Map<String, Double> brand) {
-		this.brand = brand;
-	}
+	/*public void setCCBrandMap(Map<String,Map<String, Double>> ccBrandMap) {
+		this.ccBrandMap = ccBrandMap;
+	}*/
 
 	public void setCost_center(Map<String, Double> cost_center) {
 		this.cost_center = cost_center;
@@ -99,10 +99,10 @@ public class UserRoleInfo implements Serializable {
 		return email;
 	}
 
-	public Map<String, Double> getBrand() {
-		return brand;
+/*	public Map<String,Map<String, Double>> getCCBrandMap() {
+		return ccBrandMap;
 	}
-
+*/
 	public Map<String, Double> getCost_center() {
 		return cost_center;
 	}
