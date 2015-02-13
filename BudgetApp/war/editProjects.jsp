@@ -130,8 +130,10 @@ String ccView="";
 				</span></td><td>
 				<select id="getBrand1" name="brandValue" onchange="getProjectsBrandwise()" style=" width: 190px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
 				<%
-				String selectedCostCenter = userInfo.getSelectedCostCenter();
-				selectedCostCenter = (String)request.getAttribute("getCCValue");
+				String selectedCostCenter = (String)request.getAttribute("getCCValue");
+				if(selectedCostCenter==null || "".equals(selectedCostCenter)){
+				selectedCostCenter = userInfo.getSelectedCostCenter();
+				}
 				Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
 				List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
 				ccList = util.readCostCenterBrandMappingData();
@@ -155,7 +157,6 @@ String ccView="";
 					myBrands = sortedMap.keySet().toArray();
 				    for(int i=0;i<myBrands.length;i++){ 
                         brandValue1 = myBrands[i].toString();
-                        System.out.println("brandValue1 = "+brandValue1);
                         if(brandValue.equals(brandValue1)){%>
                         <option value="<%=brandValue1 %>" selected><%=brandValue1 %></option>
                         <%}else{ %>
@@ -1042,7 +1043,11 @@ String ccView="";
     							d["5"] =  "<%=gtfReport.getgMemoryId()%>";
     							d["7"] = "<%=requestor%>";
 							}
-						<%}if(!user.getUserName().equalsIgnoreCase(requestor)){%>
+		   					
+						<%}
+						System.out.println("user.getUserName() = "+user.getUserName());
+	   					System.out.println("requestor = "+requestor);
+						if(!user.getUserName().equalsIgnoreCase(requestor)){%>
 						return;
 						<%}else{%>
 						$('#multibrandEdit').show().fadeIn(100);
