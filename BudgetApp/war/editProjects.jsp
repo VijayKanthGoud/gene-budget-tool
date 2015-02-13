@@ -83,8 +83,7 @@ String ccView="";
 						</select>
 						</td>
 						</tr>
-				
-						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td style="padding-top: 4%"><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost center :</span></td> <td  style="padding-top: 4%"><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
+						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
 						<% 
 						String ccSelected = (String)request.getAttribute("getCCValue");
 						String[] costcenter1= userInfo.getCostCenter().split(":");
@@ -124,14 +123,26 @@ String ccView="";
 						%> 
 						</td>
 						</tr>
-						
-			<tr id="dropdown">
-						<td  style="padding-top:4%">
+						<tr id="dropdown">
+						<td style="padding-top:4%">
 						<span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">
 					Select Brand :&nbsp;&nbsp;
 				</span></td><td>
 				<select id="getBrand1" name="brandValue" onchange="getProjectsBrandwise()" style=" width: 190px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
-				<%Map<String,Double> userBrandMap= userInfo.getBrand(); 
+				<%
+				String selectedCostCenter = userInfo.getSelectedCostCenter();
+				selectedCostCenter = (String)request.getAttribute("getCCValue");
+				Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
+				List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
+				ccList = util.readCostCenterBrandMappingData();
+				for(CostCenter_Brand cc: ccList){
+					if(cc!=null && cc.getCostCenter()!=null && !"".equalsIgnoreCase(cc.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc.getCostCenter())){
+						userBrandMap = util.getBrandMap(cc.getBrandFromDB());
+						System.out.println("userBrandMap"+userBrandMap);
+						System.out.println("selectedCostCenter"+selectedCostCenter);
+					}
+				}
+				//Map<String,Double> userBrandMap= userInfo.getCCBrandMap().get(selectedCostCenter); 
 				
 				Object[] myBrands = {}; 
 				String brandValue1="";
@@ -144,12 +155,14 @@ String ccView="";
 					myBrands = sortedMap.keySet().toArray();
 				    for(int i=0;i<myBrands.length;i++){ 
                         brandValue1 = myBrands[i].toString();
+                        System.out.println("brandValue1 = "+brandValue1);
                         if(brandValue.equals(brandValue1)){%>
                         <option value="<%=brandValue1 %>" selected><%=brandValue1 %></option>
                         <%}else{ %>
                         <option value="<%=brandValue1 %>"><%=brandValue1 %></option>
                         <%}}
 				}
+				
 				%>
 				<% BudgetSummary summary1 = (BudgetSummary) session.getAttribute("summary");
 							Map<String, BudgetSummary> budgetMap1 = summary1.getBudgetMap();%>
@@ -171,6 +184,9 @@ String ccView="";
 				</select>
 						</td>
 						</tr>
+						
+				
+						
 				</td>
 			</table>
 	<div id="getCostCentreProjects">
@@ -211,12 +227,22 @@ String ccView="";
 							Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
 							BudgetSummary budgetSummary = new BudgetSummary();
 							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
-							Map<String,Double> brandMap = user.getBrand();
+							String cc = user.getSelectedCostCenter();
+							Map<String,Double> brandMap= new LinkedHashMap<String,Double>();
+							ccList = new ArrayList<CostCenter_Brand>();
+							ccList = util.readCostCenterBrandMappingData();
+							for(CostCenter_Brand cc1: ccList){
+								if(cc1!=null && cc1.getCostCenter()!=null && !"".equalsIgnoreCase(cc1.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc1.getCostCenter())){
+									brandMap = util.getBrandMap(cc1.getBrandFromDB());
+								}
+							}
+							//Map<String,Double> brandMap = user.getCCBrandMap().get(cc);
 							LOGGER.log(Level.INFO, "brandMaps received : " + brandMap);
 							Object[] brands = {}; 
 							if(brandMap!=null && !brandMap.isEmpty()){
 								brands = brandMap.keySet().toArray();
 							}
+							//System.out.println(":::::::"+brands[0]);
 						%>
 					<script>
 					<%@ include file="scripts/editProjects.js"%>
@@ -967,7 +993,7 @@ String ccView="";
 					
 					<%
 					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
-					Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(user.getSelectedCostCenter());%>
+					Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(selectedCostCenter);%>
 					// multi brand click
 					
 					var usr=0;
