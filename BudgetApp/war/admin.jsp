@@ -27,10 +27,10 @@ ng\:form {
 	 
 	  if(document.URL.split("?")[1].toString().split("=")[1] == 1){
 		  selectedTab=1;
-		  document.getElementById("headerid").innerHTML="Upload project data";
+		  document.getElementById("headerid").innerHTML="FACT";
 		}else{
 			selectedTab=2;
-			document.getElementById("headerid").innerHTML="Upload accural data";
+			document.getElementById("headerid").innerHTML="PO Details";
 		}
   });
   
@@ -52,7 +52,7 @@ ng\:form {
 <tr>
 <td id='cssmenu'>
 <div align="center">
-<button id = "headerid" type="button" class="form-control-header" >Upload project data: </button>
+<button id = "headerid" type="button" class="form-control-header" >FACT: </button>
 </div>
 </td>
 </tr>

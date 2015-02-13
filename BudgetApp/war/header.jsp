@@ -107,10 +107,10 @@
 			<%
 				if (role!=null && !"".equalsIgnoreCase(role) && ("Admin".equals(role))) {
 			%>
-			<li class='last'><a href='#'><span>Admin</span></a>
+			<li class='last'><a href='#'><span>Imports</span></a>
 			<ul>
-                        <li class='last'> <a href ="/admin?tab_sel=1" id="tabs-1">Upload project data</a></li>
-                        <li class='last'><a href ="/admin?tab_sel=2" id="#tabs-2">Upload accural data</a></li>
+                        <li class='last'> <a href ="/admin?tab_sel=1" id="tabs-1">FACT</a></li>
+                        <li class='last'><a href ="/admin?tab_sel=2" id="#tabs-2">PO Details</a></li>
                     </ul>  
                     </li>  
 			<%

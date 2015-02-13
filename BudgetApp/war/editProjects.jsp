@@ -43,7 +43,7 @@ String ccView="";
 		<table
 			style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #005691; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
 			<tr>
-				<td style="width: 20%;" rowspan="2">
+				<td style="width: 20%; padding-bottom:2.5%" rowspan="2">
 					<table class="summarytable"
 						style="color: #005691; white-space: nowrap; height: 117px; width: 220px;">
 						<tr>
@@ -58,7 +58,7 @@ String ccView="";
 					</table>
 				</td>				
 				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); %>
-				<td style="padding-left: 1.5%; width: 50%; text-align: center;">
+				<td style="padding-left: 1.5%; padding-top: 1%; width: 50%; text-align: center;">
 				<table align="center"> 
 				<tr>
 				<td width="100px" >
@@ -76,15 +76,57 @@ String ccView="";
 							}
 							
 						%></span>
-						<span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">View : </span></td><td><select  id="selectedUserView" name="selectedUserView" onchange= "selectUserView()" autofocus style=" width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" >
+						<span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select View : </span></td><td><select  id="selectedUserView" name="selectedUserView" onchange= "selectUserView()" autofocus style=" width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" >
 						<option <%= prjView%>>My Projects</options>
 						<option <%= brandView%>>My Brands</options>
 						<option <%= ccView%>>My Cost Center</options>
 						</select>
 						</td>
 						</tr>
-						<tr id="dropdown">
-						<td >
+				
+						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td style="padding-top: 4%"><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost center :</span></td> <td  style="padding-top: 4%"><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
+						<% 
+						String ccSelected = (String)request.getAttribute("getCCValue");
+						String[] costcenter1= userInfo.getCostCenter().split(":");
+						String costc;
+					   	if(costcenter1!=null){
+							for(int k=0;k<costcenter1.length;k++){
+								costc = costcenter1[k];
+								if(costc!=null && !"".equals(costc) && ccSelected!=null && !"".equals(ccSelected) && ccSelected.equalsIgnoreCase(costc)){
+						%>
+						<option value="<%= costc %>" selected><%= costc%></option>
+						<%} else if((costc)!=null && !"".equals(costc)){%>
+						<option value="<%= costc%>"><%= costc%></option>
+						<%} } }%>
+						</select>
+						</td>
+						<% }else{%>
+							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
+						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
+						String ccSelected = (String)request.getAttribute("getCCValue");
+						CostCenter_Brand cc_brand = new CostCenter_Brand();
+							if(cc_brandList!=null && !cc_brandList.isEmpty()){
+								for(int i=0;i<cc_brandList.size();i++){
+									cc_brand = cc_brandList.get(i);
+									if(cc_brand.getCostCenter()!=null 
+											&& !"".equals(cc_brand.getCostCenter()) 
+											&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
+						%>
+						<option value="<%= cc_brand.getCostCenter()%>" selected><%= cc_brand.getCostCenter()%></option>
+						<%} else if(cc_brand.getCostCenter()!=null 
+								&& !"".equals(cc_brand.getCostCenter())){%>
+						<option value="<%= cc_brand.getCostCenter()%>"><%= cc_brand.getCostCenter()%></option>
+						<%} } }%>
+						</select>
+						<% }String selectedView = (String)request.getAttribute("selectedView");
+						String selectedBrand = (String)request.getAttribute("brandValue");
+						
+						%> 
+						</td>
+						</tr>
+						
+			<tr id="dropdown">
+						<td  style="padding-top:4%">
 						<span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">
 					Select Brand :&nbsp;&nbsp;
 				</span></td><td>
@@ -127,48 +169,6 @@ String ccView="";
                             <%}}} %>
 				
 				</select>
-						</td>
-						</tr>
-						
-				
-						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
-						<% 
-						String ccSelected = (String)request.getAttribute("getCCValue");
-						String[] costcenter1= userInfo.getCostCenter().split(":");
-						String costc;
-					   	if(costcenter1!=null){
-							for(int k=0;k<costcenter1.length;k++){
-								costc = costcenter1[k];
-								if(costc!=null && !"".equals(costc) && ccSelected!=null && !"".equals(ccSelected) && ccSelected.equalsIgnoreCase(costc)){
-						%>
-						<option value="<%= costc %>" selected><%= costc%></option>
-						<%} else if((costc)!=null && !"".equals(costc)){%>
-						<option value="<%= costc%>"><%= costc%></option>
-						<%} } }%>
-						</select>
-						</td>
-						<% }else{%>
-							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
-						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
-						String ccSelected = (String)request.getAttribute("getCCValue");
-						CostCenter_Brand cc_brand = new CostCenter_Brand();
-							if(cc_brandList!=null && !cc_brandList.isEmpty()){
-								for(int i=0;i<cc_brandList.size();i++){
-									cc_brand = cc_brandList.get(i);
-									if(cc_brand.getCostCenter()!=null 
-											&& !"".equals(cc_brand.getCostCenter()) 
-											&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
-						%>
-						<option value="<%= cc_brand.getCostCenter()%>" selected><%= cc_brand.getCostCenter()%></option>
-						<%} else if(cc_brand.getCostCenter()!=null 
-								&& !"".equals(cc_brand.getCostCenter())){%>
-						<option value="<%= cc_brand.getCostCenter()%>"><%= cc_brand.getCostCenter()%></option>
-						<%} } }%>
-						</select>
-						<% }String selectedView = (String)request.getAttribute("selectedView");
-						String selectedBrand = (String)request.getAttribute("brandValue");
-						
-						%> 
 						</td>
 						</tr>
 				</td>
@@ -265,7 +265,7 @@ String ccView="";
 				</td>
 			</tr>
 			<tr style="">
-				<td style="padding-left: 21.5%"><input type=text
+				<td style="padding-left: 21.5%; padding-bottom: 3%"><input type=text
 					style="float: left; align: center; width: 35%;" id="txtSearch">
 					<img src="images/search.png" height="20" width="20" align="bottom"
 					style="float: left;"
