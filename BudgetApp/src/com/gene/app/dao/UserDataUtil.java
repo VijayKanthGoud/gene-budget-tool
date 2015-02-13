@@ -45,13 +45,13 @@ public class UserDataUtil {
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
-	String [] costCenter = {"7034","7527:7034:7035:7121:7712:7135:7713:7004:7428:7512:7138:7136","7527:7034:7035:7121:7712:7135:7713:7004:7428:7512:7138:7136",
-			"7004","7527:7034:7035:7121:7712:7135:7713:7004:7428:7512:7138:7136","7527:7034:7035:7121:7712:7135:7713:7004:7428:7512:7138:7136",
-			"7034:7035:7004:7136","7034:7035:7004:7136","7121:7428:7512:7138",
-			"7527:7034:7035:7121:7712:7135:7713:7004:7428:7512:7138:7136","7121:7428:7512:7138","7034","7035","7004","7035","7004","7034","7034"
-			,"7136","7138","7138","7135","7034","7034","7034","7034","7034","7034","7034"};
+	String [] costCenter = {"7034","7527:7034:7035:7121:7712:7135:7713:7428","7527:7034:7035:7121:7712:7135:7713:7428",
+			"7004","7527:7034:7035:7121:7712:7135:7713:7428","7527:7034:7035:7121:7712:7135:7713:7428",
+			"7034:7035","7034:7035","7121:7428",
+			"7527:7034:7035:7121:7712:7135:7713:7428","7121:7428","7034","7035","7034","7035","7034","7034","7034"
+			,"7034","7034","7034","7135","7034","7034","7034","7034","7034","7034","7034"};
 	//String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004","7135"};
-	String [] costCenter1 = {"7527","7034","7035","7121","7712","7135","7713","7004","7428","7512","7138","7136"};
+	String [] costCenter1 = {"7527","7034","7035","7121","7712","7135","7713","7428"};//"7004","7512","7138","7136"};
 	String []costCenter2 = {"Indirect Product:total=3033.20;",
 			"Actemra:total=1565.0;Rituxan RA:total=948.0;Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
 			"Indirect Product:total=300.0;Avastin:total=4278.0;Tarceva:total=1125.0;Alectinib:total=1034.0;anti-PDL1:total=2250.0;Rituxan Heme/Onc:total=969.0;Gazyva:total=2339.0;GDC-0199:total=689.0;Herceptin:total=850.0;Kadcyla:total=1600.0;Perjeta:total=1340.0;Erivedge:total=1250.0;Zelboraf:total=350.0;Cobimetinib:total=1075.0;BioOnc Pipeline:total=840.0;GDC0941:total=800.0;",
@@ -59,14 +59,15 @@ public class UserDataUtil {
 			"Indirect Product:total=869.83;",
 			"Indirect Product:total=240.73;",
 			"Indirect Product:total=1507.83;",
-			"Indirect Product:total=1825.6; Avastin:total=400.0; Tarceva:total=140.0; Alectinib:total=65.0; anti-PDL1:total=1040.0; Rituxan Heme/Onc:total=275.0; Gazyva:total=125.0; GDC-0199:total=205.0; Herceptin:total=555.0; Kadcyla:total=302.5; Perjeta:total=307.5; Erivedge:total=100.0; Cobimetinib:total=50.0; BioOnc Pipeline:total=100.0; Actemra:total=102.5; Rituxan RA:total=190.0; Esbriet:total=800.0; Lucentis:total=280.0; Pulmozyme:total=4705; Xolair:total=1550.; Lampalizumab:total=50.0; General Immun Pipeline:total=50.0; Lebrikizumab:total=100.0; Valcyte:total=30.0; Nutropin:total=30.0; Tamiflu:total=20.0; Lytics:total=53.5;",
-			"Avastin:total=75.0; Alectinib:total=285.0; Alectinib:total=605.0; GDC-0199:total=100.0; Herceptin:total=20.0; Kadcyla:total=140.0; Perjeta:total=140.0; Erivedge:total=100.0; Cobimetinib:total=170.0; Actemra:total=250.0; Lucentis:total=150.0; Pulmozyme:total=350.0; Lampalizumab:total=185.0; General Immun Pipeline:total=25.0; Tamiflu:total=806.0; Ocrelizumab:total=1215.0; Gantenerumab:total=250.0; Crenezumab:total=150.0; ACE-910:total=650.0;",
-			"Avastin:total=276.00; Tarceva:total=85.98; Alectinib:total=170.56; anti-PDL1:total=630.56; Rituxan Heme/Onc:total=158.84; Gazyva:total=444.90; GDC-0199:total=300.00; Herceptin:total=110.11; Kadcyla:total=677.22; Perjeta:total=112.22; Erivedge:total=92.72; Zelboraf:total=41.00; Cobimetinib:total=260.00; BioOnc Pipeline:total=350.00; Actemra:total=574.00; Rituxan RA:total=207.00; Esbriet:total=250.00; Lucentis:total=304.09; Pulmozyme:total=115.00;Xolair:total=707.57; Etrolizumab:total=50.00; General Immun Pipeline:total=50.00; Lebrikizumab:total=108.00; Valcyte:total=120.00; Ocrelizumab:total=1017.64; Gantenerumab:total=201.00; Crenezumab:total=175.00; Alzheimers:total=174.00; LptD:total=350.00; ACE-910:total=490.00;IMPACT Pipeline General:total=300.00; Neuroscience Pipeline:total=150.00;",
-			"Avastin:total=1235.0;Tarceva:total=270.0;Alectinib:total=200.0;anti-PDL1:total=605.0;Rituxan Heme/Onc:total=305.0;Gazyva:total=570.0;GDC-0199:total=200.0;Herceptin:total=100.0;Kadcyla:total=550.0;Perjeta:total=550.0;Erivedge:total=290.0;Zelboraf:total=152.0;Cobimetinib:total=168.0;BioOnc Pipeline:total=150.0;Actemra:total=600.0;Rituxan RA:total=238.0;Esbriet:total=400.0;Lucentis:total=135.0;Pulmozyme:total=135.0;Xolair:total=850.0; General Immun Pipeline:total=100.0;Lebrikizumab:total=50.0;Valcyte:total=235.0;Nutropin:total=100.0; Tamiflu:total=225.0;Lytics:total=180.0;Ocrelizumab:total=800.0;Gantenerumab:total=295.0; Crenezumab:total=65.0; Alzheimers:total=90.0;LptD:total=165.0;ACE-910:total=265.0;IMPACT Pipeline General:total=275.0;Neuroscience Pipeline:total=115.0;Indirect Product:total=587.07;",
-			"Avastin:total=511.0;Tarceva:total=152.0;Alectinib:total=105.0;anti-PDL1:total=650.0;Rituxan Heme/Onc:total=200.0;Gazyva:total=183.0;GDC-0199:total=160.0;Herceptin:total=50.0;Kadcyla:total=110.0;Perjeta:total=115.0;Erivedge:total=50.0;Zelboraf:total=75.0;Cobimetinib:total=100.0;BioOnc Pipeline:total=400.0;Actemra:total=500.0;Rituxan RA:total=150.0;Esbriet:total=400.0;Lucentis:total=275.0;Pulmozyme:total=225.0;Xolair:total=200.0;Lampalizumab:total=275.0;Etrolizumab:total=50.0;General Immun Pipeline:total=20.0;Lebrikizumab:total=325.0;Valcyte:total=200.0;Tamiflu:total=110.0;Lytics:total=85.0;Ocrelizumab:total=440.0;Alzheimers:total=170.0;LptD:total=125.0;ACE-910:total=175.0;IMPACT Pipeline General:total=220.0;Neuroscience Pipeline:total=97.0; Xenical:total=67.5;Invirase:total=67.5;Indirect Product:total=489.22;"};
+			//"Indirect Product:total=1825.6; Avastin:total=400.0; Tarceva:total=140.0; Alectinib:total=65.0; anti-PDL1:total=1040.0; Rituxan Heme/Onc:total=275.0; Gazyva:total=125.0; GDC-0199:total=205.0; Herceptin:total=555.0; Kadcyla:total=302.5; Perjeta:total=307.5; Erivedge:total=100.0; Cobimetinib:total=50.0; BioOnc Pipeline:total=100.0; Actemra:total=102.5; Rituxan RA:total=190.0; Esbriet:total=800.0; Lucentis:total=280.0; Pulmozyme:total=4705; Xolair:total=1550.; Lampalizumab:total=50.0; General Immun Pipeline:total=50.0; Lebrikizumab:total=100.0; Valcyte:total=30.0; Nutropin:total=30.0; Tamiflu:total=20.0; Lytics:total=53.5;",
+			"Avastin:total=75.0; Alectinib:total=285.0; Alectinib:total=605.0; GDC-0199:total=100.0; Herceptin:total=20.0; Kadcyla:total=140.0; Perjeta:total=140.0; Erivedge:total=100.0; Cobimetinib:total=170.0; Actemra:total=250.0; Lucentis:total=150.0; Pulmozyme:total=350.0; Lampalizumab:total=185.0; General Immun Pipeline:total=25.0; Tamiflu:total=806.0; Ocrelizumab:total=1215.0; Gantenerumab:total=250.0; Crenezumab:total=150.0; ACE-910:total=650.0;"
+			//"Avastin:total=276.00; Tarceva:total=85.98; Alectinib:total=170.56; anti-PDL1:total=630.56; Rituxan Heme/Onc:total=158.84; Gazyva:total=444.90; GDC-0199:total=300.00; Herceptin:total=110.11; Kadcyla:total=677.22; Perjeta:total=112.22; Erivedge:total=92.72; Zelboraf:total=41.00; Cobimetinib:total=260.00; BioOnc Pipeline:total=350.00; Actemra:total=574.00; Rituxan RA:total=207.00; Esbriet:total=250.00; Lucentis:total=304.09; Pulmozyme:total=115.00;Xolair:total=707.57; Etrolizumab:total=50.00; General Immun Pipeline:total=50.00; Lebrikizumab:total=108.00; Valcyte:total=120.00; Ocrelizumab:total=1017.64; Gantenerumab:total=201.00; Crenezumab:total=175.00; Alzheimers:total=174.00; LptD:total=350.00; ACE-910:total=490.00;IMPACT Pipeline General:total=300.00; Neuroscience Pipeline:total=150.00;",
+			//"Avastin:total=1235.0;Tarceva:total=270.0;Alectinib:total=200.0;anti-PDL1:total=605.0;Rituxan Heme/Onc:total=305.0;Gazyva:total=570.0;GDC-0199:total=200.0;Herceptin:total=100.0;Kadcyla:total=550.0;Perjeta:total=550.0;Erivedge:total=290.0;Zelboraf:total=152.0;Cobimetinib:total=168.0;BioOnc Pipeline:total=150.0;Actemra:total=600.0;Rituxan RA:total=238.0;Esbriet:total=400.0;Lucentis:total=135.0;Pulmozyme:total=135.0;Xolair:total=850.0; General Immun Pipeline:total=100.0;Lebrikizumab:total=50.0;Valcyte:total=235.0;Nutropin:total=100.0; Tamiflu:total=225.0;Lytics:total=180.0;Ocrelizumab:total=800.0;Gantenerumab:total=295.0; Crenezumab:total=65.0; Alzheimers:total=90.0;LptD:total=165.0;ACE-910:total=265.0;IMPACT Pipeline General:total=275.0;Neuroscience Pipeline:total=115.0;Indirect Product:total=587.07;",
+			//"Avastin:total=511.0;Tarceva:total=152.0;Alectinib:total=105.0;anti-PDL1:total=650.0;Rituxan Heme/Onc:total=200.0;Gazyva:total=183.0;GDC-0199:total=160.0;Herceptin:total=50.0;Kadcyla:total=110.0;Perjeta:total=115.0;Erivedge:total=50.0;Zelboraf:total=75.0;Cobimetinib:total=100.0;BioOnc Pipeline:total=400.0;Actemra:total=500.0;Rituxan RA:total=150.0;Esbriet:total=400.0;Lucentis:total=275.0;Pulmozyme:total=225.0;Xolair:total=200.0;Lampalizumab:total=275.0;Etrolizumab:total=50.0;General Immun Pipeline:total=20.0;Lebrikizumab:total=325.0;Valcyte:total=200.0;Tamiflu:total=110.0;Lytics:total=85.0;Ocrelizumab:total=440.0;Alzheimers:total=170.0;LptD:total=125.0;ACE-910:total=175.0;IMPACT Pipeline General:total=220.0;Neuroscience Pipeline:total=97.0; Xenical:total=67.5;Invirase:total=67.5;Indirect Product:total=489.22;"
+			};
 	public void insertUserRoleInfo(){
 		String selectedCostCenter = "";
-		/*Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
+/*		Map<String,Double> brandMap = new LinkedHashMap<String,Double>();
 		brandMap.put("Onart", 30000.0);
 		brandMap.put("Perjeta", 20000.0);
 		brandMap.put("Tarceva", 50000.0);
@@ -170,7 +171,7 @@ public class UserDataUtil {
 		brand9Map.put("Lucentis", 60000.0);
 		brand9Map.put("Bitopertin", 40000.0);
 		brand9Map.put("Kadcyla", 50000.0);
-		brand9Map.put("Actemra", 60000.0);*/
+		brand9Map.put("Actemra", 60000.0);
 		
 		Map<String,Double> brand7138Map = new LinkedHashMap<String,Double>();
 		
@@ -401,7 +402,7 @@ Map<String,Double> brand7034Map = new LinkedHashMap<String,Double>();
 Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		
 		brand7527Map.put("Indirect Product", 30000.0);
-		
+		*/
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	List<UserRoleInfo> userInfoList = new ArrayList<UserRoleInfo>();
 	UserRoleInfo userRoleInfo = null;
@@ -412,8 +413,8 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		Map<String,Map<String,Double>> map1 = new LinkedHashMap<String,Map<String,Double>>();
 		map1.put("7034", brand7034Map);
 		map1.put("7035", brand7035Map);
-		map1.put("7004", brand7004Map);
-		map1.put("7136", brand7136Map);
+		//map1.put("7004", brand7004Map);
+		//map1.put("7136", brand7136Map);
 		userRoleInfo.setCCBrandMap(map1);
 	}else if("sreedhac".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map2 = new LinkedHashMap<String,Map<String,Double>>();
@@ -426,26 +427,26 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		map2.put("7712", brand7712Map);
 		map2.put("7135", brand7135Map);
 		map2.put("7713", brand7713Map);
-		map2.put("7004", brand7004Map);
+		//map2.put("7004", brand7004Map);
 		map2.put("7428", brand7428Map);
-		map2.put("7512", brand7512Map);
-		map2.put("7138", brand7138Map);
-		map2.put("7136", brand7136Map);
+		//map2.put("7512", brand7512Map);
+		//map2.put("7138", brand7138Map);
+		//map2.put("7136", brand7136Map);
 		userRoleInfo.setCCBrandMap(map2);
 	}else if("challags".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map3 = new LinkedHashMap<String,Map<String,Double>>();
 		map3.put("7121",brand7121Map);
 		map3.put("7428",brand7428Map);
-		map3.put("7512",brand7512Map);
-		map3.put("7138",brand7138Map);
+		//map3.put("7512",brand7512Map);
+		//map3.put("7138",brand7138Map);
 		userRoleInfo.setCCBrandMap(map3);
 	}else if("shwetims".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map4 = new LinkedHashMap<String,Map<String,Double>>();
-		map4.put("7136", brand7136Map);
+		//map4.put("7136", brand7136Map);
 		userRoleInfo.setCCBrandMap(map4);
 	}else if("subramb1".equalsIgnoreCase( userName[i]) || "kameckip".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map5 = new LinkedHashMap<String,Map<String,Double>>();
-		map5.put("7138", brand7138Map);
+		//map5.put("7138", brand7138Map);
 		userRoleInfo.setCCBrandMap(map5);
 	}else if( "Lluis Lagarda".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map6 = new LinkedHashMap<String,Map<String,Double>>();
@@ -455,8 +456,8 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		Map<String,Map<String,Double>> map7 = new LinkedHashMap<String,Map<String,Double>>();
 		map7.put("7034", brand7034Map);
 		map7.put("7035", brand7035Map);
-		map7.put("7004", brand7004Map);
-		map7.put("7136", brand7136Map);
+		//map7.put("7004", brand7004Map);
+		//map7.put("7136", brand7136Map);
 		userRoleInfo.setCCBrandMap(map7);
 	}else if("siddagov".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map8 = new LinkedHashMap<String,Map<String,Double>>();
@@ -469,11 +470,11 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		map8.put("7712", brand7712Map);
 		map8.put("7135", brand7135Map);
 		map8.put("7713", brand7713Map);
-		map8.put("7004", brand7004Map);
+		//map8.put("7004", brand7004Map);
 		map8.put("7428", brand7428Map);
-		map8.put("7512", brand7512Map);
-		map8.put("7138", brand7138Map);
-		map8.put("7136", brand7136Map);
+		//map8.put("7512", brand7512Map);
+		//map8.put("7138", brand7138Map);
+		//map8.put("7136", brand7136Map);
 		userRoleInfo.setCCBrandMap(map8);
 	}else if("kaviv".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map9 = new LinkedHashMap<String,Map<String,Double>>();
@@ -484,11 +485,11 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		map9.put("7712", brand7712Map);
 		map9.put("7135", brand7135Map);
 		map9.put("7713", brand7713Map);
-		map9.put("7004", brand7004Map);
+		//map9.put("7004", brand7004Map);
 		map9.put("7428", brand7428Map);
-		map9.put("7512", brand7512Map);
-		map9.put("7138", brand7138Map);
-		map9.put("7136", brand7136Map);
+		//map9.put("7512", brand7512Map);
+		//map9.put("7138", brand7138Map);
+		//map9.put("7136", brand7136Map);
 		userRoleInfo.setCCBrandMap(map9);
 	}else if("michasav".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map10 = new LinkedHashMap<String,Map<String,Double>>();
@@ -500,7 +501,7 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		userRoleInfo.setCCBrandMap(map11);
 	}else if("Melissa Chen".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map12 = new LinkedHashMap<String,Map<String,Double>>();
-		map12.put("7004", brand7004Map);
+		//map12.put("7004", brand7004Map);
 		userRoleInfo.setCCBrandMap(map12);
 	}else if("Kim Basurto".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map13 = new LinkedHashMap<String,Map<String,Double>>();
@@ -508,14 +509,14 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		userRoleInfo.setCCBrandMap(map13);
 	}else if("Jamieson Sheffield".equalsIgnoreCase( userName[i])){
 		Map<String,Map<String,Double>> map14 = new LinkedHashMap<String,Map<String,Double>>();
-		map14.put("7004", brand7004Map);
+		//map14.put("7004", brand7004Map);
 		userRoleInfo.setCCBrandMap(map14);
 	}else{
 		Map<String,Map<String,Double>> map15 = new LinkedHashMap<String,Map<String,Double>>();
 		map15.put("7034", brand7034Map);
 		userRoleInfo.setCCBrandMap(map15);
-	}
-*/	selectedCostCenter = costCenter[i];
+	}*/
+	selectedCostCenter = costCenter[i];
 	userRoleInfo.setUserName(userName[i]);
 	userRoleInfo.setRole(role[i]);
 	userRoleInfo.setCostCenter(costCenter[i]);
