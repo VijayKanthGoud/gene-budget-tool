@@ -95,7 +95,7 @@ public class DBUtil {
 		userMap = readAllUserInfo();
 
 		for(Map.Entry<String,UserRoleInfo> ccMap :  userMap.entrySet()){
-			if(ccMap.getValue().getSelectedCostCenter().equalsIgnoreCase(costCenter)){
+			if(ccMap.getValue().getCostCenter().contains(costCenter)){
 				ArrayList<String> validBrands =new ArrayList<String>();
 				for(CostCenter_Brand ccBrand : costCenterList){
 					if(ccBrand.getCostCenter().equalsIgnoreCase(costCenter)){
