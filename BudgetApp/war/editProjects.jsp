@@ -147,9 +147,9 @@ String ccView="";
 				Object[] myBrands = {}; 
 				String brandValue1="";
 				String brandValue=(String)request.getAttribute("brandValue");
-				if(brandValue==null || brandValue==""){
+				 if(brandValue==null || brandValue==""){
 					brandValue = "Avastin";
-				}
+				} 
 				if(userBrandMap!=null && !userBrandMap.isEmpty()){
 					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
 					myBrands = sortedMap.keySet().toArray();
@@ -163,7 +163,7 @@ String ccView="";
 				}
 				
 				%>
-				<% BudgetSummary summary1 = (BudgetSummary) session.getAttribute("summary");
+				<%-- <% BudgetSummary summary1 = (BudgetSummary) session.getAttribute("summary");
 							Map<String, BudgetSummary> budgetMap1 = summary1.getBudgetMap();%>
 				 <% String option1 = "";
                             if(budgetMap1!=null && !budgetMap1.isEmpty()){
@@ -178,7 +178,7 @@ String ccView="";
                             <option value="<%=option1 %>" selected><%=option1 %></option>
                             <%}else{ %>
                             <option value="<%=option1 %>"><%=option1 %></option>
-                            <%}}} %>
+                            <%}}} %> --%>
 				
 				</select>
 						</td>
@@ -255,11 +255,14 @@ String ccView="";
                             <td >Select Brand:</td>
                             <td colspan="2"><select id="brandType" onchange="getBrandTotals()" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;">
                             <%String option = "";
+                            if(brandValue==null || brandValue==""){
+            					brandValue = "Avastin";
+            				} 
                             if(budgetMap!=null && !budgetMap.isEmpty()){
                             	Object[] budgets = budgetMap.keySet().toArray();
                             for(int i=0;i<budgets.length;i++){ 
                             option = budgets[i].toString();
-                            if(i==1){%>
+                            if(brandValue.equals(option)){%>
                             <option value="<%=option %>" selected><%=option %></option>
                             <%}else{ %>
                             <option value="<%=option %>"><%=option %></option>
@@ -548,6 +551,12 @@ String ccView="";
 				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
 				d[44]="<%=gReport.getBrand()%>";
 				d[47]="<%= gReport.getCostCenter()%>";
+				<% requestor = gReport.getRequestor();
+				if(requestor.contains(":")){
+					requestor = requestor.substring(0,requestor.indexOf(":"));
+				}
+				%>
+				d[48]="<%=requestor%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -713,7 +722,10 @@ String ccView="";
     				
     				<%
 				}
-			}%>
+				
+		}%>
+			
+			
 			if(closedExist ==false || activeExist ==false){
 				dummyACProjects();
 			}
@@ -1211,7 +1223,9 @@ String ccView="";
 			}
 			var userName = '<%= user.getUserName()%>';
 			var role = '<%= user.getRole()%>';
-			if((role!='Admin') && (args.item["1"]!=null && args.item["1"]!='' && args.item["1"] != userName)){
+			if((role!='Admin') && (args.item["26"]=="Active" || args.item["26"]=="New") && 
+					(args.item["11"] == "Accrual" || args.item["11"] == "Planned") && 
+					(args.item["48"]!=null && args.item["48"]!='' && args.item["48"] != userName)){
 				alert("You are not authorised to edit this project !!!");
 				return false;
 			}
@@ -1306,6 +1320,8 @@ String ccView="";
 			dataView.expandGroup("Closed");
 			dataView.expandGroup("New");
 		} else {
+			
+			dataView.collapseGroup("New");
 			dataView.collapseGroup("Active");
 			dataView.collapseGroup("Closed");
 		}

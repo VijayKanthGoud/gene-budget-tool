@@ -223,9 +223,9 @@ function groupByStatus() {
 			
 			
 			]);
-	 if(newExist == false){
+	// if(newExist == false){
 		dataView.collapseGroup("New");
-	}
+	//}
 	 dataView.collapseGroup("Active");
 	 dataView.collapseGroup("Closed");
 }

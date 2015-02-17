@@ -179,7 +179,7 @@ public class DownloadFileServlet extends HttpServlet {
 			row.createCell(cellCount++).setCellValue(gtfReport.getPoNumber());
 			row.createCell(cellCount++).setCellValue(gtfReport.getPoDesc());
 			row.createCell(cellCount++).setCellValue(gtfReport.getVendor());
-			row.createCell(cellCount++).setCellValue(gtfReport.getRequestor());
+			row.createCell(cellCount++).setCellValue(util.readUserRoleInfoByName(gtfReport.getRequestor()).getFullName());
 			Map<String, Double> map = gtfReport.getAccrualsMap();
 			double total = 0.0;
 			boolean hasEntered=false;

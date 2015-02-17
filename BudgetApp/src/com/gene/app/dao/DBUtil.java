@@ -76,10 +76,21 @@ public class DBUtil {
 		Arrays.sort(brandsArray);
 		String[] budgetArray = null;
 		String value = "";
+		String[] emptyArray = null;
+		String brandValue ="";
 		for(int i=0;i<brandsArray.length;i++){
 			value = brandsArray[i];
 			budgetArray = value.split(":");
-			brandMap.put(budgetArray[0], 50000.0);
+			emptyArray = budgetArray[0].split(" ");
+			brandValue="";
+			if("".equalsIgnoreCase(emptyArray[0].trim())){
+				for(int j=1;j<emptyArray.length;j++){
+					brandValue+=emptyArray[j];
+				}
+			}else{
+				brandValue=budgetArray[0];
+			}
+			brandMap.put(brandValue, 50000.0);
 		}
 		Map<String,Double> sortedMap = new TreeMap<String,Double>(brandMap);
 		return sortedMap;
