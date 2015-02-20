@@ -99,7 +99,7 @@ String ccView="";
 						<%} } }%>
 						</select>
 						</td>
-						<% }else{%>
+						<% } else{%>
 							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
 						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
 						String ccSelected = (String)request.getAttribute("getCCValue");
@@ -147,7 +147,7 @@ String ccView="";
 				Object[] myBrands = {}; 
 				String brandValue1="";
 				String brandValue=(String)request.getAttribute("brandValue");
-				 if(brandValue==null || brandValue==""){
+				if(brandValue==null || brandValue==""){
 					brandValue = "Avastin";
 				} 
 				if(userBrandMap!=null && !userBrandMap.isEmpty()){
@@ -182,12 +182,25 @@ String ccView="";
 				
 				</select>
 						</td>
-						</tr>
-						
+			</tr>
 				
 						
 				</td>
 			</table>
+			<div id="selectthebrand">
+				
+				<div id="header"
+			    style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
+		     </div><br>
+		     <div align="left" style="padding-left: 36%">
+				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;
+				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">All</span></input><br><br>
+				</div>
+				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
+				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; font-size: 10px; letter-spacing:1px;" align= 'right'> Cancel</button>
+				
+				</div>
 	<div id="getCostCentreProjects">
 		
 			<form method="GET" id="getCostCentre" action="/getreport">
@@ -228,9 +241,9 @@ String ccView="";
 							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
 							String cc = user.getSelectedCostCenter();
 							Map<String,Double> brandMap= new LinkedHashMap<String,Double>();
-							ccList = new ArrayList<CostCenter_Brand>();
+							/* ccList = new ArrayList<CostCenter_Brand>();
 							ccList = util.readCostCenterBrandMappingData();
-							for(CostCenter_Brand cc1: ccList){
+							 */for(CostCenter_Brand cc1: ccList){
 								if(cc1!=null && cc1.getCostCenter()!=null && !"".equalsIgnoreCase(cc1.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc1.getCostCenter())){
 									brandMap = util.getBrandMap(cc1.getBrandFromDB());
 								}
@@ -1668,11 +1681,16 @@ String ccView="";
 </script>
 <!-- to be removed after uat 2 -->
 	<div width='100%' align=right>
-	<% if(userService.getCurrentUser().getEmail().contains("test") || userService.getCurrentUser().getEmail().contains("sid") || userService.getCurrentUser().getEmail().contains("singhb")){  %>
+	<!--% if(userService.getCurrentUser().getEmail().contains("test") || userService.getCurrentUser().getEmail().contains("sid") || userService.getCurrentUser().getEmail().contains("singhb")){  %>
 	    <button class="myButton" value="" onclick="openUploadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Upload excel data</button>
-	<% } %>    
-		<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
+	<% } %-->    
+		<button class="myButton" value="" onclick="openDownloadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
 	</div>
+	</br>
+	<!-- <div>
+	<button class="myButton" value="" onclick="onClickAsynch();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'left'>Download All CostCenters</button>
+	</div>
+	 -->
 <div id="uploadWindow">
 		<div id="header"
 			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload

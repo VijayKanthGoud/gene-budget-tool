@@ -936,14 +936,15 @@ function closeWithoutSave() {
 }
 
 function deleteSelectedProjects() {
-	var userAccepted = confirm("Selected project(s) will be deleted. Want to continue?");
-	if (!userAccepted) {
-		return false;
-	}
+	
 	var pLength = m_data.length;
 	var noProjToDelete = true;
 	for (var count = 0; count < m_data.length; count++) {
 		if (m_data[count]["8"] != 'undefined' && m_data[count]["8"] == true) {
+			var userAccepted = confirm("Selected project(s) will be deleted. Want to continue?");
+			if (!userAccepted) {
+				return false;
+			}
 			m_data.splice(count--, 1);
 			noProjToDelete = false;
 		}
@@ -1102,16 +1103,79 @@ function submitProjects(){
 
 
 function exportExcelData(){
+	
 	//code for server side export
+/*	alert($('#getCostCenter').val());*/
+	if($('input:radio[name=selectCC]:checked').val() == 1){
+		onClickAsynch();
+	}
+	else{
 	console.log("Downloading data...");
 	if(data[0][0]==null || data[0][0]==''){
-		alert("No data to Upload !!!");
+		alert("No data to export !!!");
 		return;
 	}else{
 	$('#objArrayId').val(JSON.stringify(data,null,4));
 	$('#ccId').val($('#getCostCenter').val());
     document.getElementById('exportExcel').submit();
 	}
+	}
+	closepopup();
+}
+
+function onClickAsynch(){
+	var num=1;
+	function async(callback) {
+//	    var i;
+	    var z;
+	    <%
+	    HashSet hs = new HashSet();
+	    ArrayList<String> costcentreAry = new ArrayList<String>();
+	    for(int j=0; j<ccList.size();j++){
+	    	costcentreAry.add(ccList.get(j).getCostCenter());
+	    }
+	    hs.addAll(costcentreAry);
+	    costcentreAry.clear();
+	    costcentreAry.addAll(hs);
+	  /*  for(int j=0; j<costcentreAry.size();j++){%>
+	 
+	   <% }*/%>
+//   alert(<%= costcentreAry.size()%>);
+	    <%for (int i=0; i < costcentreAry.size();i++){%>
+	    CostCenterApperance(<%=costcentreAry.get(i)%>);
+	    <%}%>
+	}
+	function CostCenterApperance(i) {
+		
+//		alert("Inside appearance"+num)
+//	    var x = speech[i];
+	    setTimeout(function() {
+	    	ServletCall(i);
+	    	callback();
+	    }, 3500*num);
+	    num++;
+//	    }
+//	    console.log(speech[i]);
+	}
+	function ServletCall(i){
+		
+		console.log("Downloading data...");
+		
+//			alert('Inside t 	imeout function'+i);
+		$('#objArrayId').val('');
+		$('#ccId').val(i);
+	    document.getElementById('exportExcel').submit();
+	    
+		
+//		alert('after servlet call');
+	}
+
+
+
+async(function(){ 
+
+});
+
 }
 
 function modifyData(data){
@@ -1224,6 +1288,22 @@ function openUploadPopUp(){
 	$('#back').addClass('black_overlay').fadeIn(100);
 }
 
+function openDownloadPopUp(){
+	if(<%=!userInfo.getRole().contains("Admin")%>){
+	//	$('#selectthebrand').hide();
+		exportExcelData();
+	}
+	else{
+	$('#selectthebrand').show().fadeIn(100);
+	$('#back').addClass('black_overlay').fadeIn(100);
+	//$('selectCC').val(0,)
+	var ccVal = $('#getCostCenter').val();
+	$('#selectedCCValue').val(ccVal);
+	$('input:radio[name=selectCC]')[0].checked = true;
+	$('#back').addClass('black_overlay').fadeIn(100);
+	}
+}
+
 function closeUploadWindow(){
 	$('#uploadWindow').hide();
 	$('#back').removeClass('black_overlay').fadeIn(100);
@@ -1270,6 +1350,7 @@ function toSubmit(){
 function getCostCenterDetails(){
 	var ccVal = $('#getCostCenter').val();
 	var val = $('#selectedUserView').val();
+	
 	
 	if(val=="My Brands"){
 		var brandVal = 	document.getElementById("getBrand").value;
