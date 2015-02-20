@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -68,7 +67,7 @@ public class DownloadFileServlet extends HttpServlet {
 		
 		user.setSelectedCostCenter(costCenter);
 		// LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
-		Map<String, GtfReport> gtfReportMap = util
+	Map<String, GtfReport> gtfReportMap = util
 				.getAllReportDataFromCache(user.getSelectedCostCenter());
 		
 		JSONArray jsonArray = null;
@@ -76,9 +75,10 @@ public class DownloadFileServlet extends HttpServlet {
 		JSONObject rprtObject = null;
 		List <GtfReport> list = new ArrayList<GtfReport>();
 		try {
-			jsonArray = new JSONArray(objarray);
+			
 		
 		if(objarray!=null && !"".equalsIgnoreCase(objarray)){
+			jsonArray = new JSONArray(objarray);
 		for (int count = 0; count < jsonArray.length(); count++) {
 			//gtfJSONReport = new GtfReport();
 			rprtObject = jsonArray.getJSONObject(count);
@@ -163,7 +163,7 @@ public class DownloadFileServlet extends HttpServlet {
 		
 		for (int i=0;i<list.size();i++) {
 			GtfReport gtfReport = list.get(i);
-			if("Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand())){
+			if(gtfReport.getBrand()==null || "Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand() )){
 				continue;
 			}
 			Row row = sheet.createRow(rowCount++);
