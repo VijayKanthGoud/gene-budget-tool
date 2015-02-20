@@ -1110,8 +1110,16 @@ function exportExcelData(){
 		onClickAsynch();
 	}
 	else{
-	console.log("Downloading data...");
-	if(data[0][0]==null || data[0][0]==''){
+	//console.log(JSON.stringify(data,null,4));
+	var multiBrandCnt=true;
+	for(var cntData = 0; cntData < data.length; cntData++){
+		var cntD = data[cntData];
+		if(cntD[0]!=null && cntD[0]!=''){
+			multiBrandCnt=false;
+			break;
+			}
+		}
+	if(multiBrandCnt==true){
 		alert("No data to export !!!");
 		return;
 	}else{
