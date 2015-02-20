@@ -555,7 +555,7 @@ function getSummaryValues(){
 			if(key==selectedValue){
 				//alert("val = "+selectedValue);
 				value = obj.budgetMap[key];
-				$('#totalBudget').val((value.totalBudget).toFixed(2));
+				$('#totalBudget').text((value.totalBudget).toFixed(2));
 				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
 				$('#budgetLeftToSpend').text((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2));
 				$('#accrualTotal').text((value.accrualTotal).toFixed(2));

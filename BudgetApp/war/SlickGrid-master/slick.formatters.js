@@ -78,7 +78,8 @@
 	  if(dataContext["35"] != "Buttons"){
 		if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> "+ Number(value).toFixed(2) +"</span>" 
-		}else if((dataContext["11"] == "Planned" || (dataContext["11"] == "Accrual")) ){
+		}else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || 
+				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["0"].toString().indexOf(".") == -1))  {
 			for(var i=0;i<month;i++){
 				if(columnDef["name"]==monthArray[i]){
 				return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>";
@@ -91,9 +92,9 @@
 			
 		}
 			
-		}else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
+		}/*else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
 			return "<div width = '100%' style='background:#C0CCED'><span style='color:#005691'> "+ Number(value).toFixed(2) +"</span></div>" ;
-		}else{
+		}*/else{
 			return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>"; 
 		}
 	  }

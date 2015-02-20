@@ -83,7 +83,7 @@ String ccView="";
 						</select>
 						</td>
 						</tr>
-						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
+						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
 						<% 
 						String ccSelected = (String)request.getAttribute("getCCValue");
 						String[] costcenter1= userInfo.getCostCenter().split(":");
@@ -100,7 +100,7 @@ String ccView="";
 						</select>
 						</td>
 						<% } else{%>
-							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Cost center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
+							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
 						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
 						String ccSelected = (String)request.getAttribute("getCCValue");
 						CostCenter_Brand cc_brand = new CostCenter_Brand();
@@ -282,9 +282,9 @@ String ccView="";
                             <%}}} %>
                             </select></td>
                         </tr>
+                        <tr>
                                 <td>Budget:</td>
-                                <td><input id = "totalBudget" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;" type=text name=type
-                                       maxlength="8" size="8" value="<%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%>"></td>
+                                <td><span id = "totalBudget"> <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
                         </tr>
 
 						<tr>
@@ -955,6 +955,7 @@ String ccView="";
 						var verBenchmark=0.0;
 						var verAccrual=0.0;
 						var verVariance=0.0;
+						var rowTotal=0.0;
 						
 						if(fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 							
@@ -1070,17 +1071,17 @@ String ccView="";
     							d["7"] = "<%=requestor%>";
 							}
 		   					
-						<%}
-						System.out.println("user.getUserName() = "+user.getUserName());
+						<%}%>
+						<%-- System.out.println("user.getUserName() = "+user.getUserName());
 	   					System.out.println("requestor = "+requestor);
-						if(!user.getUserName().equalsIgnoreCase(requestor)){%>
+						if((!user.getUserName().equalsIgnoreCase(requestor) && !"Admin".equalsIgnoreCase(user.getRole()) )){%>
 						return;
-						<%}else{%>
+						<%}else{%> --%>
 						$('#multibrandEdit').show().fadeIn(100);
 						displayMultibrandGrid();
 						$('#back').addClass('black_overlay').fadeIn(100);
 						// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
-						<%}%>
+						<%-- <%}%> --%>
 						}
 					//code for newly added projects 
 					else if(itemClicked[34]=="New projects"){
@@ -1495,6 +1496,7 @@ String ccView="";
 		m_grid.getCanvasNode().focus();
 
 		m_grid.onClick.subscribe(function(e, args) {
+			
 			m_grid.gotoCell(args.row, args.cell, false);
 			if (args.cell == <%=BudgetConstants.MB_CHECKBOX_CELL%>) {
 				initDeletionCell(args.row);
@@ -1534,7 +1536,9 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row;
 			var pRow = row + 1;
-
+			if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
+				return false ;
+			}
 			if ((args.item[0].toString().trim() != "" && itemClicked[26] == "Active")
 					|| (itemClicked[26] == "Closed")) {
 				return false;
@@ -1681,10 +1685,7 @@ String ccView="";
 </script>
 <!-- to be removed after uat 2 -->
 	<div width='100%' align=right>
-	<!--% if(userService.getCurrentUser().getEmail().contains("test") || userService.getCurrentUser().getEmail().contains("sid") || userService.getCurrentUser().getEmail().contains("singhb")){  %>
-	    <button class="myButton" value="" onclick="openUploadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Upload excel data</button>
-	<% } %-->    
-		<button class="myButton" value="" onclick="openDownloadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
+	<button class="myButton" value="" onclick="openDownloadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
 	</div>
 	</br>
 	<!-- <div>

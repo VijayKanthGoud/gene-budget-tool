@@ -264,7 +264,7 @@ public class StoreReport extends HttpServlet {
 				}
 				gtfReport.setCreateDate(timeStamp);
 				gtfReport.setYear(BudgetConstants.dataYEAR);
-				gtfReport.setProjectName(multiBrandObject.getString("4"));
+				//gtfReport.setProjectName(multiBrandObject.getString("4"));
 				gtfReport.setBrand(multiBrandObject.getString("1").trim());
 				//gtfReport.setgMemoryId(multiBrandObject.getString("5"));
 				
