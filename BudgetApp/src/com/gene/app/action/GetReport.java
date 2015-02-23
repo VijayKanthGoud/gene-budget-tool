@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import com.gene.app.dao.DBUtil;
 import com.gene.app.model.BudgetSummary;
+import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
@@ -66,6 +67,7 @@ public class GetReport extends HttpServlet {
 		List<GtfReport> gtfReportList = null;
 		//gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
 		// for project owner role
+		System.out.println(":::"+selectedBrand+":::::"+selectedView+"::::"+selectedCC);
 		if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && !user.getRole().contains("Admin")){
 			gtfReports = util.getAllReportDataFromCache(user.getSelectedCostCenter());
 			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports);
@@ -74,9 +76,22 @@ public class GetReport extends HttpServlet {
 		else if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && user.getRole().contains("Admin")){
 			if(selectedView==null || "".equalsIgnoreCase(selectedView.trim()) 
 					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
-					selectedView = "My Brands";
+				selectedView = "My Brands";
+				selectedCC = "7135";
+				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
+				 List<CostCenter_Brand> costCenterList =util.readCostCenterBrandMappingData();
+				for(CostCenter_Brand ccBrand : costCenterList){
+					if(selectedCC.equalsIgnoreCase(ccBrand.getCostCenter().trim())){
+						ccBrandMap = ccBrand;
+						break;
+					}
+				}
+				if(ccBrandMap.getBrandFromDB().contains("Avastin")){
 					selectedBrand = "Avastin";
-					selectedCC = "7135";
+				}else{
+					selectedBrand =ccBrandMap.getBrandFromDB().split(":")[0];
+				}
+					
 		//user.setCostCenter(selectedCC);
 			}
 		gtfReports = util.getAllReportDataFromCache(selectedCC);
