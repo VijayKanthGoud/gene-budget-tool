@@ -557,7 +557,7 @@ function getSummaryValues(){
 				value = obj.budgetMap[key];
 				$('#totalBudget').text((value.totalBudget).toFixed(2));
 				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
-				$('#budgetLeftToSpend').text((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2));
+				$('#budgetLeftToSpend').text(((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2)).toFixed(2));
 				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
 				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
 				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 == 0){
