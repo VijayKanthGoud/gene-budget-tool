@@ -173,6 +173,8 @@
   function CheckBoxFormatter(row, cell, value, columnDef, dataContext) {
 	  if(dataContext[7].toString().trim() != ""){
 		return "<input type='checkbox' class='checkDeletion' value='true' id = "+ row+"chkBox>";
+	  }else{
+		  return "";
 	  }
   }
 
