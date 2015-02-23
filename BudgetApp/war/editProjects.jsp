@@ -968,8 +968,9 @@ String ccView="";
 									rowTotal = parseFloat(rowTotal)
 												+ parseFloat(data[temp][j]);
 								}
+								data[temp][24]=parseFloat(rowTotal).toFixed(2);
 							}
-							data[temp][24]=parseFloat(rowTotal).toFixed(2);
+							
 							
 							for (var j = 0; j < data.length ; j++) {
 								if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
