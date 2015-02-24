@@ -102,8 +102,8 @@ ng\:form {
 			</div>
 			<!-- </br></br> -->
 			<div class="form-group">
-			<span style="font-size: 14px; font-weight: bold"> From Line number: </span><input  class="form-control-textbox" type="number" name="frmLine" id="From"><br>
-  			<span style="font-size: 14px; font-weight: bold">To Line number: </span> <input class="form-control-textbox" type="number" name="toLine" id="To"><br>
+			<span style="font-size: 14px; font-weight: bold"> From Line number: </span><input  class="form-control-textbox" type="number" min="0" onkeypress='return event.charCode >= 48 && event.charCode <= 57' name="frmLine" id="From"><br>
+  			<span style="font-size: 14px; font-weight: bold">To Line number: </span> <input class="form-control-textbox" type="number" min="0" onkeypress='return event.charCode >= 48 && event.charCode <= 57' name="toLine" id="To"><br>
 			
 			</div>
 			
