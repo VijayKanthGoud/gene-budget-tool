@@ -83,7 +83,7 @@ String ccView="";
 						</select>
 						</td>
 						</tr>
-						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
+						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost Center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
 						<% 
 						String ccSelected = (String)request.getAttribute("getCCValue");
 						String[] costcenter1= userInfo.getCostCenter().split(":");
@@ -100,7 +100,7 @@ String ccView="";
 						</select>
 						</td>
 						<% } else{%>
-							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
+							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost Center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
 						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
 						String ccSelected = (String)request.getAttribute("getCCValue");
 						CostCenter_Brand cc_brand = new CostCenter_Brand();
@@ -147,13 +147,14 @@ String ccView="";
 				Object[] myBrands = {}; 
 				String brandValue1="";
 				String brandValue=(String)request.getAttribute("brandValue");
-				if(brandValue==null || brandValue==""){
-					brandValue = "Avastin";
-				} 
+				
 				if(userBrandMap!=null && !userBrandMap.isEmpty()){
 					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
 					myBrands = sortedMap.keySet().toArray();
 				    for(int i=0;i<myBrands.length;i++){ 
+				    	if(brandValue==null || brandValue==""){
+							brandValue =  myBrands[0].toString();
+						} 
                         brandValue1 = myBrands[i].toString();
                         if(brandValue.equals(brandValue1)){%>
                         <option value="<%=brandValue1 %>" selected><%=brandValue1 %></option>
