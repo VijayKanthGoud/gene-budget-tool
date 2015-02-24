@@ -792,7 +792,7 @@ function saveAndClose() {
 			for (var j = 0; j < m_data.length; j++) {
 				var d = m_data[j];
 				if (d[4] != '') {
-					total = total + parseFloat(d[3]);
+					total = 0.0;//total + parseFloat(d[3]);
 				} else {
 					break;
 				}
@@ -805,7 +805,7 @@ function saveAndClose() {
 	
 	itemClicked[24] = total;
 	for(i = 12 + currentMonth; i<24; i++){
-		itemClicked[i] =parseFloat(total/(12-currentMonth)).toFixed(2);
+		itemClicked[i] = 0.0;//parseFloat(total/(12-currentMonth)).toFixed(2);
 	}
 
 	grid.invalidate();

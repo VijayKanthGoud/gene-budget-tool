@@ -603,9 +603,9 @@ String ccView="";
     				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
     				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
     				d[41]="<%=gReport.getPercent_Allocation()%>";
-    				if(<%=gReport.getMultiBrand()%> == true){
+    				<%-- if(<%=gReport.getMultiBrand()%> == true){
     					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
-    				}else{
+    				}else{ --%>
     					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
 						gtfReports.get(i).getPlannedMap().get("FEB") + 
 						gtfReports.get(i).getPlannedMap().get("MAR") + 
@@ -618,7 +618,7 @@ String ccView="";
 						gtfReports.get(i).getPlannedMap().get("OCT") + 
 						gtfReports.get(i).getPlannedMap().get("NOV") + 
 						gtfReports.get(i).getPlannedMap().get("DEC"))%>";
-    				}
+    				/* } */
     				d[25]="<%=gtfReports.get(i).getRemarks()%>";
   				<%} else{%>  
   				for(var cnt=1;cnt<11;cnt++){
@@ -778,7 +778,7 @@ String ccView="";
 				d[40] = d[11];
 			for (var j = 0; j < totalSize ; j++) {
 				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" ){
-				if((data[j][37] == false || data[j][11] != "Planned") && data[j][0].indexOf(".") == -1 ){
+				/* if((data[j][37] == false || data[j][11] != "Planned") && data[j][0].indexOf(".") == -1 ){ */
 					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
 					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
@@ -792,7 +792,7 @@ String ccView="";
 					d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
 					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
 					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
-					}
+					/* }
 				else if(data[j][0].indexOf(".") != -1){
 					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
@@ -808,7 +808,7 @@ String ccView="";
 					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
 					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
 					}
-				}
+			 */	}
 			}
 
 			for (var j = 12; j < 25; j++) {
@@ -911,7 +911,7 @@ String ccView="";
 							}
 						}
 						
-						if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){ 
+						<%-- if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){ 
 						var interimTotal=0.0;
 						var actualPlannedTotal=parseFloat(data[temp][24]).toFixed();
 						var calculatedPlannedTotal=0.0;
@@ -936,7 +936,7 @@ String ccView="";
 							grid.invalidate();
 							return;
 						}
-					}
+					} --%>
 					grid.invalidate();
 			
 					if(args.item["34"] != "New projects"){
@@ -959,7 +959,7 @@ String ccView="";
 						
 						if(fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 							
-							if((item[37]=='undefined' || item[37]==false) || (item[37]==true && data[temp][11]!="Planned")){
+							//if((item[37]=='undefined' || item[37]==false) || (item[37]==true && data[temp][11]!="Planned")){
 								rowTotal = 0.0;
 								for (var j = 12; j < 24; j++) {
 									if(data[temp][j] == "" || data[temp][j] == "undefined"){
@@ -969,7 +969,22 @@ String ccView="";
 												+ parseFloat(data[temp][j]);
 								}
 								data[temp][24]=parseFloat(rowTotal).toFixed(2);
-							}
+								if(item[37]==true){
+									for (var j = 0; j < data.length ; j++) {
+										if( data[j][0].toString().indexOf(".") != -1 && data[j][0].toString().split(".")[0] == item[0] ){
+											rowTotal = 0.0;
+											for (var k = 12; k < 24; k++) {
+												if(data[j][k] == "" || data[j][k] == "undefined"){
+													data[j][k] = 0.0;
+												}
+												rowTotal = parseFloat(rowTotal)
+															+ parseFloat(data[j][k]);
+											}
+											data[j][24]=parseFloat(rowTotal).toFixed(2);
+										}
+									}
+								}
+							//}
 							
 							
 							for (var j = 0; j < data.length ; j++) {
