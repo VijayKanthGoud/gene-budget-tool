@@ -83,9 +83,9 @@ public class DownloadFileServlet extends HttpServlet {
 			//gtfJSONReport = new GtfReport();
 			rprtObject = jsonArray.getJSONObject(count);
 			if(rprtObject.getString("0")!=null && !"".equalsIgnoreCase(rprtObject.getString("0")) ){
-			if(rprtObject.getString("37")!=null && !"".equalsIgnoreCase(rprtObject.getString("37")) && "false".equalsIgnoreCase(rprtObject.getString("37"))){
+			//if(rprtObject.getString("37")!=null && !"".equalsIgnoreCase(rprtObject.getString("37")) && "false".equalsIgnoreCase(rprtObject.getString("37"))){
 			list.add(gtfReportMap.get(rprtObject.getString("0")));
-			}
+			//}
 			}
 			
 		}}else{
@@ -159,11 +159,13 @@ public class DownloadFileServlet extends HttpServlet {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("Sample sheet");
 		int rowCount = 3, cellCount = 0;
+		String requestor="";
 		createHeader(sheet);
 		
 		for (int i=0;i<list.size();i++) {
+			requestor="";
 			GtfReport gtfReport = list.get(i);
-			if(gtfReport.getBrand()==null || "Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand() )){
+			if(gtfReport.getBrand()==null /*|| "Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand() )*/){
 				continue;
 			}
 			Row row = sheet.createRow(rowCount++);
@@ -179,7 +181,12 @@ public class DownloadFileServlet extends HttpServlet {
 			row.createCell(cellCount++).setCellValue(gtfReport.getPoNumber());
 			row.createCell(cellCount++).setCellValue(gtfReport.getPoDesc());
 			row.createCell(cellCount++).setCellValue(gtfReport.getVendor());
-			row.createCell(cellCount++).setCellValue(util.readUserRoleInfoByName(gtfReport.getRequestor()).getFullName());
+			if(gtfReport.getRequestor().contains(":")){
+				requestor = gtfReport.getRequestor().split(":")[0];
+			}else{
+				requestor = gtfReport.getRequestor();
+			}
+			row.createCell(cellCount++).setCellValue(util.readUserRoleInfoByName(requestor).getFullName());
 			Map<String, Double> map = gtfReport.getAccrualsMap();
 			double total = 0.0;
 			boolean hasEntered=false;
@@ -263,9 +270,7 @@ public class DownloadFileServlet extends HttpServlet {
 		if (gtfReports != null) {
 			for (Map.Entry<String, GtfReport> gtfEntry : gtfReports.entrySet()) {
 				gtfReport = gtfEntry.getValue();
-				if(!gtfReport.getMultiBrand()){
 				gtfReportList.add(gtfReport);
-				}
 			}
 		}
 		return gtfReportList;
