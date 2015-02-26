@@ -52,7 +52,7 @@ ng\:form {
 <tr>
 <td id='cssmenu'>
 <div align="center">
-<button id = "headerid" type="button" class="form-control-header" >FACT: </button>
+<button id = "headerid" type="button" class="form-control-header" disabled>FACT: </button>
 </div>
 </td>
 </tr>
