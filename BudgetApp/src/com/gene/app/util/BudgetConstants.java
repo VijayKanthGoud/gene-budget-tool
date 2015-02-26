@@ -43,14 +43,16 @@ public interface BudgetConstants {
 	public static final String KEY = "key";
 	public static final String CELL_VALUE = "cellValue";
 	public static final String CELL_NUM = "celNum";
-	public static final int CELL_PONUMBER = -2;
+	
+	public static final int CELL_PONUMBER = -3;
 	public static final int CELL_REMARKS = 13;
-	public static final int CELL_PNAME = -10;
-	public static final int CELL_BRAND = -9;
-	public static final int CELL_PWBS = -5;
-	public static final int CELL_SUBACTVTY = -4;
-	public static final int CELL_VENDOR = -1;
-	public static final int CELL_GMEMORI_ID = -7;
+	public static final int CELL_PNAME = -11;
+	public static final int CELL_BRAND = -10;
+	public static final int CELL_PWBS = -6;
+	public static final int CELL_SUBACTVTY = -5;
+	public static final int CELL_VENDOR = -2;
+	public static final int CELL_UNIT = -1;
+	public static final int CELL_GMEMORI_ID = -8;
 	public static final String isMultiBrand = "37";
 	public static final String multiBrandInput = "36";
 	public static final String MAP_TYPE = "mapType";
@@ -68,6 +70,7 @@ public interface BudgetConstants {
 	public static final String New_GTFReport_PoNumber = "8";
 	public static final String New_GTFReport_PoDesc = "9";
 	public static final String New_GTFReport_Vendor = "10";
+	public static final String New_GTFReport_Unit = "49";
 	public static final String New_GTFReport_Remarks = "25";
 	public static final String New_isMultiBrand = "37";
 	public static final String New_multiBrandInput = "36";
@@ -77,7 +80,7 @@ public interface BudgetConstants {
 	public static final String NEW = "new";
 	
 	//cell numbers edit projects
-	public static final String NUMBER_OF_HDN_COLS = "5";
+	public static final String NUMBER_OF_HDN_COLS = "6";
 	
 	public static final String STATUS_CELL = "0";
 	public static final String PROJECT_NAME_CELL = "1";
@@ -90,20 +93,21 @@ public interface BudgetConstants {
 	public static final String ALLOCATION_PERCENTAGE_CELL = "8";
 	public static final String PO_NUMBER_CELL = "9";
 	public static final String VENDOR_CELL = "10";
-	public static final String JAN_CELL = "11";
-	public static final String FEB_CELL = "12";
-	public static final String MAR_CELL = "13";
-	public static final String APR_CELL = "14";
-	public static final String MAY_CELL = "15";
-	public static final String JUN_CELL = "16";
-	public static final String JUL_CELL = "17";
-	public static final String AUG_CELL = "18";
-	public static final String SEP_CELL = "19";
-	public static final String OCT_CELL = "20";
-	public static final String NOV_CELL = "21";
-	public static final String DEC_CELL = "22";
-	public static final String TOTAL_CELL = "23";
-	public static final String REMARK_CELL = "24";
+	public static final String UNIT_CELL = "11";
+	public static final String JAN_CELL = "12";
+	public static final String FEB_CELL = "13";
+	public static final String MAR_CELL = "14";
+	public static final String APR_CELL = "15";
+	public static final String MAY_CELL = "16";
+	public static final String JUN_CELL = "17";
+	public static final String JUL_CELL = "18";
+	public static final String AUG_CELL = "19";
+	public static final String SEP_CELL = "20";
+	public static final String OCT_CELL = "21";
+	public static final String NOV_CELL = "22";
+	public static final String DEC_CELL = "23";
+	public static final String TOTAL_CELL = "24";
+	public static final String REMARK_CELL = "25";
 	
 	//field numbers edit projects
 	
@@ -118,6 +122,7 @@ public interface BudgetConstants {
 	public static final String ALLOCATION_PERCENTAGE_FIELD = "7";
 	public static final String PO_NUMBER_FIELD = "8";
 	public static final String VENDOR_FIELD = "10";
+	public static final String UNIT_FIELD = "49";
 	public static final String JAN_FIELD = "12";
 	public static final String FEB_FIELD = "13";
 	public static final String MAR_FIELD = "14";

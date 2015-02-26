@@ -393,7 +393,7 @@ String ccView="";
 	var totalSize = 0;
 	var numHideColumns = <%=BudgetConstants.NUMBER_OF_HDN_COLS%>;
 	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
-	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", 
+	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Unit",
 	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
 	        			"DEC", "Total", "Remark" ];
 	var noOfNew = 0;
@@ -417,20 +417,21 @@ String ccView="";
 		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text},
 		{ id : 10, name : columnNames[9], field : <%=BudgetConstants.PO_NUMBER_FIELD%>, width : 90, editor : Slick.Editors.PONumberText, formatter : Slick.Formatters.poField},
 		{ id : 11, name : columnNames[10], field : <%=BudgetConstants.VENDOR_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
-		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.UNIT_FIELD%>, width : 90, editor : Slick.Editors.Integer, formatter : Slick.Formatters.editableField},
+		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	} ];
 
 	//Columns displayed when hide columns is checked
@@ -441,20 +442,20 @@ String ccView="";
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
 		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
-		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
 	}]
 	var searchString = "";
 	
@@ -590,6 +591,7 @@ String ccView="";
     				d[8]="<%=gReport.getPoNumber()%>";
     				d[9]="<%=gReport.getPoDesc()%>";
     				d[10]="<%=gReport.getVendor()%>";
+    				d[49]="<%=gReport.getUnits()%>";
     				d[11]="Planned";
     				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
     				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
@@ -1288,7 +1290,7 @@ String ccView="";
 				}
 				if (args.item["11"] == "Planned"
 									&& (cols[cell].name == "Project Name" || cols[cell].name == "Project WBS" || 
-											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || isAnEditableId ) &&  
+											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || cols[cell].name == "Unit" || isAnEditableId ) &&  
 											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active")) {
 					return true;
 				}

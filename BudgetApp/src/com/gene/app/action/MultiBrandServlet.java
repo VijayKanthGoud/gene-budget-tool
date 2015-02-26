@@ -115,6 +115,7 @@ public class MultiBrandServlet extends HttpServlet {
 					paretnGtfReport.setStatus(gtfRpt.getStatus());
 					paretnGtfReport.setSubActivity(gtfRpt.getSubActivity());
 					paretnGtfReport.setVendor(gtfRpt.getVendor());
+					paretnGtfReport.setUnits(gtfRpt.getUnits());
 					paretnGtfReport.setWBS_Name(gtfRpt.getWBS_Name());
 					paretnGtfReport.setProjectName(projectName);
 					paretnGtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
@@ -186,6 +187,7 @@ public class MultiBrandServlet extends HttpServlet {
 						childGtfReport.setStatus(gtfRpt.getStatus());
 						childGtfReport.setSubActivity(gtfRpt.getSubActivity());
 						childGtfReport.setVendor(gtfRpt.getVendor());
+						childGtfReport.setUnits(gtfRpt.getUnits());
 						childGtfReport.setWBS_Name(gtfRpt.getWBS_Name());
 						childGtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
 
@@ -246,6 +248,7 @@ public class MultiBrandServlet extends HttpServlet {
 						newChildGtfReport.setStatus(gtfRpt.getStatus());
 						newChildGtfReport.setSubActivity(gtfRpt.getSubActivity());
 						newChildGtfReport.setVendor(gtfRpt.getVendor());
+						newChildGtfReport.setUnits(gtfRpt.getUnits());
 						newChildGtfReport.setWBS_Name(gtfRpt.getWBS_Name());
 						newChildGtfReport.setPlannedMap(setZeroMap);
 						newChildGtfReport.setAccrualsMap(setZeroMap);

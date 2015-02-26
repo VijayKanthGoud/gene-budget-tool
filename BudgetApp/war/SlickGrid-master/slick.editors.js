@@ -180,7 +180,7 @@
     var scope = this;
 
     this.init = function () {
-      $input = $("<INPUT type=text class='editor-text'/>");
+      $input = $("<INPUT type=text class='editor-text' maxlength='6'/>");
 
       $input.bind("keydown.nav", function (e) {
         if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
@@ -220,10 +220,10 @@
     };
 
     this.validate = function () {
-      if (isNaN($input.val())) {
+      if (isNaN($input.val()) || ($input.val()) < 0 || ($input.val()) > 999999 ) {
         return {
           valid: false,
-          msg: "Please enter a valid integer"
+          msg: "Please enter a valid integer between 0 - 999,999"
         };
       }
 

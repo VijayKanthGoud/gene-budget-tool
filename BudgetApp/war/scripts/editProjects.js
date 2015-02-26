@@ -319,7 +319,7 @@ function updateMemCache(e, args, tempKey) {
 	if(cell <= <%=BudgetConstants.PROJECT_OWNER_CELL%>){
 		fixedCell = cell;
 	}
-	var itemCell = fixedCell + 1;
+	var itemCell = fixedCell;
 	
 	if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
@@ -348,7 +348,7 @@ function updateMemCache(e, args, tempKey) {
 	}else{
 		cellValue = item[itemCell];
 	}
-	var cellNum = fixedCell - 11;
+	var cellNum = fixedCell - 12;
 	key = item[34];
 	var aSaveData=[];
 	var iCnt=0;
@@ -457,32 +457,34 @@ function updateMemCache(e, args, tempKey) {
 					d[24]= parseFloat(varTotal);
 		 		}
 		 		iCnt++;
-	 		}else if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+	 		}else if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
 		 		var aSave = (aSaveData[iCnt] = {});
 		 		aSave[0] = d[27];
 		 		if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
-		 			d[fixedCell] = args.item[fixedCell];
-		 			aSave[1] = d[fixedCell];
+		 			d[<%=BudgetConstants.VENDOR_FIELD%>] = args.item[<%=BudgetConstants.VENDOR_FIELD%>];
+		 			aSave[1] = d[<%=BudgetConstants.VENDOR_FIELD%>];
 		 		}else if(fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	){
-		 			d[fixedCell - 2] = args.item[fixedCell - 2];
-		 			aSave[1] = d[fixedCell - 2];
+		 			d[<%=BudgetConstants.SUBACTIVITY_FIELD%>] = args.item[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
+		 			aSave[1] = d[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
 		 		}else if(fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%>){
-		 			d[fixedCell - 3] = args.item[fixedCell - 3];
-		 			aSave[1] = d[fixedCell - 3];
+		 			d[<%=BudgetConstants.PROJECT_WBS_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
+		 			aSave[1] = d[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
 		 		}else if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
-		 			d[fixedCell - 1] = args.item[fixedCell - 1];
-		 			aSave[1] = d[fixedCell - 1];
+		 			d[<%=BudgetConstants.PO_NUMBER_FIELD%>] = args.item[<%=BudgetConstants.PO_NUMBER_FIELD%>];
+		 			aSave[1] = d[<%=BudgetConstants.PO_NUMBER_FIELD%>];
 		 		}else if(fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%>){
 		 			d[itemCell] = args.item[itemCell];
 		 			aSave[1] = d[itemCell];
 		 		}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
-		 		//alert(d[fixedCell - 4]);
-		 		if(d[fixedCell - 4].toString().indexOf(".")!=-1){
-		 			d[fixedCell - 4] = args.item[fixedCell - 4] +"." +d[fixedCell - 4].toString().split(".")[1]
+		 		if(d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().indexOf(".")!=-1){
+		 			d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>] +"." +d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().split(".")[1]
 		 		}else{
-		 			d[fixedCell - 4] = args.item[fixedCell - 4];
+		 			d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
 		 		}
-		 			aSave[1] = d[fixedCell - 4];
+		 			aSave[1] = d[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
+		 		}else if(fixedCell == <%=BudgetConstants.UNIT_CELL%>){
+		 			d[<%=BudgetConstants.UNIT_FIELD%>] = args.item[<%=BudgetConstants.UNIT_FIELD%>];
+		 			aSave[1] = d[<%=BudgetConstants.UNIT_FIELD%>];
 		 		}
 		 		//aSave[2] = d["47"];
 		 		iCnt++;
@@ -517,7 +519,7 @@ function updateMemCache(e, args, tempKey) {
 			$("#statusMessage");
 			summaryResult = result;
 			getSummaryValues();
-			if(cellNum == '-2' /*|| cellNum == '-10' */ || cellNum == '-7' || cellNum == '-9'){
+			if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>' || cellNum == '<%=BudgetConstants.CELL_GMEMORI_ID%>' || cellNum == '<%=BudgetConstants.CELL_BRAND%>'){
 				window.location.reload(true);
 			}
 		},

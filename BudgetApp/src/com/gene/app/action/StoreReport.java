@@ -109,6 +109,11 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setPoDesc(poDesc);
 				gtfReport.setVendor(rprtObject
 						.getString(BudgetConstants.New_GTFReport_Vendor));
+				try{
+					gtfReport.setUnits(Integer.parseInt(rprtObject.getString(BudgetConstants.New_GTFReport_Unit)));
+				}catch(Exception ne){
+					gtfReport.setUnits(0);
+				}
 				gtfReport.setCreateDate(timeStamp);
 				gtfReport.setYear(BudgetConstants.dataYEAR);
 				gtfReport.setCostCenter(user.getSelectedCostCenter());
@@ -199,7 +204,6 @@ public class StoreReport extends HttpServlet {
 			gtfReport.setYear(BudgetConstants.dataYEAR);
 			gtfReport.setQual_Quant("Qual_Quant");
 			gtfReport.setStudy_Side("study_Side");
-			gtfReport.setUnits(1);
 			try {
 				gtfReport
 						.setPercent_Allocation(BudgetConstants.GTF_Percent_Total);

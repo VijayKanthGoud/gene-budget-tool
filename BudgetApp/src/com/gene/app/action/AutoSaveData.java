@@ -127,13 +127,14 @@ public class AutoSaveData extends HttpServlet {
 							gtfReportObj.setFlag(2);
 							LOGGER.log(Level.INFO, "Set flag to : " + gtfReportObj.getFlag());
 							gtfReportMap.put(keyNum, gtfReportObj);	
-						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PNAME ||
-								Integer.parseInt(cellNum) == BudgetConstants.CELL_PWBS ||
-								Integer.parseInt(cellNum) == BudgetConstants.CELL_SUBACTVTY ||
-								Integer.parseInt(cellNum) == BudgetConstants.CELL_VENDOR ||
-								Integer.parseInt(cellNum) == BudgetConstants.CELL_BRAND){
+						} else if (Integer.parseInt(cellNum) == BudgetConstants.CELL_PNAME
+								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_PWBS
+								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_SUBACTVTY
+								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_VENDOR
+								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_UNIT
+								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_BRAND) {
 							String strValue = cellValue;
-							switch(Integer.parseInt(cellNum)){
+							switch (Integer.parseInt(cellNum)) {
 							case BudgetConstants.CELL_PNAME:
 								gtfReportObj.setProjectName(strValue);
 								break;
@@ -148,6 +149,14 @@ public class AutoSaveData extends HttpServlet {
 								break;
 							case BudgetConstants.CELL_BRAND:
 								gtfReportObj.setBrand(strValue);
+								break;
+							case BudgetConstants.CELL_UNIT:
+								try {
+									gtfReportObj.setUnits(Integer
+											.parseInt(strValue));
+								} catch (Exception e) {
+									gtfReportObj.setUnits(0);
+								}
 								break;
 							default:
 								break;
