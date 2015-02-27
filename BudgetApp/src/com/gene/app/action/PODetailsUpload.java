@@ -155,11 +155,11 @@ public class PODetailsUpload extends HttpServlet {
 			} catch (NumberFormatException ne) {
 				createNewReport(user, rcvdRow, gtfReports,costCentre);
 			}
-			if (gtfReports.size() != 0) {
-				util.generateProjectIdUsingJDOTxn(gtfReports);
-				util.storeProjectsToCache(gtfReports, costCentre,
-						BudgetConstants.NEW);
-			}
+		}
+		if (gtfReports.size() != 0) {
+			util.generateProjectIdUsingJDOTxn(gtfReports);
+			util.storeProjectsToCache(gtfReports, costCentre,
+					BudgetConstants.NEW);
 		}
 	}
 
