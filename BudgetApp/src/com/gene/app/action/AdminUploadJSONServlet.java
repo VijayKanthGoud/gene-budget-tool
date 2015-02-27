@@ -55,7 +55,7 @@ public class AdminUploadJSONServlet extends HttpServlet {
 			JSONArray jsonArray = new JSONArray(objarray);
 			/*costCentre = jsonArray.getJSONArray(18).get(3)
 					.toString().split("\\s")[0];*/
-			for (int count = fromLine; count < toLine; count++) {
+			for (int count = fromLine-1; count < toLine; count++) {
 				List list = new ArrayList();
 				for (int k = 3; k < jsonArray.getJSONArray(count).length(); k++) {
 					String varCol = jsonArray.getJSONArray(count).get(k)
@@ -98,12 +98,12 @@ public class AdminUploadJSONServlet extends HttpServlet {
 					user = util.getUserByName(userMap,recvdRow.get(8).toString());
 					if(user==null || user.getEmail()==null){
 						user = orgUser;
-						gtfReport.setRequestor(user.getFullName());
+						gtfReport.setRequestor(user.getUserName());
 					}
 				}
 			} else {
 				user = orgUser;
-				gtfReport.setRequestor(user.getFullName());
+				gtfReport.setRequestor(user.getUserName());
 			}
 			gtfReport.setCostCenter(costCentre);
 
