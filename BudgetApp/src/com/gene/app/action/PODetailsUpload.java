@@ -20,10 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.gene.app.dao.DBUtil;
 import com.gene.app.model.GtfReport;
@@ -34,9 +32,9 @@ import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 
 @SuppressWarnings("serial")
-public class UserUploadServlet extends HttpServlet {
+public class PODetailsUpload extends HttpServlet {
 	private final static Logger LOGGER = Logger
-			.getLogger(UserUploadServlet.class.getName());
+			.getLogger(PODetailsUpload.class.getName());
 	DBUtil util = new DBUtil();
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
 	String costCenter = "";
@@ -84,7 +82,7 @@ public class UserUploadServlet extends HttpServlet {
 					costCenterWiseGtfRptMap,costCenter);
 		}catch (JSONException exception) {
 			LOGGER.log(Level.SEVERE,
-					"ERROR OCCURED DURING  FILE UPLOAD. eRROR DETAILS : "
+					"ERROR OCCURED DURING  FILE UPLOAD. ERROR DETAILS : "
 							+ exception);
 		}
 		/*try {

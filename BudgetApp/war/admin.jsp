@@ -124,7 +124,7 @@ ng\:form {
 		//console.log(JSON.stringify(excelValue.sheets["Main"].data));
 		if(selectedTab==1){
 			  $.ajax({
-					url : '/adminjsonupload',
+					url : '/factsheetupload',
 					type : 'POST',
 					dataType : 'text',
 					data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
@@ -142,7 +142,7 @@ ng\:form {
 				}); 
 		}else{
 		  $.ajax({
-				url : '/userupload',
+				url : '/podetailsupload',
 				type : 'POST',
 				dataType : 'text',
 				data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),

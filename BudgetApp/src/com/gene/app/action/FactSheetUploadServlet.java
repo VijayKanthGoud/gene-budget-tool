@@ -27,9 +27,9 @@ import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 
 @SuppressWarnings("serial")
-public class AdminUploadJSONServlet extends HttpServlet {
+public class FactSheetUploadServlet extends HttpServlet {
 	private final static Logger LOGGER = Logger
-			.getLogger(AdminUploadJSONServlet.class.getName());
+			.getLogger(FactSheetUploadServlet.class.getName());
 	DBUtil util = new DBUtil();
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
 

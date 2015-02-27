@@ -148,21 +148,21 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>AdminJSONUpload</servlet-name>
-		<servlet-class>com.gene.app.action.AdminUploadJSONServlet</servlet-class>
+		<servlet-name>FactSheetUpload</servlet-name>
+		<servlet-class>com.gene.app.action.FactSheetUploadServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>AdminJSONUpload</servlet-name>
-		<url-pattern>/adminjsonupload</url-pattern>
+		<servlet-name>FactSheetUpload</servlet-name>
+		<url-pattern>/factsheetupload</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>UserUpload</servlet-name>
-		<servlet-class>com.gene.app.action.UserUploadServlet</servlet-class>
+		<servlet-name>PODetailsUpload</servlet-name>
+		<servlet-class>com.gene.app.action.PODetailsUpload</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>UserUpload</servlet-name>
-		<url-pattern>/userupload</url-pattern>
+		<servlet-name>PODetailsUpload</servlet-name>
+		<url-pattern>/podetailsupload</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
