@@ -39,7 +39,7 @@ public class InitiateProjectServlet extends HttpServlet{
 		prjParam.setProjectName(req.getParameter("prj_name"));
 		storeRprtTogMemori(req, resp, prjParam);
 	}
-	
+
 	public void storeRprtTogMemori(HttpServletRequest req,
 			HttpServletResponse resp, ProjectParameters prjParam) {
 
@@ -100,7 +100,7 @@ public class InitiateProjectServlet extends HttpServlet{
 				}
 
 				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentre(),respFrmStudy.getNewGMemId());
-				resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId =123123123");
+				resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId ="+respFrmStudy.getNewGMemId());
 			} else {
 				throw new Exception();
 			}
@@ -114,7 +114,7 @@ public class InitiateProjectServlet extends HttpServlet{
 		}
 
 	}
-	
+
 	public void updateGMemoriIdInBudget(String gMemoriId,String costCenter,String gMemIdFrmStudy){
 		DBUtil util = new DBUtil();
 		Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(costCenter);
