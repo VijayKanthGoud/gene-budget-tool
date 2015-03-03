@@ -525,7 +525,9 @@ String ccView="";
 			
 		<%}
 		}%>
+		
 		if(newExist ==false){
+		
 			dummyNewProjects();
 		}
 		}
@@ -1221,12 +1223,12 @@ String ccView="";
 		
 		
 		
-		/* 	// delete cell data on press of delete button
+		 	// delete cell data on press of delete button
 		grid.onKeyDown.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row - 1;
 			var fixedCell = cell;
-			if (e.which == 46) {
+			if (e.which == 38 || e.which == 40 || e.which == 13) {
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;
 				}
@@ -1238,7 +1240,7 @@ String ccView="";
 				grid.invalidate();
 				e.stopPropagation();
 			}
-		}); */
+		}); 
 		
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
@@ -1757,6 +1759,8 @@ String ccView="";
 <form id="exportExcel" name="exportExcel" method="post" action="/download" target="myIFrm">
 <input type="hidden" name="objarray" id="objArrayId"/>
 <input type="hidden" name="costCenter" id="ccId"/>
+<input type="hidden" name="viewSelected" id="viewSelected"/>
+<input type="hidden" name="brandSelected" id="brandSelected"/>
 </form>
 <iframe id="myIFrm" name="myIFrm" src="" style="visibility:hidden">
 
