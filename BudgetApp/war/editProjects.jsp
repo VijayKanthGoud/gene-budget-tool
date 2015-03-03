@@ -1256,6 +1256,9 @@ String ccView="";
 			}
 			var userName = '<%= user.getUserName()%>';
 			var role = '<%= user.getRole()%>';
+			if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin"){
+				return false;
+			}
 			if((role!='Admin') && (args.item["26"]=="Active" || args.item["26"]=="New") && 
 					(args.item["11"] == "Accrual" || args.item["11"] == "Planned") && 
 					(args.item["48"]!=null && args.item["48"]!='' && args.item["48"] != userName)){
@@ -1416,6 +1419,18 @@ String ccView="";
 		    }
 		});
 		
+		if($('#selectedUserView').val() == 'My Projects' || '<%=user.getRole()%>'=="Admin"){
+			$('#exportButton').show();
+		}else{
+			$('#exportButton').hide();
+		}
+		$('#selectedUserView').change(function() {
+			if($('#selectedUserView').val() == 'My Projects'  || '<%=user.getRole()%>'=="Admin"){
+				$('#exportButton').show();
+			}else{
+				$('#exportButton').hide();
+			}
+		});
 	})
 
 	// Persist the data to datastore while moving to other page or closing the application
@@ -1704,7 +1719,7 @@ String ccView="";
 </script>
 <!-- to be removed after uat 2 -->
 	<div width='100%' align=right>
-	<button class="myButton" value="" onclick="openDownloadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
+	<button id="exportButton" class="myButton" value="" onclick="openDownloadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
 	</div>
 	</br>
 	<!-- <div>
