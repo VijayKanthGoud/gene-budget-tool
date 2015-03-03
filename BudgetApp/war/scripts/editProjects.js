@@ -941,6 +941,8 @@ function deleteSelectedProjects() {
 	
 	var pLength = m_data.length;
 	var noProjToDelete = true;
+	if(itemClicked[1]=='<%=user.getUserName()%>' || '<%=user.getRole()%>'=="Admin" ){
+		
 	for (var count = 0; count < m_data.length; count++) {
 		if (m_data[count]["8"] != 'undefined' && m_data[count]["8"] == true) {
 			var userAccepted = confirm("Selected project(s) will be deleted. Want to continue?");
@@ -951,9 +953,13 @@ function deleteSelectedProjects() {
 			noProjToDelete = false;
 		}
 	}
-	if (noProjToDelete) {
+	 if (noProjToDelete) {
 		alert("Please select project(s) to delete.");
 	}
+	}else{
+		alert("You are not Authorised to delete this Project");
+	}
+	
 	for (var c = 0; c < pLength; c++) {
 		if (c >= m_data.length) {
 			var d = (m_data[c] = {});
@@ -991,11 +997,14 @@ function deleteSelectedProjects() {
 }
 
 function initDeletionCell(row) {
+	
 	for (var count = 0; count < m_data.length; count++) {
 		var thisId = "#" + count + "chkBox";
 		if ($(thisId).is(':checked')) {
 			m_data[count]["8"] = true;
-		} else {
+		}
+	
+		else {
 			m_data[count]["8"] = false;
 		}
 	}
@@ -1105,7 +1114,10 @@ function submitProjects(){
 
 
 function exportExcelData(){
-	
+	var val = $('#selectedUserView').val();
+	var ccVal = $('#getCostCenter').val();
+	var brandValue = $('#getBrand1').val();
+	alert(val+":::::::::"+ccVal+"::::::"+brandValue);
 	//code for server side export
 /*	alert($('#getCostCenter').val());*/
 	if($('input:radio[name=selectCC]:checked').val() == 1){
@@ -1170,10 +1182,17 @@ function onClickAsynch(){
 	function ServletCall(i){
 		
 		console.log("Downloading data...");
+		var viewVal = $('#selectedUserView').val();
+		//var ccVal = $('#getCostCenter').val();
+		var brandValue = $('#getBrand1').val();
 		
 //			alert('Inside t 	imeout function'+i);
 		$('#objArrayId').val('');
 		$('#ccId').val(i);
+		$('#viewSelected').val(viewVal);
+		$('#brandSelected').val(brandValue);
+		
+		
 	    document.getElementById('exportExcel').submit();
 	    
 		
