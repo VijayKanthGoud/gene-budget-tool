@@ -82,6 +82,19 @@ public class UpdateStudyInBudget {
 					eObj.setStatusMessage("User is not authorised to edit the project !!!");
 					return eObj;
 				}
+				switch(prjParam.getpStatus()){
+				case "New":
+					gtfReport.setFlag(1);
+					break;
+				case "Active":
+					gtfReport.setFlag(2);
+					break;
+				case "Closed":
+					gtfReport.setFlag(3);
+					break;
+				default:
+					break;
+				}
 				gtfReport.setStatus(prjParam.getpStatus());
 				gtfReport.setRequestor(prjParam.getpUnixId());
 				gtfReport.setCostCenter(costCenter);
