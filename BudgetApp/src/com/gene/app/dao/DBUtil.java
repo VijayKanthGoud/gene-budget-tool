@@ -971,4 +971,35 @@ public class DBUtil {
 		}
 		return gtfReportList;
 	}
+	public List<GtfReport> getReportListByBrand(
+			Map<String, GtfReport> gtfReports, String userType,
+			String selectedBrand) {
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		if (gtfReports != null) {
+
+			for (Map.Entry<String, GtfReport> gtfEntry : gtfReports.entrySet()) {
+				gtfReport = gtfEntry.getValue();
+				if ((selectedBrand != null && !"".equals(selectedBrand.trim()))
+						&& (gtfReport.getBrand().trim().toLowerCase())
+								.equalsIgnoreCase(selectedBrand.toLowerCase()
+										.trim())) {
+					gtfReportList.add(gtfReport);
+				}
+			}
+		}
+		return gtfReportList;
+	}
+
+	public List<GtfReport> getReportListCC(Map<String, GtfReport> gtfReports) {
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		GtfReport gtfReport = null;
+		if (gtfReports != null) {
+			for (Map.Entry<String, GtfReport> gtfEntry : gtfReports.entrySet()) {
+				gtfReport = gtfEntry.getValue();
+				gtfReportList.add(gtfReport);
+			}
+		}
+		return gtfReportList;
+	}
 }
