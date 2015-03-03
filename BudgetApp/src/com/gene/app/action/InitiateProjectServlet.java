@@ -100,7 +100,7 @@ public class InitiateProjectServlet extends HttpServlet{
 				}
 
 				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentre(),respFrmStudy.getNewGMemId());
-				resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId ="+respFrmStudy.getNewGMemId());
+				resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
 			} else {
 				throw new Exception();
 			}
