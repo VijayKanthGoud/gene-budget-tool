@@ -8,8 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,6 +23,7 @@ import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.Util;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.UserService;
@@ -68,6 +68,8 @@ public class GetReport extends HttpServlet {
 		//gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
 		// for project owner role
 		System.out.println(":::"+selectedBrand+":::::"+selectedView+"::::"+selectedCC);
+		Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
+		Object[] myBrands = {}; 
 		if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && !user.getRole().contains("Admin")){
 			gtfReports = util.getAllReportDataFromCache(user.getSelectedCostCenter());
 			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports);
@@ -78,6 +80,8 @@ public class GetReport extends HttpServlet {
 					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
 				selectedView = "My Brands";
 				selectedCC = "7135";
+			}
+			if(!Util.isNullOrEmpty(selectedBrand)){
 				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
 				 List<CostCenter_Brand> costCenterList =util.readCostCenterBrandMappingData();
 				for(CostCenter_Brand ccBrand : costCenterList){
@@ -89,11 +93,14 @@ public class GetReport extends HttpServlet {
 				if(ccBrandMap.getBrandFromDB().contains("Avastin")){
 					selectedBrand = "Avastin";
 				}else{
-					selectedBrand =ccBrandMap.getBrandFromDB().split(":")[0];
+					userBrandMap = util.getBrandMap(ccBrandMap.getBrandFromDB());
+					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
+					myBrands = sortedMap.keySet().toArray();
+					selectedBrand =myBrands[0].toString();
 				}
-					
+			}	
 		//user.setCostCenter(selectedCC);
-			}
+			//}
 		gtfReports = util.getAllReportDataFromCache(selectedCC);
 		gtfReportList = getRptListForLoggedInUser(user, selectedView, selectedBrand, gtfReports);
 		}
