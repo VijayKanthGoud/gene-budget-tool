@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -23,9 +24,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.gene.app.dao.DBUtil;
+import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.Util;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
@@ -51,7 +54,8 @@ public class DownloadFileServlet extends HttpServlet {
 		Map<String, GtfReport> completeGtfRptMap = new LinkedHashMap<String, GtfReport>();
 		String objarray = request.getParameter(BudgetConstants.objArray).toString();
 		String costCenter = request.getParameter("costCenter").toString();
-		
+		String viewSelected = request.getParameter("viewSelected").toString();
+		String brandSelected = request.getParameter("brandSelected").toString();
 		// LOGGER.log(Level.INFO, "Inside GetReport");
 		if (user == null) {
 			userService = UserServiceFactory.getUserService();// (User)session.getAttribute("loggedInUser");
@@ -76,7 +80,8 @@ public class DownloadFileServlet extends HttpServlet {
 		List <GtfReport> list = new ArrayList<GtfReport>();
 		try {
 			
-		
+			Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
+			Object[] myBrands = {}; 
 		if(objarray!=null && !"".equalsIgnoreCase(objarray)){
 			jsonArray = new JSONArray(objarray);
 		for (int count = 0; count < jsonArray.length(); count++) {
@@ -89,7 +94,44 @@ public class DownloadFileServlet extends HttpServlet {
 			}
 			
 		}}else{
-			list = getReportListCC(gtfReportMap);
+			if(!Util.isNullOrEmpty(viewSelected)){
+				viewSelected ="My Brands";
+			}
+			if(!Util.isNullOrEmpty(brandSelected)){
+				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
+				 List<CostCenter_Brand> costCenterList =util.readCostCenterBrandMappingData();
+				for(CostCenter_Brand ccBrand : costCenterList){
+					if(user.getSelectedCostCenter().equalsIgnoreCase(ccBrand.getCostCenter().trim())){
+						ccBrandMap = ccBrand;
+						break;
+					}
+				}
+				if(ccBrandMap.getBrandFromDB().contains("Indirect Product")){
+					brandSelected = "Indirect Product";
+				}else{
+					userBrandMap = util.getBrandMap(ccBrandMap.getBrandFromDB());
+					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
+					myBrands = sortedMap.keySet().toArray();
+					brandSelected =myBrands[0].toString();
+				//	brandSelected =ccBrandMap.getBrandFromDB().split(":")[0];
+				}
+			}
+			
+			switch(viewSelected){
+			case "My Brands":
+				list = util.getReportListByBrand(gtfReportMap,BudgetConstants.USER_ROLE_BRAND_OWNER,brandSelected);
+				break;
+			case "My Projects":
+				list = util.getReportList(gtfReportMap, BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
+				break;
+			case "My Cost Center":
+				list = util.getReportListCC(gtfReportMap);
+				break;
+			default:
+				list = util.getReportListCC(gtfReportMap);
+				break;
+			}
+			
 		}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -264,7 +306,7 @@ public class DownloadFileServlet extends HttpServlet {
 			cellR1.setCellValue(m);
 		}
 	}
-	public List<GtfReport> getReportListCC(Map<String, GtfReport> gtfReports) {
+	/*public List<GtfReport> getReportListCC(Map<String, GtfReport> gtfReports) {
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		GtfReport gtfReport = null;
 		if (gtfReports != null) {
@@ -274,5 +316,5 @@ public class DownloadFileServlet extends HttpServlet {
 			}
 		}
 		return gtfReportList;
-	}
+	}*/
 }
