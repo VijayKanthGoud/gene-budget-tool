@@ -66,7 +66,7 @@ public class UpdateStudyInBudget {
 		String gMemoriId = prjParam.getgMemoriId();
 		System.out.println("gMemoriId"+gMemoriId);
 		System.out.println("gtfRptMap.get(gMemoriId)"+gtfRptMap.get(gMemoriId));
-		if(gtfRptMap.get(gMemoriId)==null){
+		if(gtfRptMap.get(gMemoriId)==null || (gMemoriId.length()!=6)){
 			eObj.setStatusCode(405);
 			eObj.setStatusMessage("gMemori Id : " +gMemoriId+" doesn't exist in CostCenter: "+costCenter+" of Budgeting Tool !!!");
 			return eObj;
