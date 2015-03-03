@@ -14,6 +14,13 @@ public class ErrorObject {
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
+	public String getNewGMemId() {
+		return newGMemId;
+	}
+	public void setNewGMemId(String newGMemId) {
+		this.newGMemId = newGMemId;
+	}
 	private String statusMessage;
 	private int statusCode;
+	private String newGMemId;
 }
