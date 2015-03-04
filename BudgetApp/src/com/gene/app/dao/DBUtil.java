@@ -713,6 +713,26 @@ public class DBUtil {
 			return costCenterList;
 		}
 		
+		public List<String> readAllCostCenters(){
+			String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+			cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+			CostCenter_Brand cost_brand = new CostCenter_Brand();
+			List<String> costCenterList = new ArrayList<String>();
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			Query q = pm.newQuery(CostCenter_Brand.class);
+			q.setOrdering("costCenter asc");
+			//q.declareParameters("String emailParam");
+			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
+			if(!results.isEmpty()){
+			for (CostCenter_Brand p : results) {
+				cost_brand = p;
+				costCenterList.add(cost_brand.getCostCenter());
+			}
+			}
+			cache.put(key, costCenterList);
+			return costCenterList;
+		}
+		
 		public Map<String,BudgetSummary> prepareBrandMap(String brands){
 			Map<String,BudgetSummary> brandMap = new HashMap<String,BudgetSummary>();
 			//Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;

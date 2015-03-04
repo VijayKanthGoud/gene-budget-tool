@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -34,8 +35,10 @@ public class InitiateProjectServlet extends HttpServlet{
 		String costCenter = req.getParameter("ccId");
 		String gMemId = req.getParameter("dummyGMemId");
 		ProjectParameters prjParam = new ProjectParameters();
-		prjParam.setCostCentre(costCenter);
-		prjParam.setpUnixId(req.getParameter("unixId"));
+		List<String> costCenters = new ArrayList<String>();
+		costCenters.add(costCenter);
+		prjParam.setCostCentres(costCenters);
+		prjParam.setProjectOwner(req.getParameter("unixId"));
 		prjParam.setProjectName(req.getParameter("prj_name"));
 		storeRprtTogMemori(req, resp, prjParam);
 	}
@@ -80,7 +83,6 @@ public class InitiateProjectServlet extends HttpServlet{
 				ErrorObject respFrmStudy = new ErrorObject();
 				try {
 					response = new JSONObject(response_tokens);
-
 					respFrmStudy = gson.fromJson(response.toString(), ErrorObject.class);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -98,8 +100,7 @@ public class InitiateProjectServlet extends HttpServlet{
 					System.out.println("gMemoriId is:::"+respFrmStudy.getNewGMemId());
 				} catch (RuntimeException ex) {
 				}
-
-				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentre(),respFrmStudy.getNewGMemId());
+				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentres().get(0),respFrmStudy.getNewGMemId());
 				resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
 			} else {
 				throw new Exception();
@@ -108,9 +109,7 @@ public class InitiateProjectServlet extends HttpServlet{
 		} catch (Exception e) {
 			// Error handling elided.
 			String result = e.getMessage();
-
 			System.out.println("result:::" + result);
-
 		}
 
 	}
@@ -118,9 +117,10 @@ public class InitiateProjectServlet extends HttpServlet{
 	public void updateGMemoriIdInBudget(String gMemoriId,String costCenter,String gMemIdFrmStudy){
 		DBUtil util = new DBUtil();
 		Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(costCenter);
+		String ccFromStudy = "";
 		List<GtfReport> gtfRptList = new ArrayList<GtfReport>();
 		String newGMemId = "";
-		if(gtfRptMap!=null && !gtfRptMap.isEmpty()){
+		if(gtfRptMap!=null && !gtfRptMap.isEmpty() && gtfRptMap.get(gMemoriId)!=null){
 			for(Map.Entry<String, GtfReport> gtfEntry : gtfRptMap.entrySet()){
 				newGMemId = "";
 				if(gtfEntry.getKey().equals(gMemoriId) || gtfEntry.getKey().contains(gMemoriId)){
@@ -135,8 +135,9 @@ public class InitiateProjectServlet extends HttpServlet{
 					gtfRptList.add(gtfEntry.getValue());
 				}
 			}
+			util.saveAllReportDataToCache(ccFromStudy, gtfRptMap);
 			util.generateProjectIdUsingJDOTxn(gtfRptList);
-			util.saveAllReportDataToCache(costCenter, gtfRptMap);
 		}
+		
 	}
 }

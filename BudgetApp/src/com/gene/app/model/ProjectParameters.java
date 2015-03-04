@@ -1,14 +1,14 @@
 package com.gene.app.model;
 
-import java.util.LinkedHashMap;
+import java.util.List;
 
 public class ProjectParameters {
 
 	private String gMemoriId;
 	private String projectName;
-	private String costCentre;
+	private List<String> costCentres;
 	private String pStatus;
-	private String pUnixId;
+	private String projectOwner;
 	
 	public String getpStatus() {
 		return pStatus;
@@ -28,17 +28,17 @@ public class ProjectParameters {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-	public String getCostCentre() {
-		return costCentre;
+	public List<String> getCostCentres() {
+		return costCentres;
 	}
-	public void setCostCentre(String costCentre) {
-		this.costCentre = costCentre;
+	public void setCostCentres(List<String> costCentre) {
+		this.costCentres = costCentre;
 	}
 	
-	public String getpUnixId() {
-		return pUnixId;
+	public String getProjectOwner() {
+		return projectOwner;
 	}
-	public void setpUnixId(String pUnixId) {
-		this.pUnixId = pUnixId;
+	public void setProjectOwner(String projectOwner) {
+		this.projectOwner = projectOwner;
 	}
 }

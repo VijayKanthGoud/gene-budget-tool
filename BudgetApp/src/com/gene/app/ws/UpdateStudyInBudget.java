@@ -2,6 +2,7 @@ package com.gene.app.ws;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -43,42 +43,62 @@ public class UpdateStudyInBudget {
 	public ErrorObject storeProjectData(ProjectParameters prjParam, ErrorObject eObj){
 		DBUtil util = new DBUtil();
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
+		List<String> selectedCC = new ArrayList<>();
 		GtfReport gtfReport = null;
-		String costCenter = prjParam.getCostCentre();
-		String pUnixId = prjParam.getpUnixId();
+		List<String> costCenterList = prjParam.getCostCentres();
+		String pUnixId = prjParam.getProjectOwner();
 		UserRoleInfo userInfo = util.readUserRoleInfoByName(pUnixId);
 		System.out.println("userInfo"+userInfo.getUserName());
 		System.out.println("userInfo null or empty"+(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())));
-		System.out.println("costCenter = "+costCenter);
 		if(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())){
 			System.out.println("If loop userInfo null or empty"+(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())));
 			eObj.setStatusCode(401);
 			eObj.setStatusMessage("Authentication Failed !!!");
 			return eObj;
 		}else{
-			if(!Util.isNullOrEmpty(costCenter) && !userInfo.getCostCenter().contains(costCenter)){
-				System.out.println("else If 402 loop userInfo null or empty"+((!Util.isNullOrEmpty(costCenter) && !userInfo.getCostCenter().contains(costCenter))));
+			//List<String> ccBrandList = util.readAllCostCenters();
+			
+			for(String cCenter:costCenterList){
+				if(Util.isNullOrEmpty(cCenter) && userInfo.getCostCenter().contains(cCenter)){
+					selectedCC.add(cCenter);
+				}
+			}
+			
+			if(selectedCC.isEmpty()){
+				//System.out.println("else If 402 loop userInfo null or empty"+((!Util.isNullOrEmpty(selectedCC) && !userInfo.getCostCenter().contains(costCenter))));
 				eObj.setStatusCode(402);
-				eObj.setStatusMessage("User is not mapped to costCentre: " +costCenter+" !!!");
+				eObj.setStatusMessage("User is not mapped to costCentres: " +costCenterList+" !!!");
 				return eObj;
 			}
 		}
-		Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(costCenter);
-		String gMemoriId = prjParam.getgMemoriId();
+		Map<String,GtfReport> gtfRptMap = new HashMap<String,GtfReport>();
+		String gMemoriId = "";
+		String selectedCostCenter = "";
+		boolean isGMemIdExists = false; 
+		for(String cc: selectedCC){
+			gtfRptMap = util.getAllReportDataFromCache(cc);
+			gMemoriId = prjParam.getgMemoriId();
+			if(gtfRptMap.get(gMemoriId)!=null && (gMemoriId.length()==6)){
+				isGMemIdExists = true;
+				selectedCostCenter = cc;
+			}
+		}
+		//Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(costCenter);
+		//String gMemoriId = prjParam.getgMemoriId();
 		System.out.println("gMemoriId"+gMemoriId);
 		System.out.println("gtfRptMap.get(gMemoriId)"+gtfRptMap.get(gMemoriId));
-		if(gtfRptMap.get(gMemoriId)==null || (gMemoriId.length()!=6)){
+		if(!isGMemIdExists){
 			eObj.setStatusCode(405);
-			eObj.setStatusMessage("gMemori Id : " +gMemoriId+" doesn't exist in CostCenter: "+costCenter+" of Budgeting Tool !!!");
+			eObj.setStatusMessage("gMemori Id : " +gMemoriId+" doesn't exist in CostCenter associated to user: "+pUnixId+" of Budgeting Tool !!!");
 			return eObj;
 		}
 		System.out.println("gtfRptMap"+gtfRptMap);
 		for(Map.Entry<String, GtfReport> gtfEntry: gtfRptMap.entrySet()){
 			if(gtfEntry.getKey().contains(gMemoriId) && gtfEntry.getKey().length()<10){
 				gtfReport = gtfEntry.getValue();
-				System.out.println("prjParam.getProjectOwner() : "+prjParam.getpUnixId() +"::::" +gtfReport.getRequestor());
-				if((gtfReport.getRequestor().contains(":") && !prjParam.getpUnixId().equalsIgnoreCase(gtfReport.getRequestor().split(":")[0]) ) ||
-						(!gtfReport.getRequestor().contains(":") && !prjParam.getpUnixId().equalsIgnoreCase(gtfReport.getRequestor()))){
+				System.out.println("prjParam.getProjectOwner() : "+prjParam.getProjectOwner() +"::::" +gtfReport.getRequestor());
+				if((gtfReport.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfReport.getRequestor().split(":")[0]) ) ||
+						(!gtfReport.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfReport.getRequestor()))){
 					eObj.setStatusCode(403);
 					eObj.setStatusMessage("User is not authorised to edit the project !!!");
 					return eObj;
@@ -97,8 +117,8 @@ public class UpdateStudyInBudget {
 					break;
 				}
 				gtfReport.setStatus(prjParam.getpStatus());
-				gtfReport.setRequestor(prjParam.getpUnixId());
-				gtfReport.setCostCenter(costCenter);
+				gtfReport.setRequestor(prjParam.getProjectOwner());
+				gtfReport.setCostCenter(selectedCostCenter);
 				gtfReport.setProjectName(prjParam.getProjectName());
 				gtfReports.add(gtfReport);
 			}
@@ -106,7 +126,7 @@ public class UpdateStudyInBudget {
 		System.out.println("status Code"+eObj.getStatusCode());
 		System.out.println("status Message"+eObj.getStatusMessage());
 		util.generateProjectIdUsingJDOTxn(gtfReports);
-		util.storeProjectsToCache(gtfReports, costCenter, BudgetConstants.NEW);
+		util.storeProjectsToCache(gtfReports, selectedCostCenter, BudgetConstants.NEW);
 		eObj.setStatusCode(200);
 		eObj.setStatusMessage("Successful !!!");
 		return eObj;
