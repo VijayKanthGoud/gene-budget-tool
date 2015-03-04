@@ -18,6 +18,8 @@ import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 @SuppressWarnings("serial")
 public class DeleteTableServlet extends HttpServlet {
@@ -27,6 +29,7 @@ public class DeleteTableServlet extends HttpServlet {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List listToBeDeleted = null;
 		Query q;
+		MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 		switch (tableName) {
 		case "gtfreport":
 			q = pm.newQuery(GtfReport.class);
@@ -49,6 +52,7 @@ public class DeleteTableServlet extends HttpServlet {
 		}
 		if(listToBeDeleted != null && !listToBeDeleted.isEmpty()){
 			pm.deletePersistentAll(listToBeDeleted);
+			cache.clearAll();
 		}
 		resp.sendRedirect("/deleteproject.jsp");
 	}
