@@ -148,7 +148,7 @@ public class PODetailsUpload extends HttpServlet {
 						.getMultiBrand()) {
 					for (String chldgMemId : costCenterWiseGtfRptMap.get(
 							receivedGmemoriId).getChildProjectList()) {
-						if(costCenterWiseGtfRptMap.get(chldgMemId).getBrand() == brand){
+						if(costCenterWiseGtfRptMap.get(chldgMemId).getBrand().equalsIgnoreCase(brand)){
 							receivedGmemoriId = costCenterWiseGtfRptMap.get(chldgMemId).getgMemoryId();
 							receivedGtfReport = costCenterWiseGtfRptMap
 									.get(receivedGmemoriId);
