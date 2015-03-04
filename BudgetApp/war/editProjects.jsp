@@ -877,7 +877,7 @@ String ccView="";
 					} else {
 						fixedCell = cell;
 					}
-					var itemCell = fixedCell + 1;
+					var itemCell = fixedCell;
 					// Code for brand column(dropdown and validation)
 					if(/* args.item["34"]=="New projects" && */ args.cell == <%=BudgetConstants.BRAND_CELL%> ){
 						for(var i=0;i< availableTags.length;i++){
