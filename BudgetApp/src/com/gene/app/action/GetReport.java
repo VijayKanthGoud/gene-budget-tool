@@ -1,6 +1,7 @@
 package com.gene.app.action;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,6 +53,13 @@ public class GetReport extends HttpServlet {
 		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
+		String requestUri = req.getRequestURI();
+		Principal userPrincipal = req.getUserPrincipal();
+		String loginLink = userService.createLoginURL(requestUri);
+		if(userPrincipal==null){
+			resp.sendRedirect(loginLink);
+			return;
+		}
 		email = userService.getCurrentUser().getEmail();
 		user = util.readUserRoleInfo(email);
 		//LOGGER.log(Level.INFO, "email in userService"+email);
