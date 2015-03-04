@@ -871,12 +871,12 @@ body .ui-tooltip {
 	background: #f6f6f6 url("images/ui-bg_glass_100_f6f6f6_1x400.png") 50% 50% repeat-x;
 	font-weight: bold;
 	font-size: 13px;
-	color: #005691;
+	color: #2271B0;
 }
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-	color: #005691;
+	color: #2271B0;
 	text-decoration: none;
 }
 .ui-state-hover,
@@ -885,7 +885,7 @@ body .ui-tooltip {
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	border: 1px solid #005691;
+	border: 1px solid #2271B0;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,

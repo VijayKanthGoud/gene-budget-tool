@@ -82,27 +82,27 @@
 				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["0"].toString().indexOf(".") == -1))  {
 			for(var i=0;i<month;i++){
 				if(columnDef["name"]==monthArray[i]){
-				return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>";
+				return "<span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span>";
 				}
 			}
 			for(var i=month;i<12;i++){
 				if(columnDef["name"]==monthArray[i]){
-					return "<div width = '100%' style='background:#C0CCED'><span style='color:#005691'> "+ Number(value).toFixed(2) +"</span></div>" ;		
+					return "<div width = '100%' style='background:#C0CCED'><span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span></div>" ;		
 				}
 			
 		}
 			
 		}/*else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
-			return "<div width = '100%' style='background:#C0CCED'><span style='color:#005691'> "+ Number(value).toFixed(2) +"</span></div>" ;
+			return "<div width = '100%' style='background:#C0CCED'><span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span></div>" ;
 		}*/else{
-			return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>"; 
+			return "<span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span>"; 
 		}
 	  }
   }
   
   function DollarFormatterMB(row, cell, value, columnDef, dataContext) {
 	  if(dataContext[1].trim() != '' || dataContext[2].trim() != ''){
-		  return "<span style='color:#005691'> "+ Number(value).toFixed(2) +"</span>";
+		  return "<span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span>";
 	  }
   }
   
@@ -117,9 +117,9 @@
 		  if(value.toLowerCase().indexOf("mb") >= 0){
 			  return "<div width = '100%' style='background:#C0CCED'><span ><a href='#' style='color:green'>"+value + "</a></span></div>" ;		
 		  }else if(value=="Save"   && dataContext["35"] == "Buttons"){
-			  return  "<input type='button' value='"+value+"' id='submitProjBtn' style='font-size: 12px; width:80px; height: 20px; background:#005691; color:#FFFFFF'/>";
+			  return  "<input type='button' value='"+value+"' id='submitProjBtn' style='font-size: 12px; width:80px; height: 20px; background:#2271B0; color:#FFFFFF'/>";
 		  }else if( value=="Cancel"  && dataContext["35"] == "Buttons"){
-			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#005691; color:#FFFFFF' />";
+			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#2271B0; color:#FFFFFF' />";
 		  }else if(dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1 && dataContext["26"] != "Total" ){
 			  return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>" ;		
 		  }
@@ -130,7 +130,7 @@
   function cancelButtonFormatter(row, cell, value, columnDef, dataContext) {
 	  if(typeof value == "string"){
 		 if( value=="Cancel"  && dataContext["35"] == "Buttons"){
-			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#005691; color:#FFFFFF' />";
+			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#2271B0; color:#FFFFFF' />";
 		 }
 	  }
 	  return value;
@@ -166,9 +166,9 @@
   
   function BudgetFormatter(row, cell, value, columnDef, dataContext) {
 		if(value!=""){
-			return "<span style='color:#005691'>"+ Number(value).toFixed(2) +"</span>" ;
+			return "<span style='color:#2271B0'>"+ Number(value).toFixed(2) +"</span>" ;
 		}else if(dataContext[25]=="Added"){
-			return "<span style='color:#005691'>" + (0).toFixed(2) +"</span>";
+			return "<span style='color:#2271B0'>" + (0).toFixed(2) +"</span>";
 		}
   }
   

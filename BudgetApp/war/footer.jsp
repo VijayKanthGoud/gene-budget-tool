@@ -4,7 +4,7 @@
 <div id="footer" style="position: fixed; bottom: 0px; width: 100%; height: 20px; z-index: 2;">
 	<table width="100%">
 		<tr>
-			<td height="20px" style="background-color: #005691; color: #FFFFFF;  font-size: 11px; text-align : center"
+			<td height="20px" style="background-color: #2271B0; color: #FFFFFF;  font-size: 11px; text-align : center"
 					width="87%">
 						Copyright Genentech, Inc. ©2014. <a href="/user-agreement/"
 							style="color: white; text-decoration: underline;">User

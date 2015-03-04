@@ -41,11 +41,11 @@ String ccView="";
 <body onload="getBrandTotals();getAvailableTags();">  
 	<div align="center">
 		<table
-			style="border: 1px solid gray; background: #E3E8F3; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #005691; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
+			style="border: 1px solid gray; background: #EAF4FD; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #2271B0; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
 			<tr>
 				<td style="width: 20%; padding-bottom:2.5%" rowspan="2">
 					<table class="summarytable"
-						style="color: #005691; white-space: nowrap; height: 117px; width: 220px;">
+						style="color: #2271B0; white-space: nowrap; height: 117px; width: 220px;">
 						<tr>
 							<td style="padding-left: 20px;"><input type="radio"
 								name="selectedmode" value="planned">Planned <input
@@ -191,7 +191,7 @@ String ccView="";
 			<div id="selectthebrand">
 				
 				<div id="header"
-			    style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
+			    style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
 		     </div><br>
 		     <div align="left" style="padding-left: 36%">
 				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
@@ -234,7 +234,7 @@ String ccView="";
 		</div>
 	 	<td style="width: 20%;" rowspan="2">
 					<table class="summarytable"
-						style="color: #005691; white-space: nowrap; font-weight: bold;">
+						style="color: #2271B0; white-space: nowrap; font-weight: bold;">
 						<%
 							BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
 							Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
@@ -267,7 +267,7 @@ String ccView="";
 						 <tr>
        					<tr>
                             <td >Select Brand:</td>
-                            <td colspan="2"><select id="brandType" onchange="getBrandTotals()" style="color: #005691; font: normal 12 Arial, Helvetica, sans-serif;">
+                            <td colspan="2"><select id="brandType" onchange="getBrandTotals()" style="color: #2271B0; font: normal 12 Arial, Helvetica, sans-serif;">
                             <%String option = "";
                             if(brandValue==null || brandValue==""){
             					brandValue = "Avastin";
@@ -320,7 +320,7 @@ String ccView="";
 	<div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
-			style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"  align = center> Multi-brand
+			style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"  align = center> Multi-brand
 		</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
@@ -1260,7 +1260,7 @@ String ccView="";
 			var role = '<%= user.getRole()%>';
 			if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin"){
 				return false;
-			}
+			} 
 			if((role!='Admin') && (args.item["26"]=="Active" || args.item["26"]=="New") && 
 					(args.item["11"] == "Accrual" || args.item["11"] == "Planned") && 
 					(args.item["48"]!=null && args.item["48"]!='' && args.item["48"] != userName)){
@@ -1730,7 +1730,7 @@ String ccView="";
 	 -->
 <div id="uploadWindow">
 		<div id="header"
-			style="width: 100%; height: 20px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload
+			style="width: 100%; height: 20px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload
 		</div>
 		<div align='right' style='padding-right: 100px;'>
 			<form action="/userupload" method="post" enctype="multipart/form-data">

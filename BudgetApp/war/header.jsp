@@ -72,9 +72,9 @@
 	<table style="width: 100%;">
 		<tr>
 			<td style="width: 25%; float: left"><a id="logo-container"
-				href="/"> <img src="images/logo.png"
-					alt="Genentech - A Member of the Roche Group" width="120"
-					height="32" class="gene-logo has-high-res">
+				href="/"> <img src="images/elephant.png"
+					 width="120px"
+					height="100px" class="gene-logo has-high-res">
 			</a></td>
 
 			<td style="width: 50%; align: center">
@@ -96,7 +96,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="5" style="background-color: #e1e2e2; width: 100%"></td>
+			<td colspan="5" style="background-color: #e1e2e2; width: 100%; font:13px/1.231 arial, helvetica, clean, sans-serif"></td>
 		</tr>
 	</table>
 	<div style="height: 5px;"></div>

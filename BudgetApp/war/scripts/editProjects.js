@@ -175,7 +175,7 @@ function groupByStatus() {
 							+ noOfNew + " items)</span>" ;
 						
 							if(frmStudy == false){
-								returnStr +=  "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#005691; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
+								returnStr +=  "&nbsp;&nbsp;<input type='button' style='font-size: 12px; height: 25px; width: 120px; background:#2271B0; color:#FFFFFF' value='Create Projects' id='crtNewProjBtn'/>";
 							}
 						return returnStr;
 						} 

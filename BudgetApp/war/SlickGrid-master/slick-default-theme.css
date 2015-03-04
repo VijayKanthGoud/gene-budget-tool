@@ -19,20 +19,20 @@ classes should alter those!
  /*  background: white url('images/header-columns-over-bg.gif') repeat-x center bottom; */
 }
 .slick-column-name{
-	 /* background: #e3e8f3; */
+	 /* background: #EAF4FD; */
 }
 .slick-headerrow {
-  background: #e3e8f3;
+  background: #EAF4FD;
 }
 
 .slick-headerrow-column {
-  background: #e3e8f3;
+  background: #EAF4FD;
   border-bottom: 0;
   height: 100%;
 }
 
 .slick-row.ui-state-active {
-  background: #e3e8f3;
+  background: #EAF4FD;
 }
 
 .slick-row {
@@ -44,7 +44,7 @@ classes should alter those!
 
 .slick-row.selected {
   z-index: 10;
-  background: #e3e8f3;
+  background: #EAF4FD;
 }
 
 .slick-cell {
@@ -76,7 +76,7 @@ classes should alter those!
 }
 
 .slick-cell.selected {
-  background-color: #e3e8f3 !important;
+  background-color: #EAF4FD !important;
 }
 
 .slick-cell.active {
