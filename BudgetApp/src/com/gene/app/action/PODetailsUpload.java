@@ -183,27 +183,15 @@ public class PODetailsUpload extends HttpServlet {
 		receivedGtfReport.setRequestor(PM);
 		receivedGtfReport.setProject_WBS(WBS);
 		receivedGtfReport.setWBS_Name(WBSName);
-
-		if (WBS.contains("421")) {
-			receivedGtfReport.setMultiBrand(true);
-		}
-
 		receivedGtfReport.setPoNumber(rcvdRow.get(5).toString());
 		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
 		receivedGtfReport.setVendor(rcvdRow.get(7).toString());
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 				.format(Calendar.getInstance().getTime());
-		receivedGtfReport.setCreateDate(timeStamp);
-		receivedGtfReport.setYear(BudgetConstants.dataYEAR);
-		receivedGtfReport.setQual_Quant("Qual_Quant");
-		receivedGtfReport.setStudy_Side("study_Side");
-		receivedGtfReport.setUnits(1);
-		receivedGtfReport.setMultiBrand(isMultibrand);
-		receivedGtfReport.setPercent_Allocation(100);
-		//receivedGtfReport.setStatus("Active");
 		String poDesc = receivedGtfReport.getPoDesc();
-		receivedGtfReport.setProjectName(poDesc);
-		//receivedGtfReport.setFlag(2);
+		if(receivedGtfReport.getProjectName() != null && receivedGtfReport.getProjectName().equalsIgnoreCase("")){
+			receivedGtfReport.setProjectName(poDesc);
+		}
 		receivedGtfReport.setSubActivity("");
 		Map<String, Double> receivedAccrualMap = receivedGtfReport
 				.getAccrualsMap();
@@ -229,12 +217,7 @@ public class PODetailsUpload extends HttpServlet {
 		gtfReport.setRequestor(PM);
 		gtfReport.setProject_WBS(WBS);
 		gtfReport.setWBS_Name(WBSName);
-		
-		if (WBS.contains("421.")) {
-			gtfReport.setMultiBrand(true);
-		}else{
-			gtfReport.setMultiBrand(false);
-		}
+		gtfReport.setMultiBrand(false);
 
 		gtfReport.setPoNumber(rcvdRow.get(5).toString());
 		gtfReport.setPoDesc(rcvdRow.get(6).toString());

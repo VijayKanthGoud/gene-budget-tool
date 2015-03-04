@@ -2,9 +2,9 @@ package com.gene.app.util;
 
 public interface BudgetConstants {
 
-	//DBUtil.java
-	public static final String[] months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
+	// DBUtil.java
+	public static final String[] months = { "JAN", "FEB", "MAR", "APR", "MAY",
+			"JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "TOTAL" };
 	public static final int GTF_Percent_Total = 100;
 	public static final String total = "TOTAL";
 	public static final String seperator = " - ";
@@ -13,12 +13,12 @@ public interface BudgetConstants {
 	public static final String GTFReportOrderingParameters = "flag asc";
 	public static final String GTFReportOrderingParameters_getReport = "flag asc, projectName asc, gMemoryId asc";
 	public static final String GTFReportOrderingParameters_updateReports = "costCenter asc";
-	
+
 	// This variable is used in UI layer and service layer
 	public static final String costCenter = "307673";
 	public static final String dataYEAR = "2015";
-	
-	//StoreReport.java
+
+	// StoreReport.java
 	public static final String contentType = "text/plain";
 	public static final String objArray = "objarray";
 	public static final String loggedInUser = "loggedInUser";
@@ -43,7 +43,7 @@ public interface BudgetConstants {
 	public static final String KEY = "key";
 	public static final String CELL_VALUE = "cellValue";
 	public static final String CELL_NUM = "celNum";
-	
+
 	public static final int CELL_PONUMBER = -3;
 	public static final int CELL_REMARKS = 13;
 	public static final int CELL_PNAME = -11;
@@ -56,9 +56,9 @@ public interface BudgetConstants {
 	public static final String isMultiBrand = "37";
 	public static final String multiBrandInput = "36";
 	public static final String MAP_TYPE = "mapType";
-	
+
 	// New Store Report
-	
+
 	public static final String New_GTFReport_gMemoriId = "0";
 	public static final String New_GTFReport_ProjectOwner = "1";
 	public static final String New_GTFReport_ProjectName = "2";
@@ -75,18 +75,18 @@ public interface BudgetConstants {
 	public static final String New_isMultiBrand = "37";
 	public static final String New_multiBrandInput = "36";
 	public static final String GMBT_SUMMARY = "summary";
-	
+
 	public static final String OLD = "old";
 	public static final String NEW = "new";
-	
-	//cell numbers edit projects
+
+	// cell numbers edit projects
 	public static final String NUMBER_OF_HDN_COLS = "6";
-	
+
 	public static final String STATUS_CELL = "0";
 	public static final String PROJECT_NAME_CELL = "1";
 	public static final String BRAND_CELL = "2";
 	public static final String $_IN_THOUSAND_CELL = "3";
-	public static final String  GMEMORI_ID_CELL= "4";
+	public static final String GMEMORI_ID_CELL = "4";
 	public static final String PROJECT_OWNER_CELL = "5";
 	public static final String PROJECT_WBS_CELL = "6";
 	public static final String SUBACTIVITY_CELL = "7";
@@ -108,14 +108,14 @@ public interface BudgetConstants {
 	public static final String DEC_CELL = "23";
 	public static final String TOTAL_CELL = "24";
 	public static final String REMARK_CELL = "25";
-	
-	//field numbers edit projects
-	
+
+	// field numbers edit projects
+
 	public static final String STATUS_FIELD = "30";
 	public static final String PROJECT_NAME_FIELD = "2";
 	public static final String BRAND_FIELD = "6";
 	public static final String $_IN_1000_FIELD = "11";
-	public static final String GMEMORI_ID_FIELD= "0";
+	public static final String GMEMORI_ID_FIELD = "0";
 	public static final String PROJECT_OWNER_FIELD = "1";
 	public static final String PROJECT_WBS_FIELD = "3";
 	public static final String SUBACTIVITY_FIELD = "5";
@@ -137,15 +137,14 @@ public interface BudgetConstants {
 	public static final String DEC_FIELD = "23";
 	public static final String TOTAL_FIELD = "24";
 	public static final String REMARK_FIELD = "25";
-	
-	
+
 	// cell numbers edit project multiple brand pop up
 	public static final String MB_CHECKBOX_CELL = "0";
-	//public static final String MB_PROJECT_NAME_CELL = "1";
+	// public static final String MB_PROJECT_NAME_CELL = "1";
 	public static final String MB_PROJECT_OWNER_CELL = "1";
-	//public static final String MB_GMEMORI_ID_CELL = "3";
+	// public static final String MB_GMEMORI_ID_CELL = "3";
 	public static final String MB_BRAND_CELL = "2";
-	public static final String  MB_$_IN_THOUSAND_CELL= "3";
+	public static final String MB_$_IN_THOUSAND_CELL = "3";
 	public static final String MB_ALLOCATION_PERCENTAGE_CELL = "4";
 	public static final String GMEMORI_COLLECTION = "gMemoriIdCollection";
 	public static final String USER_ROLE_BRAND_OWNER = "brandOwner";
