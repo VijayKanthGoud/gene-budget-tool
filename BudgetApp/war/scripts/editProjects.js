@@ -473,8 +473,8 @@ function updateMemCache(e, args, tempKey) {
 		 			d[<%=BudgetConstants.PO_NUMBER_FIELD%>] = args.item[<%=BudgetConstants.PO_NUMBER_FIELD%>];
 		 			aSave[1] = d[<%=BudgetConstants.PO_NUMBER_FIELD%>];
 		 		}else if(fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%>){
-		 			d[itemCell] = args.item[itemCell];
-		 			aSave[1] = d[itemCell];
+		 			d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
+		 			aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
 		 		}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
 		 		if(d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().indexOf(".")!=-1){
 		 			d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>] +"." +d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().split(".")[1]
