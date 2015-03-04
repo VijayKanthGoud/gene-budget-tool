@@ -72,6 +72,7 @@ public class StoreReport extends HttpServlet {
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 				.format(Calendar.getInstance().getTime());
 		String status = "";
+		String gmultiIdList="";
 		int flag = 0;
 		try {
 			jsonArray = new JSONArray(objarray);
@@ -232,7 +233,7 @@ public class StoreReport extends HttpServlet {
 			gtfReport.setVariancesMap(setZeroMap);
 			gtfReport.setMultiBrand(isMultibrand);
 			gtfReports.add(gtfReport);
-
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -242,6 +243,7 @@ public class StoreReport extends HttpServlet {
 			GtfReport gtfReport1, JSONObject rprtObject, String timeStamp) {
 		prepareSingleBrandProjectData(gtfReports, gtfReport1, rprtObject, true,
 				timeStamp);
+		
 		GtfReport gtfReport = null;
 		JSONArray jsonArray = null;
 		JSONObject multiBrandObject = null;
@@ -251,6 +253,8 @@ public class StoreReport extends HttpServlet {
 		String prj_owner_email;
 		DBUtil util = new DBUtil();
 		String email = "";
+		ArrayList<String> gmultiIdList= new ArrayList<>();
+		gmultiIdList.add(gtfReport1.getgMemoryId());
 		try {
 			String mutliBrandArray = rprtObject
 					.getString(BudgetConstants.multiBrandInput);
@@ -330,10 +334,18 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setAccrualsMap(setZeroMap);
 				gtfReport.setVariancesMap(setZeroMap);
 				gtfReport.setMultiBrand(true);
+				gmultiIdList.add(gtfReport.getgMemoryId());
 				gtfReports.add(gtfReport);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+		for(String gmemId: gmultiIdList){
+			for(GtfReport gtf : gtfReports){
+				if(gmemId.equalsIgnoreCase(gtf.getgMemoryId())){
+					gtf.setChildProjectList(gmultiIdList);
+				}
+			}
 		}
 	}
 	public void storeRprtTogMemori(HttpServletRequest req,

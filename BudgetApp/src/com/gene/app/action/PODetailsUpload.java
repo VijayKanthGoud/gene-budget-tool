@@ -28,13 +28,14 @@ import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.ProjectSequenceGeneratorUtil;
+import com.gene.app.util.Util;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 
 @SuppressWarnings("serial")
 public class PODetailsUpload extends HttpServlet {
-	private final static Logger LOGGER = Logger
-			.getLogger(PODetailsUpload.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(PODetailsUpload.class
+			.getName());
 	DBUtil util = new DBUtil();
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
 	String costCenter = "";
@@ -59,9 +60,7 @@ public class PODetailsUpload extends HttpServlet {
 		List<List<String>> rowList = new ArrayList();
 		try {
 			JSONArray jsonArray = new JSONArray(objArray);
-			/*costCentre = jsonArray.getJSONArray(18).get(3)
-					.toString().split("\\s")[0];*/
-			for (int count = startRow-1; count < endRow; count++) {
+			for (int count = startRow - 1; count < endRow; count++) {
 				List list = new ArrayList();
 				for (int k = 0; k < jsonArray.getJSONArray(count).length(); k++) {
 					String varCol = jsonArray.getJSONArray(count).get(k)
@@ -79,83 +78,95 @@ public class PODetailsUpload extends HttpServlet {
 			costCenterWiseGtfRptMap = util
 					.getAllReportDataFromCache(costCenter);
 			createOrUpdateGTFReports(user, rowList, gtfReports,
-					costCenterWiseGtfRptMap,costCenter);
-		}catch (JSONException exception) {
+					costCenterWiseGtfRptMap, costCenter);
+		} catch (JSONException exception) {
+			System.out.println(exception + "");
 			LOGGER.log(Level.SEVERE,
 					"ERROR OCCURED DURING  FILE UPLOAD. ERROR DETAILS : "
 							+ exception);
 		}
-		/*try {
-			final FileItemIterator fileItemIterator = servletFileUpload
-					.getItemIterator(req);
-			while (fileItemIterator.hasNext()) {
-				final FileItemStream fileItemStream = (FileItemStream) fileItemIterator
-						.next();
-				String uploadedFileName;
-				if (fileItemStream.isFormField()) {
-					uploadedFileName = fileItemStream.getName();
-				} else if (fileItemStream.getFieldName().equals("file")) {
-					uploadedFileName = fileItemStream.getName();
-					LOGGER.log(Level.INFO, "UPLOAD FILE NAME :"
-							+ uploadedFileName);
-					InputStream inputStream = fileItemStream.openStream();
-					InputStream stream = new ByteArrayInputStream(
-							IOUtils.toByteArray(inputStream));
-					List<List<String>> rowList = ExcelParsingUtil
-							.readExcellData(stream, "PO Detail By PM", startRow, 21,endRow);
-					List<GtfReport> gtfReports = new ArrayList<GtfReport>();
-					Map<String, GtfReport> costCenterWiseGtfRptMap = new LinkedHashMap<String, GtfReport>();
-					costCenterWiseGtfRptMap = util
-							.getAllReportDataFromCache(costCenter);
-					createOrUpdateGTFReports(user, rowList, gtfReports,
-							costCenterWiseGtfRptMap);
-				}
-			}
-		} catch (IOException | FileUploadException | InvalidFormatException exception) {
-			LOGGER.log(Level.SEVERE,
-					"ERROR OCCURED DURING  FILE UPLOAD. eRROR DETAILS : "
-							+ exception);
-		}*/
-		//resp.sendRedirect("/getreport");
 	}
 
 	private void createOrUpdateGTFReports(UserRoleInfo user,
 			List<List<String>> rowList, List<GtfReport> gtfReports,
 			Map<String, GtfReport> costCenterWiseGtfRptMap, String costCentre) {
 		Set<String> completeGMemoriIds = costCenterWiseGtfRptMap.keySet();
-		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
+		
+		Map<String, GtfReport> poMap = util
+				.preparePOMap(costCenterWiseGtfRptMap);
 		for (List<String> rcvdRow : rowList) {
 			String receivedGmemoriId = "";
+			if (rcvdRow.get(1).contains(" Total")) {
+				continue;
+			} else if (!rcvdRow.get(1).trim().equals("")) {
+				brand = rcvdRow.get(1);
+			}
+
+			if (rcvdRow.get(2).contains(" Total")) {
+				continue;
+			} else if (!rcvdRow.get(2).trim().equals("")) {
+				PM = rcvdRow.get(2);
+			}
+
+			if (!rcvdRow.get(3).trim().equals("")) {
+				WBS = rcvdRow.get(3);
+			}
+
+			if (!rcvdRow.get(4).trim().equals("")) {
+				WBSName = rcvdRow.get(4);
+			}
+
+			//check gmemory id splitting PO Desc
 			try {
-				if(rcvdRow.get(6).indexOf("_")==6){
-					receivedGmemoriId = Integer.parseInt(rcvdRow.get(6).substring(
-							0, Math.min(rcvdRow.get(6).length(), 6)))
+				if (rcvdRow.get(6).indexOf("_") == 6) {
+					receivedGmemoriId = Integer
+							.parseInt(rcvdRow.get(6).substring(0,
+									Math.min(rcvdRow.get(6).length(), 6)))
 							+ "";
-				}else{
-					if(!rcvdRow.get(1).contains(" Total") && !rcvdRow.get(2).contains(" Total")){
-						String gtfParam = rcvdRow.get(1).toString()+":"+rcvdRow.get(2).toString()+":"+rcvdRow.get(6).toString()+":"+rcvdRow.get(3).toString();
-						GtfReport collectGtf = uniqueGtfRptMap.get(gtfParam);
-						if(collectGtf != null){
-							receivedGmemoriId = collectGtf.getgMemoryId();
-						}
-					}else{
-						continue;
-					}
-				}
-				/*receivedGmemoriId = Integer.parseInt(rcvdRow.get(6).substring(
-						0, Math.min(rcvdRow.get(6).length(), 6)))
-						+ "";*/
-				if (completeGMemoriIds.contains(receivedGmemoriId)) {
-					GtfReport receivedGtfReport = costCenterWiseGtfRptMap
-							.get(receivedGmemoriId);
-					updateAccrual(rcvdRow, user, gtfReports, receivedGtfReport,costCenter);
-				} else {
-					createNewReport(user, rcvdRow, gtfReports,costCentre);
 				}
 			} catch (NumberFormatException ne) {
-				createNewReport(user, rcvdRow, gtfReports,costCentre);
+				// continue rest of the code
+			}
+			
+			// Check by matching PO number
+			if (Util.isNullOrEmpty(rcvdRow.get(5))) {
+				if (poMap.get(rcvdRow.get(5)) != null) {
+					receivedGmemoriId = poMap.get(rcvdRow.get(5))
+							.getgMemoryId();
+					if(receivedGmemoriId.contains(".")){
+						receivedGmemoriId=receivedGmemoriId.split(".")[0];
+					}
+				}
+			}
+
+			/*String newgMemoriId = "";*/
+			// If multibrand
+			if (!"".equalsIgnoreCase(receivedGmemoriId) && completeGMemoriIds.contains(receivedGmemoriId)) {
+				GtfReport receivedGtfReport = new GtfReport();
+				if (costCenterWiseGtfRptMap.get(receivedGmemoriId)
+						.getMultiBrand()) {
+					for (String chldgMemId : costCenterWiseGtfRptMap.get(
+							receivedGmemoriId).getChildProjectList()) {
+						if(costCenterWiseGtfRptMap.get(chldgMemId).getBrand() == brand){
+							receivedGmemoriId = costCenterWiseGtfRptMap.get(chldgMemId).getgMemoryId();
+							receivedGtfReport = costCenterWiseGtfRptMap
+									.get(receivedGmemoriId);
+							/*matchFound = true;*/
+							break;
+						}
+					}
+				} else {
+					receivedGtfReport = costCenterWiseGtfRptMap
+							.get(receivedGmemoriId);
+				}
+				updateAccrual(rcvdRow, user, gtfReports, receivedGtfReport,
+						costCenter);
+			} else {
+				
+				createNewReport(user, rcvdRow, gtfReports, costCentre/*, newgMemoriId*/);
 			}
 		}
+		
 		if (gtfReports.size() != 0) {
 			util.generateProjectIdUsingJDOTxn(gtfReports);
 			util.storeProjectsToCache(gtfReports, costCentre,
@@ -164,32 +175,17 @@ public class PODetailsUpload extends HttpServlet {
 	}
 
 	private void updateAccrual(List<String> rcvdRow, UserRoleInfo user,
-			List<GtfReport> gtfReports, GtfReport receivedGtfReport,String costCenter) {
+			List<GtfReport> gtfReports, GtfReport receivedGtfReport,
+			String costCenter) {
 		receivedGtfReport.setCostCenter(costCenter);
-
-		if (rcvdRow.get(1).contains(" Total")) {
-			return;
-		} else if (!rcvdRow.get(1).trim().equals("NO DATA")) {
-			brand = rcvdRow.get(1);
-		}
 		receivedGtfReport.setBrand(brand);
-
-		if (rcvdRow.get(2).contains(" Total")) {
-			return;
-		} else if (!rcvdRow.get(2).trim().equals("NO DATA")) {
-			PM = rcvdRow.get(2);
-		}
 		receivedGtfReport.setRequestor(PM);
-
-		if (!rcvdRow.get(3).trim().equals("NO DATA")) {
-			WBS = rcvdRow.get(3);
-		}
 		receivedGtfReport.setProject_WBS(WBS);
-
-		if (!rcvdRow.get(4).trim().equals("NO DATA")) {
-			WBSName = rcvdRow.get(4);
-		}
 		receivedGtfReport.setWBS_Name(WBSName);
+
+		if (WBS.contains("421")) {
+			receivedGtfReport.setMultiBrand(true);
+		}
 
 		receivedGtfReport.setPoNumber(rcvdRow.get(5));
 		receivedGtfReport.setPoDesc(rcvdRow.get(6));
@@ -203,10 +199,10 @@ public class PODetailsUpload extends HttpServlet {
 		receivedGtfReport.setUnits(1);
 		receivedGtfReport.setMultiBrand(isMultibrand);
 		receivedGtfReport.setPercent_Allocation(100);
-		receivedGtfReport.setStatus("New");
+		//receivedGtfReport.setStatus("Active");
 		String poDesc = receivedGtfReport.getPoDesc();
 		receivedGtfReport.setProjectName(poDesc);
-		receivedGtfReport.setFlag(1);
+		//receivedGtfReport.setFlag(2);
 		receivedGtfReport.setSubActivity("");
 		Map<String, Double> receivedAccrualMap = receivedGtfReport
 				.getAccrualsMap();
@@ -224,34 +220,20 @@ public class PODetailsUpload extends HttpServlet {
 	}
 
 	private void createNewReport(UserRoleInfo user, List<String> rcvdRow,
-			List<GtfReport> gtfReports,String costCentre) {
+			List<GtfReport> gtfReports, String costCentre/*, String gMemoriId*/) {
 		GtfReport gtfReport = new GtfReport();
-		
+
 		gtfReport.setCostCenter(costCentre);
-
-		if (rcvdRow.get(1).contains(" Total")) {
-			return;
-		} else if (!rcvdRow.get(1).trim().equals("NO DATA")) {
-			brand = rcvdRow.get(1);
-		}
 		gtfReport.setBrand(brand);
-
-		if (rcvdRow.get(2).contains(" Total")) {
-			return;
-		} else if (!rcvdRow.get(2).trim().equals("NO DATA")) {
-			PM = rcvdRow.get(2);
-		}
 		gtfReport.setRequestor(PM);
-
-		if (!rcvdRow.get(3).trim().equals("NO DATA")) {
-			WBS = rcvdRow.get(3);
-		}
 		gtfReport.setProject_WBS(WBS);
-
-		if (!rcvdRow.get(4).trim().equals("NO DATA")) {
-			WBSName = rcvdRow.get(4);
-		}
 		gtfReport.setWBS_Name(WBSName);
+		
+		if (WBS.contains("421.")) {
+			gtfReport.setMultiBrand(true);
+		}else{
+			gtfReport.setMultiBrand(false);
+		}
 
 		gtfReport.setPoNumber(rcvdRow.get(5));
 		gtfReport.setPoDesc(rcvdRow.get(6));
@@ -263,27 +245,33 @@ public class PODetailsUpload extends HttpServlet {
 		gtfReport.setQual_Quant("Qual_Quant");
 		gtfReport.setStudy_Side("study_Side");
 		gtfReport.setUnits(1);
-		Map<String, Double> plannedMap = new HashMap<String, Double>();
+		Map<String, Double> receivedMap = new HashMap<String, Double>();
 		Map<String, Double> setZeroMap = new HashMap<String, Double>();
 		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
-				plannedMap.put(
+				receivedMap.put(
 						BudgetConstants.months[cnt],
 						roundDoubleValue(
 								Double.parseDouble(rcvdRow.get(cnt + 8)), 2));
 			} catch (NumberFormatException e1) {
-				plannedMap.put(BudgetConstants.months[cnt], 0.0);
+				receivedMap.put(BudgetConstants.months[cnt], 0.0);
 			}
 		}
-		gtfReport.setPlannedMap(plannedMap);
-		gtfReport.setBenchmarkMap(plannedMap);
-		gtfReport.setAccrualsMap(plannedMap);
+		gtfReport.setPlannedMap(setZeroMap);
+		gtfReport.setBenchmarkMap(setZeroMap);
+		gtfReport.setAccrualsMap(receivedMap);
 		gtfReport.setVariancesMap(setZeroMap);
-		gtfReport.setMultiBrand(isMultibrand);
 		gtfReport.setEmail(user.getEmail());
 		gtfReport.setPercent_Allocation(100);
-		gtfReport.setStatus("New");
+		if(!"".equalsIgnoreCase(gtfReport.getPoNumber())){
+			gtfReport.setStatus("Active");
+			gtfReport.setFlag(2);
+		}else{
+			gtfReport.setStatus("New");
+			gtfReport.setFlag(1);
+			gtfReport.setRemarks("Error with project data : PO# is blank");
+		}
 		String poDesc = gtfReport.getPoDesc();
 		gtfReport.setProjectName(poDesc);
 		String gMemoriId;
@@ -291,11 +279,13 @@ public class PODetailsUpload extends HttpServlet {
 			gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
 					Math.min(poDesc.length(), 6)))
 					+ "";
+			gtfReport.setDummyGMemoriId(false);
 		} catch (NumberFormatException ne) {
+			
 			gMemoriId = "" + generator.nextValue();
+			gtfReport.setDummyGMemoriId(true);
 		}
 		gtfReport.setgMemoryId(gMemoriId);
-		gtfReport.setFlag(1);
 		gtfReport.setSubActivity("");
 		gtfReports.add(gtfReport);
 	}

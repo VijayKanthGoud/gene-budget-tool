@@ -870,9 +870,9 @@ public class DBUtil {
 	public String createKeyForXlPrjUpload(GtfReport report){
 		String brand = Util.isNullOrEmpty(report.getBrand())?report.getBrand():"";
 		String requestor = Util.isNullOrEmpty(report.getRequestor())?report.getRequestor():"";
-		String poDesc = Util.isNullOrEmpty(report.getPoDesc())?report.getPoDesc():"";
+		//String poDesc = Util.isNullOrEmpty(report.getPoDesc())?report.getPoDesc():"";
 		String project_WBS = Util.isNullOrEmpty(report.getProject_WBS())?report.getProject_WBS():"";
-		return brand+":"+requestor+":"+poDesc+":"+project_WBS;
+		return brand+":"+requestor+/*":"+poDesc+*/":"+project_WBS;
 	}
 	@SuppressWarnings("unchecked")
 	public void updateReports() {
@@ -941,9 +941,9 @@ public class DBUtil {
 					uniqueGtfRptKey = gtfReport.getBrand() + ":";
 				}if(Util.isNullOrEmpty(gtfReport.getRequestor())){
 					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getRequestor() + ":";
-				}if(Util.isNullOrEmpty(gtfReport.getPoDesc())){
+				}/*if(Util.isNullOrEmpty(gtfReport.getPoDesc())){
 					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getPoDesc() + ":";
-				}if(Util.isNullOrEmpty(gtfReport.getProject_WBS())){
+				}*/if(Util.isNullOrEmpty(gtfReport.getProject_WBS())){
 					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getProject_WBS();
 				}
 				gtfReportMap.put(uniqueGtfRptKey, gtfReport);
@@ -1001,5 +1001,16 @@ public class DBUtil {
 			}
 		}
 		return gtfReportList;
+	}
+	
+	public Map<String, GtfReport> preparePOMap(
+			Map<String, GtfReport> costCenterWiseGtfRptMap) {
+		Map<String, GtfReport> poMap = new HashMap<String, GtfReport>();
+		for(Map.Entry<String, GtfReport> gtfEntry:costCenterWiseGtfRptMap.entrySet()){
+			if(!gtfEntry.getValue().getStatus().equalsIgnoreCase("new")){
+				poMap.put(gtfEntry.getValue().getPoNumber(), gtfEntry.getValue());
+			}
+		}
+		return poMap;
 	}
 }

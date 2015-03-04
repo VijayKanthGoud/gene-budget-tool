@@ -92,7 +92,8 @@ public class MultiBrandServlet extends HttpServlet {
 			for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
 				setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			}
-
+			ArrayList<String> gmultiIdList= new ArrayList<>();
+			gmultiIdList.add(gMemoriId);
 			// Inserts parent
 			for (int par = 0; par < oldGtfReportList.size(); par++) {
 				gtfRpt = oldGtfReportList.get(par);
@@ -156,6 +157,7 @@ public class MultiBrandServlet extends HttpServlet {
 				} catch (Exception e) {
 					percentageAllocation = 0.0;
 				}
+				
 				for (int j = 0; j < oldGtfReportList.size(); j++) {
 					gtfRpt = oldGtfReportList.get(j);
 					if (project_id != null && !"".equals(project_id.trim())
@@ -164,6 +166,7 @@ public class MultiBrandServlet extends HttpServlet {
 						plannedMap = new LinkedHashMap<>();
 						plannedMap = gtfRpt.getPlannedMap();
 						childGtfReport.setgMemoryId(gtfRpt.getgMemoryId());
+						gmultiIdList.add(gtfRpt.getgMemoryId());
 						childGtfReport.setBrand(gtfRpt.getBrand());
 						childGtfReport.setEmail(gtfRpt.getEmail());
 						childGtfReport.setFlag(gtfRpt.getFlag());
@@ -225,6 +228,7 @@ public class MultiBrandServlet extends HttpServlet {
 						plannedMap = new LinkedHashMap<String, Double>(
 								setZeroMap);
 						newChildGtfReport.setgMemoryId(childgMemoriId);
+						gmultiIdList.add(childgMemoriId);
 						newChildGtfReport.setCreateDate(timeStamp);
 						newChildGtfReport.setYear(BudgetConstants.dataYEAR);
 						prj_owner_email = util.getPrjEmailByName(projectOwner);
@@ -285,6 +289,16 @@ public class MultiBrandServlet extends HttpServlet {
 				}
 
 			}
+			
+			for(String gmemId: gmultiIdList){
+				for(GtfReport gtf : masterGtfReportList){
+					if(gmemId.equalsIgnoreCase(gtf.getgMemoryId())){
+						gtf.setChildProjectList(gmultiIdList);
+					}
+				}
+			}
+			
+			
 			LOGGER.log(Level.INFO,
 					"Number of reports removed from the datastore : "
 							+ oldGtfReportList.size());

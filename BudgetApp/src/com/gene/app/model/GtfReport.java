@@ -1,6 +1,7 @@
 package com.gene.app.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.jdo.annotations.Extension;
@@ -102,6 +103,9 @@ public class GtfReport implements Serializable,Cloneable {
 	
 	@Persistent
 	private boolean isDummyGMemoriId;
+	
+	@Persistent
+	private ArrayList<String>  childProjectList;
 	
 	/*public GtfReport(GtfReport gtfReport1) {
 		// TODO Auto-generated constructor stub
@@ -349,4 +353,14 @@ public class GtfReport implements Serializable,Cloneable {
 	public void setUnits(int units) {
 		this.units = units;
 	}
+
+	public ArrayList<String> getChildProjectList() {
+		return childProjectList;
+	}
+
+	public void setChildProjectList(ArrayList<String>  childProjectList) {
+		this.childProjectList = childProjectList;
+	}
+	
+	
 }
