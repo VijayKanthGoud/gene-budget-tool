@@ -94,34 +94,34 @@ public class PODetailsUpload extends HttpServlet {
 		
 		Map<String, GtfReport> poMap = util
 				.preparePOMap(costCenterWiseGtfRptMap);
-		for (List<String> rcvdRow : rowList) {
+		for (List rcvdRow : rowList) {
 			String receivedGmemoriId = "";
-			if (rcvdRow.get(1).contains(" Total")) {
+			if (rcvdRow.get(1).toString().contains(" Total")) {
 				continue;
-			} else if (!rcvdRow.get(1).trim().equals("")) {
-				brand = rcvdRow.get(1);
+			} else if (!rcvdRow.get(1).toString().trim().equals("")) {
+				brand = rcvdRow.get(1).toString();
 			}
 
-			if (rcvdRow.get(2).contains(" Total")) {
+			if (rcvdRow.get(2).toString().contains(" Total")) {
 				continue;
-			} else if (!rcvdRow.get(2).trim().equals("")) {
-				PM = rcvdRow.get(2);
+			} else if (!rcvdRow.get(2).toString().trim().equals("")) {
+				PM = rcvdRow.get(2).toString();
 			}
 
-			if (!rcvdRow.get(3).trim().equals("")) {
-				WBS = rcvdRow.get(3);
+			if (!rcvdRow.get(3).toString().trim().equals("")) {
+				WBS = rcvdRow.get(3).toString();
 			}
 
-			if (!rcvdRow.get(4).trim().equals("")) {
-				WBSName = rcvdRow.get(4);
+			if (!rcvdRow.get(4).toString().trim().equals("")) {
+				WBSName = rcvdRow.get(4).toString();
 			}
 
 			//check gmemory id splitting PO Desc
 			try {
-				if (rcvdRow.get(6).indexOf("_") == 6) {
+				if (rcvdRow.get(6).toString().indexOf("_") == 6) {
 					receivedGmemoriId = Integer
-							.parseInt(rcvdRow.get(6).substring(0,
-									Math.min(rcvdRow.get(6).length(), 6)))
+							.parseInt(rcvdRow.get(6).toString().substring(0,
+									Math.min(rcvdRow.get(6).toString().length(), 6)))
 							+ "";
 				}
 			} catch (NumberFormatException ne) {
@@ -129,12 +129,13 @@ public class PODetailsUpload extends HttpServlet {
 			}
 			
 			// Check by matching PO number
-			if (Util.isNullOrEmpty(rcvdRow.get(5))) {
-				if (poMap.get(rcvdRow.get(5)) != null) {
-					receivedGmemoriId = poMap.get(rcvdRow.get(5))
+			if (Util.isNullOrEmpty(rcvdRow.get(5).toString())) {
+				if (poMap.get(rcvdRow.get(5).toString()) != null) {
+					receivedGmemoriId = poMap.get(rcvdRow.get(5).toString())
 							.getgMemoryId();
 					if(receivedGmemoriId.contains(".")){
 						receivedGmemoriId=receivedGmemoriId.split(".")[0];
+						
 					}
 				}
 			}
@@ -174,7 +175,7 @@ public class PODetailsUpload extends HttpServlet {
 		}
 	}
 
-	private void updateAccrual(List<String> rcvdRow, UserRoleInfo user,
+	private void updateAccrual(List rcvdRow, UserRoleInfo user,
 			List<GtfReport> gtfReports, GtfReport receivedGtfReport,
 			String costCenter) {
 		receivedGtfReport.setCostCenter(costCenter);
@@ -187,9 +188,9 @@ public class PODetailsUpload extends HttpServlet {
 			receivedGtfReport.setMultiBrand(true);
 		}
 
-		receivedGtfReport.setPoNumber(rcvdRow.get(5));
-		receivedGtfReport.setPoDesc(rcvdRow.get(6));
-		receivedGtfReport.setVendor(rcvdRow.get(7));
+		receivedGtfReport.setPoNumber(rcvdRow.get(5).toString());
+		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
+		receivedGtfReport.setVendor(rcvdRow.get(7).toString());
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 				.format(Calendar.getInstance().getTime());
 		receivedGtfReport.setCreateDate(timeStamp);
@@ -211,7 +212,7 @@ public class PODetailsUpload extends HttpServlet {
 				receivedAccrualMap.put(
 						BudgetConstants.months[cnt],
 						roundDoubleValue(
-								Double.parseDouble(rcvdRow.get(cnt + 8)), 2));
+								Double.parseDouble(rcvdRow.get(cnt + 8).toString()), 2));
 			} catch (NumberFormatException e1) {
 				receivedAccrualMap.put(BudgetConstants.months[cnt], 0.0);
 			}
@@ -219,7 +220,7 @@ public class PODetailsUpload extends HttpServlet {
 		gtfReports.add(receivedGtfReport);
 	}
 
-	private void createNewReport(UserRoleInfo user, List<String> rcvdRow,
+	private void createNewReport(UserRoleInfo user, List rcvdRow,
 			List<GtfReport> gtfReports, String costCentre/*, String gMemoriId*/) {
 		GtfReport gtfReport = new GtfReport();
 
@@ -235,9 +236,9 @@ public class PODetailsUpload extends HttpServlet {
 			gtfReport.setMultiBrand(false);
 		}
 
-		gtfReport.setPoNumber(rcvdRow.get(5));
-		gtfReport.setPoDesc(rcvdRow.get(6));
-		gtfReport.setVendor(rcvdRow.get(7));
+		gtfReport.setPoNumber(rcvdRow.get(5).toString());
+		gtfReport.setPoDesc(rcvdRow.get(6).toString());
+		gtfReport.setVendor(rcvdRow.get(7).toString());
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 				.format(Calendar.getInstance().getTime());
 		gtfReport.setCreateDate(timeStamp);
@@ -253,7 +254,7 @@ public class PODetailsUpload extends HttpServlet {
 				receivedMap.put(
 						BudgetConstants.months[cnt],
 						roundDoubleValue(
-								Double.parseDouble(rcvdRow.get(cnt + 8)), 2));
+								Double.parseDouble(rcvdRow.get(cnt + 8).toString()), 2));
 			} catch (NumberFormatException e1) {
 				receivedMap.put(BudgetConstants.months[cnt], 0.0);
 			}
