@@ -57,7 +57,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			String request = gson.toJson(prjParam);
 			//String request = prepareInitiatePrjReqURL(ccId, unixId, prj_name);
 			URL url = new URL(
-					"https://wsapp-dot-gbmt-dev.appspot.com/rest/createProjectDetails");
+					"http://memori-dev.appspot.com/web-service/project/preInitiate");
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);

@@ -21,7 +21,7 @@
 </head>
 <html>
 
-<body bgcolor="#F4F6F8">
+<body>
 	<%!
 		private static Logger LOGGER = Logger.getLogger("header.jsp");
 	%>

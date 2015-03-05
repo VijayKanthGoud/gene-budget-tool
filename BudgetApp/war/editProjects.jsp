@@ -37,7 +37,7 @@ String ccView="";
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-l<html>
+<html>
 <body onload="getBrandTotals();getAvailableTags();">
 	<div align="center">
 		<table
