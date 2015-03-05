@@ -63,6 +63,7 @@ public class AutoSaveData extends HttpServlet {
 		String brand = "";
 		double oldPlannedValue = 0.0;
 		double newPlannedValue = 0.0;
+		double benchMarkTotal = 0.0;
 		double plannedTotal = 0.0;
 		double oldAccrualValue = 0.0;
 		
@@ -200,7 +201,7 @@ public class AutoSaveData extends HttpServlet {
 								if(summaryObj!=null){// && !(gtfReportObj.getgMemoryId().contains("."))){
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
-								if(mapType.equalsIgnoreCase("accrual") && !(gtfReportObj.getgMemoryId().contains(".")) && gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
+								if(mapType.equalsIgnoreCase("accrual") && /*!(gtfReportObj.getgMemoryId().contains(".")) && */gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
 									oldAccrualValue = accrualMap.get(BudgetConstants.months[Integer
 									                                                        .parseInt(cellNum)]);
 										summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldAccrualValue);
@@ -214,11 +215,20 @@ public class AutoSaveData extends HttpServlet {
 										.parseInt(cellNum)], Double
 										.parseDouble(cellValue));
 								if(gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_New)){
+									if(summaryObj!=null){
+									benchMarkTotal = summaryObj.getBenchmarkTotal(); 
+									summaryObj.setBenchmarkTotal(benchMarkTotal+newPlannedValue-oldPlannedValue);
+									summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
+									}
+									budgetMap.put(brand, summaryObj);
+									summary.setBudgetMap(budgetMap);
+									util.putSummaryToCache(summary, costCenter);
 									benchMarkMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);
+									
 									gtfReportObj.setBenchmarkMap(benchMarkMap);
 									}
-								if(mapType.equalsIgnoreCase("accrual") && !(gtfReportObj.getgMemoryId().contains("."))){
+								if(mapType.equalsIgnoreCase("accrual") /*&& !(gtfReportObj.getgMemoryId().contains("."))*/){
 									accrualMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);
 									varianceMap.put(BudgetConstants.months[Integer

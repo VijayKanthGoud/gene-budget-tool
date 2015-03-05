@@ -79,7 +79,9 @@
 		if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> "+ Number(value).toFixed(2) +"</span>" 
 		}else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || 
-				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["0"].toString().indexOf(".") == -1))  {
+				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["27"].toString().indexOf(".") != -1 && dataContext["37"] == true) ||
+				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["27"].toString().indexOf(".") == -1 && dataContext["37"] == false)
+				)  {
 			for(var i=0;i<month;i++){
 				if(columnDef["name"]==monthArray[i]){
 				return "<span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span>";

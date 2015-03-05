@@ -37,13 +37,13 @@ String ccView="";
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-    <html>
-<body onload="getBrandTotals();getAvailableTags();">  
+<html>
+<body onload="getBrandTotals();getAvailableTags();">
 	<div align="center">
 		<table
 			style="border: 1px solid gray; background: #EAF4FD; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #2271B0; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
 			<tr>
-				<td style="width: 20%; padding-bottom:2.5%" rowspan="2">
+				<td style="width: 20%; padding-bottom: 2.5%" rowspan="2">
 					<table class="summarytable"
 						style="color: #2271B0; white-space: nowrap; height: 117px; width: 220px;">
 						<tr>
@@ -53,118 +53,155 @@ String ccView="";
 						</tr>
 						<tr>
 							<td style="padding-left: 20px;"><input type="checkbox"
-								id="hideColumns" name="hideColumns" value="hide" checked>Hide PO Details</td>
+								id="hideColumns" name="hideColumns" value="hide" checked>Hide
+								PO Details</td>
 						</tr>
 					</table>
-				</td>				
-				<% UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo"); %>
-				<td style="padding-left: 1.5%; padding-top: 1%; width: 50%; text-align: center;">
-				<table align="center"> 
-				<tr>
-				<td width="100px" >
-				<span style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
-						<%String viewSelected = (String)request.getAttribute("selectedView");
-						System.out.println("viewSelected = "+viewSelected);
-							if(viewSelected==null || "".equalsIgnoreCase(viewSelected.trim())){
-								viewSelected = "My Projects";
-							}if("My Projects".equalsIgnoreCase(viewSelected)){
-								prjView = "selected";
-							}else if("My Brands".equalsIgnoreCase(viewSelected)){
-								brandView = "selected";
-							}else{
-								ccView = "selected";
-							}
-							
-						%></span>
-						<span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select View : </span></td><td><select  id="selectedUserView" name="selectedUserView" onchange= "selectUserView()" autofocus style=" width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" >
-						<option <%= prjView%>>My Projects</options>
-						<option <%= brandView%>>My Brands</options>
-						<option <%= ccView%>>My Cost Center</options>
-						</select>
-						</td>
+				</td>
+				<%
+					UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo");
+				%>
+				<td
+					style="padding-left: 1.5%; padding-top: 1%; width: 50%; text-align: center;">
+					<table align="center">
+						<tr>
+							<td width="100px"><span
+								style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
+									<%
+										String viewSelected = (String)request.getAttribute("selectedView");
+													System.out.println("viewSelected = "+viewSelected);
+														if(viewSelected==null || "".equalsIgnoreCase(viewSelected.trim())){
+															viewSelected = "My Projects";
+														}if("My Projects".equalsIgnoreCase(viewSelected)){
+															prjView = "selected";
+														}else if("My Brands".equalsIgnoreCase(viewSelected)){
+															brandView = "selected";
+														}else{
+															ccView = "selected";
+														}
+									%>
+							</span> <span
+								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">Select
+									View : </span></td>
+							<td><select id="selectedUserView" name="selectedUserView"
+								onchange="selectUserView()" autofocus
+								style="width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
+									<option <%=prjView%>>My Projects
+										</options>
+									<option <%=brandView%>>My Brands
+										</options>
+									<option <%=ccView%>>My Cost Center
+										</options>
+							</select></td>
 						</tr>
-						<tr><%if(!userInfo.getRole().contains("Admin")) {%><td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost Center :</span></td> <td><select id="getCostCenter" name="ccValue"  style=" width: 102px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()"><%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
-						<% 
-						String ccSelected = (String)request.getAttribute("getCCValue");
-						String[] costcenter1= userInfo.getCostCenter().split(":");
-						String costc;
-					   	if(costcenter1!=null){
-							for(int k=0;k<costcenter1.length;k++){
-								costc = costcenter1[k];
-								if(costc!=null && !"".equals(costc) && ccSelected!=null && !"".equals(ccSelected) && ccSelected.equalsIgnoreCase(costc)){
-						%>
-						<option value="<%= costc %>" selected><%= costc%></option>
-						<%} else if((costc)!=null && !"".equals(costc)){%>
-						<option value="<%= costc%>"><%= costc%></option>
-						<%} } }%>
-						</select>
-						</td>
-						<% } else{%>
-							<td><span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">Select Cost Center : </span></td><td><select id="getCostCenter" name="ccValue" style=" width: 100px;  height:23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;" onchange="getCostCenterDetails()">
-						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
-						String ccSelected = (String)request.getAttribute("getCCValue");
-						CostCenter_Brand cc_brand = new CostCenter_Brand();
-							if(cc_brandList!=null && !cc_brandList.isEmpty()){
-								for(int i=0;i<cc_brandList.size();i++){
-									cc_brand = cc_brandList.get(i);
-									if(cc_brand.getCostCenter()!=null 
-											&& !"".equals(cc_brand.getCostCenter()) 
-											&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
-						%>
-						<option value="<%= cc_brand.getCostCenter()%>" selected><%= cc_brand.getCostCenter()%></option>
-						<%} else if(cc_brand.getCostCenter()!=null 
-								&& !"".equals(cc_brand.getCostCenter())){%>
-						<option value="<%= cc_brand.getCostCenter()%>"><%= cc_brand.getCostCenter()%></option>
-						<%} } }%>
-						</select>
-						<% }String selectedView = (String)request.getAttribute("selectedView");
-						String selectedBrand = (String)request.getAttribute("brandValue");
-						
-						%> 
-						</td>
+						<tr>
+							<%
+								if(!userInfo.getRole().contains("Admin")) {
+							%><td><span
+								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">Select
+									Cost Center :</span></td>
+							<td><select id="getCostCenter" name="ccValue"
+								style="width: 102px; height: 23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;"
+								onchange="getCostCenterDetails()">
+									<%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
+									<%
+										String ccSelected = (String)request.getAttribute("getCCValue");
+													String[] costcenter1= userInfo.getCostCenter().split(":");
+													String costc;
+												   	if(costcenter1!=null){
+														for(int k=0;k<costcenter1.length;k++){
+															costc = costcenter1[k];
+															if(costc!=null && !"".equals(costc) && ccSelected!=null && !"".equals(ccSelected) && ccSelected.equalsIgnoreCase(costc)){
+									%>
+									<option value="<%=costc%>" selected><%=costc%></option>
+									<%
+										} else if((costc)!=null && !"".equals(costc)){
+									%>
+									<option value="<%=costc%>"><%=costc%></option>
+									<%
+										} } }
+									%>
+							</select></td>
+							<%
+								} else{
+							%>
+							<td><span
+								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">Select
+									Cost Center : </span></td>
+							<td><select id="getCostCenter" name="ccValue"
+								style="width: 100px; height: 23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;"
+								onchange="getCostCenterDetails()">
+									<%
+										List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
+													String ccSelected = (String)request.getAttribute("getCCValue");
+													CostCenter_Brand cc_brand = new CostCenter_Brand();
+														if(cc_brandList!=null && !cc_brandList.isEmpty()){
+															for(int i=0;i<cc_brandList.size();i++){
+																cc_brand = cc_brandList.get(i);
+																if(cc_brand.getCostCenter()!=null 
+																		&& !"".equals(cc_brand.getCostCenter()) 
+																		&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
+									%>
+									<option value="<%=cc_brand.getCostCenter()%>" selected><%=cc_brand.getCostCenter()%></option>
+									<%
+										} else if(cc_brand.getCostCenter()!=null 
+															&& !"".equals(cc_brand.getCostCenter())){
+									%>
+									<option value="<%=cc_brand.getCostCenter()%>"><%=cc_brand.getCostCenter()%></option>
+									<%
+										} } }
+									%>
+							</select> <%
+ 	}String selectedView = (String)request.getAttribute("selectedView");
+ 				String selectedBrand = (String)request.getAttribute("brandValue");
+ %></td>
 						</tr>
 						<tr id="dropdown">
-						<td style="padding-top:4%">
-						<span style="font-size: 14px;font-weight: bold;font-family: 'trebuchet ms';color: #105596;">
-					Select Brand :&nbsp;&nbsp;
-				</span></td><td>
-				<select id="getBrand1" name="brandValue" onchange="getProjectsBrandwise()" style=" width: 190px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
-				<%
-				String selectedCostCenter = (String)request.getAttribute("getCCValue");
-				if(selectedCostCenter==null || "".equals(selectedCostCenter)){
-				selectedCostCenter = userInfo.getSelectedCostCenter();
-				}
-				Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
-				List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
-				ccList = util.readCostCenterBrandMappingData();
-				for(CostCenter_Brand cc: ccList){
-					if(cc!=null && cc.getCostCenter()!=null && !"".equalsIgnoreCase(cc.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc.getCostCenter())){
-						userBrandMap = util.getBrandMap(cc.getBrandFromDB());
-					}
-				}
-				//Map<String,Double> userBrandMap= userInfo.getCCBrandMap().get(selectedCostCenter); 
-				
-				Object[] myBrands = {}; 
-				String brandValue1="";
-				String brandValue=(String)request.getAttribute("brandValue");
-				
-				if(userBrandMap!=null && !userBrandMap.isEmpty()){
-					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
-					myBrands = sortedMap.keySet().toArray();
-				    for(int i=0;i<myBrands.length;i++){ 
-				    	if(brandValue==null || brandValue==""){
-							brandValue =  myBrands[0].toString();
-						} 
-                        brandValue1 = myBrands[i].toString();
-                        if(brandValue.equals(brandValue1)){%>
-                        <option value="<%=brandValue1 %>" selected><%=brandValue1 %></option>
-                        <%}else{ %>
-                        <option value="<%=brandValue1 %>"><%=brandValue1 %></option>
-                        <%}}
-				}
-				
-				%>
-				<%-- <% BudgetSummary summary1 = (BudgetSummary) session.getAttribute("summary");
+							<td style="padding-top: 4%"><span
+								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">
+									Select Brand :&nbsp;&nbsp; </span></td>
+							<td><select id="getBrand1" name="brandValue"
+								onchange="getProjectsBrandwise()"
+								style="width: 190px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
+									<%
+										String selectedCostCenter = (String)request.getAttribute("getCCValue");
+											if(selectedCostCenter==null || "".equals(selectedCostCenter)){
+											selectedCostCenter = userInfo.getSelectedCostCenter();
+											}
+											Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
+											List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
+											ccList = util.readCostCenterBrandMappingData();
+											for(CostCenter_Brand cc: ccList){
+												if(cc!=null && cc.getCostCenter()!=null && !"".equalsIgnoreCase(cc.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc.getCostCenter())){
+													userBrandMap = util.getBrandMap(cc.getBrandFromDB());
+												}
+											}
+											//Map<String,Double> userBrandMap= userInfo.getCCBrandMap().get(selectedCostCenter); 
+											
+											Object[] myBrands = {}; 
+											String brandValue1="";
+											String brandValue=(String)request.getAttribute("brandValue");
+											
+											if(userBrandMap!=null && !userBrandMap.isEmpty()){
+												Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
+												myBrands = sortedMap.keySet().toArray();
+											    for(int i=0;i<myBrands.length;i++){ 
+											    	if(brandValue==null || brandValue==""){
+														brandValue =  myBrands[0].toString();
+													} 
+									                        brandValue1 = myBrands[i].toString();
+									                        if(brandValue.equals(brandValue1)){
+									%>
+									<option value="<%=brandValue1%>" selected><%=brandValue1%></option>
+									<%
+										}else{
+									%>
+									<option value="<%=brandValue1%>"><%=brandValue1%></option>
+									<%
+										}}
+											}
+									%>
+									<%-- <% BudgetSummary summary1 = (BudgetSummary) session.getAttribute("summary");
 							Map<String, BudgetSummary> budgetMap1 = summary1.getBudgetMap();%>
 				 <% String option1 = "";
                             if(budgetMap1!=null && !budgetMap1.isEmpty()){
@@ -180,178 +217,205 @@ String ccView="";
                             <%}else{ %>
                             <option value="<%=option1 %>"><%=option1 %></option>
                             <%}}} %> --%>
-				
-				</select>
+
+							</select></td>
+						</tr>
+
+
 						</td>
-			</tr>
-				
-						
-				</td>
-			</table>
-			<div id="selectthebrand">
-				
-				<div id="header"
-			    style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
-		     </div><br>
-		     <div align="left" style="padding-left: 36%">
-				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
-				&nbsp;&nbsp;&nbsp;
-				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">All</span></input><br><br>
-				</div>
-				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
-				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; font-size: 10px; letter-spacing:1px;" align= 'right'> Cancel</button>
-				
-				</div>
-	<div id="getCostCentreProjects">
-		
-			<form method="GET" id="getCostCentre" action="/getreport">
-			<input type="hidden" name="selectedView" id="selectedView1"/>
-			<input type="hidden" name="getCCValue" id="getCostCenter1"/>
-				
-			</form>
-			
-		</div>
-	<div id="getMyProjects">
-		
-			<form method="GET" id="getProjects" action="/getreport">
-			<input type="hidden" name="selectedView" id="selectedView2"/>
-			<input type="hidden" name="getCCValue" id="getCostCenter2"/>
-				
-			</form>
-			
-		</div>	
-		
-	
-		<div align='center' style='padding-right: 50px;'>
-			<form method="GET" id="getBrand" action="/getreport" >
-			<input type="hidden" name="selectedView" id="selectedView3"/>
-			<input type="hidden" name="getCCValue" id="getCostCenter3"/>
-			<input type="hidden" name="brandValue" id="getBrand3"/>
-				<br/>
-			
-			</form>
-			
-		</div>
-	 	<td style="width: 20%;" rowspan="2">
+					</table>
+					<div id="selectthebrand">
+
+						<div id="header"
+							style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"
+							align=center>Export CostCenter</div>
+						<br>
+						<div align="left" style="padding-left: 36%">
+							<input type="radio" value="0" id="selectCC" name="selectCC">
+							<span id="selectedCCValue" style="font-size: 15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp; <input type="radio" value="1" id="selectCC"
+								name="selectCC"> <span style="font-size: 15;">All</span></input><br>
+							<br>
+						</div>
+						<button class="myButton" value="" onclick="exportExcelData();"
+							style="height: 25px; font-size: 12px; letter-spacing: 1px;"
+							align='right'>Ok</button>
+						&nbsp;
+						<button class="myButton" value="" onclick="closepopup();"
+							style="height: 25px; font-size: 10px; letter-spacing: 1px;"
+							align='right'>Cancel</button>
+
+					</div>
+					<div id="getCostCentreProjects">
+
+						<form method="GET" id="getCostCentre" action="/getreport">
+							<input type="hidden" name="selectedView" id="selectedView1" /> <input
+								type="hidden" name="getCCValue" id="getCostCenter1" />
+
+						</form>
+
+					</div>
+					<div id="getMyProjects">
+
+						<form method="GET" id="getProjects" action="/getreport">
+							<input type="hidden" name="selectedView" id="selectedView2" /> <input
+								type="hidden" name="getCCValue" id="getCostCenter2" />
+
+						</form>
+
+					</div>
+
+
+					<div align='center' style='padding-right: 50px;'>
+						<form method="GET" id="getBrand" action="/getreport">
+							<input type="hidden" name="selectedView" id="selectedView3" /> <input
+								type="hidden" name="getCCValue" id="getCostCenter3" /> <input
+								type="hidden" name="brandValue" id="getBrand3" /> <br />
+
+						</form>
+
+					</div>
+				<td style="width: 20%;" rowspan="2">
 					<table class="summarytable"
 						style="color: #2271B0; white-space: nowrap; font-weight: bold;">
 						<%
 							BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
-							Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
-							BudgetSummary budgetSummary = new BudgetSummary();
-							UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
-							String cc = user.getSelectedCostCenter();
-							Map<String,Double> brandMap= new LinkedHashMap<String,Double>();
-							/* ccList = new ArrayList<CostCenter_Brand>();
-							ccList = util.readCostCenterBrandMappingData();
-							 */for(CostCenter_Brand cc1: ccList){
-								if(cc1!=null && cc1.getCostCenter()!=null && !"".equalsIgnoreCase(cc1.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc1.getCostCenter())){
-									brandMap = util.getBrandMap(cc1.getBrandFromDB());
-								}
-							}
-							//Map<String,Double> brandMap = user.getCCBrandMap().get(cc);
-							LOGGER.log(Level.INFO, "brandMaps received : " + brandMap);
-							Object[] brands = {}; 
-							if(brandMap!=null && !brandMap.isEmpty()){
-								brands = brandMap.keySet().toArray();
-							}
-							//System.out.println(":::::::"+brands[0]);
+											Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
+											BudgetSummary budgetSummary = new BudgetSummary();
+											UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
+											String cc = user.getSelectedCostCenter();
+											Map<String,Double> brandMap= new LinkedHashMap<String,Double>();
+											/* ccList = new ArrayList<CostCenter_Brand>();
+											ccList = util.readCostCenterBrandMappingData();
+											 */for(CostCenter_Brand cc1: ccList){
+												if(cc1!=null && cc1.getCostCenter()!=null && !"".equalsIgnoreCase(cc1.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc1.getCostCenter())){
+													brandMap = util.getBrandMap(cc1.getBrandFromDB());
+												}
+											}
+											//Map<String,Double> brandMap = user.getCCBrandMap().get(cc);
+											LOGGER.log(Level.INFO, "brandMaps received : " + brandMap);
+											Object[] brands = {}; 
+											if(brandMap!=null && !brandMap.isEmpty()){
+												brands = brandMap.keySet().toArray();
+											}
+											//System.out.println(":::::::"+brands[0]);
 						%>
-					<script>
+						<script>
 					<%@ include file="scripts/editProjects.js"%>
 						 
-					</script> 
-						
-						<tr align='center'> <td colspan=2>Brand Summary &nbsp;($ in 1000's)</td>
-						<td> <img alt="" src="images/refresh.png" height="25" width="25" align='left' onclick="getBrandTotals()"> </td> </tr>
-						 <tr>
-       					<tr>
-                            <td >Select Brand:</td>
-                            <td colspan="2"><select id="brandType" onchange="getBrandTotals()" style="color: #2271B0; font: normal 12 Arial, Helvetica, sans-serif;">
-                            <%String option = "";
-                            if(brandValue==null || brandValue==""){
-            					brandValue = "Avastin";
-            				} 
-                            if(budgetMap!=null && !budgetMap.isEmpty()){
-                            	Object[] budgets = budgetMap.keySet().toArray();
-                            for(int i=0;i<budgets.length;i++){ 
-                            option = budgets[i].toString();
-                            if(brandValue.equals(option)){%>
-                            <option value="<%=option %>" selected><%=option %></option>
-                            <%}else{ %>
-                            <option value="<%=option %>"><%=option %></option>
-                            <%}}} %>
-                            </select></td>
-                        </tr>
-                        <tr>
-                                <td>Budget:</td>
-                                <td><span id = "totalBudget"> <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
-                        </tr>
+					</script>
+
+						<tr align='center'>
+							<td colspan=2>Brand Summary &nbsp;($ in 1000's)</td>
+							<td><img alt="" src="images/refresh.png" height="25"
+								width="25" align='left' onclick="getBrandTotals()"></td>
+						</tr>
+						<tr>
+						<tr>
+							<td>Select Brand:</td>
+							<td colspan="2"><select id="brandType"
+								onchange="getBrandTotals()"
+								style="color: #2271B0; font: normal 12 Arial, Helvetica, sans-serif;">
+									<%
+										String option = "";
+									                            if(brandValue==null || brandValue==""){
+									            					brandValue = "Avastin";
+									            				} 
+									                            if(budgetMap!=null && !budgetMap.isEmpty()){
+									                            	Object[] budgets = budgetMap.keySet().toArray();
+									                            for(int i=0;i<budgets.length;i++){ 
+									                            option = budgets[i].toString();
+									                            if(brandValue.equals(option)){
+									%>
+									<option value="<%=option%>" selected><%=option%></option>
+									<%
+										}else{
+									%>
+									<option value="<%=option%>"><%=option%></option>
+									<%
+										}}}
+									%>
+							</select></td>
+						</tr>
+						<tr>
+							<td>Budget:</td>
+							<td><span id="totalBudget"> <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
+						</tr>
 
 						<tr>
-                                <td>Planned:</td><td><span id = "plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
-                        </tr>
-                        <tr>
-                                <td>Unplanned Total:</td><td><span id = "budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0) %></span></td>
-                        </tr>
-                        <tr>
-                                <!-- td style="padding-left: 20px;">2017</td> -->
-                                <td>Accrual:</td><td><span id = "accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
-                        </tr>
-                         <tr>
-                               <td><span id = "varTotalLabel" style="color:black">Variance Total:</span></td>
-                               <td><span id = "varTotalText" style="color:black"><span id = "varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
-                               </td>
-                         </tr>
+							<td>Planned:</td>
+							<td><span id="plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+						</tr>
+						<tr>
+							<td>Unplanned Total:</td>
+							<td><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
+						</tr>
+						<tr>
+							<!-- td style="padding-left: 20px;">2017</td> -->
+							<td>Accrual:</td>
+							<td><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+						</tr>
+						<tr>
+							<td><span id="varTotalLabel" style="color: black">Variance
+									Total:</span></td>
+							<td><span id="varTotalText" style="color: black"><span
+									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+							</td>
+						</tr>
 					</table>
 				</td>
 			</tr>
 			<tr style="">
-				<td style="padding-left: 21.5%; padding-bottom: 3%"><input type=text
-					style="float: left; align: center; width: 35%;" id="txtSearch">
-					<img src="images/search.png" height="20" width="20" align="bottom"
-					style="float: left;"
+				<td style="padding-left: 21.5%; padding-bottom: 3%"><input
+					type=text style="float: left; align: center; width: 35%;"
+					id="txtSearch"> <img src="images/search.png" height="20"
+					width="20" align="bottom" style="float: left;"
 					title="Search in Project name, gMemori Id, Brand and Remarks.">
 				</td>
 			</tr>
 		</table>
 	</div>
 	<div id="statusMessage"></div>
-	<div id="displayGrid" style="width: 100%; height: 58%;  min-height: 300px;"></div>
+	<div id="displayGrid"
+		style="width: 100%; height: 58%; min-height: 300px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
-			style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"  align = center> Multi-brand
-		</div>
+			style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"
+			align=center>Multi-brand</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
-			<button class="myButton" value="" onclick="deleteSelectedProjects();" style="height: 20px; font-size: 11px; letter-spacing:1px;">
+			<button class="myButton" value="" onclick="deleteSelectedProjects();"
+				style="height: 20px; font-size: 11px; letter-spacing: 1px;">
 				Delete selected</button>
 			<button id="saveClose" class="myButton" value=""
-				onclick="saveAndClose();" style="height: 20px; font-size: 11px; letter-spacing:1px;">Save and close</button>
-			<button class="myButton" value="" onclick="closeWithoutSave();" style="height: 20px; font-size: 11px; letter-spacing:1px;">
+				onclick="saveAndClose();"
+				style="height: 20px; font-size: 11px; letter-spacing: 1px;">Save
+				and close</button>
+			<button class="myButton" value="" onclick="closeWithoutSave();"
+				style="height: 20px; font-size: 11px; letter-spacing: 1px;">
 				Cancel</button>
 		</div>
 	</div>
-	<div id="back">	</div>  
-  
-<script src="SlickGrid-master/lib/firebugx.js"></script>
-<script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
-<script src="SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
-<script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
-<script src="SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
-<script src="SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
-<script src="SlickGrid-master/plugins/slick.cellexternalcopymanager.js"></script>
-<script src="SlickGrid-master/plugins/slick.cellselectionmodel.js"></script>
-<script src="SlickGrid-master/slick.editors.js"></script>
-<script src="SlickGrid-master/slick.formatters.js"></script>
-<script src="SlickGrid-master/slick.grid.frozen.js"></script>
-<script src="SlickGrid-master/slick.dataview.js"></script>
-<script src="SlickGrid-master/slick.core.js"></script>
-<script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
-<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
-<script src="scripts/fileHandle.js"></script>
-<script>
+	<div id="back"></div>
+
+	<script src="SlickGrid-master/lib/firebugx.js"></script>
+	<script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
+	<script src="SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
+	<script src="SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
+	<script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
+	<script src="SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
+	<script src="SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
+	<script src="SlickGrid-master/plugins/slick.cellexternalcopymanager.js"></script>
+	<script src="SlickGrid-master/plugins/slick.cellselectionmodel.js"></script>
+	<script src="SlickGrid-master/slick.editors.js"></script>
+	<script src="SlickGrid-master/slick.formatters.js"></script>
+	<script src="SlickGrid-master/slick.grid.frozen.js"></script>
+	<script src="SlickGrid-master/slick.dataview.js"></script>
+	<script src="SlickGrid-master/slick.core.js"></script>
+	<script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
+	<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
+	<script src="scripts/fileHandle.js"></script>
+	<script>
     // rdoSelectedmode holds the radio(Planned/All) button object
 	var rdoSelectedmode = $('input[name="selectedmode"]');
 	
@@ -510,7 +574,7 @@ String ccView="";
 		var indent = 0;
 		var parents = [];
 		if(frmStudy==false){
-		<% 	if(gtfReports == null || gtfReports.isEmpty()) { %>
+		<%if(gtfReports == null || gtfReports.isEmpty()) {%>
 		createNewProjects();
 		newExist=true;
 		<%}else{
@@ -534,8 +598,7 @@ String ccView="";
 		var jsId = -1;
 		var dLength= data.length;
 		// prepare the data
-		<%
-		String requestor = "";
+		<%String requestor = "";
 		for (int i = 0; i < gtfReports.size(); i++) {
 			boolean isFirst = true;
 			for (int count = 0; count < 4; count++) {%>
@@ -567,20 +630,18 @@ String ccView="";
 				}
 				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
 				d[44]="<%=gReport.getBrand()%>";
-				d[47]="<%= gReport.getCostCenter()%>";
-				<% requestor = gReport.getRequestor();
+				d[47]="<%=gReport.getCostCenter()%>";
+				<%requestor = gReport.getRequestor();
 				if(requestor.contains(":")){
 					requestor = requestor.substring(0,requestor.indexOf(":"));
-				}
-				%>
+				}%>
 				d[48]="<%=requestor%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
     				if(requestor.contains(":")){
     					requestor = requestor.substring(0,requestor.indexOf(":"));
-    				}
-    				%>    
+    				}%>    
    			 		d[0]=gmemoriID;
    			 		
     				d[1]="<%=requestor%>";
@@ -631,7 +692,7 @@ String ccView="";
   					}
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-   				if(gmemoriID.indexOf(".") == -1 ){
+   				/* if(gmemoriID.indexOf(".") == -1 ){ */
    				d[11]="Benchmark";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
@@ -657,17 +718,17 @@ String ccView="";
     					gtfReports.get(i).getBenchmarkMap().get("OCT") + 
     					gtfReports.get(i).getBenchmarkMap().get("NOV") + 
    				 		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
-   				}else{
+   				/* }else{
    	   				d[11]="";
-   					for (var j = 12; j < 25; j++) {
+   					for (var j = 12; j < 25; j++) {slickformatter
 						d[j] = 0.0;
 						}
 					d[33]="";
-   				}
+   				} */
    				} if(jsId % 4 == 2){
 				d[11]="Accrual";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-				if(d[26]!="New" && gmemoriID.indexOf(".") == -1 ){
+				if(d[26]!="New" /* && gmemoriID.indexOf(".") == -1  */){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
 					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
 					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
@@ -702,7 +763,7 @@ String ccView="";
    				} if(jsId % 4 == 3){
 				d[11]="Variance";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-				if(d[26]!="New" && gmemoriID.indexOf(".") == -1 ){
+				if(d[26]!="New" /* && gmemoriID.indexOf(".") == -1 */ ){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
 					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
 					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
@@ -735,11 +796,10 @@ String ccView="";
     						}
    				}
     
-    				<%} %>
+    				<%}%>
     				d[40] = d[11];
     				
-    				<%
-				}
+    				<%}
 				
 		}%>
 			
@@ -849,12 +909,12 @@ String ccView="";
 		dataView.setFilter(searchProject);
 		dataView.endUpdate();
 		groupByStatus();
-		<%if(request.getAttribute("accessreq").toString().equalsIgnoreCase("external") && gtfReports.isEmpty()){ %>
+		<%if(request.getAttribute("accessreq").toString().equalsIgnoreCase("external") && gtfReports.isEmpty()){%>
 		$('#displayGrid').css("align","center");
 		$('#displayGrid').html('<div style = "font-size:16px; line-height: 50px; margin-left: auto; margin-right: auto; width: 10%; ">No Project found.</div>');
-	<% }else{ %>
+	<%}else{%>
 	    grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
-	<% } %>
+	<%}%>
 		// initialize the grid
 		//grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
 		//register the group item metadata provider to add expand/collapse group handlers
@@ -1037,8 +1097,7 @@ String ccView="";
 				itemClicked = dataView.getItem(args.row);
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("mb")!=-1){
 					
-					<%
-					selectedCostCenter = (String)request.getAttribute("getCCValue");
+					<%selectedCostCenter = (String)request.getAttribute("getCCValue");
 					if(selectedCostCenter==null || "".equals(selectedCostCenter)){
 						selectedCostCenter = userInfo.getSelectedCostCenter();
 					}
@@ -1048,9 +1107,7 @@ String ccView="";
 					
 					var usr=0;
 					var userCnt=0;
-					<% 
-					
-					Set<String> userList = ccUsers.keySet();
+					<%Set<String> userList = ccUsers.keySet();
 					for(Map.Entry<String,ArrayList<String>> userMapDetails: ccUsers.entrySet()){%>
 					 poOwners[userCnt] = "<%=userMapDetails.getKey()%>";
 					 var d = (ccUsersVar[userCnt] = {});
@@ -1068,8 +1125,7 @@ String ccView="";
 						
 						// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
 						var multiBrandCnt = 0 ;	
-						<% 
-						GtfReport pGtfReport = new GtfReport();
+						<%GtfReport pGtfReport = new GtfReport();
 						
 						for(GtfReport gtfReport : gtfReports){
 							requestor = gtfReport.getRequestor();
@@ -1251,13 +1307,17 @@ String ccView="";
 			var cols = grid.getColumns();
 			args.item[46]=JSON.parse(JSON.stringify(args.item));
 			var fixedCell = cell;
+			
 			if ($('#hideColumns').is(":checked")) {
 				fixedCell = cell + numHideColumns;
 			} else {
 				fixedCell = cell;
 			}
-			var userName = '<%= user.getUserName()%>';
-			var role = '<%= user.getRole()%>';
+			var userName = '<%=user.getUserName()%>';
+			var role = '<%=user.getRole()%>';
+			if((args.item["27"].toString().indexOf(".") != -1 && args.item["37"] == true && args.item["11"] == "Accrual") ){
+				args.item[50]=args.item[fixedCell];
+			}
 			if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin"){
 				return false;
 			} 
@@ -1275,11 +1335,13 @@ String ccView="";
 				args.item[45]=budgetItem;
 			}
 			if(args.item["34"]!="New projects" ){
-				if(args.item["11"] == "Accrual" && args.item["26"]=="Active" && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+				if((args.item["11"] == "Accrual" && args.item["26"]=="Active") && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 					args.item["43"] = args.item[fixedCell];
 					grid.invalidate();
 				}
-				if(args.item["27"].toString().indexOf(".") != -1){
+				if(((args.item["27"].toString().indexOf(".") == -1 && args.item["37"] == true && args.item["11"] == "Accrual") 
+						|| (args.item["27"].toString().indexOf(".") != -1 && args.item["37"] == true && args.item["11"] != "Accrual"))
+						){
 					return false;
 				}
 				if(cell == 2 && args.item["11"] == "Planned"  && args.item["26"] =="New" ){
@@ -1719,50 +1781,55 @@ String ccView="";
 	
 	
 </script>
-<!-- to be removed after uat 2 -->
+	<!-- to be removed after uat 2 -->
 	<div width='100%' align=right>
-	<button id="exportButton" class="myButton" value="" onclick="openDownloadPopUp();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Export data as excel</button>
+		<button id="exportButton" class="myButton" value=""
+			onclick="openDownloadPopUp();"
+			style="height: 25px; font-size: 12px; letter-spacing: 1px;"
+			align='right'>Export data as excel</button>
 	</div>
 	</br>
 	<!-- <div>
 	<button class="myButton" value="" onclick="onClickAsynch();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'left'>Download All CostCenters</button>
 	</div>
 	 -->
-<div id="uploadWindow">
+	<div id="uploadWindow">
 		<div id="header"
-			style="width: 100%; height: 20px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> File Upload
-		</div>
+			style="width: 100%; height: 20px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"
+			align=center>File Upload</div>
 		<div align='right' style='padding-right: 100px;'>
-			<form action="/userupload" method="post" enctype="multipart/form-data">
-				<br/>
-				<span style="font-size: 14px;font-weight: bold;">
-					Select File to Upload : &nbsp;&nbsp;&nbsp;
-				</span>
-				<input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"> <br/>
-				<input class='myButton' id="fileUploadBtn" type="submit" value="Upload" disabled = "true">
-				<input class='myButton' type="button" value="Cancel" onclick="closeUploadWindow();">
+			<form action="/userupload" method="post"
+				enctype="multipart/form-data">
+				<br /> <span style="font-size: 14px; font-weight: bold;">
+					Select File to Upload : &nbsp;&nbsp;&nbsp; </span> <input type="file"
+					name="file"
+					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+				<br /> <input class='myButton' id="fileUploadBtn" type="submit"
+					value="Upload" disabled="true"> <input class='myButton'
+					type="button" value="Cancel" onclick="closeUploadWindow();">
 			</form>
-			
+
 		</div>
 	</div>
-	
-<div id="cautionWindow">
+
+	<div id="cautionWindow">
 		<div id="header"
-			style="width: 100%; height: 20px; background-color: red; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"  align = center> Caution!
-		</div>
-		<div style="font-size: 14px">
-			Window width is not sufficient enough for application to be viewed. Please increase the window width.			
-		</div>
+			style="width: 100%; height: 20px; background-color: red; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"
+			align=center>Caution!</div>
+		<div style="font-size: 14px">Window width is not sufficient
+			enough for application to be viewed. Please increase the window
+			width.</div>
 	</div>
-<%@ include file="footer.jsp"%>
+	<%@ include file="footer.jsp"%>
 </body>
-<form id="exportExcel" name="exportExcel" method="post" action="/download" target="myIFrm">
-<input type="hidden" name="objarray" id="objArrayId"/>
-<input type="hidden" name="costCenter" id="ccId"/>
-<input type="hidden" name="viewSelected" id="viewSelected"/>
-<input type="hidden" name="brandSelected" id="brandSelected"/>
+<form id="exportExcel" name="exportExcel" method="post"
+	action="/download" target="myIFrm">
+	<input type="hidden" name="objarray" id="objArrayId" /> <input
+		type="hidden" name="costCenter" id="ccId" /> <input type="hidden"
+		name="viewSelected" id="viewSelected" /> <input type="hidden"
+		name="brandSelected" id="brandSelected" />
 </form>
-<iframe id="myIFrm" name="myIFrm" src="" style="visibility:hidden">
+<iframe id="myIFrm" name="myIFrm" src="" style="visibility: hidden">
 
 </iframe>
 

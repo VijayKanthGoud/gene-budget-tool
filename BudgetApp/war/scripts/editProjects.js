@@ -349,7 +349,11 @@ function updateMemCache(e, args, tempKey) {
 		cellValue = item[itemCell];
 	}
 	var cellNum = fixedCell - 12;
-	key = item[34];
+	if(item[37]==true && item["11"] == "Accrual" && item[27].toString().indexOf(".") != -1){
+		key = item[27];
+	}else{
+		key = item[34];
+	}
 	var aSaveData=[];
 	var iCnt=0;
 	var varTotal = 0.0;
@@ -383,7 +387,6 @@ function updateMemCache(e, args, tempKey) {
 				 userCnt++;
 				<%}%>
 				if(args.item[37] == false){
-					
 					var index = availableTags.indexOf("Total Products(MB)");
 					if (index > -1) {
 						availableTags.splice(index, 1);
@@ -404,102 +407,136 @@ function updateMemCache(e, args, tempKey) {
 			}
 			
 		}else{
- 		for(var i=0;i<data.length;i++){
-			var d = data[i];
-			if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
-				if(d[11]=="Accrual"){
-					d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
-				}else if(d[11]=="Variance"){
-					if( item[43]=='undefined' ||item[43]=="" ){
-						item[43]=0.0;
-					}
+			for(var i=0;i<data.length;i++){
+				var d = data[i];
+				if((key.toString().indexOf(".") != -1) && 
+						key.split(".")[0]== d[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
+					if(d[11]=="Accrual"){
+						var aSave = (aSaveData[iCnt] = {});
+						
+						d[fixedCell] = parseFloat(d[fixedCell]) + parseFloat(item[fixedCell]) - parseFloat(item[50]);
+						aSave[0] = d[27];
+						aSave[1] = d[fixedCell];
+						iCnt++;
+						for(var iVar=0;iVar<data.length;iVar++){
+							var kData = data[iVar];
+							if(key.toString().indexOf(".") != -1 && 
+									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Variance"){
+								kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
+								break;
+							}
+						}
+					
+
 					for(var iVar=0;iVar<data.length;iVar++){
 						var kData = data[iVar];
-						if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Benchmark"){
-							d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
+						
+						if(key.toString().indexOf(".") != -1 && key == kData[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && 
+								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Variance"){
+							aSave = (aSaveData[iCnt] = {});
+							kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
+							aSave[0] = kData[27];
+							aSave[1] = cellValue;
 							break;
 						}
 					}
+					}
 				}
-				if(item[37]== false){
+
+				if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
+					if(d[11]=="Accrual"){
+						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
+					}else if(d[11]=="Variance"){
+						if( item[43]=='undefined' ||item[43]=="" ){
+							item[43]=0.0;
+						}
+						for(var iVar=0;iVar<data.length;iVar++){
+							var kData = data[iVar];
+							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Benchmark"){
+								d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
+								break;
+							}
+						}
+					}
+					if(item[37]== false){
+						varTotal = 0.0;
+						for (var j = 12; j < 24; j++) {
+							if(d[j] == "" || d[j] == "undefined"){
+								d[j] = 0.0;
+							}
+							varTotal = parseFloat(varTotal)
+							+ parseFloat(d[j]);
+						}
+
+						d[24]= parseFloat(varTotal);
+					}
+				}
+				if(key== d[34] && d[11]=="Planned" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+					var aSave = (aSaveData[iCnt] = {});
+					aSave[0] = d[27];
+					if(d[7] == 0.0){
+						d[7]=100.0;
+					}
+					if(item[11]=='Accrual'){
+						d[itemCell]=parseFloat(cellValue).toFixed(2);
+					}
+					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+					//aSave[2] = d["47"];
+					d[itemCell]=aSave[1];
+					if(item[37]== false){
+						varTotal = 0.0;
+						for (var j = 12; j < 24; j++) {
+							if(d[j] == "" || d[j] == "undefined"){
+								d[j] = 0.0;
+							}
+							varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
+						}
+						d[24]= parseFloat(varTotal);
+					}
+					iCnt++;
+				}else if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+					var aSave = (aSaveData[iCnt] = {});
+					aSave[0] = d[27];
+					if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
+						d[<%=BudgetConstants.VENDOR_FIELD%>] = args.item[<%=BudgetConstants.VENDOR_FIELD%>];
+						aSave[1] = d[<%=BudgetConstants.VENDOR_FIELD%>];
+					}else if(fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	){
+						d[<%=BudgetConstants.SUBACTIVITY_FIELD%>] = args.item[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
+						aSave[1] = d[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
+					}else if(fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%>){
+						d[<%=BudgetConstants.PROJECT_WBS_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
+						aSave[1] = d[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
+					}else if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
+						d[<%=BudgetConstants.PO_NUMBER_FIELD%>] = args.item[<%=BudgetConstants.PO_NUMBER_FIELD%>];
+						aSave[1] = d[<%=BudgetConstants.PO_NUMBER_FIELD%>];
+					}else if(fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%>){
+						d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
+						aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
+					}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
+						if(d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().indexOf(".")!=-1){
+							d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>] +"." +d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().split(".")[1]
+						}else{
+							d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
+						}
+						aSave[1] = d[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
+					}else if(fixedCell == <%=BudgetConstants.UNIT_CELL%>){
+						d[<%=BudgetConstants.UNIT_FIELD%>] = args.item[<%=BudgetConstants.UNIT_FIELD%>];
+						aSave[1] = d[<%=BudgetConstants.UNIT_FIELD%>];
+					}
+					//aSave[2] = d["47"];
+					iCnt++;
+				}else if(key== d[34] && d[11]=="Benchmark" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
+					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {
 						if(d[j] == "" || d[j] == "undefined"){
 							d[j] = 0.0;
 						}
-						varTotal = parseFloat(varTotal)
-									+ parseFloat(d[j]);
-					}
-					
+						varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
+					}	
 					d[24]= parseFloat(varTotal);
 				}
 			}
-	 		if(key== d[34] && d[11]=="Planned" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
-		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[27];
-		 		if(d[7] == 0.0){
-				 	d[7]=100.0;
-		 		}
-		 		if(item[11]=='Accrual'){
-					d[itemCell]=parseFloat(cellValue).toFixed(2);
-				}
-		 		aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
-		 		//aSave[2] = d["47"];
-		 		d[itemCell]=aSave[1];
-		 		if(item[37]== false){
-		 			varTotal = 0.0;
-					for (var j = 12; j < 24; j++) {
-						if(d[j] == "" || d[j] == "undefined"){
-							d[j] = 0.0;
-						}
-						varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
-					}
-					d[24]= parseFloat(varTotal);
-		 		}
-		 		iCnt++;
-	 		}else if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
-		 		var aSave = (aSaveData[iCnt] = {});
-		 		aSave[0] = d[27];
-		 		if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
-		 			d[<%=BudgetConstants.VENDOR_FIELD%>] = args.item[<%=BudgetConstants.VENDOR_FIELD%>];
-		 			aSave[1] = d[<%=BudgetConstants.VENDOR_FIELD%>];
-		 		}else if(fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	){
-		 			d[<%=BudgetConstants.SUBACTIVITY_FIELD%>] = args.item[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
-		 			aSave[1] = d[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
-		 		}else if(fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%>){
-		 			d[<%=BudgetConstants.PROJECT_WBS_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
-		 			aSave[1] = d[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
-		 		}else if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
-		 			d[<%=BudgetConstants.PO_NUMBER_FIELD%>] = args.item[<%=BudgetConstants.PO_NUMBER_FIELD%>];
-		 			aSave[1] = d[<%=BudgetConstants.PO_NUMBER_FIELD%>];
-		 		}else if(fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%>){
-		 			d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
-		 			aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
-		 		}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
-		 		if(d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().indexOf(".")!=-1){
-		 			d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>] +"." +d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().split(".")[1]
-		 		}else{
-		 			d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
-		 		}
-		 			aSave[1] = d[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
-		 		}else if(fixedCell == <%=BudgetConstants.UNIT_CELL%>){
-		 			d[<%=BudgetConstants.UNIT_FIELD%>] = args.item[<%=BudgetConstants.UNIT_FIELD%>];
-		 			aSave[1] = d[<%=BudgetConstants.UNIT_FIELD%>];
-		 		}
-		 		//aSave[2] = d["47"];
-		 		iCnt++;
-	 		}else if(key== d[34] && d[11]=="Benchmark" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
-	 			d[itemCell]=parseFloat(cellValue).toFixed(2);
-	 			varTotal = 0.0;
-				for (var j = 12; j < 24; j++) {
-					if(d[j] == "" || d[j] == "undefined"){
-						d[j] = 0.0;
-					}
-					varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
-				}	
-				d[24]= parseFloat(varTotal);
- 			}
-		}
 		}
 		
 	if(singleBrandToMulti!=true){
