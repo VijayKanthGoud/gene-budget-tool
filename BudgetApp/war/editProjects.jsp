@@ -692,7 +692,7 @@ String ccView="";
   					}
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-   				/* if(gmemoriID.indexOf(".") == -1 ){ */
+   				if(gmemoriID.indexOf(".") == -1 || d[26] != "New"){ 
    				d[11]="Benchmark";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
@@ -718,13 +718,13 @@ String ccView="";
     					gtfReports.get(i).getBenchmarkMap().get("OCT") + 
     					gtfReports.get(i).getBenchmarkMap().get("NOV") + 
    				 		gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
-   				/* }else{
+   				 }else{
    	   				d[11]="";
-   					for (var j = 12; j < 25; j++) {slickformatter
+   					for (var j = 12; j < 25; j++) {
 						d[j] = 0.0;
 						}
 					d[33]="";
-   				} */
+   				} 
    				} if(jsId % 4 == 2){
 				d[11]="Accrual";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
