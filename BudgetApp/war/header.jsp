@@ -70,11 +70,15 @@
 			%>
 
 	<table style="width: 100%;">
+	
+	
 		<tr>
-			<td style="width: 25%; float: left"><a id="logo-container"
+
+			<td style="width: 15%; float: left"><a id="logo-container"
 				href="/"> <img src="images/elephant.png"
 					 width="120px"
 					height="100px" class="gene-logo has-high-res">
+		
 			</a></td>
 
 			<td style="width: 50%; align: center">
@@ -87,7 +91,13 @@
 
 				</div>
 			</td>
-			<td style="width: 25%; float: right">
+			<td style="width: 35%; float: right">
+					<div style="text-align:right; font-size: 14px;" class="">
+                Questions? Comments? Issues? Please email <a href="#" data-mailto="gMEMORI_support-d@gene.com" id="mailToSupport">gBMT_Support@gene.com</a>
+            </div>
+					<div style="float:right;top:5%; margin: 0 auto; position: relative;">
+                <img src="/images/masLogo.png">
+            </div>
 				<div style="text-align: right;">
 					<span
 						style="color: #105596; font-family: 'trebuchet ms'; font-size: 14px; white-space: nowrap;"><i><%=userName%></i>
