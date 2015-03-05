@@ -37,7 +37,7 @@ String ccView="";
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-<html>
+l<html>
 <body onload="getBrandTotals();getAvailableTags();">
 	<div align="center">
 		<table
@@ -223,59 +223,56 @@ String ccView="";
 
 
 						</td>
-					</table>
-					<div id="selectthebrand">
-
-						<div id="header"
-							style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"
-							align=center>Export CostCenter</div>
-						<br>
-						<div align="left" style="padding-left: 36%">
-							<input type="radio" value="0" id="selectCC" name="selectCC">
-							<span id="selectedCCValue" style="font-size: 15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp; <input type="radio" value="1" id="selectCC"
-								name="selectCC"> <span style="font-size: 15;">All</span></input><br>
-							<br>
-						</div>
-						<button class="myButton" value="" onclick="exportExcelData();"
-							style="height: 25px; font-size: 12px; letter-spacing: 1px;"
-							align='right'>Ok</button>
-						&nbsp;
-						<button class="myButton" value="" onclick="closepopup();"
-							style="height: 25px; font-size: 10px; letter-spacing: 1px;"
-							align='right'>Cancel</button>
-
-					</div>
-					<div id="getCostCentreProjects">
-
-						<form method="GET" id="getCostCentre" action="/getreport">
-							<input type="hidden" name="selectedView" id="selectedView1" /> <input
-								type="hidden" name="getCCValue" id="getCostCenter1" />
-
-						</form>
-
-					</div>
-					<div id="getMyProjects">
-
-						<form method="GET" id="getProjects" action="/getreport">
-							<input type="hidden" name="selectedView" id="selectedView2" /> <input
-								type="hidden" name="getCCValue" id="getCostCenter2" />
-
-						</form>
-
-					</div>
-
-
-					<div align='center' style='padding-right: 50px;'>
-						<form method="GET" id="getBrand" action="/getreport">
-							<input type="hidden" name="selectedView" id="selectedView3" /> <input
-								type="hidden" name="getCCValue" id="getCostCenter3" /> <input
-								type="hidden" name="brandValue" id="getBrand3" /> <br />
-
-						</form>
-
-					</div>
-				<td style="width: 20%;" rowspan="2">
+			</tr>
+				
+						
+				</td>
+			</table>
+			<div id="selectthebrand">
+				
+				<div id="header"
+			    style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
+		     </div><br>
+		     <div align="left" style="padding-left: 36%">
+				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;
+				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">All</span></input><br><br>
+				</div>
+				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
+				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; font-size: 10px; letter-spacing:1px;" align= 'right'> Cancel</button>
+				
+				</div>
+	<div id="getCostCentreProjects">
+		
+			<form method="GET" id="getCostCentre" action="/getreport">
+			<input type="hidden" name="selectedView" id="selectedView1"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter1"/>
+				
+			</form>
+			
+		</div>
+	<div id="getMyProjects">
+		
+			<form method="GET" id="getProjects" action="/getreport">
+			<input type="hidden" name="selectedView" id="selectedView2"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter2"/>
+				
+			</form>
+			
+		</div>	
+		
+	
+		<div align='center' style='padding-right: 50px;'>
+			<form method="GET" id="getBrand" action="/getreport" >
+			<input type="hidden" name="selectedView" id="selectedView3"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter3"/>
+			<input type="hidden" name="brandValue" id="getBrand3"/>
+				<br/>
+			
+			</form>
+			
+		</div>
+	 	<td style="width: 20%;" rowspan="2">
 					<table class="summarytable"
 						style="color: #2271B0; white-space: nowrap; font-weight: bold;">
 						<%
@@ -599,6 +596,7 @@ String ccView="";
 		var dLength= data.length;
 		// prepare the data
 		<%String requestor = "";
+		String role="";
 		for (int i = 0; i < gtfReports.size(); i++) {
 			boolean isFirst = true;
 			for (int count = 0; count < 4; count++) {%>
@@ -636,6 +634,8 @@ String ccView="";
 					requestor = requestor.substring(0,requestor.indexOf(":"));
 				}%>
 				d[48]="<%=requestor%>";
+				<% role = user.getRole();%>
+				d[50]="<%=role%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -1279,7 +1279,7 @@ String ccView="";
 		
 		
 		
-		 	// delete cell data on press of delete button
+		 	// brand select using arrow keys
 		grid.onKeyDown.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row - 1;
@@ -1628,6 +1628,24 @@ String ccView="";
 			}
 
 		});
+		
+		m_grid.onKeyDown.subscribe(function(e, args) {
+			var cell = args.cell;
+			var row = args.row - 1;
+			var fixedCell = cell;
+			if (e.which == 38 || e.which == 40 || e.which == 13) {
+				if ($('#hideColumns').is(":checked")) {
+					fixedCell = cell + numHideColumns;
+				}
+				data[row][fixedCell] = 0.0;
+				updateTotals(cell, row, fixedCell, args);
+				if (!m_grid.getEditorLock().commitCurrentEdit()) {
+					return;
+				}
+				m_grid.invalidate();
+				e.stopPropagation();
+			}
+		}); 
 
 		m_grid.onBeforeEditCell
 				.subscribe(function(e, args) {
