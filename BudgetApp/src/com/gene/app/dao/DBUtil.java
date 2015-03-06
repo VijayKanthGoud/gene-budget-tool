@@ -57,12 +57,37 @@ public class DBUtil {
 		return user;
 	}
 	
+	public UserRoleInfo readUserRoleInfoByFName(String fullName) {
+		boolean isGeneUser = false;
+		ArrayList<String> ccUsers = new ArrayList<>();
+		Map<String,UserRoleInfo> userMap = new LinkedHashMap<String,UserRoleInfo>();
+		userMap = readAllUserInfo();
+		UserRoleInfo user = new UserRoleInfo();
+		if(userMap!=null && !userMap.isEmpty()){
+			user = getUserByFullName(userMap,fullName);
+		}
+		System.out.println("readUserRoleInfoByName:::"+fullName);
+		return user;
+	}
+	
 	public UserRoleInfo getUserByName(Map<String,UserRoleInfo> userMap,String userName){
 		UserRoleInfo user = new UserRoleInfo();
 		UserRoleInfo tempUser;
 		for(Map.Entry<String, UserRoleInfo> userEntry:userMap.entrySet()){
 			tempUser = userEntry.getValue();
 			if(userName!=null && !"".equalsIgnoreCase(userName.trim()) && userName.equalsIgnoreCase(tempUser.getUserName())){
+				user = tempUser;
+				break;
+			}
+		}
+		return user;
+	}
+	public UserRoleInfo getUserByFullName(Map<String,UserRoleInfo> userMap,String fullName){
+		UserRoleInfo user = new UserRoleInfo();
+		UserRoleInfo tempUser;
+		for(Map.Entry<String, UserRoleInfo> userEntry:userMap.entrySet()){
+			tempUser = userEntry.getValue();
+			if(fullName!=null && !"".equalsIgnoreCase(fullName.trim()) && fullName.equalsIgnoreCase(tempUser.getFullName())){
 				user = tempUser;
 				break;
 			}
