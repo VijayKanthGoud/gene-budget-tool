@@ -1,10 +1,14 @@
 package com.gene.app.ws;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.gene.app.dao.DBUtil;
+import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.ProjectParameters;
 import com.gene.app.model.UserRoleInfo;
@@ -49,6 +54,7 @@ public class UpdateStudyInBudget {
 		String pUnixId = prjParam.getProjectOwner();
 		UserRoleInfo userInfo = util.readUserRoleInfoByName(pUnixId);
 		System.out.println("userInfo"+userInfo.getUserName());
+		System.out.println("costCenterList"+costCenterList);
 		System.out.println("userInfo null or empty"+(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())));
 		if(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())){
 			System.out.println("If loop userInfo null or empty"+(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())));
@@ -88,10 +94,11 @@ public class UpdateStudyInBudget {
 		System.out.println("gMemoriId"+gMemoriId);
 		System.out.println("gtfRptMap.get(gMemoriId)"+gtfRptMap.get(gMemoriId));
 		if(!isGMemIdExists){
+			createProjectInBudget(prjParam,costCenterList.get(0));
 			eObj.setStatusCode(405);
 			eObj.setStatusMessage("gMemori Id : " +gMemoriId+" doesn't exist in CostCenter associated to user: "+pUnixId+" of Budgeting Tool !!!");
 			return eObj;
-		}
+		}else{
 		System.out.println("gtfRptMap"+gtfRptMap);
 		for(Map.Entry<String, GtfReport> gtfEntry: gtfRptMap.entrySet()){
 			if(gtfEntry.getKey().contains(gMemoriId) && gtfEntry.getKey().length()<10){
@@ -123,6 +130,7 @@ public class UpdateStudyInBudget {
 				gtfReports.add(gtfReport);
 			}
 		}
+		}
 		System.out.println("status Code"+eObj.getStatusCode());
 		System.out.println("status Message"+eObj.getStatusMessage());
 		util.generateProjectIdUsingJDOTxn(gtfReports);
@@ -132,4 +140,72 @@ public class UpdateStudyInBudget {
 		return eObj;
 	}
 
+	public void createProjectInBudget(ProjectParameters prjParam,String costCenter){
+		DBUtil util = new DBUtil();
+		int flag = 0;
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
+		.format(Calendar.getInstance().getTime());
+		GtfReport gtfRpt = new GtfReport();
+		gtfRpt.setgMemoryId(prjParam.getgMemoriId());
+		gtfRpt.setDummyGMemoriId((prjParam.getgMemoriId().length()==6)?false:true);
+		gtfRpt.setStatus(prjParam.getpStatus());
+		if (BudgetConstants.status_New.equalsIgnoreCase(prjParam.getpStatus().trim())) {
+			flag = 1;
+			gtfRpt.setStatus(BudgetConstants.status_New);
+		} else if (BudgetConstants.status_Active
+				.equalsIgnoreCase(prjParam.getpStatus().trim())) {
+			flag = 2;
+			gtfRpt.setStatus(BudgetConstants.status_Active);
+		} else {
+			flag = 3;
+			gtfRpt.setStatus("Closed");
+		}
+		gtfRpt.setFlag(flag);
+		gtfRpt.setRequestor(prjParam.getProjectOwner());
+		gtfRpt.setCostCenter(costCenter);
+		gtfRpt.setProjectName(prjParam.getProjectName());
+		Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
+		Object[] myBrands = {};
+		CostCenter_Brand ccBrandMap = new CostCenter_Brand();
+		 List<CostCenter_Brand> costCenterList =util.readCostCenterBrandMappingData();
+		for(CostCenter_Brand ccBrand : costCenterList){
+			if(costCenter.equalsIgnoreCase(ccBrand.getCostCenter().trim())){
+				ccBrandMap = ccBrand;
+				break;
+			}
+		}
+		userBrandMap = util.getBrandMap(ccBrandMap.getBrandFromDB());
+		Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
+		myBrands = sortedMap.keySet().toArray();
+		gtfRpt.setBrand(myBrands[0].toString());
+		gtfRpt.setCreateDate(timeStamp);
+		gtfRpt.setYear(BudgetConstants.dataYEAR);
+		gtfRpt.setQual_Quant("Qual_Quant");
+		gtfRpt.setStudy_Side("study_Side");
+		gtfRpt.setPercent_Allocation(BudgetConstants.GTF_Percent_Total);
+		Map<String, Double> setZeroMap = new HashMap<String, Double>();
+		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
+			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+		}
+		gtfRpt.setPlannedMap(setZeroMap);
+		gtfRpt.setBenchmarkMap(setZeroMap);
+		gtfRpt.setAccrualsMap(setZeroMap);
+		gtfRpt.setVariancesMap(setZeroMap);
+		gtfRpt.setMultiBrand(false);
+		gtfRpt.setRemarks("Project is created from Study.. Brand and Status defaulted");
+		gtfRpt.setEmail(prjParam.getProjectOwner()+"@gene.com");
+		//gtfRpt.setFlag(flag);
+		gtfRpt.setStatus(prjParam.getpStatus());
+		gtfRpt.setRequestor(prjParam.getProjectOwner());
+		gtfRpt.setProject_WBS("");
+		gtfRpt.setSubActivity("");
+		gtfRpt.setPoNumber("");
+		gtfRpt.setPoDesc("");
+		gtfRpt.setVendor("");
+		gtfRpt.setUnits(0);
+		List<GtfReport> gtfRptList = new ArrayList<GtfReport>();
+		gtfRptList.add(gtfRpt);
+		util.saveDataToDataStore(gtfRpt);
+		util.storeProjectsToCache(gtfRptList, costCenter, BudgetConstants.NEW);
+	}
 }

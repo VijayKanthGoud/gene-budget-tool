@@ -154,6 +154,7 @@
 		  return "<div width = '100%' style='background:#C0CCED'>" + value +"</div>";
 	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" && dataContext["2"] != "" && dataContext["0"].toString().length==10 ){
 		  var initializeURL = "/initiateProject?ccId="+dataContext[47]+"&unixId="+dataContext[48]+"&prj_name="+dataContext[2]+"&dummyGMemId="+dataContext[0];
+		  initializeURL = encodeURI(initializeURL);
 		  return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href="+initializeURL+" target='initialiseURL' style='color:green'>Initialize</a></span></div>";
 	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" && dataContext["2"] == "" && dataContext["0"].toString().indexOf(".") == -1 ){
 		  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
