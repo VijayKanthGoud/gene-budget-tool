@@ -108,7 +108,8 @@ ng\:form {
 			</div>
 			
 			<div style="padding-left: 180px; padding-bottom: 20px ">
-			<button type="button" class="form-control-submit" onclick="uploadData()" autofocus>Upload data</button>
+			<div id="loadImg" style="visibility: hidden;"><img  alt="Loading..." height='25px' width='25px' src="images/loading.gif"> Loading data...</div>
+			<button id="loadBtn" type="button" class="form-control-submit" onclick="uploadData()" autofocus>Upload data</button>
 			</div>
 		</div>
 	</div>
@@ -120,9 +121,13 @@ ng\:form {
 
 <%-- <%@ include file="uploadpopUp.jsp" %>
  --%><script>
+ 
 	function uploadData(){
 		//console.log(JSON.stringify(excelValue.sheets["Main"].data));
+		$('#loadBtn').hide();
+		 $('#loadImg').removeAttr( "style" )
 		if(selectedTab==1){
+			
 			  $.ajax({
 					url : '/factsheetupload',
 					type : 'POST',
@@ -152,10 +157,12 @@ ng\:form {
 				success : function(result) {
 					alert("Uploaded successfully");
 					console.log('Data saved successfully');
+					window.location.reload(true);
 				},
 				error: function(result) {
 					alert("fail");
 					console.log(result);
+					window.location.reload(true);
 		        }
 			}); 
 		}
