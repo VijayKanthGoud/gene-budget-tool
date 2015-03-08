@@ -45,6 +45,7 @@ public class PODetailsUpload extends HttpServlet {
 	String WBS = "";
 	String WBSName = "";
 	boolean isMultibrand = false;
+	int curMonth =0;
 	
 	Map<String, GtfReport> uploadedGMems = new HashMap();
 	Map<String, GtfReport> uploadedPOs = new HashMap();
@@ -64,6 +65,7 @@ public class PODetailsUpload extends HttpServlet {
 		List<List<String>> rowList = new ArrayList();
 		uploadedPOs = new HashMap();
 		uploadedGMems = new HashMap();
+		curMonth = Calendar.getInstance().get(Calendar.MONTH);
 		try {
 			JSONArray jsonArray = new JSONArray(objArray);
 			for (int count = startRow - 1; count < endRow; count++) {
@@ -184,11 +186,33 @@ public class PODetailsUpload extends HttpServlet {
 			}
 		}
 		
-		if (gtfReports.size() != 0) {
+		/*if (gtfReports.size() != 0) {
+
+			// calculate multibrand and percentages.
+			for(GtfReport gtf : gtfReports){
+				if(gtf.getMultiBrand() && !gtf.getgMemoryId().contains(".")){
+					ArrayList<String> cList = gtf.getChildProjectList();
+					double pTotalVal = gtf.getPlannedMap().get(BudgetConstants.months[11]);
+					for(String cId : gtf.getChildProjectList()){
+						if(cId.contains(".")){
+							if(costCenterWiseGtfRptMap.get(cId)!=null){
+								for(GtfReport cGtf : gtfReports){
+									if(!cId.equalsIgnoreCase(cGtf.getgMemoryId())){
+										cGtf.setChildProjectList(cList);
+										cGtf.setPercent_Allocation((cGtf.getPlannedMap().get(BudgetConstants.months[11]) * 100/ pTotalVal) );
+									}
+									
+								}
+							}
+						}
+					}
+				}
+			}*/
+
 			util.generateProjectIdUsingJDOTxn(gtfReports);
 			util.storeProjectsToCache(gtfReports, costCentre,
 					BudgetConstants.NEW);
-		}
+		//}
 	}
 
 	private void updateAccrual(List rcvdRow, UserRoleInfo user,
@@ -424,14 +448,18 @@ public class PODetailsUpload extends HttpServlet {
 			gtfReport.setUnits(1);
 			Map<String, Double> receivedMap = new HashMap<String, Double>();
 			Map<String, Double> setZeroMap = new HashMap<String, Double>();
+			Map<String, Double> setPlannedMap = new HashMap<String, Double>();
+			Map<String, Double> parentPlannedMap = new HashMap<String, Double>();
 			Map<String, Double> parentAccrualMap = new HashMap<String, Double>();
 			if(isMB && noOfChild == 1){
 				if ( !Util.isNullOrEmpty(systemGMem) ){
 				
 				parentAccrualMap = 
 				uploadedGMems.get(gtfReport.getgMemoryId().split("\\.")[0]).getAccrualsMap();
+				parentPlannedMap = uploadedGMems.get(gtfReport.getgMemoryId().split("\\.")[0]).getPlannedMap();
 				}else{
 					parentAccrualMap = pGtf.getAccrualsMap();
+					parentPlannedMap = pGtf.getPlannedMap();
 				}
 			}
 			for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
@@ -439,6 +467,7 @@ public class PODetailsUpload extends HttpServlet {
 				try {
 					String val = "";
 					double pVal = 0.0;
+					double pPVal = 0.0;
 					String rcvdStr = rcvdRow.get(cnt + 8).toString();
 					if( rcvdStr.contains("(")){
 						val = "-" + rcvdStr.substring(rcvdStr.indexOf("(")+1, rcvdStr.indexOf(")"));
@@ -447,9 +476,18 @@ public class PODetailsUpload extends HttpServlet {
 					}
 					if(parentAccrualMap != null && !parentAccrualMap.isEmpty() && isMB && noOfChild == 1){
 						pVal = parentAccrualMap.get(BudgetConstants.months[cnt]);
+						pPVal=parentPlannedMap.get(BudgetConstants.months[cnt]);
 						parentAccrualMap.put(
 								BudgetConstants.months[cnt],
 								roundDoubleValue(Double.parseDouble(val), 2) + roundDoubleValue(pVal, 2));
+						parentPlannedMap.put(
+								BudgetConstants.months[cnt],
+								roundDoubleValue(Double.parseDouble(val), 2) + roundDoubleValue(pVal, 2));
+					}
+					if(cnt < curMonth ){
+						setPlannedMap.put(BudgetConstants.months[cnt], 0.0);
+					}else{
+						setPlannedMap.put(BudgetConstants.months[cnt], roundDoubleValue(Double.parseDouble(val), 2));
 					}
 					receivedMap.put(
 							BudgetConstants.months[cnt],
@@ -457,9 +495,10 @@ public class PODetailsUpload extends HttpServlet {
 					
 				} catch (NumberFormatException e1) {
 					receivedMap.put(BudgetConstants.months[cnt], 0.0);
+					setPlannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}
 			}
-			gtfReport.setPlannedMap(setZeroMap);
+			gtfReport.setPlannedMap(setPlannedMap);
 			gtfReport.setBenchmarkMap(setZeroMap);
 			gtfReport.setAccrualsMap(receivedMap);
 			gtfReport.setVariancesMap(setZeroMap);
