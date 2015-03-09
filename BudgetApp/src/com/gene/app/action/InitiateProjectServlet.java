@@ -134,48 +134,40 @@ public class InitiateProjectServlet extends HttpServlet{
 	public void updateGMemoriIdInBudget(String gMemoriId,String costCenter,String gMemIdFrmStudy){
 		DBUtil util = new DBUtil();
 		Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(costCenter);
-		System.out.println("gtfMap ::"+gtfRptMap);
 		String ccFromStudy = "";
 		List<GtfReport> gtfRptList = new ArrayList<GtfReport>();
 		List<GtfReport> oldgtfRptList = new ArrayList<GtfReport>();
 		String newGMemId = "";
 		GtfReport gtfRpt = new GtfReport();
-		System.out.println("gMemoriId = "+gMemoriId);
-		System.out.println("(gtfRptMap!=null && !gtfRptMap.isEmpty() && gtfRptMap.get(gMemoriId)!=null)"+(gtfRptMap.get(gMemoriId)!=null));
 		if(gtfRptMap!=null && !gtfRptMap.isEmpty() && gtfRptMap.get(gMemoriId)!=null){
 			for(Map.Entry<String, GtfReport> gtfEntry : gtfRptMap.entrySet()){
 				newGMemId = "";
 				gtfRpt = gtfEntry.getValue();
 				if(gtfEntry.getKey().equals(gMemoriId) || gtfEntry.getKey().contains(gMemoriId)){
 					if(gtfEntry.getKey().contains(gMemoriId) && gtfEntry.getKey().contains(".")){
-						System.out.println("in if"+(gtfEntry.getKey().contains(gMemoriId) && gtfEntry.getKey().contains(".")));
-						newGMemId=gMemIdFrmStudy+"."+gtfEntry.getKey().split(".")[1];
+						newGMemId=gMemIdFrmStudy+"."+gtfEntry.getKey().substring(gtfEntry.getKey().indexOf(".")+1);//split(".")[1];
 					}else if(gtfEntry.getKey().equals(gMemoriId)){
-						System.out.println("else if");
 						newGMemId = gMemIdFrmStudy;
 					}
-					System.out.println("gMemoriId"+gMemoriId);
-					System.out.println("newGMemId"+newGMemId);
 					oldgtfRptList.add(gtfRpt);
-					util.removeExistingProject(oldgtfRptList);
-					util.storeProjectsToCache(oldgtfRptList,costCenter, BudgetConstants.OLD);
 					gtfRpt.setgMemoryId(newGMemId);
-					System.out.println("gtfRptMap before remove"+gtfRptMap);
-					gtfRptMap.remove(gMemoriId);
-					gtfRptMap.put(newGMemId, gtfRpt);
-					System.out.println("gtfRptMap after remove"+gtfRptMap);
-					//ccFromStudy = costCenter;
 					gtfRptList.add(gtfRpt);
-					/*util.generateProjectIdUsingJDOTxn(gtfRptList);
-					util.storeProjectsToCache(gtfRptList,costCenter, BudgetConstants.NEW);*/
 				}
 			}
-			System.out.println("gtfRptMap"+gtfRptMap);
+			if(oldgtfRptList!=null && !oldgtfRptList.isEmpty()){
+				for(int i=0;i<oldgtfRptList.size();i++){
+					gtfRptMap.remove(oldgtfRptList.get(i).getgMemoryId());
+				}
+			}
+			if(gtfRptList!=null && !gtfRptList.isEmpty()){
+				for(int i=0;i<gtfRptList.size();i++){
+					gtfRptMap.put(gtfRptList.get(i).getgMemoryId(),gtfRptList.get(i));
+				}
+			}
 			util.saveAllReportDataToCache(costCenter, gtfRptMap);
-			System.out.println("gtfRptList"+gtfRptList);
 			util.generateProjectIdUsingJDOTxn(gtfRptList);
-			/*util.removeExistingProject(oldGtfReportList);
-			util.storeProjectsToCache(oldGtfReportList,user.getSelectedCostCenter(), BudgetConstants.OLD);*/
+			util.removeExistingProject(oldgtfRptList);
+			util.storeProjectsToCache(oldgtfRptList,costCenter, BudgetConstants.OLD);
 		}
 		
 	}
