@@ -1376,9 +1376,7 @@ function closeUploadWindow(){
 	$('input[name=file]').replaceWith($('input[name=file]').clone(true));
 }
 
-function openUrl(url){
-	popUpWindow = window.open(url,'gmemori','');
-}
+
 function selectUserView(){
 	var val = $('#selectedUserView').val();
 	var ccVal = $('#getCostCenter').val();

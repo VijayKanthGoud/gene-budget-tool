@@ -22,6 +22,32 @@
 <html>
 
 <body>
+
+<script>
+	$(function() {
+		$('#homeLink').click(function() {
+			if(typeof popUpWindow === 'undefined'){
+				openUrl('http://memori-qa.appspot.com');
+	    	}else{
+	    		var userAccepted = confirm("gMemori app is already opened. Want to reload?");
+				if (!userAccepted) {
+					if (window.focus) {
+						popUpWindow.focus()
+					}
+			    	return;
+				}else{
+					openUrl('http://memori-qa.appspot.com');
+					if (window.focus) {
+						popUpWindow.focus()
+					}
+				}
+	    	}
+		});
+	});
+	function openUrl(url){
+		popUpWindow = window.open(url,'gmemori','');
+	}
+</script>
 	<%!
 		private static Logger LOGGER = Logger.getLogger("header.jsp");
 	%>
