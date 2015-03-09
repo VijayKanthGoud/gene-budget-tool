@@ -541,6 +541,8 @@
     };
 
     this.save = function () {
+    	$input.val($input.val().replace(/</g, "&lt;"));
+    	$input.val($input.val().replace(/>/g, "&gt;"));
     	if($input.val().trim().length == 0){
     	$input.val("");
     	}
@@ -556,6 +558,8 @@
     };
 
     this.show = function () {
+      $input.val($input.val().replace(/&lt;/g, "<"));
+      $input.val($input.val().replace(/&gt;/g, ">"));
       $wrapper.show();
     };
 

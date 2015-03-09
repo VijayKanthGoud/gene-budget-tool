@@ -111,9 +111,9 @@ public class AutoSaveData extends HttpServlet {
 					
 					if (gtfReportObj != null) {
 						if (Integer.parseInt(cellNum) == BudgetConstants.CELL_REMARKS) {
-							if(cellValue.contains("\"")){
-								cellValue = cellValue.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'");
-							}
+							//if(cellValue.contains("\"")){
+								cellValue = cellValue.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'").replace("<", "&lt;").replace(">", "&gt;");
+							//}
 							String remarks = cellValue;
 							gtfReportObj.setRemarks(remarks);
 							gtfReportMap.put(keyNum, gtfReportObj);
