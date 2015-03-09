@@ -190,10 +190,13 @@
   }
   
   function editableFieldFormatter(row, cell, value, columnDef, dataContext) {
-	  if(dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" )){
-		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
+	  if((typeof value != 'undefined' && value != '') && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
+		  return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
 	  }
-	  return value;
+	  
+	  if((typeof value === 'undefined' || value == '')  && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" )) ){
+	     return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
+  	  }
   }
   
   function poFieldFormatter(row, cell, value, columnDef, dataContext) {
