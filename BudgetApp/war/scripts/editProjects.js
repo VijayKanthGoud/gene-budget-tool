@@ -38,8 +38,26 @@ function getProjectsBrandwise(){
 	$('#getBrand').submit();
 } 
 
+function OpenInNewTab(url) {
+	//alert("OpenInNewTab");
+	  var win = window.open(url, 'initiate');
+	  win.focus();
+	}
 function getBrandTotals(){
-	
+	var gMemId = <%= request.getAttribute("gMemoriId")%>;
+	var statusCode = <%= request.getAttribute("Error Code")%>;
+	var statusMsg = '<%= request.getAttribute("Error Msg")%>';
+	if(gMemId!=null && gMemId.toString().length==6 && statusCode!=null && statusCode.toString()!=null && statusCode.toString()=='200'){
+		OpenInNewTab("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemId);
+		window.history.pushState("object or string", "Title", "http://36-dot-gbmt-dev.appspot.com/");
+		window.location.reload(true);
+	}else if (statusCode!=null && statusCode.toString()!=null && statusCode.toString()!='200'){
+		if(statusMsg!=null && statusMsg.toString()!=null && statusMsg.toString()!=''){
+			alert(statusMsg.toString());
+		}
+		window.history.pushState("object or string", "Title", "http://36-dot-gbmt-dev.appspot.com/");
+		window.location.reload(true);
+	}
 	if($('#selectedUserView').val() == 'My Brands'){
 		$("#dropdown").show();
 	}else{

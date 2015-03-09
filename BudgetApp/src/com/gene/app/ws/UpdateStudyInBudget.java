@@ -55,11 +55,14 @@ public class UpdateStudyInBudget {
 		UserRoleInfo userInfo = util.readUserRoleInfoByName(pUnixId);
 		System.out.println("userInfo"+userInfo.getUserName());
 		System.out.println("costCenterList"+costCenterList);
+		System.out.println("userInfo.getCostCenter() :::"+userInfo.getCostCenter());
 		System.out.println("userInfo null or empty"+(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())));
 		if(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())){
 			System.out.println("If loop userInfo null or empty"+(userInfo == null || !Util.isNullOrEmpty(userInfo.getEmail())));
 			eObj.setStatusCode(401);
 			eObj.setStatusMessage("Authentication Failed !!!");
+			System.out.println("status Code"+eObj.getStatusCode());
+			System.out.println("status Message"+eObj.getStatusMessage());
 			return eObj;
 		}else{
 			//List<String> ccBrandList = util.readAllCostCenters();
@@ -74,9 +77,12 @@ public class UpdateStudyInBudget {
 				//System.out.println("else If 402 loop userInfo null or empty"+((!Util.isNullOrEmpty(selectedCC) && !userInfo.getCostCenter().contains(costCenter))));
 				eObj.setStatusCode(402);
 				eObj.setStatusMessage("User is not mapped to costCentres: " +costCenterList+" !!!");
+				System.out.println("status Code"+eObj.getStatusCode());
+				System.out.println("status Message"+eObj.getStatusMessage());
 				return eObj;
 			}
 		}
+		System.out.println("selectedCC::::"+selectedCC);
 		Map<String,GtfReport> gtfRptMap = new HashMap<String,GtfReport>();
 		String gMemoriId = "";
 		String selectedCostCenter = "";
@@ -84,9 +90,13 @@ public class UpdateStudyInBudget {
 		for(String cc: selectedCC){
 			gtfRptMap = util.getAllReportDataFromCache(cc);
 			gMemoriId = prjParam.getgMemoriId();
+			System.out.println("selectedCC::::"+gtfRptMap);
+			System.out.println("gMemoriId::::"+gMemoriId);
+			System.out.println("gMemoriId.length()::::"+gMemoriId.length());
 			if(gtfRptMap.get(gMemoriId)!=null && (gMemoriId.length()==6)){
 				isGMemIdExists = true;
 				selectedCostCenter = cc;
+				
 			}
 		}
 		//Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(costCenter);
@@ -95,8 +105,10 @@ public class UpdateStudyInBudget {
 		System.out.println("gtfRptMap.get(gMemoriId)"+gtfRptMap.get(gMemoriId));
 		if(!isGMemIdExists){
 			createProjectInBudget(prjParam,costCenterList.get(0));
-			eObj.setStatusCode(405);
-			eObj.setStatusMessage("gMemori Id : " +gMemoriId+" doesn't exist in CostCenter associated to user: "+pUnixId+" of Budgeting Tool !!!");
+			eObj.setStatusCode(200);
+			eObj.setStatusMessage("gMemori Id : " +gMemoriId+" has been created in Budgeting Tool !!!");
+			System.out.println("status Code"+eObj.getStatusCode());
+			System.out.println("status Message"+eObj.getStatusMessage());
 			return eObj;
 		}else{
 		System.out.println("gtfRptMap"+gtfRptMap);
@@ -108,6 +120,8 @@ public class UpdateStudyInBudget {
 						(!gtfReport.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfReport.getRequestor()))){
 					eObj.setStatusCode(403);
 					eObj.setStatusMessage("User is not authorised to edit the project !!!");
+					System.out.println("status Code"+eObj.getStatusCode());
+					System.out.println("status Message"+eObj.getStatusMessage());
 					return eObj;
 				}
 				switch(prjParam.getpStatus()){

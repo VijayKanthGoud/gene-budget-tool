@@ -115,10 +115,17 @@ public class InitiateProjectServlet extends HttpServlet{
 				System.out.println("error code"+respFrmStudy.getStatusCode());
 				if(Util.isNullOrEmpty(respFrmStudy.getNewGMemId())){
 				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentres().get(0),respFrmStudy.getNewGMemId());
-				resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
+				//resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
+				req.setAttribute("gMemoriId", respFrmStudy.getNewGMemId());
+				req.setAttribute("Error Code", respFrmStudy.getStatusCode());
+				req.setAttribute("Error Msg", respFrmStudy.getStatusMessage());
 				}else{
-					throw new Exception("Project was not created in study. Error reason: "+respFrmStudy.getStatusMessage());
+					//throw new Exception("Project was not created in study. Error reason: "+respFrmStudy.getStatusMessage());
+					req.setAttribute("Error Code", respFrmStudy.getStatusCode());
+					req.setAttribute("Error Msg", "Project was not created in study. Error reason: "+respFrmStudy.getStatusMessage());
 				}
+				RequestDispatcher rd = req.getRequestDispatcher("/getreport");
+				rd.forward(req, resp);
 			} else {
 				throw new Exception();
 			}
@@ -127,6 +134,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			// Error handling elided.
 			String result = e.getMessage();
 			System.out.println("result:::" + result);
+			req.setAttribute("Error Msg", result);
 		}
 
 	}
@@ -149,7 +157,12 @@ public class InitiateProjectServlet extends HttpServlet{
 					}else if(gtfEntry.getKey().equals(gMemoriId)){
 						newGMemId = gMemIdFrmStudy;
 					}
-					oldgtfRptList.add(gtfRpt);
+					try {
+						oldgtfRptList.add((GtfReport) gtfRpt.clone());
+					} catch (CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					gtfRpt.setgMemoryId(newGMemId);
 					gtfRptList.add(gtfRpt);
 				}
@@ -164,10 +177,14 @@ public class InitiateProjectServlet extends HttpServlet{
 					gtfRptMap.put(gtfRptList.get(i).getgMemoryId(),gtfRptList.get(i));
 				}
 			}
+			System.out.println("gtfRptMap in update"+gtfRptMap);
+			System.out.println("gtfRptList in update"+gtfRptList.get(0).getgMemoryId());
 			util.saveAllReportDataToCache(costCenter, gtfRptMap);
+			util.storeProjectsToCache(gtfRptList,costCenter, BudgetConstants.NEW);
 			util.generateProjectIdUsingJDOTxn(gtfRptList);
 			util.removeExistingProject(oldgtfRptList);
 			util.storeProjectsToCache(oldgtfRptList,costCenter, BudgetConstants.OLD);
+			System.out.println("gtfRptMap from cc = "+util.getAllReportDataFromCache(costCenter));
 		}
 		
 	}
