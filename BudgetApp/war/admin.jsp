@@ -139,10 +139,12 @@ ng\:form {
 					success : function(result) {
 						alert("Uploaded successfully");
 						console.log('Data saved successfully');
+						window.location.reload(true);
 					},
 					error: function(result) {
 						alert("fail");
 						console.log(result);
+						window.location.reload(true);
 			        }
 				}); 
 		}else{
