@@ -48,7 +48,7 @@ function getBrandTotals(){
 	var statusCode = <%= request.getAttribute("Error Code")%>;
 	var statusMsg = '<%= request.getAttribute("Error Msg")%>';
 	if(gMemId!=null && gMemId.toString().length==6 && statusCode!=null && statusCode.toString()!=null && statusCode.toString()=='200'){
-		OpenInNewTab("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemId);
+		OpenInNewTab("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemId);
 		window.history.pushState("object or string", "Title", "http://36-dot-gbmt-dev.appspot.com/");
 		window.location.reload(true);
 	}else if (statusCode!=null && statusCode.toString()!=null && statusCode.toString()!='200'){
