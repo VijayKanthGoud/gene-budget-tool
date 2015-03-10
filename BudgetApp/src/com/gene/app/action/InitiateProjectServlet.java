@@ -179,7 +179,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			}
 			System.out.println("gtfRptMap in update"+gtfRptMap);
 			System.out.println("gtfRptList in update"+gtfRptList.get(0).getgMemoryId());
-			util.saveAllReportDataToCache(costCenter, gtfRptMap);
+			//util.saveAllReportDataToCache(costCenter, gtfRptMap);
 			util.storeProjectsToCache(gtfRptList,costCenter, BudgetConstants.NEW);
 			util.generateProjectIdUsingJDOTxn(gtfRptList);
 			util.removeExistingProject(oldgtfRptList);

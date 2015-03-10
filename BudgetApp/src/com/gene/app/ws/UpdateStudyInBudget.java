@@ -65,8 +65,6 @@ public class UpdateStudyInBudget {
 			System.out.println("status Message"+eObj.getStatusMessage());
 			return eObj;
 		}else{
-			//List<String> ccBrandList = util.readAllCostCenters();
-			
 			for(String cCenter:costCenterList){
 				if(Util.isNullOrEmpty(cCenter) && userInfo.getCostCenter().contains(cCenter)){
 					selectedCC.add(cCenter);
@@ -74,13 +72,26 @@ public class UpdateStudyInBudget {
 			}
 			
 			if(selectedCC.isEmpty()){
-				//System.out.println("else If 402 loop userInfo null or empty"+((!Util.isNullOrEmpty(selectedCC) && !userInfo.getCostCenter().contains(costCenter))));
 				eObj.setStatusCode(402);
 				eObj.setStatusMessage("User is not mapped to costCentres: " +costCenterList+" !!!");
 				System.out.println("status Code"+eObj.getStatusCode());
 				System.out.println("status Message"+eObj.getStatusMessage());
 				return eObj;
 			}
+		}
+		GtfReport gtfRpt = new GtfReport();
+		List<GtfReport>	gtfRptlst = new ArrayList<GtfReport>();
+		if(prjParam.getgMemoriId()!=null && !"".equals(prjParam.getgMemoriId())){
+			gtfRptlst = util.readProjectDataByGMemId(prjParam.getgMemoriId());
+			if(gtfRptlst!=null && !gtfRptlst.isEmpty()){
+				gtfRpt = gtfRptlst.get(0);
+			}
+		}if( gtfRpt!=null && !selectedCC.contains(gtfRpt.getCostCenter())){
+			eObj.setStatusCode(404);
+			eObj.setStatusMessage("Project doesn't exist in costCenter " +costCenterList+" !!!");
+			System.out.println("status Code"+eObj.getStatusCode());
+			System.out.println("status Message"+eObj.getStatusMessage());
+			return eObj;
 		}
 		System.out.println("selectedCC::::"+selectedCC);
 		Map<String,GtfReport> gtfRptMap = new HashMap<String,GtfReport>();
@@ -124,20 +135,27 @@ public class UpdateStudyInBudget {
 					System.out.println("status Message"+eObj.getStatusMessage());
 					return eObj;
 				}
-				switch(prjParam.getpStatus()){
-				case "New":
-					gtfReport.setFlag(1);
-					break;
-				case "Active":
-					gtfReport.setFlag(2);
-					break;
-				case "Closed":
-					gtfReport.setFlag(3);
-					break;
-				default:
-					break;
+				int flag = 0;
+				String status = "";
+				String remarks = "";
+				if ((BudgetConstants.status_New).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
+					flag = 1;
+					status = BudgetConstants.status_New;
+				} else if ((BudgetConstants.status_Active).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
+					flag = 2;
+					status = BudgetConstants.status_Active;
+					if(!Util.isNullOrEmpty(gtfReport.getPoNumber())){
+						remarks = "PO Number is blank. Hence status is set to New !!!";
+						gtfReport.setRemarks(remarks);
+						flag = 1;
+						status = BudgetConstants.status_New;
+					}
+				} else {
+					flag = 3;
+					status = "Closed";
 				}
-				gtfReport.setStatus(prjParam.getpStatus());
+				gtfReport.setStatus(status);
+				gtfReport.setFlag(flag);
 				gtfReport.setRequestor(prjParam.getProjectOwner());
 				gtfReport.setCostCenter(selectedCostCenter);
 				gtfReport.setProjectName(prjParam.getProjectName());
@@ -157,24 +175,32 @@ public class UpdateStudyInBudget {
 	public void createProjectInBudget(ProjectParameters prjParam,String costCenter){
 		DBUtil util = new DBUtil();
 		int flag = 0;
+		String status = "";
+		String remarks = "";
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 		.format(Calendar.getInstance().getTime());
 		GtfReport gtfRpt = new GtfReport();
 		gtfRpt.setgMemoryId(prjParam.getgMemoriId());
 		gtfRpt.setDummyGMemoriId((prjParam.getgMemoriId().length()==6)?false:true);
-		gtfRpt.setStatus(prjParam.getpStatus());
-		if (BudgetConstants.status_New.equalsIgnoreCase(prjParam.getpStatus().trim())) {
+		//gtfRpt.setStatus(prjParam.getpStatus());
+		if ((BudgetConstants.status_New).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
 			flag = 1;
-			gtfRpt.setStatus(BudgetConstants.status_New);
-		} else if (BudgetConstants.status_Active
-				.equalsIgnoreCase(prjParam.getpStatus().trim())) {
+			status = BudgetConstants.status_New;
+		} else if ((BudgetConstants.status_Active).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
 			flag = 2;
-			gtfRpt.setStatus(BudgetConstants.status_Active);
+			status = BudgetConstants.status_Active;
+			//if(!Util.isNullOrEmpty(gtfReport.getPoNumber())){
+			remarks = "PO Number is blank. Hence status is set to New !!!";
+			gtfRpt.setRemarks(remarks);
+			flag = 1;
+			status = BudgetConstants.status_New;
+			//}
 		} else {
 			flag = 3;
-			gtfRpt.setStatus("Closed");
+			status = "Closed";
 		}
 		gtfRpt.setFlag(flag);
+		gtfRpt.setStatus(status);
 		gtfRpt.setRequestor(prjParam.getProjectOwner());
 		gtfRpt.setCostCenter(costCenter);
 		gtfRpt.setProjectName(prjParam.getProjectName());
@@ -209,7 +235,7 @@ public class UpdateStudyInBudget {
 		gtfRpt.setRemarks("Project is created from Study.. Brand and Status defaulted");
 		gtfRpt.setEmail(prjParam.getProjectOwner()+"@gene.com");
 		//gtfRpt.setFlag(flag);
-		gtfRpt.setStatus(prjParam.getpStatus());
+		//gtfRpt.setStatus(prjParam.getpStatus());
 		gtfRpt.setRequestor(prjParam.getProjectOwner());
 		gtfRpt.setProject_WBS("");
 		gtfRpt.setSubActivity("");

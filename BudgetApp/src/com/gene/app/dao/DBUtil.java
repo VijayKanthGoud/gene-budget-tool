@@ -660,6 +660,21 @@ public class DBUtil {
 		pm.close();
 		return gtfReportList;
 	}
+	
+	public List<GtfReport> readProjectDataByGMemId(String gMemoriId) {
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Query q = pm.newQuery(GtfReport.class);
+		if(gMemoriId!=null && !"".equals(gMemoriId)){
+			q.setFilter("gMemoryId==gMemoryIdParam");
+			q.declareParameters("String gMemoryIdParam");
+		}
+		List<GtfReport> results = (List<GtfReport>)  q.execute(gMemoriId);
+		pm.close();
+		return results;
+	}
+	
 	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
