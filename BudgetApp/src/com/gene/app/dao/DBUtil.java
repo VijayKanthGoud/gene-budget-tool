@@ -931,8 +931,8 @@ public class DBUtil {
 		String brand = Util.isNullOrEmpty(report.getBrand())?report.getBrand():"";
 		String requestor = Util.isNullOrEmpty(report.getRequestor())?report.getRequestor():"";
 		//String poDesc = Util.isNullOrEmpty(report.getPoDesc())?report.getPoDesc():"";
-		String project_WBS = Util.isNullOrEmpty(report.getProject_WBS())?report.getProject_WBS():"";
-		return brand+":"+requestor+/*":"+poDesc+*/":"+project_WBS;
+		String projectName = Util.isNullOrEmpty(report.getProjectName())?report.getProjectName():"";
+		return brand+":"+requestor+/*":"+poDesc+*/":"+projectName;
 	}
 	@SuppressWarnings("unchecked")
 	public void updateReports() {
@@ -993,7 +993,7 @@ public class DBUtil {
 		GtfReport gtfReport = null;
 		if(gtfReportMap==null || gtfReportMap.isEmpty() || gtfReportMap.size()==0){
 			Map<String,GtfReport> gtfRptMap = getAllReportDataFromCache(costCentre);
-			 gtfReportMap = new HashMap<String,GtfReport>();
+			gtfReportMap = new HashMap<String,GtfReport>();
 		if(gtfRptMap!=null && !gtfRptMap.isEmpty()){
 			for(Map.Entry<String, GtfReport> gtfMapEntry: gtfRptMap.entrySet()){
 				gtfReport = gtfMapEntry.getValue();
@@ -1003,8 +1003,8 @@ public class DBUtil {
 					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getRequestor() + ":";
 				}/*if(Util.isNullOrEmpty(gtfReport.getPoDesc())){
 					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getPoDesc() + ":";
-				}*/if(Util.isNullOrEmpty(gtfReport.getProject_WBS())){
-					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getProject_WBS();
+				}*/if(Util.isNullOrEmpty(gtfReport.getProjectName())){
+					uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getProjectName();
 				}
 				gtfReportMap.put(uniqueGtfRptKey, gtfReport);
 			}

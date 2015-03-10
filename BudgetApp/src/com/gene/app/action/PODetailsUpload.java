@@ -390,7 +390,7 @@ public class PODetailsUpload extends HttpServlet {
 					gtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName()+":"+pUserId);
 					
 				}else{
-					gtfReport.setBrand("Total Brand (MB)");
+					gtfReport.setBrand("Total Products(MB)");
 					childList.add(gMemoriId);
 					childList.add(gMemoriId + ".1");
 					pUserId=util.readUserRoleInfoByFName(PM).getUserName();

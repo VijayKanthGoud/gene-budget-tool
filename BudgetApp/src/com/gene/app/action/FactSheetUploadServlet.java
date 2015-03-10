@@ -1,12 +1,16 @@
 package com.gene.app.action;
 
 import java.io.IOException;
+import java.sql.Array;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +36,8 @@ public class FactSheetUploadServlet extends HttpServlet {
 			.getLogger(FactSheetUploadServlet.class.getName());
 	DBUtil util = new DBUtil();
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
+	Map<String, ArrayList<GtfReport>> uploadWithOutPos = new HashMap();
+	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap();
 
 	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -44,20 +50,16 @@ public class FactSheetUploadServlet extends HttpServlet {
 		String [] objArrayStr = objarray.split("],");
 		System.out.println("objArrayStr = "+objArrayStr.length);
 		String costCentre = req.getParameter("costCenter");
+		uploadedPOs = new HashMap();
+		uploadWithOutPos = new HashMap();
 		int fromLine = Integer.parseInt(req.getParameter("inputFrom"));
 		int toLine = Integer.parseInt(req.getParameter("inputTo"));
-		/*for(int i=0;i<objArrayStr.length;i++){
-			System.out.println("objArrayStr values "+i+ " ::: "+objArrayStr[i]);
-		}*/
 		List<List<String>> rowList = new ArrayList();
-
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
-			/*costCentre = jsonArray.getJSONArray(18).get(3)
-					.toString().split("\\s")[0];*/
 			for (int count = fromLine-1; count < toLine; count++) {
 				List list = new ArrayList();
-				for (int k = 3; k < jsonArray.getJSONArray(count).length(); k++) {
+				for (int k = 0; k < jsonArray.getJSONArray(count).length(); k++) {
 					String varCol = jsonArray.getJSONArray(count).get(k)
 							.toString();
 					if (!varCol.equalsIgnoreCase("null")) {
@@ -66,7 +68,13 @@ public class FactSheetUploadServlet extends HttpServlet {
 						list.add("");
 					}
 				}
+				if(Util.isNullOrEmpty(list.get(1).toString()) || Util.isNullOrEmpty(list.get(2).toString()) ||
+						Util.isNullOrEmpty(list.get(3).toString()) || Util.isNullOrEmpty(list.get(4).toString()) ||
+						Util.isNullOrEmpty(list.get(5).toString()) || Util.isNullOrEmpty(list.get(6).toString()) ||
+						Util.isNullOrEmpty(list.get(7).toString()) || Util.isNullOrEmpty(list.get(8).toString()) ||
+						Util.isNullOrEmpty(list.get(9).toString()) || Util.isNullOrEmpty(list.get(10).toString()) ){
 				rowList.add(list);
+				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -76,65 +84,63 @@ public class FactSheetUploadServlet extends HttpServlet {
 	}
 
 	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
-			List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre) {
+		List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre) {
 		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
-		//System.out.println("uniqueGtfRptMap = "+uniqueGtfRptMap);
 		boolean isMultibrand = false;
 		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
 		for (List recvdRow : rowList) {
 			GtfReport gtfReport = new GtfReport();
-			if (recvdRow.get(2) != null && !recvdRow.get(2).equals("#")
-					&& !recvdRow.get(2).toString().trim().equals("")) {
-				gtfReport.setSubActivity(recvdRow.get(2).toString());
+			if (recvdRow.get(5) != null && !recvdRow.get(5).toString().equals("#")
+					&& !recvdRow.get(5).toString().trim().equals("")) {
+				gtfReport.setSubActivity(recvdRow.get(5).toString());
 			} else {
 				gtfReport.setSubActivity("");
 				continue;
 			}
-			if (recvdRow.get(8) != null && !recvdRow.get(8).equals("#")
-					&& !recvdRow.get(8).toString().trim().equals("")) {
-				gtfReport.setRequestor(recvdRow.get(8).toString());
-				//user = new UserRoleInfo();
-				if(userMap!=null && !userMap.isEmpty()){
-					user = util.getUserByName(userMap,recvdRow.get(8).toString());
-					if(user==null || user.getEmail()==null){
-						user = orgUser;
-						gtfReport.setRequestor(user.getUserName());
-					}
+			if (recvdRow.get(11) != null && !recvdRow.get(11).toString().equals("#")
+					&& !recvdRow.get(11).toString().trim().equals("")) {
+				if(util.readUserRoleInfoByFName(recvdRow.get(11).toString()) != null && 
+						util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getUserName() != null){
+				gtfReport.setRequestor(util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getUserName());
+				gtfReport.setEmail(util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getEmail());
+				}else{
+					gtfReport.setRequestor(orgUser.getUserName());
+					gtfReport.setEmail(orgUser.getEmail());
 				}
 			} else {
-				user = orgUser;
-				gtfReport.setRequestor(user.getUserName());
+				gtfReport.setRequestor(orgUser.getUserName());
+				gtfReport.setEmail(orgUser.getEmail());
 			}
 			gtfReport.setCostCenter(costCentre);
 
-			if (recvdRow.get(0) != null && !recvdRow.get(0).equals("#")
-					&& !recvdRow.get(0).toString().trim().equals("")) {
-				gtfReport.setProject_WBS(recvdRow.get(0).toString());
+			if (recvdRow.get(3) != null && !recvdRow.get(3).toString().equals("#")
+					&& !recvdRow.get(3).toString().trim().equals("")) {
+				gtfReport.setProject_WBS(recvdRow.get(3).toString());
 			} else {
 				gtfReport.setProject_WBS("");
 			}
 
-			if (recvdRow.get(1) != null && !recvdRow.get(1).equals("#")
-					&& !recvdRow.get(1).toString().toString().trim().equals("")) {
-				gtfReport.setWBS_Name(recvdRow.get(1).toString());
+			if (recvdRow.get(4) != null && !recvdRow.get(4).toString().equals("#")
+					&& !recvdRow.get(4).toString().toString().trim().equals("")) {
+				gtfReport.setWBS_Name(recvdRow.get(4).toString());
 			} else {
-				gtfReport.setWBS_Name(recvdRow.get(1).toString());
+				gtfReport.setWBS_Name(recvdRow.get(4).toString());
 			}
 
 			
 
-			if (recvdRow.get(3) != null && !recvdRow.get(3).equals("#")
-					&& !recvdRow.get(3).toString().trim().equals("")) {
-				gtfReport.setBrand(recvdRow.get(3).toString());
+			if (recvdRow.get(6) != null && !recvdRow.get(6).toString().equals("#")
+					&& !recvdRow.get(6).toString().trim().equals("")) {
+				gtfReport.setBrand(recvdRow.get(6).toString());
 			} else {
-				gtfReport.setBrand("");
+				gtfReport.setBrand("No brand");
 			}
 
-			if (recvdRow.get(4) != null && !recvdRow.get(4).equals("#")
-					&& !recvdRow.get(4).toString().trim().equals("")) {
+			if (recvdRow.get(7) != null && !recvdRow.get(7).toString().equals("#")
+					&& !recvdRow.get(7).toString().trim().equals("")) {
 				try {
 					gtfReport.setPercent_Allocation(Double.parseDouble(recvdRow
-							.get(4).toString()));
+							.get(7).toString()));
 				} catch (NumberFormatException ne) {
 					gtfReport.setPercent_Allocation(100);
 				}
@@ -142,9 +148,9 @@ public class FactSheetUploadServlet extends HttpServlet {
 				gtfReport.setPercent_Allocation(100);
 			}
 
-			if (recvdRow.get(5) != null && !recvdRow.get(5).equals("#")
-					&& !recvdRow.get(5).toString().trim().equals("")) {
-				gtfReport.setPoNumber(recvdRow.get(5).toString());
+			if (recvdRow.get(8) != null && !recvdRow.get(8).toString().equals("#")
+					&& !recvdRow.get(8).toString().trim().equals("")) {
+				gtfReport.setPoNumber(recvdRow.get(8).toString());
 				gtfReport.setStatus("Active");
 				gtfReport.setFlag(2);
 			} else {
@@ -153,23 +159,24 @@ public class FactSheetUploadServlet extends HttpServlet {
 				gtfReport.setFlag(1);
 			}
 
-			if (recvdRow.get(6) != null && !recvdRow.get(6).equals("#")
-					&& !recvdRow.get(6).toString().trim().equals("")) {
-				gtfReport.setPoDesc(recvdRow.get(6).toString());
+			if (recvdRow.get(9) != null && !recvdRow.get(9).toString().equals("#")
+					&& !recvdRow.get(9).toString().trim().equals("")) {
+				gtfReport.setPoDesc(recvdRow.get(9).toString());
 			} else {
-				gtfReport.setPoDesc("");
+				gtfReport.setPoDesc("Not Available");
 			}
 
-			if (recvdRow.get(7) != null && !recvdRow.get(7).equals("#")
-					&& !recvdRow.get(7).toString().trim().equals("")) {
-				gtfReport.setVendor(recvdRow.get(7).toString());
+			if (recvdRow.get(10) != null && !recvdRow.get(10).toString().equals("#")
+					&& !recvdRow.get(10).toString().trim().equals("")) {
+				gtfReport.setVendor(recvdRow.get(10).toString());
 			} else {
+				
 				gtfReport.setVendor("");
 			}
 
 			/*if (recvdRow.get(8) != null && !recvdRow.get(8).equals("#")
 					&& !recvdRow.get(8).toString().trim().equals("")) {
-				gtfReport.setRequestor(recvdRow.get(8).toString());
+				gtfReport.setRequestor(util.readUserRoleInfoByFName(recvdRow.get(8).toString()).getUserName());
 			} else {
 				gtfReport.setRequestor("");
 			}*/
@@ -187,14 +194,14 @@ public class FactSheetUploadServlet extends HttpServlet {
 				setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 				try {
 
-					if (recvdRow.get(cnt + 9) != null
-							&& !recvdRow.get(cnt + 9).toString().trim()
+					if (recvdRow.get(cnt + 12) != null
+							&& !recvdRow.get(cnt + 12).toString().trim()
 									.equals("")) {
 						String value = "0.0";
-						if (recvdRow.get(cnt + 9).toString().contains("(")) {
-							value = "-" + recvdRow.get(cnt + 9).toString().replaceAll("[^\\d.]", "");
+						if (recvdRow.get(cnt + 12).toString().contains("(")) {
+							value = "-" + recvdRow.get(cnt + 12).toString().replaceAll("[^\\d.]", "");
 						}else{
-							value = recvdRow.get(cnt + 9).toString();
+							value = recvdRow.get(cnt + 12).toString();
 						}
 						plannedMap.put(BudgetConstants.months[cnt], Double.parseDouble(value));
 					} else {
@@ -210,43 +217,144 @@ public class FactSheetUploadServlet extends HttpServlet {
 			gtfReport.setAccrualsMap(setZeroMap);
 			gtfReport.setVariancesMap(setZeroMap);
 			gtfReport.setMultiBrand(isMultibrand);
-			gtfReport.setEmail(user.getEmail());
+			
 
-			String poDesc = gtfReport.getPoDesc();
-			gtfReport.setProjectName(poDesc);
-			String gMemoriId;
-			try {
-				if(gtfReport.getPoDesc().indexOf("_")==6){
-				gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
-						Math.min(poDesc.length(), 6)))
-						+ "";
-				gtfReport.setDummyGMemoriId(false);
-				}else{
+			if (recvdRow.get(2) != null && !recvdRow.get(2).toString().equals("#")
+					&& !recvdRow.get(2).toString().trim().equals("")) {
+				gtfReport.setProjectName((recvdRow.get(2).toString()));
+			} else {
+				gtfReport.setProjectName(gtfReport.getPoDesc());
+			}
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
+				gtfReport.setBrand(gtfReport.getWBS_Name());
+			}
+			
+			// Update existing reports
+			StringBuilder gtfParam = new StringBuilder("");
+			if(Util.isNullOrEmpty(gtfReport.getBrand())){
+				gtfParam = gtfParam.append(gtfReport.getBrand() + ":");
+			}else{
+				gtfParam = gtfParam.append(":");
+			}
+			if(Util.isNullOrEmpty(gtfReport.getRequestor())){
+				gtfParam = gtfParam.append(gtfReport.getRequestor() + ":");
+			}else{
+				gtfParam = gtfParam.append(":");
+			}
+			if(Util.isNullOrEmpty(gtfReport.getProjectName())){
+				gtfParam = gtfParam.append(gtfReport.getProjectName());
+			}
+			GtfReport gtfRpt = uniqueGtfRptMap.get(gtfParam.toString());
+			
+			// Update if gmemori id already exists else create a new gmemori id either from poDesc or generate new
+			if(gtfRpt != null){
+				gtfReport.setId(gtfRpt.getId());
+				gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
+			}else{
+				String gMemoriId;
+				try {
+					if(gtfReport.getPoDesc().indexOf("_")==6){
+					gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
+							Math.min(gtfReport.getPoDesc().length(), 6)))
+							+ "";
+					gtfReport.setDummyGMemoriId(false);
+					}else{
+						gMemoriId = "" + generator.nextValue();
+						gtfReport.setDummyGMemoriId(true);
+					}
+				} catch (NumberFormatException ne) {
 					gMemoriId = "" + generator.nextValue();
 					gtfReport.setDummyGMemoriId(true);
 				}
-			} catch (NumberFormatException ne) {
-				gMemoriId = "" + generator.nextValue();
-				gtfReport.setDummyGMemoriId(true);
-			}
 
-			gtfReport.setgMemoryId(gMemoriId);
-			String gtfParam = gtfReport.getBrand()+":"+gtfReport.getRequestor()+":"+gtfReport.getPoDesc()+":"+gtfReport.getProject_WBS();
-			//System.out.println("gtfParam = "+gtfParam);
-			GtfReport gtfRpt = uniqueGtfRptMap.get(gtfParam);
-			if(gtfRpt != null){
-				//System.out.println("gtfRpt is not null");
-				gtfReport.setId(gtfRpt.getId());
-				gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
+				gtfReport.setgMemoryId(gMemoriId);
 			}
-			gtfReports.add(gtfReport);
+			
+			
+			
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
+				ArrayList<GtfReport> poUpdated = new ArrayList<>();
+				if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
+					poUpdated = uploadedPOs.get(gtfReport.getPoNumber());
+				}
+					poUpdated.add(gtfReport);
+				
+				uploadedPOs.put(gtfReport.getPoNumber(), poUpdated);
+			}else{
+				
+				ArrayList<GtfReport> noPoUpdated = new ArrayList<>();
+				if(uploadWithOutPos.get(gtfReport.getProjectName())!=null){
+				 noPoUpdated = uploadWithOutPos.get(gtfReport.getProjectName());
+				 noPoUpdated.add(gtfReport);
+				 uploadWithOutPos.put(gtfReport.getProjectName(), noPoUpdated);
+				 
+				}else{
+					noPoUpdated.add(gtfReport);
+					uploadWithOutPos.put(gtfReport.getProjectName(), noPoUpdated);
+				}
+			}
 		}
 
+		changeForMultiBrand(uploadedPOs, gtfReports);
+		changeForMultiBrand(uploadWithOutPos, gtfReports);
+		
 		if (gtfReports.size() != 0) {
 			util.generateProjectIdUsingJDOTxn(gtfReports);
 			util.storeProjectsToCache(gtfReports, costCentre,
 					BudgetConstants.NEW);
 			
+		}
+	}
+
+	private void changeForMultiBrand(Map<String, ArrayList<GtfReport>> uploadedPOs, List<GtfReport> gtfReports) {
+		Map<String, Double> setZeroMap = new HashMap<String, Double>();
+		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
+			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+		}
+		for (Entry<String, ArrayList<GtfReport>> entry : uploadedPOs.entrySet())
+		{
+		    ArrayList<GtfReport> receivedGtfReports = entry.getValue();
+		    if(receivedGtfReports.size() > 1){
+		    	GtfReport nwParentGtfReport = new GtfReport();
+		    	ArrayList<String> childProjList = new ArrayList<String>();
+		    	try {
+					nwParentGtfReport = (GtfReport) receivedGtfReports.get(0).clone();
+					nwParentGtfReport.setPlannedMap(setZeroMap);
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    	String gMemoriId = nwParentGtfReport.getgMemoryId();
+		    	int count = 1;
+		    	childProjList.add(gMemoriId);
+		    	for(GtfReport gtfRpt : receivedGtfReports){
+		    		Map<String, Double> receivedChildMap = new HashMap(gtfRpt.getPlannedMap());
+		    		for (Entry<String, Double> entryMap : receivedChildMap.entrySet()){
+		    			nwParentGtfReport.getPlannedMap().put(entryMap.getKey(), nwParentGtfReport.getPlannedMap().get(entryMap.getKey()) + entryMap.getValue());
+		    		}
+		    		gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
+		    		
+		    		childProjList.add(gMemoriId +"."+ (count++));
+		    	}
+		    	nwParentGtfReport.setChildProjectList(childProjList);
+		    	nwParentGtfReport.setBrand("Total Product (MB)");
+		    	nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
+		    	receivedGtfReports.add(nwParentGtfReport);
+		    	for(GtfReport gtfRpt : receivedGtfReports){
+		    		gtfRpt.setMultiBrand(true);
+		    		gtfRpt.setChildProjectList(childProjList);
+		    		gtfReports.add(gtfRpt);
+		    		
+		    	}
+		    	//uploadedPOs.put(entry.getKey(), receivedGtfReports);
+		    }else{
+		    	try {
+					gtfReports.add((GtfReport) receivedGtfReports.get(0).clone());
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
 		}
 	}
 	

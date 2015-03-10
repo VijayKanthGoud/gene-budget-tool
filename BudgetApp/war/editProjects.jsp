@@ -454,7 +454,7 @@ String ccView="";
 	var totalSize = 0;
 	var numHideColumns = <%=BudgetConstants.NUMBER_OF_HDN_COLS%>;
 	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
-	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Unit",
+	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Units",
 	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
 	        			"DEC", "Total", "Remark" ];
 	var noOfNew = 0;
@@ -1357,7 +1357,7 @@ String ccView="";
 				}
 				if (args.item["11"] == "Planned"
 									&& (cols[cell].name == "Project Name" || cols[cell].name == "Project WBS" || 
-											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || cols[cell].name == "Unit" || isAnEditableId ) &&  
+											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || cols[cell].name == "Units" || isAnEditableId ) &&  
 											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active")) {
 					return true;
 				}
