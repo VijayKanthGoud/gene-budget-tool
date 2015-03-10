@@ -88,7 +88,7 @@
 				
 			<%
 			if (userService!= null && userService.isUserLoggedIn()    /* && isGeneUser   */) {
-				userName = "Welcome, " + user.getNickname() + " (" + role +") !";
+				userName = "Welcome,   " + user.getNickname() + " (" + role +") !   ";
 			} else{%>
 				alert("You are not authorized to access the application!");
 			<%	response.sendRedirect(userService.createLogoutURL(requestUri));
@@ -124,11 +124,7 @@
 					<div style="float:right;top:5%; margin: 0 auto; position: relative;">
                 <img src="/images/masLogo.png">
             </div>
-				<div style="text-align: right;">
-					<span
-						style="color: #105596; font-family: 'trebuchet ms'; font-size: 14px; white-space: nowrap;"><i><%=userName%></i>
-					</span>
-				</div>
+				
 			</td>
 		</tr>
 		<tr>
@@ -153,6 +149,11 @@
 				}
 			%>
 			<li class='last'><a href='/logout'><span>Logout</span></a></li>
+			<div style="text-align: right;">
+					<span
+						style="color: #FFFFFF; font-size: 16px; white-space: nowrap; font-weight: normal;font-style: normal !important;"><i><%=userName%>&nbsp;&nbsp;&nbsp;&nbsp;</i>
+					</span>
+				</div>
 		</ul>
 	</div>
 	<%
