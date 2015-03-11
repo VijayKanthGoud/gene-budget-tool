@@ -1095,7 +1095,7 @@ String ccView="";
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
-				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("mb")!=-1){
+				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
 					
 					<%selectedCostCenter = (String)request.getAttribute("getCCValue");
 					if(selectedCostCenter==null || "".equals(selectedCostCenter)){
@@ -1117,7 +1117,7 @@ String ccView="";
 					 userCnt++;
 					<%}%>
 					
-					var index = availableTags.indexOf("Total Products(MB)");
+					var index = availableTags.indexOf("Smart WBS");
 					if (index > -1) {
 						availableTags.splice(index, 1);
 					}
@@ -1637,6 +1637,12 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row;
 			var pRow = row + 1;
+			if((m_data[row]["7"] .toString().trim() == "" || m_data[row]["1"] .toString().trim() == "") && cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>){
+				return false;
+			}
+			if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
+				return false ;
+			}
 			if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
 				return false ;
 			}

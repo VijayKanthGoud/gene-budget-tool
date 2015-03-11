@@ -337,7 +337,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    		childProjList.add(gMemoriId +"."+ (count++));
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
-		    	nwParentGtfReport.setBrand("Total Product (MB)");
+		    	nwParentGtfReport.setBrand("Smart WBS");
 		    	nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 		    	receivedGtfReports.add(nwParentGtfReport);
 		    	for(GtfReport gtfRpt : receivedGtfReports){

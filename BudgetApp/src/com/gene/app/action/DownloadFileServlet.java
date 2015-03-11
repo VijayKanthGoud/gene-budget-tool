@@ -207,7 +207,7 @@ public class DownloadFileServlet extends HttpServlet {
 		for (int i=0;i<list.size();i++) {
 			requestor="";
 			GtfReport gtfReport = list.get(i);
-			if(gtfReport.getBrand()==null /*|| "Total Products(MB)".equalsIgnoreCase(gtfReport.getBrand() )*/){
+			if(gtfReport.getBrand()==null /*|| "Smart WBS".equalsIgnoreCase(gtfReport.getBrand() )*/){
 				continue;
 			}
 			Row row = sheet.createRow(rowCount++);

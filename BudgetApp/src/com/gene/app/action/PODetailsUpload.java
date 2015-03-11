@@ -181,8 +181,8 @@ public class PODetailsUpload extends HttpServlet {
 							costCenter,costCenterWiseGtfRptMap.get(pGmemId));
 				}
 			} else {
-				
-				createNewReport(user, rcvdRow, gtfReports, costCentre, receivedGmemoriId,null);
+				createNewReport(user, rcvdRow, gtfReports, costCentre,
+						receivedGmemoriId, null);
 			}
 		}
 		
@@ -390,7 +390,7 @@ public class PODetailsUpload extends HttpServlet {
 					gtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName()+":"+pUserId);
 					
 				}else{
-					gtfReport.setBrand("Total Products(MB)");
+					gtfReport.setBrand("Smart WBS");
 					childList.add(gMemoriId);
 					childList.add(gMemoriId + ".1");
 					pUserId=util.readUserRoleInfoByFName(PM).getUserName();

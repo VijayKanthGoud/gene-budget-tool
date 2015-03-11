@@ -4,7 +4,7 @@ var availableTags = [];
 var poOwners=[];
 var ccUsersVar=[];
 function getAvailableTags(){
-	availableTags[0] = "Total Products(MB)";
+	availableTags[0] = "Smart WBS";
 	var j;
 	<%for(int i=0;i<myBrands.length;i++){%>
 		j=<%= i+1%>;
@@ -384,7 +384,7 @@ function updateMemCache(e, args, tempKey) {
  		aSave[1] = cellValue;
  		//aSave[2] = d["47"];
 		}else if(cell == <%=BudgetConstants.BRAND_CELL%>){
-			if(cellValue.toString().toLowerCase().indexOf("mb")!=-1){
+			if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1){
 				//alert(cellValue+"::::"+args.item[37] +"::::"+cellNum);
 				<%
 				//MemcacheService cacheCCJs = MemcacheServiceFactory.getMemcacheService();
@@ -405,7 +405,7 @@ function updateMemCache(e, args, tempKey) {
 				 userCnt++;
 				<%}%>
 				if(args.item[37] == false){
-					var index = availableTags.indexOf("Total Products(MB)");
+					var index = availableTags.indexOf("Smart WBS");
 					if (index > -1) {
 						availableTags.splice(index, 1);
 					}
@@ -819,7 +819,7 @@ function saveAndClose() {
 		}
 	}
 
-	availableTags.splice(0, 0, "Total Products(MB)");
+	availableTags.splice(0, 0, "Smart WBS");
 
 	for (var i = 0; i < m_data.length; i++) {
 
@@ -975,7 +975,7 @@ function closeWithoutSave() {
 			break;
 		}
 	}
-	availableTags.splice(0, 0, "Total Products(MB)");
+	availableTags.splice(0, 0, "Smart WBS");
 	for (var j = 0; j < m_data.length; j++) {
 		var d = (m_data[j] = {});
 		d[0] = "";
@@ -1103,7 +1103,7 @@ function submitProjects(){
 		if( data[i][6] == 'undefined' || data[i][6].toString().trim() ==""){
 			errStr += 4;	
 		}
-		if(data[i][6].toString().toLowerCase().indexOf("mb")!=-1 && data[i][37] == false){
+		if(data[i][6].toString().toLowerCase().indexOf("smart wbs")!=-1 && data[i][37] == false){
 			flag=true;
 			break;
 		}

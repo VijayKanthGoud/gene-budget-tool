@@ -38,7 +38,7 @@ public class GetProjectData extends HttpServlet {
 		}
 	}
 	
-	public void readProjectDataByProjectOwnerAndBrand(String projectOwner,String brand) {
+	/*public void readProjectDataByProjectOwnerAndBrand(String projectOwner,String brand) {
 		projectOwner = "Chris Sung";
 		brand = "Total Products";
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -69,5 +69,5 @@ public class GetProjectData extends HttpServlet {
 			LOGGER.log(Level.INFO, "getPoNumber = " + p.getPoNumber());
 		}
 		}
-	}
+	}*/
 }
