@@ -80,8 +80,8 @@ public class GtfReport implements Serializable,Cloneable {
 	@Persistent
 	private Boolean multiBrand;
 	
-	@Persistent
-	private Map<String,MultiBrand> mutliBrandMap;
+	/*@Persistent
+	private Map<String,MultiBrand> mutliBrandMap;*/
 	
 	@Persistent
 	private String createDate;
@@ -145,9 +145,9 @@ public class GtfReport implements Serializable,Cloneable {
         return super.clone();
     }
 
-	public Map<String, MultiBrand> getMutliBrandMap() {
+	/*public Map<String, MultiBrand> getMutliBrandMap() {
 		return mutliBrandMap;
-	}
+	}*/
 
 	public String getCreateDate() {
 		return createDate;
@@ -157,9 +157,9 @@ public class GtfReport implements Serializable,Cloneable {
 		this.createDate = createDate;
 	}
 
-	public void setMutliBrandMap(Map<String, MultiBrand> mutliBrandMap) {
+	/*public void setMutliBrandMap(Map<String, MultiBrand> mutliBrandMap) {
 		this.mutliBrandMap = mutliBrandMap;
-	}
+	}*/
 
 	public Boolean getMultiBrand() {
 		return multiBrand;

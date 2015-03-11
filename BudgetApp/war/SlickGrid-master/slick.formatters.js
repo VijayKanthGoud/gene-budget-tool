@@ -116,7 +116,7 @@
   
   function HyperLinkFormatter(row, cell, value, columnDef, dataContext) {
 	  if(typeof value == "string"){
-		  if(value.toLowerCase().indexOf("mb") >= 0){
+		  if(value.toLowerCase().indexOf("smart wbs") >= 0){
 			  return "<div width = '100%' style='background:#C0CCED'><span ><a href='#' style='color:green'>"+value + "</a></span></div>" ;		
 		  }else if(value=="Save"   && dataContext["35"] == "Buttons"){
 			  return  "<input type='button' value='"+value+"' id='submitProjBtn' style='font-size: 12px; width:80px; height: 20px; background:#2271B0; color:#FFFFFF'/>";
@@ -176,7 +176,7 @@
   }
   
   function CheckBoxFormatter(row, cell, value, columnDef, dataContext) {
-	  if(dataContext[7].toString().trim() != ""){
+	  if(dataContext[7].toString().trim() != "" || dataContext[1].toString().trim() != "" || dataContext[3].toString().trim() != "" || dataContext[2].toString().trim() != ""){
 		return "<input type='checkbox' class='checkDeletion' value='true' id = "+ row+"chkBox>";
 	  }else{
 		  return "";

@@ -314,18 +314,18 @@ public class FactSheetUploadServlet extends HttpServlet {
 		for (Entry<String, ArrayList<GtfReport>> entry : uploadedPOs.entrySet())
 		{
 		    ArrayList<GtfReport> receivedGtfReports = entry.getValue();
-		    if(receivedGtfReports.size() > 1){
+		    if(receivedGtfReports.size() > 1 || receivedGtfReports.get(0).getProject_WBS().trim().startsWith("421.")) {
 		    	GtfReport nwParentGtfReport = new GtfReport();
 		    	ArrayList<String> childProjList = new ArrayList<String>();
 		    	try {
 					nwParentGtfReport = (GtfReport) receivedGtfReports.get(0).clone();
 					nwParentGtfReport.setPlannedMap(setZeroMap);
 				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    	String gMemoriId = nwParentGtfReport.getgMemoryId();
 		    	int count = 1;
+				double total = 0.0;
 		    	childProjList.add(gMemoriId);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		Map<String, Double> receivedChildMap = new HashMap(gtfRpt.getPlannedMap());
@@ -333,7 +333,8 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    			nwParentGtfReport.getPlannedMap().put(entryMap.getKey(), nwParentGtfReport.getPlannedMap().get(entryMap.getKey()) + entryMap.getValue());
 		    		}
 		    		gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
-		    		
+					total += gtfRpt.getPlannedMap().get("TOTAL");
+					childProjList.add(gMemoriId + "." + (count++));
 		    		childProjList.add(gMemoriId +"."+ (count++));
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
@@ -343,6 +344,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		gtfRpt.setMultiBrand(true);
 		    		gtfRpt.setChildProjectList(childProjList);
+					if (gtfRpt.getgMemoryId().contains(".")) {
+						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
+								.get("TOTAL") / total) * 100 , 2));
+					}
 		    		gtfReports.add(gtfRpt);
 		    		
 		    	}
