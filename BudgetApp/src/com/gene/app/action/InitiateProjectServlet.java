@@ -38,6 +38,7 @@ public class InitiateProjectServlet extends HttpServlet{
 		String costCenter = rcostCenter.replace("_", " ");
 		String rgMemId = req.getParameter("dummyGMemId");
 		String gMemId = rgMemId.replace("_", " ");
+		
 		ProjectParameters prjParam = new ProjectParameters();
 		List<String> costCenters = new ArrayList<String>();
 		costCenters.add(costCenter);
@@ -48,6 +49,7 @@ public class InitiateProjectServlet extends HttpServlet{
 		String rprj_name = req.getParameter("prj_name");
 		String prj_name = rprj_name.replace("_", " ");
 		prjParam.setProjectName(prj_name);
+		System.out.println("rcostCenter"+rcostCenter+"::::"+rgMemId+"::::"+prj_name+"::::"+rUnixId);
 		storeRprtTogMemori(req, resp, prjParam);
 	}
 
@@ -65,7 +67,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			String request = gson.toJson(prjParam);
 			//String request = prepareInitiatePrjReqURL(ccId, unixId, prj_name);
 			URL url = new URL(
-					"http://memori-qa.appspot.com/web-service/project/preInitiate");
+					"http://memori-dev.appspot.com/web-service/project/preInitiate");
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);
@@ -124,8 +126,10 @@ public class InitiateProjectServlet extends HttpServlet{
 					req.setAttribute("Error Code", respFrmStudy.getStatusCode());
 					req.setAttribute("Error Msg", "Project was not created in study. Error reason: "+respFrmStudy.getStatusMessage());
 				}
-				RequestDispatcher rd = req.getRequestDispatcher("/getreport");
-				rd.forward(req, resp);
+				gson = new Gson();
+				resp.getWriter().write(gson.toJson(respFrmStudy));
+				/*RequestDispatcher rd = req.getRequestDispatcher("/getreport");
+				rd.forward(req, resp);*/
 			} else {
 				throw new Exception();
 			}
@@ -134,7 +138,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			// Error handling elided.
 			String result = e.getMessage();
 			System.out.println("result:::" + result);
-			req.setAttribute("Error Msg", result);
+			req.setAttribute("Error Msg",  e.getMessage() +"::::"+e.getStackTrace());
 		}
 
 	}

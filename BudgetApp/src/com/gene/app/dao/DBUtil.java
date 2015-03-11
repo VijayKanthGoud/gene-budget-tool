@@ -164,12 +164,20 @@ public class DBUtil {
 		UserRoleInfo user = new UserRoleInfo();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(UserRoleInfo.class);
-		q.declareParameters("String emailParam");
-		List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute(email);
-		if(!results.isEmpty()){
-		for (UserRoleInfo p : results) {
-			user = p;
-		}
+		try{
+			q.declareParameters("String emailParam");
+			List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute(email);
+
+			if(!results.isEmpty()){
+				for (UserRoleInfo p : results) {
+					user = p;
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
 		}
 		return user;
 	}
@@ -183,6 +191,7 @@ public class DBUtil {
 		UserRoleInfo userInfo = new UserRoleInfo();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(UserRoleInfo.class);
+		try{
 		List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute();
 		if (results!=null && !results.isEmpty()) {
 			for(UserRoleInfo role : results)
@@ -190,6 +199,12 @@ public class DBUtil {
 				userInfo = role; 
 				userMap.put(userInfo.getEmail(), userInfo);
 			}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
 		}
 		cache.put(key, userMap);
 		}
@@ -221,20 +236,27 @@ public class DBUtil {
 		if(budgetMap==null || budgetMap.isEmpty()){
 			budgetMap = new LinkedHashMap<String,BudgetSummary>();
 			BudgetSummary budgetInfo = new BudgetSummary();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query q = pm.newQuery(BudgetSummary.class);
-		List<BudgetSummary> results = (List<BudgetSummary>) q.execute();
-		if (!results.isEmpty()) {
-			for(BudgetSummary budget : results)
-			{ 
-				budgetInfo = budget; 
-				budgetMap.put(budgetInfo.getProjectOwnerEmail(), budgetInfo);
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			Query q = pm.newQuery(BudgetSummary.class);
+			try{
+				List<BudgetSummary> results = (List<BudgetSummary>) q.execute();
+				if (!results.isEmpty()) {
+					for(BudgetSummary budget : results)
+					{ 
+						budgetInfo = budget; 
+						budgetMap.put(budgetInfo.getProjectOwnerEmail(), budgetInfo);
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				q.closeAll();
+				pm.close();
 			}
-		}
-		cache.put(key, budgetMap);
+			cache.put(key, budgetMap);
 		}
 		return budgetMap;
-		
+
 	}
 	public BudgetSummary readBudgetSummaryFromDB(String email,String costCenter) {
 		boolean isGeneUser = false;
@@ -657,6 +679,7 @@ public class DBUtil {
 			q.closeAll();
 			pm.close();
 		}*/
+		q.closeAll();
 		pm.close();
 		return gtfReportList;
 	}
@@ -671,6 +694,7 @@ public class DBUtil {
 			q.declareParameters("String gMemoryIdParam");
 		}
 		List<GtfReport> results = (List<GtfReport>)  q.execute(gMemoriId);
+		q.closeAll();
 		pm.close();
 		return results;
 	}
@@ -682,6 +706,7 @@ public class DBUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			System.out.println("closing all datastore call.");
 			pm.close();
 		}
 	}
@@ -692,6 +717,7 @@ public class DBUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			System.out.println("closing all datastore call.");
 			pm.close();
 		}
 	}
@@ -733,45 +759,61 @@ public class DBUtil {
 	}
 	// reading costcenter_brand table data and put it in cache
 	
-		public List<CostCenter_Brand> readCostCenterBrandMappingData(){
-			String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
-			cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-			CostCenter_Brand cost_brand = new CostCenter_Brand();
-			List<CostCenter_Brand> costCenterList = new ArrayList<CostCenter_Brand>();
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			Query q = pm.newQuery(CostCenter_Brand.class);
-			q.setOrdering("costCenter asc");
-			//q.declareParameters("String emailParam");
+	public List<CostCenter_Brand> readCostCenterBrandMappingData(){
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+		CostCenter_Brand cost_brand = new CostCenter_Brand();
+		List<CostCenter_Brand> costCenterList = new ArrayList<CostCenter_Brand>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Query q = pm.newQuery(CostCenter_Brand.class);
+		q.setOrdering("costCenter asc");
+		//q.declareParameters("String emailParam");
+		try{
 			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
 			if(!results.isEmpty()){
-			for (CostCenter_Brand p : results) {
-				cost_brand = p;
-				costCenterList.add(cost_brand);
+				for (CostCenter_Brand p : results) {
+					cost_brand = p;
+					costCenterList.add(cost_brand);
+				}
 			}
-			}
-			cache.put(key, costCenterList);
-			return costCenterList;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
 		}
+		cache.put(key, costCenterList);
+		return costCenterList;
+	}
 		
-		public List<String> readAllCostCenters(){
-			String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
-			cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-			CostCenter_Brand cost_brand = new CostCenter_Brand();
-			List<String> costCenterList = new ArrayList<String>();
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			Query q = pm.newQuery(CostCenter_Brand.class);
-			q.setOrdering("costCenter asc");
-			//q.declareParameters("String emailParam");
+	public List<String> readAllCostCenters(){
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+		CostCenter_Brand cost_brand = new CostCenter_Brand();
+		List<String> costCenterList = new ArrayList<String>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Query q = pm.newQuery(CostCenter_Brand.class);
+		q.setOrdering("costCenter asc");
+		//q.declareParameters("String emailParam");
+		try{
 			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
 			if(!results.isEmpty()){
-			for (CostCenter_Brand p : results) {
-				cost_brand = p;
-				costCenterList.add(cost_brand.getCostCenter());
+				for (CostCenter_Brand p : results) {
+					cost_brand = p;
+					costCenterList.add(cost_brand.getCostCenter());
+				}
 			}
-			}
-			cache.put(key, costCenterList);
-			return costCenterList;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
 		}
+		cache.put(key, costCenterList);
+		return costCenterList;
+	}
 		
 		public Map<String,BudgetSummary> prepareBrandMap(String brands){
 			Map<String,BudgetSummary> brandMap = new HashMap<String,BudgetSummary>();

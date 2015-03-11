@@ -1091,10 +1091,42 @@ String ccView="";
 						dataView.refresh();
 					}
 		});
-
+		function do_the_ajax_call(myPopup){
+			$.ajax({
+				url : '/initiateProject',
+				type : 'GET',
+				async: false,
+				dataType : 'text',
+				data : {ccId: itemClicked[47],
+					unixId: itemClicked[48],
+					prj_name:itemClicked[2],
+					dummyGMemId:itemClicked[0]
+				},
+				success : function(result) {
+					myPopup.location = "https://memori-dev.appspot.com/initiateProject?gMemoriId="+result.split("newGMemId")[1].split('":"')[1].split('"}')[0];
+					//window.open("https://memori-dev.appspot.com/initiateProject?gMemoriId="+result.split("newGMemId")[1].split('":"')[1].split('"}')[0],'gmemori','');
+					window.location.reload(true);
+					/* validationMsg = result;
+					alert(validationMsg);
+					 *///getSummaryValues();
+				},
+				error : function(result){
+					alert(result.split("statusMessage")[1].split('":"')[1].split('","')[0]);
+					//window.location.reload(true);
+				}
+			});
+		}
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
+				
+				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
+						itemClicked[0].toString().trim != "" && itemClicked[11] == "Planned" && itemClicked[26] != "Total" && itemClicked[2] != "" && itemClicked[0].toString().length==10){
+					var myPopup = window.open ("http://gbmt-dev.appspot.com/", 'gmemori', '');
+					do_the_ajax_call(myPopup);
+					
+					
+				}else
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
 					
 					<%selectedCostCenter = (String)request.getAttribute("getCCValue");

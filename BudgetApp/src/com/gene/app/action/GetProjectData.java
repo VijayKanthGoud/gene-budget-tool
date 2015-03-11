@@ -29,12 +29,19 @@ public class GetProjectData extends HttpServlet {
 		Query q = pm.newQuery(GtfReport.class);
 		q.setFilter("requestor == requestorParam");
 		q.declareParameters("String requestorParam");
-		List<GtfReport> results = (List<GtfReport>) q.execute(projectOwner);
-		if(!results.isEmpty()){
-		for (GtfReport p : results) {
-			LOGGER.log(Level.INFO, "getBrand = " + p.getRequestor());
-			LOGGER.log(Level.INFO, "getPoNumber = " + p.getPoNumber());
-		}
+		try{
+			List<GtfReport> results = (List<GtfReport>) q.execute(projectOwner);
+			if(!results.isEmpty()){
+				for (GtfReport p : results) {
+					LOGGER.log(Level.INFO, "getBrand = " + p.getRequestor());
+					LOGGER.log(Level.INFO, "getPoNumber = " + p.getPoNumber());
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
 		}
 	}
 	

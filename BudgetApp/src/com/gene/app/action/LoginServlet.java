@@ -24,12 +24,21 @@ public class LoginServlet extends HttpServlet {
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(UserRoleInfo.class);
-		List results = (List) q.execute();
-		Extent<UserRoleInfo> extent = pm.getExtent(UserRoleInfo.class, false);
-		for (UserRoleInfo p : extent) {
-			System.out.println("UserInfo = " + p.toString());
-			
+		try{
+			List results = (List) q.execute();
+
+			Extent<UserRoleInfo> extent = pm.getExtent(UserRoleInfo.class, false);
+			for (UserRoleInfo p : extent) {
+				System.out.println("UserInfo = " + p.toString());
+
+			}
+
+			extent.closeAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
 		}
-		extent.closeAll();
 	}
 }
