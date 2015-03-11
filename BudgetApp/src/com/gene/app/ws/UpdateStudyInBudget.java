@@ -86,7 +86,7 @@ public class UpdateStudyInBudget {
 			if(gtfRptlst!=null && !gtfRptlst.isEmpty()){
 				gtfRpt = gtfRptlst.get(0);
 			}
-		}if( gtfRpt!=null && !selectedCC.contains(gtfRpt.getCostCenter())){
+		}if( gtfRpt!=null && Util.isNullOrEmpty(gtfRpt.getgMemoryId()) && !selectedCC.contains(gtfRpt.getCostCenter())){
 			eObj.setStatusCode(404);
 			eObj.setStatusMessage("Project doesn't exist in costCenter " +costCenterList+" !!!");
 			System.out.println("status Code"+eObj.getStatusCode());
