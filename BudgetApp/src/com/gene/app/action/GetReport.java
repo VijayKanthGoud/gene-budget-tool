@@ -116,7 +116,7 @@ public class GetReport extends HttpServlet {
 		req.setAttribute("brandValue", selectedBrand);
 		req.setAttribute("getCCValue", selectedCC);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
-		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim()) && ("".equalsIgnoreCase(selectedView.trim()))){
+		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim()) && ((selectedView==null) || ("".equalsIgnoreCase(selectedView.trim())))){
 		queryGtfRptList = getQueryGtfReportList(gtfReportList,queryString,req);
 		 req.setAttribute("accessreq", "external");
 		}else{
