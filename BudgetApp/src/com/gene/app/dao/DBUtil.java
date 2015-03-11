@@ -764,26 +764,32 @@ public class DBUtil {
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		CostCenter_Brand cost_brand = new CostCenter_Brand();
 		List<CostCenter_Brand> costCenterList = new ArrayList<CostCenter_Brand>();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
 
-		Query q = pm.newQuery(CostCenter_Brand.class);
-		q.setOrdering("costCenter asc");
-		//q.declareParameters("String emailParam");
-		try{
-			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
-			if(!results.isEmpty()){
-				for (CostCenter_Brand p : results) {
-					cost_brand = p;
-					costCenterList.add(cost_brand);
+		if(cache.get(key)!=null){
+			costCenterList = (List<CostCenter_Brand>) cache.get(key);
+		}else{
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			Query q = pm.newQuery(CostCenter_Brand.class);
+			q.setOrdering("costCenter asc");
+			//q.declareParameters("String emailParam");
+			try{
+				List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
+				if(!results.isEmpty()){
+					for (CostCenter_Brand p : results) {
+						cost_brand = p;
+						costCenterList.add(cost_brand);
+					}
 				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				q.closeAll();
+				pm.close();
 			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			q.closeAll();
-			pm.close();
+
+			cache.put(key, costCenterList);
 		}
-		cache.put(key, costCenterList);
 		return costCenterList;
 	}
 		
@@ -792,26 +798,37 @@ public class DBUtil {
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		CostCenter_Brand cost_brand = new CostCenter_Brand();
 		List<String> costCenterList = new ArrayList<String>();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-
-		Query q = pm.newQuery(CostCenter_Brand.class);
-		q.setOrdering("costCenter asc");
-		//q.declareParameters("String emailParam");
-		try{
-			List<CostCenter_Brand> results = (List<CostCenter_Brand>) q.execute();
+		List<CostCenter_Brand> results = new ArrayList<>();
+		if(cache.get(key)!=null){
+			results = (List<CostCenter_Brand>) cache.get(key);
 			if(!results.isEmpty()){
 				for (CostCenter_Brand p : results) {
 					cost_brand = p;
 					costCenterList.add(cost_brand.getCostCenter());
 				}
 			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			q.closeAll();
-			pm.close();
+		}else{
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			Query q = pm.newQuery(CostCenter_Brand.class);
+			q.setOrdering("costCenter asc");
+			//q.declareParameters("String emailParam");
+			try{
+				results = (List<CostCenter_Brand>) q.execute();
+				if(!results.isEmpty()){
+					for (CostCenter_Brand p : results) {
+						cost_brand = p;
+						costCenterList.add(cost_brand.getCostCenter());
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				q.closeAll();
+				pm.close();
+			}
+			cache.put(key, costCenterList);
 		}
-		cache.put(key, costCenterList);
 		return costCenterList;
 	}
 		
