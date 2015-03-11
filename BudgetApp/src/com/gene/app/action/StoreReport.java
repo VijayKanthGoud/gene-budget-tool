@@ -73,6 +73,7 @@ public class StoreReport extends HttpServlet {
 				.format(Calendar.getInstance().getTime());
 		String status = "";
 		String gmultiIdList="";
+		String poNum = "";
 		int flag = 0;
 		try {
 			jsonArray = new JSONArray(objarray);
@@ -80,11 +81,13 @@ public class StoreReport extends HttpServlet {
 				gtfReport = new GtfReport();
 				rprtObject = jsonArray.getJSONObject(count);
 				gtfReport.setEmail(user.getEmail());
-				if (rprtObject
-						.getString(BudgetConstants.New_GTFReport_PoNumber)
-						.toString().trim().length() > 0) {
+				poNum=rprtObject
+				.getString(BudgetConstants.New_GTFReport_PoNumber)
+				.toString().trim();
+				if (poNum.length() > 0 && !"0".equalsIgnoreCase(poNum)) {
 					status = BudgetConstants.status_Active;
 				} else {
+					poNum="";
 					status = BudgetConstants.New_GTFReport_Status;
 				}
 				if (BudgetConstants.status_New.equalsIgnoreCase(status.trim())) {
@@ -103,8 +106,7 @@ public class StoreReport extends HttpServlet {
 						.getString(BudgetConstants.New_GTFReport_Project_WBS));
 				gtfReport.setSubActivity(rprtObject
 						.getString(BudgetConstants.New_GTFReport_SubActivity));
-				gtfReport.setPoNumber(rprtObject
-						.getString(BudgetConstants.New_GTFReport_PoNumber));
+				gtfReport.setPoNumber(poNum);
 				String poDesc = rprtObject
 						.getString(BudgetConstants.New_GTFReport_PoDesc);
 				gtfReport.setPoDesc(poDesc);
