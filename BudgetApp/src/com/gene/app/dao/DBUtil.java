@@ -695,7 +695,7 @@ public class DBUtil {
 		}
 			
 		}
-		if(gtfRpt!=null && !"".equals(gtfRpt.getgMemoryId())){
+		if(gtfRpt==null || !Util.isNullOrEmpty(gtfRpt.getCostCenter())){
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 
@@ -712,13 +712,36 @@ public class DBUtil {
 		return results;
 	}
 	
-	public Map<String, GtfReport> readProjectDataById(String gMemoriId) {
-		GtfReport gtfRpt = readProjectDataByGMemId(gMemoriId).get(0);
-		Map<String, GtfReport> gtfRptMap = new LinkedHashMap<String,GtfReport>();
-		if(gtfRpt!=null){
-		gtfRptMap = getAllReportDataFromCache(gtfRpt.getCostCenter());
+	public List<GtfReport> readProjectDataById(String gMemoriId, UserRoleInfo user) {
+		GtfReport gtfRpt = new GtfReport();
+		List<GtfReport> results = new ArrayList<GtfReport>();
+		for(String cc:readAllCostCenters()){
+		if(getAllReportDataFromCache(cc).get(gMemoriId)!=null){
+			gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
+			results.add(gtfRpt);
+			break;
 		}
-		return gtfRptMap;
+			
+		}
+		if(Util.isNullOrEmpty(gtfRpt.getCostCenter()) && !user.getCostCenter().contains(gtfRpt.getCostCenter())){
+			results = new ArrayList<GtfReport>();
+			return results;
+		}
+		if(gtfRpt==null || !Util.isNullOrEmpty(gtfRpt.getCostCenter())){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Query q = pm.newQuery(GtfReport.class);
+		if(gMemoriId!=null && !"".equals(gMemoriId)){
+			q.setFilter("gMemoryId==gMemoryIdParam");
+			q.declareParameters("String gMemoryIdParam");
+		}
+		results = (List<GtfReport>)  q.execute(gMemoriId);
+		results.size();
+		q.closeAll();
+		}
+		//pm.close();
+		return results;
 	}
 	
 	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
@@ -816,7 +839,7 @@ public class DBUtil {
 	}
 		
 	public List<String> readAllCostCenters(){
-		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		String key = "readAllCostCenters"+BudgetConstants.seperator+CostCenter_Brand.class.getName();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		CostCenter_Brand cost_brand = new CostCenter_Brand();
 		List<String> costCenterList = new ArrayList<String>();

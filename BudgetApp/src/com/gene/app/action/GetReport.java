@@ -249,7 +249,7 @@ public class GetReport extends HttpServlet {
 	public List<GtfReport> getQueryGtfReportList(List<GtfReport>gtfReports,String gMemoriId, HttpServletRequest req, UserRoleInfo user){
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		GtfReport gtfReport = null;
-		gtfReportList =	util.readProjectDataByGMemId(gMemoriId);
+		gtfReportList =	util.readProjectDataById(gMemoriId,user);
 		if(gtfReportList==null){
 			gtfReportList = new ArrayList<GtfReport>();
 			System.out.println("gtfReportList = "+gtfReportList.isEmpty());
