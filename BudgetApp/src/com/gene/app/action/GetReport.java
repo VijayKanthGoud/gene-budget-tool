@@ -49,7 +49,7 @@ public class GetReport extends HttpServlet {
 		String selectedBrand = req.getParameter("brandValue");
 		String selectedView = req.getParameter("selectedView");
 		String selectedCC = req.getParameter("getCCValue");
-		
+		String gMemoriId = req.getParameter("gMemoriId");
 		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
@@ -116,9 +116,9 @@ public class GetReport extends HttpServlet {
 		req.setAttribute("brandValue", selectedBrand);
 		req.setAttribute("getCCValue", selectedCC);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
-		if(queryString!=null && !"".equalsIgnoreCase(queryString.trim()) && ((selectedView==null) || ("".equalsIgnoreCase(selectedView.trim())))){
-		queryGtfRptList = getQueryGtfReportList(gtfReportList,queryString,req);
-		 req.setAttribute("accessreq", "external");
+		if(gMemoriId!=null && !"".equalsIgnoreCase(gMemoriId.trim())){
+		queryGtfRptList = getQueryGtfReportList(gtfReportList,gMemoriId,req,user);
+		req.setAttribute("accessreq", "external");
 		}else{
 			queryGtfRptList = gtfReportList;
 			 req.setAttribute("accessreq", "internal");
@@ -246,19 +246,32 @@ public class GetReport extends HttpServlet {
 		}
 		return gtfReportList;
 	}
-	public List<GtfReport> getQueryGtfReportList(List<GtfReport>gtfReports,String queryString,HttpServletRequest req){
+	public List<GtfReport> getQueryGtfReportList(List<GtfReport>gtfReports,String gMemoriId, HttpServletRequest req, UserRoleInfo user){
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		GtfReport gtfReport = null;
-		String qParam = ""; 
+		gtfReportList =	util.readProjectDataByGMemId(gMemoriId);
+		if(gtfReportList==null){
+			gtfReportList = new ArrayList<GtfReport>();
+			System.out.println("gtfReportList = "+gtfReportList.isEmpty());
+		}else if(gtfReportList!=null && !gtfReportList.isEmpty()){
+			gtfReport = gtfReportList.get(0);
+			System.out.println("gtfReport = "+gtfReport.getPlannedMap());
+			req.setAttribute("selectedView", "My Projects");
+			req.setAttribute("getCCValue", gtfReport.getCostCenter());
+			user.setSelectedCostCenter(gtfReport.getCostCenter());
+			//gtfReports.add(gtfReport);
+		}
+		
+		/*String qParam = ""; 
 		Iterator<GtfReport> iter = null;
 			if(gtfReports!=null){
 				iter = gtfReports.iterator();
 				
 				qParam = req.getParameter("gMemoriId");
 				//int dotpos = qParam.indexOf(".");
-				/*if(dotpos>0){
+				if(dotpos>0){
 				qParam = qParam.substring(0,dotpos);
-				}*/
+				}
 			while(iter.hasNext()){
 			if(queryString.contains("gMemoriId")) {
 				
@@ -279,7 +292,7 @@ public class GetReport extends HttpServlet {
 					gtfReportList.add(gtfReport);
 					}
 			}
-	}}
+	}}*/
 		return gtfReportList;
 	}
 	/*public List<GtfReport> getRptListByGmemId(List<GtfReport>gtfReports,String qParam){

@@ -685,6 +685,17 @@ public class DBUtil {
 	}
 	
 	public List<GtfReport> readProjectDataByGMemId(String gMemoriId) {
+		GtfReport gtfRpt = new GtfReport();
+		List<GtfReport> results = new ArrayList<GtfReport>();
+		for(String cc: readAllCostCenters()){
+		if(getAllReportDataFromCache(cc).get(gMemoriId)!=null){
+			gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
+			results.add(gtfRpt);
+			break;
+		}
+			
+		}
+		if(gtfRpt!=null && !"".equals(gtfRpt.getgMemoryId())){
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 
@@ -693,11 +704,21 @@ public class DBUtil {
 			q.setFilter("gMemoryId==gMemoryIdParam");
 			q.declareParameters("String gMemoryIdParam");
 		}
-		List<GtfReport> results = (List<GtfReport>)  q.execute(gMemoriId);
+		results = (List<GtfReport>)  q.execute(gMemoriId);
 		results.size();
 		q.closeAll();
-		pm.close();
+		}
+		//pm.close();
 		return results;
+	}
+	
+	public Map<String, GtfReport> readProjectDataById(String gMemoriId) {
+		GtfReport gtfRpt = readProjectDataByGMemId(gMemoriId).get(0);
+		Map<String, GtfReport> gtfRptMap = new LinkedHashMap<String,GtfReport>();
+		if(gtfRpt!=null){
+		gtfRptMap = getAllReportDataFromCache(gtfRpt.getCostCenter());
+		}
+		return gtfRptMap;
 	}
 	
 	public void generateProjectIdUsingJDOTxn(List<GtfReport> gtfReports) {
