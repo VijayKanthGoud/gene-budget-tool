@@ -1136,7 +1136,7 @@ String ccView="";
 				
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
 						itemClicked[0].toString().trim != "" && itemClicked[11] == "Planned" && itemClicked[26] != "Total" && itemClicked[2] != "" && itemClicked[0].toString().length==10){
-					//var myPopup = window.open ("http://gbmt-dev.appspot.com/", 'gmemori', '');
+					var myPopup = window.open ("", 'gmemori', '');
 					do_the_ajax_call();
 				}else
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
