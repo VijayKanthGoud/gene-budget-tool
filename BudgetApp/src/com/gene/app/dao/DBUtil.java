@@ -694,6 +694,7 @@ public class DBUtil {
 			q.declareParameters("String gMemoryIdParam");
 		}
 		List<GtfReport> results = (List<GtfReport>)  q.execute(gMemoriId);
+		results.size();
 		q.closeAll();
 		pm.close();
 		return results;
