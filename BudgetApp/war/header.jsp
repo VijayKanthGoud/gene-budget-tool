@@ -135,7 +135,7 @@
 	<div id='cssmenu'>
 		<ul>
 			<li><a style = "cursor: hand;" id="homeLink" ><span>Home</span></a></li>
-			<li class='last'><a href='/'><span>Reports</span></a></li>
+			<!-- <li class='last'><a href='/'><span>Reports</span></a></li> -->
 			<%
 				if (role!=null && !"".equalsIgnoreCase(role) && ("Admin".equals(role))) {
 			%>
@@ -148,7 +148,7 @@
 			<%
 				}
 			%>
-			<li class='last'><a href='/logout'><span>Logout</span></a></li>
+			<!-- <li class='last'><a href='/logout'><span>Logout</span></a></li> -->
 			<div style="text-align: right;">
 					<span
 						style="color: #FFFFFF; font-size: 16px; white-space: nowrap; font-weight: normal;font-style: normal !important;"><i><%=userName%>&nbsp;&nbsp;&nbsp;&nbsp;</i>
