@@ -1112,15 +1112,19 @@ String ccView="";
 						gMemoriId = obj.newGMemId;
 						openPopUp =  true;
 					}else{
-						alert("Error occured during synchronization from Study : \n"+obj.statusMessage);
+						if(obj!=null && obj.statusMessage!=null){
+						alert("Error occured during synchronization with Study : \n"+obj.statusMessage);
+						}else{
+							alert("Error occured during synchronization with Study : \n Internal error occured.");
+						}
 					}
 				},
 				error : function(result){
-					alert("Error occured during synchronization from Study : \n Internal error occured.");
+					alert("Error occured during synchronization with Study : \n Internal error occured.");
 				}
 			});
 			if(openPopUp == true){
-			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId);
+			window.open ("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
 			}
