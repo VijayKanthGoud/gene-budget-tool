@@ -839,7 +839,7 @@ public class DBUtil {
 	}
 		
 	public List<String> readAllCostCenters(){
-		String key = "readAllCostCenters"+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		CostCenter_Brand cost_brand = new CostCenter_Brand();
 		List<String> costCenterList = new ArrayList<String>();
@@ -872,7 +872,7 @@ public class DBUtil {
 				q.closeAll();
 				pm.close();
 			}
-			cache.put(key, costCenterList);
+			cache.put(key, results);
 		}
 		return costCenterList;
 	}
