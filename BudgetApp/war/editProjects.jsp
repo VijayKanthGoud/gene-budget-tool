@@ -1091,7 +1091,9 @@ String ccView="";
 						dataView.refresh();
 					}
 		});
-		function do_the_ajax_call(myPopup){
+		function do_the_ajax_call(){
+			var openPopUp =  false;
+			var gMemoriId ;
 			$.ajax({
 				url : '/initiateProject',
 				type : 'GET',
@@ -1103,29 +1105,35 @@ String ccView="";
 					dummyGMemId:itemClicked[0]
 				},
 				success : function(result) {
-					myPopup.location = "https://memori-dev.appspot.com/initiateProject?gMemoriId="+result.split("newGMemId")[1].split('":"')[1].split('"}')[0];
-					//window.open("https://memori-dev.appspot.com/initiateProject?gMemoriId="+result.split("newGMemId")[1].split('":"')[1].split('"}')[0],'gmemori','');
-					window.location.reload(true);
-					/* validationMsg = result;
-					alert(validationMsg);
-					 *///getSummaryValues();
+					var obj = $.parseJSON(result);
+					var statusCode = obj.statusCode;
+					if(statusCode == 200){
+						
+						gMemoriId = obj.newGMemId;
+						openPopUp =  true;
+					}else{
+						alert("Error occured during synchronization from Study : \n"+obj.statusMessage);
+					}
 				},
 				error : function(result){
-					alert(result.split("statusMessage")[1].split('":"')[1].split('","')[0]);
-					//window.location.reload(true);
+					alert("Error occured during synchronization from Study : \n Internal error occured.");
 				}
 			});
+			if(openPopUp == true){
+			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId);
+			openPopUp =  false;
+			window.location.reload(true);
+			}
 		}
+		
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
 				
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
 						itemClicked[0].toString().trim != "" && itemClicked[11] == "Planned" && itemClicked[26] != "Total" && itemClicked[2] != "" && itemClicked[0].toString().length==10){
-					var myPopup = window.open ("http://gbmt-dev.appspot.com/", 'gmemori', '');
-					do_the_ajax_call(myPopup);
-					
-					
+					//var myPopup = window.open ("http://gbmt-dev.appspot.com/", 'gmemori', '');
+					do_the_ajax_call();
 				}else
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
 					
@@ -1446,6 +1454,9 @@ String ccView="";
 				this.value = "";
 			}
 			searchString = this.value;
+			searchString = searchString.replace(/</g, "&lt;");
+			searchString = searchString.replace(/>/g, "&gt;");
+			
 			
 	    if (searchString != "") {
 			dataView.expandGroup("Active");
