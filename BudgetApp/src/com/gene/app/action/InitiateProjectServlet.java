@@ -117,7 +117,7 @@ public class InitiateProjectServlet extends HttpServlet{
 				System.out.println("error code"+respFrmStudy.getStatusCode());
 				if(Util.isNullOrEmpty(respFrmStudy.getNewGMemId())){
 				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentres().get(0),respFrmStudy.getNewGMemId());
-				//resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
+				//resp.sendRedirect("https://memori-qa.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
 				req.setAttribute("gMemoriId", respFrmStudy.getNewGMemId());
 				req.setAttribute("Error Code", respFrmStudy.getStatusCode());
 				req.setAttribute("Error Msg", respFrmStudy.getStatusMessage());
