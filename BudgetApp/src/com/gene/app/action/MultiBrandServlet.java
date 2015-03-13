@@ -96,7 +96,11 @@ public class MultiBrandServlet extends HttpServlet {
 			gmultiIdList.add(gMemoriId);
 			// Inserts parent
 			for (int par = 0; par < oldGtfReportList.size(); par++) {
-				gtfRpt = oldGtfReportList.get(par);
+				try {
+					gtfRpt = (GtfReport) oldGtfReportList.get(par).clone();
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
 				GtfReport paretnGtfReport = new GtfReport();
 				if (gtfRpt.getgMemoryId().equalsIgnoreCase(gMemoriId)) {
 					LOGGER.log(Level.INFO, "Parent project is : " + gMemoriId);
@@ -159,7 +163,11 @@ public class MultiBrandServlet extends HttpServlet {
 				}
 				
 				for (int j = 0; j < oldGtfReportList.size(); j++) {
-					gtfRpt = oldGtfReportList.get(j);
+					try {
+						gtfRpt = (GtfReport) oldGtfReportList.get(j).clone();
+					} catch (CloneNotSupportedException e1) {
+						e1.printStackTrace();
+					}
 					if (project_id != null && !"".equals(project_id.trim())
 							&& project_id.equalsIgnoreCase(gtfRpt.getId())) {
 						GtfReport childGtfReport = new GtfReport();
