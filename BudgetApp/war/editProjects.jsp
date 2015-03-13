@@ -587,10 +587,9 @@ String ccView="";
 		<%}
 		}%>
 		
-		if(newExist ==false){
-		
-			dummyNewProjects();
-		}
+			if(newExist ==false){
+				dummyNewProjects();		
+			}
 		}
 		var jsId = -1;
 		var dLength= data.length;
@@ -600,14 +599,19 @@ String ccView="";
 		for (int i = 0; i < gtfReports.size(); i++) {
 			boolean isFirst = true;
 			for (int count = 0; count < 4; count++) {%>
+			
+			<%GtfReport gReport = gtfReports.get(i);%>
+			var pStat = "<%=gReport.getStatus()%>";
+			if(pStat == "Closed" && activeExist==false){
+				jsId++;
+	       	 	dummyActiveProjects();
+		 	}
 				var d = (data[++jsId + dLength] = {});
 			 	var parent;
-			 	
     	   		d["id"] = "id_" + (parseInt(jsId) + parseInt(dLength));
     	    	d["indent"] = indent;
     	    	d["parent"] = parent;
     	    	d[0]="";
-    	    	<%GtfReport gReport = gtfReports.get(i);%>
     	 		d[25]="";
        	 		d[26]="<%=gReport.getStatus()%>";
        	 		var gmemoriID = "<%=gReport.getgMemoryId()%>";
@@ -804,9 +808,12 @@ String ccView="";
 		}%>
 			
 			
-			if(closedExist ==false || activeExist ==false){
-				dummyACProjects();
-			}
+		if(activeExist ==false){
+			dummyActiveProjects();
+		} 
+		if(closedExist ==false){
+			dummyClosedProjects();
+		} 
 			totalSize=data.length;
 			for (var cntTotal = 0; cntTotal < 4; cntTotal++) {
 				var rowNum = cntTotal + totalSize;
@@ -1351,7 +1358,9 @@ String ccView="";
 			var cols = grid.getColumns();
 			args.item[46]=JSON.parse(JSON.stringify(args.item));
 			var fixedCell = cell;
-			
+			if(args.item["26"]=="Closed"){
+				return false;
+			}
 			if ($('#hideColumns').is(":checked")) {
 				fixedCell = cell + numHideColumns;
 			} else {
