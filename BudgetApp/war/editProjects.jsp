@@ -603,7 +603,7 @@ String ccView="";
 			<%GtfReport gReport = gtfReports.get(i);%>
 			var pStat = "<%=gReport.getStatus()%>";
 			if(pStat == "Closed" && activeExist==false){
-				jsId++;
+				dLength += 1;
 	       	 	dummyActiveProjects();
 		 	}
 				var d = (data[++jsId + dLength] = {});
