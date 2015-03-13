@@ -715,13 +715,18 @@ public class DBUtil {
 	public List<GtfReport> readProjectDataById(String gMemoriId, UserRoleInfo user) {
 		GtfReport gtfRpt = new GtfReport();
 		List<GtfReport> results = new ArrayList<GtfReport>();
+		Map<String,GtfReport> gtfRptMap = new HashMap<String,GtfReport>();
 		for(String cc:readAllCostCenters()){
-		if(getAllReportDataFromCache(cc).get(gMemoriId)!=null){
-			gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
-			results.add(gtfRpt);
+			gtfRptMap = getAllReportDataFromCache(cc);
+			if(gtfRptMap.get(gMemoriId)!=null){
+			for(Map.Entry<String, GtfReport> gtfRptEntry:gtfRptMap.entrySet()){
+				if(gtfRptEntry.getKey().startsWith(gMemoriId)){
+					gtfRpt = gtfRptEntry.getValue();
+					results.add(gtfRpt);
+				}
+			}
 			break;
 		}
-			
 		}
 		if(Util.isNullOrEmpty(gtfRpt.getCostCenter()) && !user.getCostCenter().contains(gtfRpt.getCostCenter())){
 			results = new ArrayList<GtfReport>();

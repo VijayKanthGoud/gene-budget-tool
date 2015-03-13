@@ -137,22 +137,19 @@ public class UpdateStudyInBudget {
 				}
 				int flag = 0;
 				String status = "";
-				String remarks = "";
-				if ((BudgetConstants.status_New).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
-					flag = 1;
-					status = BudgetConstants.status_New;
-				} else if ((BudgetConstants.status_Active).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
-					flag = 2;
-					status = BudgetConstants.status_Active;
-					if(!Util.isNullOrEmpty(gtfReport.getPoNumber())){
-						remarks = "PO Number is blank. Hence status is set to New !!!";
-						gtfReport.setRemarks(remarks);
-						flag = 1;
-						status = BudgetConstants.status_New;
-					}
-				} else {
+				
+				if("Closed".equalsIgnoreCase(prjParam.getpStatus().toLowerCase())){
 					flag = 3;
 					status = "Closed";
+				} else {
+					if ((!Util.isNullOrEmpty(gtfReport.getPoNumber()))) {
+						System.out.println("PO Number is blank. Hence status is set to New !!!");
+						flag = 1;
+						status = BudgetConstants.status_New;
+					} else {
+						flag = 2;
+						status = BudgetConstants.status_Active;
+					} 
 				}
 				gtfReport.setStatus(status);
 				gtfReport.setFlag(flag);
@@ -182,25 +179,8 @@ public class UpdateStudyInBudget {
 		GtfReport gtfRpt = new GtfReport();
 		gtfRpt.setgMemoryId(prjParam.getgMemoriId());
 		gtfRpt.setDummyGMemoriId((prjParam.getgMemoriId().length()==6)?false:true);
-		//gtfRpt.setStatus(prjParam.getpStatus());
-		if ((BudgetConstants.status_New).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
-			flag = 1;
-			status = BudgetConstants.status_New;
-		} else if ((BudgetConstants.status_Active).equalsIgnoreCase(prjParam.getpStatus().toLowerCase())) {
-			flag = 2;
-			status = BudgetConstants.status_Active;
-			//if(!Util.isNullOrEmpty(gtfReport.getPoNumber())){
-			remarks = "PO Number is blank. Hence status is set to New !!!";
-			gtfRpt.setRemarks(remarks);
-			flag = 1;
-			status = BudgetConstants.status_New;
-			//}
-		} else {
-			flag = 3;
-			status = "Closed";
-		}
-		gtfRpt.setFlag(flag);
-		gtfRpt.setStatus(status);
+		gtfRpt.setFlag(1);
+		gtfRpt.setStatus(BudgetConstants.status_New);
 		gtfRpt.setRequestor(prjParam.getProjectOwner());
 		gtfRpt.setCostCenter(costCenter);
 		gtfRpt.setProjectName(prjParam.getProjectName());
