@@ -187,7 +187,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 			gtfReport.setYear(BudgetConstants.dataYEAR);
 			gtfReport.setQual_Quant("Qual_Quant");
 			gtfReport.setStudy_Side("study_Side");
-			gtfReport.setUnits(1);
+			gtfReport.setUnits(0);
 			Map<String, Double> plannedMap = new HashMap<String, Double>();
 			Map<String, Double> setZeroMap = new HashMap<String, Double>();
 			for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {

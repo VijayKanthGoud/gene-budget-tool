@@ -445,7 +445,7 @@ public class PODetailsUpload extends HttpServlet {
 			gtfReport.setYear(BudgetConstants.dataYEAR);
 			gtfReport.setQual_Quant("Qual_Quant");
 			gtfReport.setStudy_Side("study_Side");
-			gtfReport.setUnits(1);
+			gtfReport.setUnits(0);
 			Map<String, Double> receivedMap = new HashMap<String, Double>();
 			Map<String, Double> setZeroMap = new HashMap<String, Double>();
 			Map<String, Double> setPlannedMap = new HashMap<String, Double>();

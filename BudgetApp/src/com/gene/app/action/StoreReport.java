@@ -115,7 +115,7 @@ public class StoreReport extends HttpServlet {
 				try{
 					gtfReport.setUnits(Integer.parseInt(rprtObject.getString(BudgetConstants.New_GTFReport_Unit)));
 				}catch(Exception ne){
-					gtfReport.setUnits(1);
+					gtfReport.setUnits(0);
 				}
 				gtfReport.setCreateDate(timeStamp);
 				gtfReport.setYear(BudgetConstants.dataYEAR);
