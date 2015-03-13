@@ -974,17 +974,17 @@ public class DBUtil {
 										System.out.println("gtfReport.getBrand() in plannedTotal = "+gtfReport.getBrand());
 										System.out.println("gtfReport.getgMemoryId() in plannedTotal = "+gtfReport.getgMemoryId());
 									}
-									if (gtfReport.getBenchmarkMap() != null && !(gtfReport.getgMemoryId().contains(".")) ) {
+									if (gtfReport.getBenchmarkMap() != null /*&& !(gtfReport.getgMemoryId().contains("."))*/ ) {
 										benchMarkTotal = benchMarkTotal
 												+ gtfReport.getBenchmarkMap().get(
 														BudgetConstants.months[j]);
 									}
-									if (gtfReport.getAccrualsMap() != null && !(gtfReport.getgMemoryId().contains("."))) {
+									if (gtfReport.getAccrualsMap() != null /*&& !(gtfReport.getgMemoryId().contains("."))*/) {
 										accrualTotal = accrualTotal
 												+ gtfReport.getAccrualsMap().get(
 														BudgetConstants.months[j]);
 									}
-									if (gtfReport.getVariancesMap() != null && !(gtfReport.getgMemoryId().contains("."))) {
+									if (gtfReport.getVariancesMap() != null /*&& !(gtfReport.getgMemoryId().contains("."))*/) {
 										varianceTotal = varianceTotal
 												+ gtfReport.getVariancesMap().get(
 														BudgetConstants.months[j]);
