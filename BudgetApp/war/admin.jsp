@@ -172,13 +172,13 @@ ng\:form {
 	</script>
 
 	<script type="text/javascript"
-		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+		src="js/angular.min.js"></script>
 	<script type="text/javascript"
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		src="js/jquery.min.js"></script>
 	<script type="text/javascript"
-		src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+		src="js/bootstrap.min.js"></script>
 	<script type="text/javascript"
-		src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+		src="js/lodash.min.js"></script>
 	<script type="text/javascript" src="js/jszip.js"></script>
 	<script type="text/javascript" src="js/xlsx.js"></script>
 	<script type="text/javascript" src="js/xlsx-reader.js"></script>
