@@ -230,10 +230,10 @@ function groupByStatus() {
 			      if(typeof g.value === 'undefined'){
 			    	  return "";
 			      }
-			      else if( g.value.toString().split("-")[1].trim().length == 6){
+			      else if( g.value.toString().split("::")[1].trim().length == 6){
 			        return  g.value;
 			      }else{
-			    	  return g.value.toString().split("-")[0].trim();
+			    	  return g.value.toString().split("::")[0].trim();
 			      }
 			      },
 			      lazyTotalsCalculation: true

@@ -381,7 +381,7 @@ String ccView="";
 			align=center>Multi-brand</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
-			<button class="myButton" value="" onclick="deleteSelectedProjects();"
+			<button id="deleteSel" class="myButton" value="" onclick="deleteSelectedProjects();"
 				style="height: 20px; font-size: 11px; letter-spacing: 1px;">
 				Delete selected</button>
 			<button id="saveClose" class="myButton" value=""
@@ -630,7 +630,7 @@ String ccView="";
 				if(gmemoriID.indexOf(".") > -1){
 					d[34]=gmemoriID.split(".")[0];
 				}
-				d[42]="<%=gReport.getProjectName()%>" + " - " + d[34];
+				d[42]="<%=gReport.getProjectName()%>" + " :: " + d[34];
 				d[44]="<%=gReport.getBrand()%>";
 				d[47]="<%=gReport.getCostCenter()%>";
 				<%requestor = gReport.getRequestor();
@@ -1205,6 +1205,13 @@ String ccView="";
 						if((!user.getUserName().equalsIgnoreCase(requestor) && !"Admin".equalsIgnoreCase(user.getRole()) )){%>
 						return;
 						<%}else{%> --%>
+						if(itemClicked[26]=='Closed'){
+							$('#deleteSel').attr("disabled", true);
+							$('#saveClose').attr("disabled", true);
+						}else{
+							$('#deleteSel').attr("disabled", false);
+							$('#saveClose').attr("disabled", false);
+						}
 						$('#multibrandEdit').show().fadeIn(100);
 						displayMultibrandGrid();
 						$('#back').addClass('black_overlay').fadeIn(100);
@@ -1693,6 +1700,9 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row;
 			var pRow = row + 1;
+			if(itemClicked[26] == "Closed"){
+				return false;
+			}
 			if((m_data[row]["7"] .toString().trim() == "" || m_data[row]["1"] .toString().trim() == "") && cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>){
 				return false;
 			}
