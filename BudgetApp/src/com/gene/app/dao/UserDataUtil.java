@@ -21,14 +21,15 @@ public class UserDataUtil {
 	String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags",
 			"michasav","narasims","chenm30","basurtok","jamiesos", "suchockw", "grabowsa","shwetims",
 			"subramb1","kameckip","lagardal","micoleh","willim58","armett","haoz","jasonso","choul6","savinn","rybusinb",
-			"carlyl","manansaj","liug14","abreum4","ditmorek"};
+			"carlyl","manansaj","liug14","abreum4","ditmorek","kewleya","woochans","harivadp","assangm","douglaas","pateln31","santossa","melissdm"};
 	
 	String [] fullName = {"Anup Mathur","Sreejith NellurKorachanvittil","Vijay Kanth Goud Siddagowni Balram",
 			"Yelena Gold","Vasuda Gayathri Kavi","Sreedhar Challapalli","Akansha Makode","Babajyoti Singh","Bhaswanth Reddy Chinthala","test",
 			"Sunil Guptha Challagandla",
 			"Michael Savitzky","Srihari Narasimhan","Melissa Chen","Kim Basurto","Jamieson Sheffield", "Witold Suchocki", "Adam Grabowski","Shwetima Shwetima",
 			"Balaji Subramaniam","Piotr Kamecki","Lluis Lagarda","Micole Doyle","Melissa Williams","Tom Armet","Hao Zhou","Jason Sole","Lily Chou"
-			,"Natalie Savin","Bartosz Rybusinski","Loeb	Carly","Manasala Jehrus","Liu Gary","Abreu Melissa","Sinaikin Katherine"};
+			,"Natalie Savin","Bartosz Rybusinski","Loeb	Carly","Manasala Jehrus","Liu Gary","Abreu Melissa","Sinaikin Katherine",
+			"Alison Kewley","Chris Sung","Hari Patel","Milton Assang","Doug Saulsbury","Nitin Patel","Santosh Sastry","Melissa Malloy"};
 	// create user email array
 	/*String [] userEmail = {"mathura2@gene.com","nellurks@gene.com","siddagov@gene.com","goldy@gene.com","kaviv@gene.com","sreedhac@gene.com",
 			"makodea@gene.com","singhb15@gene.com","chinthb2@gene.com","test@example.com","challags@gene.com"};*///,"","","",""};
@@ -37,7 +38,8 @@ public class UserDataUtil {
 			"narasims@gene.com","chenm30@gene.com","basurtok@gene.com","jamiesos@gene.com", "suchockw@gene.com", 
 			"grabowsa@gene.com","shwetims@gene.com","subramb1@gene.com","kameckip@gene.com","lagardal@gene.com","micoleh@gene.com",
 			"willim58@gene.com","armett@gene.com","haoz@gene.com","jasonso@gene.com","choul6@gene.com","savinn@gene.com","rybusinb@gene.com",
-			"carlyl@gene.com","manansaj@gene.com","liug14@gene.com","abreum4@gene.com","ditmorek@gene.com"};
+			"carlyl@gene.com","manansaj@gene.com","liug14@gene.com","abreum4@gene.com","ditmorek@gene.com","kewleya@gene.com","woochans@gene.com","harivadp@gene.com",
+			"assangm@gene.com","douglaas@gene.com","pateln31@gene.com","santossa@gene.com","melissdm@gene.com"};
 	//String [] userEmail = {"test@example.com"};
 	// create brandmap array
 
@@ -47,16 +49,56 @@ public class UserDataUtil {
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
 			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
-			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner"};
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+			"Project Owner","Project Owner","Project Owner","Project Owner","Project Owner",
+			"Project Owner","Project Owner","Project Owner"};
 	//String [] role = {"Project Owner"};
-	String [] costCenter = {"7034","7527:7034:7035:7121:7712:7135:7713:7428","7527:7034:7035:7121:7712:7135:7713:7428",
-			"7004","7527:7034:7035:7121:7712:7135:7713:7428","7527:7034:7035:7121:7712:7135:7713:7428",
-			"7034:7035","7034:7035","7121:7428",
-			"7527:7034:7035:7121:7712:7135:7713:7428","7121:7428","7034","7035","7034","7035","7574","7034","7034"
-			,"7034","7034","7034","7135","7034","7034","7034","7034","7034","7034","7034","7034",
-			"7512","7135","7574","7035","7034"};
+	String [] costCenter = {"7034",
+			"7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138",
+			"7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138",
+			"7004",
+			"7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138",
+			"7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138",
+			"7034:7035",
+			"7034:7035",
+			"7121:7428",
+			"7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138",
+			"7121:7428",
+			"7034",
+			"7035",
+			"7512",
+			"7035",
+			"7574",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7135",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7034",
+			"7512",
+			"7135",
+			"7574",
+			"7035",
+			"7034",
+			"7136",
+			"7136",
+			"7136",
+			"7527",
+			"7138",
+			"7138",
+			"7138",
+			"7713"};
+	
 	//String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004","7135"};
-	String [] costCenter1 = {"7527","7034","7035","7121","7712","7135","7713","7428","7512","7574"};//"7004","7512","7138","7136"};
+	String [] costCenter1 = {"7527","7034","7035","7121","7712","7135","7713","7428","7512","7574","7136","7138"};//"7004","7512","7138","7136"};
 	String []costCenter2 = {"Indirect Product:total=3033.20;",
 			"Actemra:total=1565.0;Rituxan RA:total=948.0;Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
 			"Indirect Product:total=300.0;Avastin:total=4278.0;Tarceva:total=1125.0;Alectinib:total=1034.0;anti-PDL1:total=2250.0;Rituxan Heme/Onc:total=969.0;Gazyva:total=2339.0;GDC-0199:total=689.0;Herceptin:total=850.0;Kadcyla:total=1600.0;Perjeta:total=1340.0;Erivedge:total=1250.0;Zelboraf:total=350.0;Cobimetinib:total=1075.0;BioOnc Pipeline:total=840.0;GDC0941:total=800.0;",
@@ -67,7 +109,9 @@ public class UserDataUtil {
 			//"Indirect Product:total=1825.6; Avastin:total=400.0; Tarceva:total=140.0; Alectinib:total=65.0; anti-PDL1:total=1040.0; Rituxan Heme/Onc:total=275.0; Gazyva:total=125.0; GDC-0199:total=205.0; Herceptin:total=555.0; Kadcyla:total=302.5; Perjeta:total=307.5; Erivedge:total=100.0; Cobimetinib:total=50.0; BioOnc Pipeline:total=100.0; Actemra:total=102.5; Rituxan RA:total=190.0; Esbriet:total=800.0; Lucentis:total=280.0; Pulmozyme:total=4705; Xolair:total=1550.; Lampalizumab:total=50.0; General Immun Pipeline:total=50.0; Lebrikizumab:total=100.0; Valcyte:total=30.0; Nutropin:total=30.0; Tamiflu:total=20.0; Lytics:total=53.5;",
 			"Avastin:total=75.0;Alectinib:total=605.0;GDC-0199:total=100.0;Herceptin:total=20.0;Kadcyla:total=140.0;Perjeta:total=140.0;Erivedge:total=100.0;Cobimetinib:total=170.0;Actemra:total=250.0;Lucentis:total=150.0;Pulmozyme:total=350.0;Lampalizumab:total=185.0;General Immun Pipeline:total=25.0;Tamiflu:total=806.0;Ocrelizumab:total=1215.0;Gantenerumab:total=250.0;Crenezumab:total=150.0;ACE-910:total=650.0;",
 			"Avastin:total=75.0;Alectinib:total=605.0;GDC-0199:total=100.0;Herceptin:total=20.0;Kadcyla:total=140.0;Perjeta:total=140.0;Erivedge:total=100.0;Cobimetinib:total=170.0;Actemra:total=250.0;Lucentis:total=150.0;Pulmozyme:total=350.0;Lampalizumab:total=185.0;General Immun Pipeline:total=25.0;Tamiflu:total=806.0;Ocrelizumab:total=1215.0;Gantenerumab:total=250.0;Crenezumab:total=150.0;ACE-910:total=650.0;",
-			"Actemra:total=1565.0;Rituxan RA:total=948.0;Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;"
+			"Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
+			"Actemra:total=1565.0;Rituxan RA:total=948.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
+			"Actemra:total=1223.0;Rituxan RA:total=128.0;Esbriet:total=1300.0;Lucentis:total=1325.0;Pulmozyme:total=315.0;Xolair:total=560.0;Lampalizumab:total=580.0;Etrolizumab:total=450.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1700.0;Indirect Product:total=100.0;"
 			//"Avastin:total=276.00; Tarceva:total=85.98; Alectinib:total=170.56; anti-PDL1:total=630.56; Rituxan Heme/Onc:total=158.84; Gazyva:total=444.90; GDC-0199:total=300.00; Herceptin:total=110.11; Kadcyla:total=677.22; Perjeta:total=112.22; Erivedge:total=92.72; Zelboraf:total=41.00; Cobimetinib:total=260.00; BioOnc Pipeline:total=350.00; Actemra:total=574.00; Rituxan RA:total=207.00; Esbriet:total=250.00; Lucentis:total=304.09; Pulmozyme:total=115.00;Xolair:total=707.57; Etrolizumab:total=50.00; General Immun Pipeline:total=50.00; Lebrikizumab:total=108.00; Valcyte:total=120.00; Ocrelizumab:total=1017.64; Gantenerumab:total=201.00; Crenezumab:total=175.00; Alzheimers:total=174.00; LptD:total=350.00; ACE-910:total=490.00;IMPACT Pipeline General:total=300.00; Neuroscience Pipeline:total=150.00;",
 			//"Avastin:total=1235.0;Tarceva:total=270.0;Alectinib:total=200.0;anti-PDL1:total=605.0;Rituxan Heme/Onc:total=305.0;Gazyva:total=570.0;GDC-0199:total=200.0;Herceptin:total=100.0;Kadcyla:total=550.0;Perjeta:total=550.0;Erivedge:total=290.0;Zelboraf:total=152.0;Cobimetinib:total=168.0;BioOnc Pipeline:total=150.0;Actemra:total=600.0;Rituxan RA:total=238.0;Esbriet:total=400.0;Lucentis:total=135.0;Pulmozyme:total=135.0;Xolair:total=850.0; General Immun Pipeline:total=100.0;Lebrikizumab:total=50.0;Valcyte:total=235.0;Nutropin:total=100.0; Tamiflu:total=225.0;Lytics:total=180.0;Ocrelizumab:total=800.0;Gantenerumab:total=295.0; Crenezumab:total=65.0; Alzheimers:total=90.0;LptD:total=165.0;ACE-910:total=265.0;IMPACT Pipeline General:total=275.0;Neuroscience Pipeline:total=115.0;Indirect Product:total=587.07;",
 			//"Avastin:total=511.0;Tarceva:total=152.0;Alectinib:total=105.0;anti-PDL1:total=650.0;Rituxan Heme/Onc:total=200.0;Gazyva:total=183.0;GDC-0199:total=160.0;Herceptin:total=50.0;Kadcyla:total=110.0;Perjeta:total=115.0;Erivedge:total=50.0;Zelboraf:total=75.0;Cobimetinib:total=100.0;BioOnc Pipeline:total=400.0;Actemra:total=500.0;Rituxan RA:total=150.0;Esbriet:total=400.0;Lucentis:total=275.0;Pulmozyme:total=225.0;Xolair:total=200.0;Lampalizumab:total=275.0;Etrolizumab:total=50.0;General Immun Pipeline:total=20.0;Lebrikizumab:total=325.0;Valcyte:total=200.0;Tamiflu:total=110.0;Lytics:total=85.0;Ocrelizumab:total=440.0;Alzheimers:total=170.0;LptD:total=125.0;ACE-910:total=175.0;IMPACT Pipeline General:total=220.0;Neuroscience Pipeline:total=97.0; Xenical:total=67.5;Invirase:total=67.5;Indirect Product:total=489.22;"
