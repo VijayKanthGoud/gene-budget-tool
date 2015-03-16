@@ -127,7 +127,7 @@ public class UpdateStudyInBudget {
 			if(gtfEntry.getKey().contains(gMemoriId) && gtfEntry.getKey().length()<10){
 				gtfReport = gtfEntry.getValue();
 				System.out.println("prjParam.getProjectOwner() : "+prjParam.getProjectOwner() +"::::" +gtfReport.getRequestor());
-				if((gtfReport.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfReport.getRequestor().split(":")[0]) ) ||
+				if((gtfReport.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfReport.getRequestor().split(":")[1]) ) ||
 						(!gtfReport.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfReport.getRequestor()))){
 					eObj.setStatusCode(403);
 					eObj.setStatusMessage("User is not authorised to edit the project !!!");
