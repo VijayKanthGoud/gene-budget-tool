@@ -88,6 +88,7 @@ public class GetReport extends HttpServlet {
 					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
 				selectedView = "My Brands";
 				selectedCC = "7135";
+				user.setSelectedCostCenter(selectedCC);
 			}
 			if(!Util.isNullOrEmpty(selectedBrand)){
 				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
