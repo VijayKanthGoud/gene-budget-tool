@@ -727,7 +727,7 @@ public class DBUtil {
 			break;
 		}
 		}
-		if(Util.isNullOrEmpty(gtfRpt.getCostCenter()) && !user.getCostCenter().contains(gtfRpt.getCostCenter())){
+		if(Util.isNullOrEmpty(gtfRpt.getCostCenter()) && Util.isNullOrEmpty(user.getCostCenter()) && !user.getCostCenter().contains(gtfRpt.getCostCenter())){
 			results = new ArrayList<GtfReport>();
 			return results;
 		}

@@ -89,6 +89,7 @@ public class GetReport extends HttpServlet {
 				selectedView = "My Brands";
 				selectedCC = "7135";
 				user.setSelectedCostCenter(selectedCC);
+				user.setCostCenter("7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138");
 			}
 			if(!Util.isNullOrEmpty(selectedBrand)){
 				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
@@ -142,8 +143,9 @@ public class GetReport extends HttpServlet {
 		            	return o1.getFlag() - o2.getFlag();
 		            }
 		        } );
-		}
 		queryGtfRptList = util.calculateVarianceMap(queryGtfRptList);
+		}
+		
 		//LOGGER.log(Level.INFO, "gtfReportList from after calculating variance map"+gtfReportList);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, queryGtfRptList);
 		DBUtil util = new DBUtil();
