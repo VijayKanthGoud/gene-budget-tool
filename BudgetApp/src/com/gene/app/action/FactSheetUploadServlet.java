@@ -344,9 +344,14 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		gtfRpt.setMultiBrand(true);
 		    		gtfRpt.setChildProjectList(childProjList);
+		    		try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
 						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
 								.get("TOTAL") / total) * 100 , 2));
+					}}catch(NumberFormatException nfe){
+						gtfRpt.setPercent_Allocation(0);
+					}catch(ArithmeticException ae){
+						gtfRpt.setPercent_Allocation(0);
 					}
 		    		gtfReports.add(gtfRpt);
 		    		
