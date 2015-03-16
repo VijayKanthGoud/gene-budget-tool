@@ -124,8 +124,11 @@ public class GetReport extends HttpServlet {
 			queryGtfRptList = gtfReportList;
 			 req.setAttribute("accessreq", "internal");
 		}
+		
+			
 		//LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
 		String qParam = req.getParameter("gMemoriId");
+		if(queryGtfRptList!=null && !queryGtfRptList.isEmpty()){
 		Collections.sort( queryGtfRptList, new Comparator<GtfReport>()
 		        {
 		            public int compare( GtfReport o1, GtfReport o2 )
@@ -139,6 +142,7 @@ public class GetReport extends HttpServlet {
 		            	return o1.getFlag() - o2.getFlag();
 		            }
 		        } );
+		}
 		queryGtfRptList = util.calculateVarianceMap(queryGtfRptList);
 		//LOGGER.log(Level.INFO, "gtfReportList from after calculating variance map"+gtfReportList);
 		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, queryGtfRptList);
