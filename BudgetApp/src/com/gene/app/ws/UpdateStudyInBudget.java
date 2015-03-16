@@ -140,9 +140,11 @@ public class UpdateStudyInBudget {
 				
 				if("Closed".equalsIgnoreCase(prjParam.getpStatus().toLowerCase())){
 					if ((!Util.isNullOrEmpty(gtfReport.getPoNumber()))) {
-						System.out.println("PO Number is blank. Hence status is set to New !!!");
-						flag = 1;
-						status = BudgetConstants.status_New;
+						eObj.setStatusCode(405);
+						eObj.setStatusMessage("Project cannot be closed in gMemori Budget as PO number is blank !!!");
+						System.out.println("status Code"+eObj.getStatusCode());
+						System.out.println("status Message"+eObj.getStatusMessage());
+						return eObj;
 					} else{
 					flag = 3;
 					status = "Closed";
