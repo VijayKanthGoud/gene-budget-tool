@@ -139,8 +139,14 @@ public class UpdateStudyInBudget {
 				String status = "";
 				
 				if("Closed".equalsIgnoreCase(prjParam.getpStatus().toLowerCase())){
+					if ((!Util.isNullOrEmpty(gtfReport.getPoNumber()))) {
+						System.out.println("PO Number is blank. Hence status is set to New !!!");
+						flag = 1;
+						status = BudgetConstants.status_New;
+					} else{
 					flag = 3;
 					status = "Closed";
+					}
 				} else {
 					if ((!Util.isNullOrEmpty(gtfReport.getPoNumber()))) {
 						System.out.println("PO Number is blank. Hence status is set to New !!!");
