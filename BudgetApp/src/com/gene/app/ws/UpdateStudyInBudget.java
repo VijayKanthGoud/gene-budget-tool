@@ -161,7 +161,7 @@ public class UpdateStudyInBudget {
 				}
 				gtfReport.setStatus(status);
 				gtfReport.setFlag(flag);
-				gtfReport.setRequestor(prjParam.getProjectOwner());
+				//gtfReport.setRequestor(prjParam.getProjectOwner());
 				gtfReport.setCostCenter(selectedCostCenter);
 				gtfReport.setProjectName(prjParam.getProjectName());
 				gtfReports.add(gtfReport);

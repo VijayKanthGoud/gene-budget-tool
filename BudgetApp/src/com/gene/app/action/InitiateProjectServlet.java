@@ -32,24 +32,22 @@ import com.google.gson.Gson;
 public class InitiateProjectServlet extends HttpServlet{
 	private final static Logger LOGGER = Logger
 			.getLogger(InitiateProjectServlet.class.getName());
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		System.out.println("initializeURL");
 		String rcostCenter = req.getParameter("ccId");
-		String costCenter = rcostCenter.replace("_", " ");
 		String rgMemId = req.getParameter("dummyGMemId");
-		String gMemId = rgMemId.replace("_", " ");
-		
 		ProjectParameters prjParam = new ProjectParameters();
 		List<String> costCenters = new ArrayList<String>();
-		costCenters.add(costCenter);
+		costCenters.add(rcostCenter);
 		prjParam.setCostCentres(costCenters);
 		String rUnixId = req.getParameter("unixId");
-		String unixId = rUnixId.replace("_", " ");
-		prjParam.setProjectOwner(unixId);
+		prjParam.setProjectOwner(rUnixId);
 		String rprj_name = req.getParameter("prj_name");
-		String prj_name = rprj_name.replace("_", " ");
-		prjParam.setProjectName(prj_name);
-		System.out.println("rcostCenter"+rcostCenter+"::::"+rgMemId+"::::"+prj_name+"::::"+rUnixId);
+		prjParam.setProjectName(rprj_name);
+		System.out.println("rcostCenter" + rcostCenter + "::::" + rgMemId
+				+ "::::" + rprj_name + "::::" + rUnixId);
 		storeRprtTogMemori(req, resp, prjParam);
 	}
 
@@ -117,7 +115,7 @@ public class InitiateProjectServlet extends HttpServlet{
 				System.out.println("error code"+respFrmStudy.getStatusCode());
 				if(Util.isNullOrEmpty(respFrmStudy.getNewGMemId())){
 				updateGMemoriIdInBudget(req.getParameter("dummyGMemId"),prjParam.getCostCentres().get(0),respFrmStudy.getNewGMemId());
-				//resp.sendRedirect("https://memori-qa.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
+				//resp.sendRedirect("https://memori-dev.appspot.com/initiateProject?gMemoriId="+respFrmStudy.getNewGMemId());
 				req.setAttribute("gMemoriId", respFrmStudy.getNewGMemId());
 				req.setAttribute("Error Code", respFrmStudy.getStatusCode());
 				req.setAttribute("Error Msg", respFrmStudy.getStatusMessage());
