@@ -117,7 +117,7 @@ public class DBUtil {
 			}
 			brandMap.put(brandValue, 50000.0);
 		}
-		Map<String,Double> sortedMap = new TreeMap<String,Double>(brandMap);
+		Map<String,Double> sortedMap = Util.sortCaseInsensitive(brandMap);
 		return sortedMap;
 	}
 	

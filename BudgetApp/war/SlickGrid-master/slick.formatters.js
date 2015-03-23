@@ -185,7 +185,7 @@
   }
   
   function CheckBoxFormatter(row, cell, value, columnDef, dataContext) {
-	  if(dataContext[7].toString().trim() != "" || dataContext[1].toString().trim() != "" || dataContext[3].toString().trim() != "" || dataContext[2].toString().trim() != ""){
+	  if((dataContext[9] != "preExisting" || itemClicked[26] == 'New') && (dataContext[7].toString().trim() != "" || dataContext[1].toString().trim() != "" || dataContext[3].toString().trim() != "" || dataContext[2].toString().trim() != "")){
 		return "<input type='checkbox' class='checkDeletion' value='true' id = "+ row+"chkBox>";
 	  }else{
 		  return "";

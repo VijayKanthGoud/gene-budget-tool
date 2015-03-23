@@ -2,6 +2,8 @@ package com.gene.app.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Util {
 	
@@ -35,6 +37,16 @@ public class Util {
 			return true;
 		}else{
 			return false;
+		}
+	}
+	
+	public static Map sortCaseInsensitive(Map rcvdMap){
+		if(rcvdMap !=null && rcvdMap.size() != 0){
+			Map sortedMap = new TreeMap((String.CASE_INSENSITIVE_ORDER));
+			sortedMap.putAll(rcvdMap);
+			return sortedMap;
+		}else{
+			return new TreeMap();
 		}
 	}
 	

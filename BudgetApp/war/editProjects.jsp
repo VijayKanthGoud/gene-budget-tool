@@ -1,6 +1,6 @@
 <%@page import="com.gene.app.model.*"%>
 <%@page import="com.gene.app.dao.DBUtil"%>
-<%@page import="com.gene.app.util.BudgetConstants"%>
+<%@page import="com.gene.app.util.*"%>
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
 <%@page import="javax.servlet.RequestDispatcher"%>
@@ -183,8 +183,7 @@ String ccView="";
 											String brandValue=(String)request.getAttribute("brandValue");
 											
 											if(userBrandMap!=null && !userBrandMap.isEmpty()){
-												Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
-												myBrands = sortedMap.keySet().toArray();
+												myBrands = userBrandMap.keySet().toArray();
 											    for(int i=0;i<myBrands.length;i++){ 
 											    	if(brandValue==null || brandValue==""){
 														brandValue =  myBrands[0].toString();
@@ -277,7 +276,7 @@ String ccView="";
 						style="color: #2271B0; white-space: nowrap; font-weight: bold;">
 						<%
 							BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
-											Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
+											Map<String, BudgetSummary> budgetMap = Util.sortCaseInsensitive(summary.getBudgetMap());
 											BudgetSummary budgetSummary = new BudgetSummary();
 											UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
 											String cc = user.getSelectedCostCenter();
@@ -995,6 +994,11 @@ String ccView="";
 					} --%>
 					grid.invalidate();
 			
+					
+					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects"){
+						addMultiBrandPopUp();
+					}
+					
 					if(args.item["34"] != "New projects"){
 						updateMemCache(e, args, tempKey);
 						for(var counter = 0; counter<data.length; counter++ ){
@@ -1131,132 +1135,7 @@ String ccView="";
 					do_the_ajax_call();
 				}else
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
-					
-					<%selectedCostCenter = (String)request.getAttribute("getCCValue");
-					if(selectedCostCenter==null || "".equals(selectedCostCenter)){
-						selectedCostCenter = userInfo.getSelectedCostCenter();
-					}
-					MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
-					Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(selectedCostCenter);%>
-					// multi brand click
-					
-					var usr=0;
-					var userCnt=0;
-					<%Set<String> userList = ccUsers.keySet();
-					for(Map.Entry<String,ArrayList<String>> userMapDetails: ccUsers.entrySet()){%>
-					 poOwners[userCnt] = "<%=userMapDetails.getKey()%>";
-					 var d = (ccUsersVar[userCnt] = {});
-					 d[0]=   poOwners[userCnt];
-					 d[1] = "<%=userMapDetails.getValue()%>";
-					 
-					 userCnt++;
-					<%}%>
-					
-					var index = availableTags.indexOf("Smart WBS");
-					if (index > -1) {
-						availableTags.splice(index, 1);
-					}
-					if(itemClicked[34]!="New projects"){
-						
-						// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
-						var multiBrandCnt = 0 ;	
-						<%GtfReport pGtfReport = new GtfReport();
-						
-						for(GtfReport gtfReport : gtfReports){
-							requestor = gtfReport.getRequestor();
-    						if(requestor.contains(":")){
-    						requestor = requestor.substring(0,requestor.indexOf(":"));
-    						}%>
-							var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
-							var gMemoriId='<%=gtfReport.getgMemoryId()%>';
-				
-		   					if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
-								var d = (m_data[multiBrandCnt++] = {});
-				 				var parent;
-				 				d["0"] = "<%=gtfReport.getId()%>";
-	    	    				d["1"] = "<%=gtfReport.getBrand()%>";
-	    	    				d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
-	    	    				<%Double total = gtfReport.getPlannedMap().get(BudgetConstants.total);%>
-	    	    				d["3"] = "<%=total%>";
-    							d["4"] = "<%=gtfReport.getProjectName()%>";
-    							d["5"] =  "<%=gtfReport.getgMemoryId()%>";
-    							d["7"] = "<%=requestor%>";
-							}
-		   					
-						<%}%>
-						<%-- System.out.println("user.getUserName() = "+user.getUserName());
-	   					System.out.println("requestor = "+requestor);
-						if((!user.getUserName().equalsIgnoreCase(requestor) && !"Admin".equalsIgnoreCase(user.getRole()) )){%>
-						return;
-						<%}else{%> --%>
-						if(itemClicked[26]=='Closed' || itemClicked[26]=='Active'){
-							$('#deleteSel').attr("disabled", true);
-							$('#saveClose').attr("disabled", true);
-						}else{
-							$('#deleteSel').attr("disabled", false);
-							$('#saveClose').attr("disabled", false);
-						}
-						$('#multibrandEdit').show().fadeIn(100);
-						displayMultibrandGrid();
-						$('#back').addClass('black_overlay').fadeIn(100);
-						// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
-						<%-- <%}%> --%>
-						}
-					//code for newly added projects 
-					else if(itemClicked[34]=="New projects"){
-						// Start : Code for newly added projects
-						var error=0;
-						var errStrng="";
-						//alert("itemClicked = "+JSON.stringify(itemClicked));
-						if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
-							itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){
-					
-							if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
-								error=error+1;
-							}
-							/* if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
-								error=error+3;
-							} */
-							if(itemClicked[1]=='' || itemClicked[1]=='undefined'){
-								error=error+5;
-							}
-							switch(error) {
-				    			case 0:
-				        			break;
-				    			case 1:
-				    				errStrng="Project name can not be blank."
-				        			break;
-				    			/* case 3:
-				    				errStrng="gMemoriID can not be blank."
-				        			break;
-				    			case 4:
-				    				errStrng="gMemoriID or Project name can not be blank."
-				        			break; */
-				    			case 5:
-				    				errStrng="Project Owner can not be blank."
-				        			break;
-				    			case 6:
-				    				errStrng="Project name or Project Owner can not be blank."
-				        			break;
-				    			default:
-				        		break;
-							}
-						}
-						if(error==0){
-						 	if(itemClicked[37]){
-								 m_data = JSON.parse(JSON.stringify(itemClicked[36]));
-						 	}else{
-							 	m_data[0][4]=itemClicked[2];
-							 	m_data[0][5]=itemClicked[0]+'.1';
-							 	m_data[0][7]=itemClicked[1];
-						 	}
-						 	$('#multibrandEdit').show().fadeIn(100);
-							displayMultibrandGrid();
-							$('#back').addClass('black_overlay').fadeIn(100);
-						}else{
-							alert(errStrng);
-						}
-					}
+					 addMultiBrandPopUp();
 				} 
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
@@ -1684,7 +1563,7 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row;
 			var pRow = row + 1;
-			if(itemClicked[26] == "Closed" || itemClicked[26] == "Active"){
+			if(itemClicked[26] == "Closed"){
 				return false;
 			}
 			if((m_data[row]["7"] .toString().trim() == "" || m_data[row]["1"] .toString().trim() == "") && cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>){
@@ -1783,6 +1662,7 @@ String ccView="";
 							initMData[6] = "";
 							initMData[7] = "";
 							initMData[8] = false;
+							initMData[9] = "";
 							m_grid.invalidate();
 							m_grid.invalidateRow(m_grid.getSelectedRows());
 							m_grid.updateRowCount();
@@ -1838,7 +1718,142 @@ String ccView="";
 		}
 	});
 	
-	
+	function addMultiBrandPopUp(){
+		
+		<%selectedCostCenter = (String)request.getAttribute("getCCValue");
+		if(selectedCostCenter==null || "".equals(selectedCostCenter)){
+			selectedCostCenter = userInfo.getSelectedCostCenter();
+		}
+		MemcacheService cacheCC = MemcacheServiceFactory.getMemcacheService();
+		Map<String,ArrayList<String>> ccUsers = util.getCCUsersList(selectedCostCenter);%>
+		// multi brand click
+		
+		var usr=0;
+		var userCnt=0;
+		<%Set<String> userList = ccUsers.keySet();
+		for(Map.Entry<String,ArrayList<String>> userMapDetails: ccUsers.entrySet()){%>
+		 poOwners[userCnt] = "<%=userMapDetails.getKey()%>";
+		 var d = (ccUsersVar[userCnt] = {});
+		 d[0]=   poOwners[userCnt];
+		 d[1] = "<%=userMapDetails.getValue()%>";
+		 
+		 userCnt++;
+		<%}%>
+		
+		
+		if(itemClicked[34]!="New projects"){
+			
+			// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
+			var multiBrandCnt = 0 ;	
+			<%GtfReport pGtfReport = new GtfReport();
+			
+			for(GtfReport gtfReport : gtfReports){
+				requestor = gtfReport.getRequestor();
+				if(requestor.contains(":")){
+				requestor = requestor.substring(0,requestor.indexOf(":"));
+				}%>
+				var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
+				var gMemoriId='<%=gtfReport.getgMemoryId()%>';
+
+					if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
+					var d = (m_data[multiBrandCnt++] = {});
+	 				var parent;
+	 				d["0"] = "<%=gtfReport.getId()%>";
+					d["1"] = "<%=gtfReport.getBrand()%>";
+					d["2"] = "<%=gtfReport.getPercent_Allocation()%>";
+					<%Double total = gtfReport.getPlannedMap().get(BudgetConstants.total);%>
+					d["3"] = "<%=total%>";
+					d["4"] = "<%=gtfReport.getProjectName()%>";
+					d["5"] =  "<%=gtfReport.getgMemoryId()%>";
+					d["7"] = "<%=requestor%>";
+					d["9"] = "preExisting";
+				}
+					
+			<%}%>
+			<%-- System.out.println("user.getUserName() = "+user.getUserName());
+				System.out.println("requestor = "+requestor);
+			if((!user.getUserName().equalsIgnoreCase(requestor) && !"Admin".equalsIgnoreCase(user.getRole()) )){%>
+			return;
+			<%}else{%> --%>
+			if(itemClicked[26]=='Closed'){
+				$('#deleteSel').attr("disabled", true);
+				$('#saveClose').attr("disabled", true);
+			}else{
+				$('#deleteSel').attr("disabled", false);
+				$('#saveClose').attr("disabled", false);
+			}
+			$('#multibrandEdit').show().fadeIn(100);
+			displayMultibrandGrid();
+			$('#back').addClass('black_overlay').fadeIn(100);
+			// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
+			<%-- <%}%> --%>
+			var index = availableTags.indexOf("Smart WBS");
+			if (index > -1) {
+				availableTags.splice(index, 1);
+			}
+		}
+		//code for newly added projects 
+		else if(itemClicked[34]=="New projects"){
+			// Start : Code for newly added projects
+			var error=0;
+			var errStrng="";
+			//alert("itemClicked = "+JSON.stringify(itemClicked));
+			if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
+				itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){
+		
+				if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
+					error=error+1;
+				}
+				/* if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
+					error=error+3;
+				} */
+				if(itemClicked[1]=='' || itemClicked[1]=='undefined'){
+					error=error+5;
+				}
+				switch(error) {
+	    			case 0:
+	        			break;
+	    			case 1:
+	    				errStrng="Project name can not be blank."
+	        			break;
+	    			/* case 3:
+	    				errStrng="gMemoriID can not be blank."
+	        			break;
+	    			case 4:
+	    				errStrng="gMemoriID or Project name can not be blank."
+	        			break; */
+	    			case 5:
+	    				errStrng="Project Owner can not be blank."
+	        			break;
+	    			case 6:
+	    				errStrng="Project name or Project Owner can not be blank."
+	        			break;
+	    			default:
+	        		break;
+				}
+			}
+			if(error==0){
+			 	if(itemClicked[37]){
+					 m_data = JSON.parse(JSON.stringify(itemClicked[36]));
+			 	}else{
+				 	m_data[0][4]=itemClicked[2];
+				 	m_data[0][5]=itemClicked[0]+'.1';
+				 	m_data[0][7]=itemClicked[1];
+			 	}
+			 	$('#multibrandEdit').show().fadeIn(100);
+				displayMultibrandGrid();
+				$('#back').addClass('black_overlay').fadeIn(100);
+				var index = availableTags.indexOf("Smart WBS");
+				if (index > -1) {
+					availableTags.splice(index, 1);
+				}
+			}else{
+				alert(errStrng);
+				itemClicked[6] = "";
+				grid.invalidate();
+			}
+		}
+	}
 </script>
 	<!-- to be removed after uat 2 -->
 	<div width='100%' align=right>
