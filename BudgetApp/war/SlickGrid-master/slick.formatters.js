@@ -76,7 +76,10 @@
 	  var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
 	 
 	  if(dataContext["35"] != "Buttons"){
-		if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
+		if(dataContext[35] == "NewProjects"){
+			return "<div width = '100%' style='background:#C0CCED'><span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span></div>" ;
+		}
+		else if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> "+ Number(value).toFixed(2) +"</span>" 
 		}else if((dataContext["26"] != "Closed") && ((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || 
 				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["27"].toString().indexOf(".") != -1 && dataContext["37"] == true) ||
@@ -143,7 +146,13 @@
 	  if(val.indexOf(".") != -1){
 		  val = val.split(".")[0];  
 	  }
-	  if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
+	  if(dataContext[35] == "NewProjects"){
+		  if(value == ""){
+			  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
+		  }else{
+			  return "<div width = '100%' style='background:#C0CCED'>"+ value +"</div>";
+		  }
+	  }else if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
 		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
 		  if(dataContext["0"].toString().indexOf(".") == -1){
 			  return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span></div>" ;

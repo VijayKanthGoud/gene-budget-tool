@@ -134,7 +134,7 @@
 	<div style="height: 5px;"></div>
 	<div id='cssmenu'>
 		<ul>
-			<li><a style = "cursor: hand;" id="homeLink" ><span>Home</span></a></li>
+			<li><a style = "cursor: hand;" id="homeLink" ><span>Study</span></a></li>
 			<!-- <li class='last'><a href='/'><span>Reports</span></a></li> -->
 			<%
 				if (role!=null && !"".equalsIgnoreCase(role) && ("Admin".equals(role))) {

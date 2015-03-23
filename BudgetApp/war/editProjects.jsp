@@ -849,8 +849,8 @@ String ccView="";
 			}
 				d[40] = d[11];
 			for (var j = 0; j < totalSize ; j++) {
-				if( d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)){
-				/* if((data[j][37] == false || data[j][11] != "Planned") && data[j][0].indexOf(".") == -1 ){ */
+				if( (data[j][37] == false && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
+						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1)) ){
 					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
 					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
@@ -864,23 +864,7 @@ String ccView="";
 					d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
 					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
 					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
-					/* }
-				else if(data[j][0].indexOf(".") != -1){
-					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
-					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
-					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
-					d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
-					d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
-					d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
-					d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
-					d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
-					d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
-					d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
-					d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
-					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
-					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
-					}
-			 */	}
+				}
 			}
 
 			for (var j = 12; j < 25; j++) {
@@ -1205,7 +1189,7 @@ String ccView="";
 						if((!user.getUserName().equalsIgnoreCase(requestor) && !"Admin".equalsIgnoreCase(user.getRole()) )){%>
 						return;
 						<%}else{%> --%>
-						if(itemClicked[26]=='Closed'){
+						if(itemClicked[26]=='Closed' || itemClicked[26]=='Active'){
 							$('#deleteSel').attr("disabled", true);
 							$('#saveClose').attr("disabled", true);
 						}else{
@@ -1337,12 +1321,12 @@ String ccView="";
 		
 		
 		
-		 	// brand select using arrow keys
+		// brand select using arrow keys
 		grid.onKeyDown.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row - 1;
 			var fixedCell = cell;
-			if (e.which == 38 || e.which == 40 || e.which == 13) {
+			if ((e.which == 38 || e.which == 40 || e.which == 13) && cell == 2) {
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;
 				}
@@ -1700,7 +1684,7 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row;
 			var pRow = row + 1;
-			if(itemClicked[26] == "Closed"){
+			if(itemClicked[26] == "Closed" || itemClicked[26] == "Active"){
 				return false;
 			}
 			if((m_data[row]["7"] .toString().trim() == "" || m_data[row]["1"] .toString().trim() == "") && cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>){

@@ -444,8 +444,28 @@ function updateMemCache(e, args, tempKey) {
 								break;
 							}
 						}
-					
-
+						var val = 0;
+						for(var iVar=0;iVar<data.length;iVar++){
+							var kData = data[iVar];
+							if(key.toString().indexOf(".") != -1 && 
+									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Accrual"){
+								if(kData[27].toString().indexOf(".") != -1){
+									val += parseFloat(kData[itemCell]);
+								}
+							}
+						}
+						for(var iVar=0;iVar<data.length;iVar++){
+							var kData = data[iVar];
+							if(key.toString().indexOf(".") != -1 && 
+									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Planned" ){
+								if (kData[27].toString().indexOf(".") == -1){
+									kData[itemCell] = parseFloat(val);
+								}else if(kData[27] == key){
+									kData[itemCell] = parseFloat(item[fixedCell]);
+								}
+								
+							}
+						}
 					for(var iVar=0;iVar<data.length;iVar++){
 						var kData = data[iVar];
 						
@@ -738,7 +758,7 @@ function dummyActiveProjects(){
 	var length= data.length;
 	var iPlace=length-1;
 	
-	var item5 ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+	var item5 ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 		,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
 				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
@@ -751,7 +771,7 @@ function dummyActiveProjects(){
 function dummyClosedProjects(){
 	var length= data.length;
 	var iPlace=length-1;
-	var item4 ={id:"id_"+length+1,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
+	var item4 ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 			,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Closed",27:"",28:"",29:"",30:""
 				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
