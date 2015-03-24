@@ -149,6 +149,10 @@ public class AutoSaveData extends HttpServlet {
 								gtfReportObj.setVendor(strValue);
 								break;
 							case BudgetConstants.CELL_BRAND:
+								if(gtfReportObj.getMultiBrand()){
+									gtfReportMap = deleteChildProjects(gtfReportObj,gtfReportMap);
+									gtfReportObj.setMultiBrand(false);
+								}
 								gtfReportObj.setBrand(strValue);
 								break;
 							case BudgetConstants.CELL_UNIT:
@@ -276,4 +280,21 @@ public class AutoSaveData extends HttpServlet {
 		resp.getWriter().write(gson.toJson(summary));
 	}
 
+	public Map<String,GtfReport> deleteChildProjects(GtfReport gtfReportObj, Map<String, GtfReport> gtfReportMap){
+		List<String> childPrjList = gtfReportObj.getChildProjectList();
+		List<GtfReport> gtfPrjList = new ArrayList<GtfReport>();
+		if(childPrjList!=null && !childPrjList.isEmpty()){
+			GtfReport gtfRpt = new GtfReport();
+			for(int i=0;i<childPrjList.size();i++){
+			gtfRpt = gtfReportMap.get(childPrjList.get(i));
+			if(gtfRpt.getgMemoryId().contains(".")){
+			gtfPrjList.add(gtfRpt);
+			}
+			}
+		}
+		util.storeProjectsToCache(gtfPrjList, gtfReportObj.getCostCenter(), BudgetConstants.OLD);
+		util.removeExistingProject(gtfPrjList);
+		gtfReportMap = util.getAllReportDataFromCache(gtfReportObj.getCostCenter());
+		return gtfReportMap;
+	}
 }
