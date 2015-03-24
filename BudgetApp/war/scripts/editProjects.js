@@ -271,8 +271,7 @@ function searchProject(item) {
         if (item[33] != "New") {
                 status = false;
         }
-        
-        if (((searchString != "" && item[27].toLowerCase().indexOf(
+        if ((((item[27].toString().length > 9) || searchString != "" && item[27].toLowerCase().indexOf(
                         searchString.toLowerCase()) == -1)
                         && (searchString != "" && item[28].toLowerCase().indexOf(
                                         searchString.toLowerCase()) == -1)
@@ -291,7 +290,7 @@ function searchProject(item) {
                 var parent = data[item.parent];
                 while (parent) {
                         if (parent._collapsed
-                                        || ((searchString != "" && parent[27].toLowerCase()
+                                        || (((item[27].toString().length > 9) || searchString != "" && parent[27].toLowerCase()
                                                         .indexOf(searchString.toLowerCase()) == -1)
                                                         && (searchString != "" && parent[28]
                                                                         .toLowerCase().indexOf(

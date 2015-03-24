@@ -1141,6 +1141,7 @@ String ccView="";
 						
 						gMemoriId = obj.newGMemId;
 						openPopUp =  true;
+						alert("Project successfully created in Budget Tool. Please continue.");
 					}else{
 						if(obj!=null && obj.statusMessage!=null){
 						alert("Error occured during synchronization with Study : \n"+obj.statusMessage);
