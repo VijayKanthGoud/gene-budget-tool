@@ -879,7 +879,7 @@ function saveAndClose() {
 			for (var j = 0; j < m_data.length; j++) {
 				var d = m_data[j];
 				if (d[4] != '') {
-					total = 0.0;//total + parseFloat(d[3]);
+					total = parseFloat(total) + parseFloat(d[3]);
 				} else {
 					break;
 				}
@@ -890,11 +890,11 @@ function saveAndClose() {
 	var d = new Date();
 	var currentMonth = d.getMonth();
 	
-	itemClicked[24] = total;
+	itemClicked[51] = total;
 	for(i = 12 + currentMonth; i<24; i++){
 		itemClicked[i] = 0.0;//parseFloat(total/(12-currentMonth)).toFixed(2);
 	}
-
+alert(itemClicked[51]);
 	grid.invalidate();
 	var costCenter = $('#getCostCenter').val();
 	//alert(JSON.stringify(m_data));

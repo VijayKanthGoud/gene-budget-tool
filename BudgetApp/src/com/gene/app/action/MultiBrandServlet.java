@@ -129,7 +129,7 @@ public class MultiBrandServlet extends HttpServlet {
 							roundDoubleValue(Double.parseDouble(sumTotal), 2));
 					parentPlannedMap = new LinkedHashMap<String, Double>(
 							plannedMap);
-					paretnGtfReport.setPlannedMap(plannedMap);
+					paretnGtfReport.setPlannedMap(parentPlannedMap);
 					paretnGtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 					paretnGtfReport.setVariancesMap(gtfRpt.getVariancesMap());
 					paretnGtfReport.setPercent_Allocation(percentageAllocation);

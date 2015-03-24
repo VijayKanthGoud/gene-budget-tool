@@ -672,6 +672,7 @@ String ccView="";
     				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
     				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
     				d[41]="<%=gReport.getPercent_Allocation()%>";
+    				d[51]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				<%-- if(<%=gReport.getMultiBrand()%> == true){
     					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				}else{ --%>
@@ -966,6 +967,25 @@ String ccView="";
 							}
 						}
 						
+						if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>
+						&& item[51]!='undefined' && item[11] == "Planned"){
+							var actualPlannedTotal=parseFloat(item[51]).toFixed();
+							var calculatedPlannedTotal=0.0;
+							for (var j = 12; j < 24; j++) {
+								if(item[j] == "" || item[j] == "undefined"){
+									item[j] = 0.0;
+									
+								}
+								calculatedPlannedTotal= parseFloat(calculatedPlannedTotal) + parseFloat(item[j]);
+							}
+							if(calculatedPlannedTotal > actualPlannedTotal){
+								alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");	
+								item[itemCell]=args.item[45][itemCell-12];
+								grid.invalidate();
+								return;
+							}
+							
+						}
 						<%-- if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){ 
 						var interimTotal=0.0;
 						var actualPlannedTotal=parseFloat(data[temp][24]).toFixed();
