@@ -84,7 +84,7 @@ public class PODetailsUpload extends HttpServlet {
 			List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 			Map<String, GtfReport> costCenterWiseGtfRptMap = new LinkedHashMap<String, GtfReport>();
 			costCenterWiseGtfRptMap = util
-					.getAllReportDataFromCache(costCenter);
+ 					.getAllReportDataFromCache(costCenter);
 			createOrUpdateGTFReports(user, rowList, gtfReports,
 					costCenterWiseGtfRptMap, costCenter);
 		} catch (JSONException exception) {
@@ -208,13 +208,51 @@ public class PODetailsUpload extends HttpServlet {
 					}
 				}
 			}*/
-
+		    updatePercentagesForMultibrand(gtfReports,costCenterWiseGtfRptMap);
 			util.generateProjectIdUsingJDOTxn(gtfReports);
 			util.storeProjectsToCache(gtfReports, costCentre,
 					BudgetConstants.NEW);
 		//}
 	}
-
+private void updatePercentagesForMultibrand(List<GtfReport> gtfReports,
+		Map<String, GtfReport> costCenterWiseGtfRptMap){
+	ArrayList<String> childList= new ArrayList<>();
+	List<GtfReport> addedGtfReports = new ArrayList<>();
+	boolean foundChildincurrent=false;
+	if(gtfReports!=null && !gtfReports.isEmpty() && gtfReports.size()>0){
+		for(GtfReport perCent : gtfReports){
+			if(perCent.getMultiBrand()==true && !perCent.getgMemoryId().contains(".")){
+				childList=perCent.getChildProjectList();
+				for(String childId : childList){
+					if(childId.contains(".")){
+						GtfReport alterPercent = new GtfReport();
+						for(GtfReport perChild : gtfReports){
+							if(perChild.getgMemoryId().equalsIgnoreCase(childId)){
+								foundChildincurrent=true;
+								alterPercent =  perChild;
+								alterPercent.setPercent_Allocation(Util.roundDoubleValue((alterPercent.getPlannedMap().get(BudgetConstants.total)/
+										perCent.getPlannedMap().get(BudgetConstants.total))*100,2));
+								alterPercent.setChildProjectList(childList);
+							}
+						}
+						if(foundChildincurrent==false){
+							alterPercent = costCenterWiseGtfRptMap.get(childId);
+							alterPercent.setPercent_Allocation(Util.roundDoubleValue((alterPercent.getPlannedMap().get(BudgetConstants.total)/
+									perCent.getPlannedMap().get(BudgetConstants.total))*100,2));
+							alterPercent.setChildProjectList(childList);
+							addedGtfReports.add(alterPercent);
+						}else{
+							foundChildincurrent=false;
+						}
+					}
+				}
+			}
+		}
+	}
+	if(addedGtfReports!=null && !addedGtfReports.isEmpty() && addedGtfReports.size()>0){
+		gtfReports.addAll(addedGtfReports);
+	}
+}
 	private void updateAccrual(List rcvdRow, UserRoleInfo user,
 			List<GtfReport> gtfReports, GtfReport receivedGtfReport,
 			String costCenter, GtfReport pGtfReport) {
@@ -382,6 +420,7 @@ public class PODetailsUpload extends HttpServlet {
 					childList.add(gMemoriId);
 					gtfReport.setBrand(brand);
 					pUserId = pGtf.getRequestor();
+					pGtf.setChildProjectList(childList);
 					/*if(pUserId==null){
 						pUserId=util.readUserRoleInfoByFName(PM).getUserName();
 					}else if(pUserId.contains(":")){
@@ -396,6 +435,7 @@ public class PODetailsUpload extends HttpServlet {
 					pUserId=util.readUserRoleInfoByFName(PM).getUserName();
 					gtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName());
 				}
+				
 				gtfReport.setChildProjectList(childList);
 				gtfReport.setMultiBrand(true);
 				gtfReport.setgMemoryId(gMemoriId);
