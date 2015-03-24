@@ -1413,6 +1413,14 @@ function openDownloadPopUp(){
 	$('#back').addClass('black_overlay').fadeIn(100);
 	//$('selectCC').val(0,)
 	var ccVal = $('#getCostCenter').val();
+	var val = $('#selectedUserView').val();
+	if(val == 'My Brands'){
+		$('#brandVal').show();
+	selectedBrandValue = $('#getBrand1').val(); 
+	$('#selectedBrandValue').text(selectedBrandValue);
+	}else{
+		$('#brandVal').hide();
+	}
 	$('#selectedCCValue').val(ccVal);
 	$('input:radio[name=selectCC]')[0].checked = true;
 	$('#back').addClass('black_overlay').fadeIn(100);
