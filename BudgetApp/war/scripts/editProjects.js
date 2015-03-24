@@ -790,9 +790,10 @@ function saveAndClose() {
 		errStr = "";
 		
 		if (m_data[i][4] != "" && m_data[i][4] != "undefined") {
-			if (m_data[i][7].trim() == "" || m_data[i][7] == "undefined") {
+			/*if (m_data[i][7].trim() == "" || m_data[i][7] == "undefined") {
 				errStr = errStr + "Project Owner "
-			}
+			}*/
+			m_data[i][7]=itemClicked[1];
 			if (m_data[i][5].toString().trim() == ""
 					|| m_data[i][5] == "undefined") {
 				if (errStr.length > 0) {
@@ -838,7 +839,7 @@ function saveAndClose() {
 		return;
 	}
 
-	availableTags = [];
+	/*availableTags = [];
 	
 	for (var j = 0; j < ccUsersVar.length; j++) {
 		if (ccUsersVar[j][0] == itemClicked[1]) {
@@ -847,7 +848,7 @@ function saveAndClose() {
 			availableTags = res.split(",");
 			break;
 		}
-	}
+	}*/
 
 	availableTags.splice(0, 0, "Smart WBS");
 
@@ -894,7 +895,6 @@ function saveAndClose() {
 	for(i = 12 + currentMonth; i<24; i++){
 		itemClicked[i] = 0.0;//parseFloat(total/(12-currentMonth)).toFixed(2);
 	}
-alert(itemClicked[51]);
 	grid.invalidate();
 	var costCenter = $('#getCostCenter').val();
 	//alert(JSON.stringify(m_data));

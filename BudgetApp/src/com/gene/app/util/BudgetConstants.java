@@ -141,11 +141,11 @@ public interface BudgetConstants {
 	// cell numbers edit project multiple brand pop up
 	public static final String MB_CHECKBOX_CELL = "0";
 	// public static final String MB_PROJECT_NAME_CELL = "1";
-	public static final String MB_PROJECT_OWNER_CELL = "1";
+	public static final String MB_PROJECT_OWNER_CELL = "4";
 	// public static final String MB_GMEMORI_ID_CELL = "3";
-	public static final String MB_BRAND_CELL = "2";
-	public static final String MB_$_IN_THOUSAND_CELL = "3";
-	public static final String MB_ALLOCATION_PERCENTAGE_CELL = "4";
+	public static final String MB_BRAND_CELL = "1";
+	public static final String MB_$_IN_THOUSAND_CELL = "2";
+	public static final String MB_ALLOCATION_PERCENTAGE_CELL = "3";
 	public static final String GMEMORI_COLLECTION = "gMemoriIdCollection";
 	public static final String USER_ROLE_BRAND_OWNER = "brandOwner";
 	public static final String [] costCenterList = {"7527","7034","7035","7121","7712","7135","7713","7428","7512","7574","7136","7138"};//"7004","7512","7138","7136"};

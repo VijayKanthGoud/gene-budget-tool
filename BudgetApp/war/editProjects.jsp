@@ -1477,14 +1477,14 @@ String ccView="";
 			field : 4,
 			width : 160,
 			editor : Slick.Editors.Text
-		}, */ {
+		}, {
 			id : 3,
 			name : "Project Owner",
 			field : 7,
 			width : 125,
 			editor : Slick.Editors.Auto
 		},
-		/* {
+		 {
 			id : 4,
 			name : "gmemori id",
 			field : 5,
@@ -1599,32 +1599,13 @@ String ccView="";
 					|| (itemClicked[26] == "Closed")) {
 				return false;
 			}
-			if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
-				availableTags = [];
-				
-				for (var j = 0; j < ccUsersVar.length; j++) {
-					if (ccUsersVar[j][0] == m_data[row]["7"]) {
-						var res = ccUsersVar[j][1].substring(1,
-								ccUsersVar[j][1].length - 1);
-						availableTags = res.split(",");
-						break;
-					}
-				}
-			}
-			<%-- if (row == 0){
-				if(cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>){
-					return false
-				}
-				return true;
-			} --%>
-			//alert(row+"::::"+JSON.stringify(m_data));
 			if (row != 0) {
 				<%-- if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
 					m_data[row]["7"] = m_data[row - 1]["7"];
 					m_grid.invalidate();
 					return false;
 				} --%>
-				if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
+				if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
 					m_data[row]["4"]=itemClicked[2];
 					if (m_data[row]["5"] == "") {
 						m_data[row]["5"] = m_data[row - 1]["5"]
@@ -1637,12 +1618,32 @@ String ccView="";
 				//	return false;
 				}
 				if ((m_data[row]["7"] == 'undefined' || m_data[row]["7"] == "")
-						&& cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
+						&& cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
 					m_data[row]["7"] = m_data[row - 1]["7"];
 					m_grid.invalidate();
 					//return false;
 				}
 			}
+			<%-- if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+				availableTags = [];
+				
+				for (var j = 0; j < ccUsersVar.length; j++) {
+					if (ccUsersVar[j][0] == m_data[row]["7"]) {
+						var res = ccUsersVar[j][1].substring(1,
+								ccUsersVar[j][1].length - 1);
+						availableTags = res.split(",");
+						break;
+					}
+				}
+			} --%>
+			<%-- if (row == 0){
+				if(cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>){
+					return false
+				}
+				return true;
+			} --%>
+			//alert(row+"::::"+JSON.stringify(m_data));
+			
 			return true;
 		});
 
@@ -1690,7 +1691,7 @@ String ccView="";
 						}
 						m_grid.invalidate();
 					}
-					if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>
+					<%-- if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>
 							&& poOwners.toString().indexOf(m_data[row][7]) == -1) {
 						for (var i = 0; i < poOwners.length; i++) {
 							if (poOwners[i] === m_data[row][1]) {
@@ -1704,7 +1705,7 @@ String ccView="";
 							m_grid.invalidate();
 							return;
 						}
-					}
+					} --%>
 					if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
 						for (var i = 0; i < availableTags.length; i++) {
 							if (availableTags[i].toString().trim()
