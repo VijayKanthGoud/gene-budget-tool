@@ -229,7 +229,7 @@ public class StoreReport extends HttpServlet {
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}
 			}
-			if(gtfReport.getMultiBrand()){
+			if(isMultibrand){
 				try {
 					plannedMap
 					.put(BudgetConstants.months[12],
