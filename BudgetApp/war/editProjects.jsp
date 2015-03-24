@@ -232,7 +232,11 @@ String ccView="";
 				<div id="header"
 			    style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
 		     </div><br>
-		     <div align="left" style="padding-left: 36%">
+		     <div align="center">
+		     <span id="brandVal"  style="font-size:15;">
+		     Brand : <span id="selectedBrandValue"> </span>
+		     &nbsp;&nbsp;
+		     </span>
 				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;
 				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">All</span></input><br><br>
