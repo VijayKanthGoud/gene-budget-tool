@@ -995,7 +995,7 @@ String ccView="";
 					grid.invalidate();
 			
 					
-					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects"){
+					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2){
 						addMultiBrandPopUp();
 					}
 					
