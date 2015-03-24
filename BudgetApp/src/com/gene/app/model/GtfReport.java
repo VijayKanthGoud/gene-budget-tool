@@ -10,6 +10,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.gene.app.util.EscapeChars;
+
 @PersistenceCapable(detachable="true")
 public class GtfReport implements Serializable,Cloneable {
 
@@ -199,7 +201,7 @@ public class GtfReport implements Serializable,Cloneable {
 	}
 
 	public void setProject_WBS(String project_WBS) {
-		this.project_WBS = project_WBS;
+		this.project_WBS = EscapeChars.forHTML(project_WBS);
 	}
 
 	public String getWBS_Name() {
@@ -215,7 +217,7 @@ public class GtfReport implements Serializable,Cloneable {
 	}
 
 	public void setSubActivity(String subActivity) {
-		this.subActivity = subActivity;
+		this.subActivity = EscapeChars.forHTML(subActivity);
 	}
 
 	public String getBrand() {
@@ -255,7 +257,7 @@ public class GtfReport implements Serializable,Cloneable {
 	}
 
 	public void setVendor(String vendor) {
-		this.vendor = vendor;
+		this.vendor = EscapeChars.forHTML(vendor);
 	}
 
 	public Map<String, Double> getBenchmarkMap() {
@@ -295,7 +297,7 @@ public class GtfReport implements Serializable,Cloneable {
 	}
 
 	public void setProjectName(String projectName) {
-		this.projectName = projectName;
+		this.projectName = EscapeChars.forHTML(projectName);
 	}
 	
 	public String getId() {
@@ -319,7 +321,7 @@ public class GtfReport implements Serializable,Cloneable {
 	}
 
 	public void setRemarks(String remarks) {
-		this.remarks = remarks;
+		this.remarks = EscapeChars.forHTML(remarks);
 	}
 
 	public int getFlag() {
