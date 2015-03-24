@@ -229,12 +229,14 @@ public class StoreReport extends HttpServlet {
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}
 			}
-			try {
-				plannedMap
-						.put(BudgetConstants.months[12],
-								roundDoubleValue(Double.parseDouble(rprtObject.getString("51")),2));
-			} catch (NumberFormatException e) {
-				plannedMap.put(BudgetConstants.months[12], 0.0);
+			if(gtfReport.getMultiBrand()){
+				try {
+					plannedMap
+					.put(BudgetConstants.months[12],
+							roundDoubleValue(Double.parseDouble(rprtObject.getString("51")),2));
+				} catch (NumberFormatException e) {
+					plannedMap.put(BudgetConstants.months[12], 0.0);
+				}
 			}
 			gtfReport.setPlannedMap(plannedMap);
 			gtfReport.setBenchmarkMap(plannedMap);
