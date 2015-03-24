@@ -86,7 +86,11 @@ public class GetReport extends HttpServlet {
 		else if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && user.getRole().contains("Admin")){
 			if(selectedView==null || "".equalsIgnoreCase(selectedView.trim()) 
 					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
-				selectedView = "My Brands";
+				if(gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())){
+					selectedView = "My Projects";
+				}else{
+					selectedView = "My Brands";
+				}
 				selectedCC = "7135";
 				user.setSelectedCostCenter(selectedCC);
 				user.setCostCenter("7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138");
@@ -118,17 +122,15 @@ public class GetReport extends HttpServlet {
 		req.setAttribute("brandValue", selectedBrand);
 		req.setAttribute("getCCValue", selectedCC);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
-		if(gMemoriId!=null && !"".equalsIgnoreCase(gMemoriId.trim())){
-		queryGtfRptList = getQueryGtfReportList(gtfReportList,gMemoriId,req,user);
-		req.setAttribute("accessreq", "external");
-		}else{
-			queryGtfRptList = gtfReportList;
-			 req.setAttribute("accessreq", "internal");
+		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
+			req.setAttribute("accessreq", "external");
+		} else {
+			req.setAttribute("accessreq", "internal");
 		}
-		
+		queryGtfRptList = gtfReportList;
 			
 		//LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
-		String qParam = req.getParameter("gMemoriId");
+		//String qParam = req.getParameter("gMemoriId");
 		if(queryGtfRptList!=null && !queryGtfRptList.isEmpty()){
 		Collections.sort( queryGtfRptList, new Comparator<GtfReport>()
 		        {

@@ -700,6 +700,8 @@ if(addsave ==0){
 
 // Create a new project
 function createIntProjects(){
+	searchString = "" ;
+	$("#txtSearch").val(searchString);
 	dataView.expandAllGroups();
 	dataView.collapseGroup("Active");
 	dataView.collapseGroup("Closed");

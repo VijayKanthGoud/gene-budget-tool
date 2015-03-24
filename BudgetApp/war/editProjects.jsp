@@ -545,12 +545,6 @@ String ccView="";
 	
 	$(function() {
 		
-		if(document.URL.toString().indexOf("getreport?gMemoriId=") != -1){
-			frmStudy=true;
-			closedExist=true;
-			newExist=true;
-			activeExist=true;
-		}
 		
 		if($(window).width() < 900){
 			$('#cautionWindow').show().fadeIn(100);
@@ -900,6 +894,27 @@ String ccView="";
 		dataView.setFilter(searchProject);
 		dataView.endUpdate();
 		groupByStatus();
+		
+		if(document.URL.toString().indexOf("gMemoriId=") != -1){
+			if("<%=request.getParameter("gMemoriId") != null %>" == "true"){
+				searchString = "<%=request.getParameter("gMemoriId")%>" ; 
+			}
+			
+			$("#txtSearch").val(searchString);
+			window.history.pushState(null, "", "<%=BudgetConstants.APP_URL%>");
+			dataView.refresh();
+			if(!isMatchPresent){
+				alert("Not Project with gMemori Id " +searchString+ " Found!!!");
+				searchString = "";
+				$("#txtSearch").val(searchString);
+			}else{
+				dataView.expandGroup("Active");
+				dataView.expandGroup("Closed");
+				dataView.expandGroup("New");
+			}
+			dataView.refresh();
+		}
+		
 		<%if(request.getAttribute("accessreq").toString().equalsIgnoreCase("external") && gtfReports.isEmpty()){%>
 		$('#displayGrid').css("align","center");
 		$('#displayGrid').html('<div style = "font-size:16px; line-height: 50px; margin-left: auto; margin-right: auto; width: 10%; ">No Project found.</div>');
