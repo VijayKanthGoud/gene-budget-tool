@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -80,17 +81,16 @@ public class GetReport extends HttpServlet {
 		Object[] myBrands = {}; 
 		if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && !user.getRole().contains("Admin")){
 			gtfReports = util.getAllReportDataFromCache(user.getSelectedCostCenter());
-			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports);
+			if(gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())){
+				selectedView = "gMemori";
+			}
+			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports, gMemoriId, req);
 		}
 		// for admin role
 		else if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && user.getRole().contains("Admin")){
 			if(selectedView==null || "".equalsIgnoreCase(selectedView.trim()) 
 					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
-				if(gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())){
-					selectedView = "My Projects";
-				}else{
-					selectedView = "My Brands";
-				}
+				selectedView = "My Brands";
 				selectedCC = "7135";
 				user.setSelectedCostCenter(selectedCC);
 				user.setCostCenter("7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138");
@@ -116,7 +116,10 @@ public class GetReport extends HttpServlet {
 		//user.setCostCenter(selectedCC);
 			//}
 		gtfReports = util.getAllReportDataFromCache(selectedCC);
-		gtfReportList = getRptListForLoggedInUser(user, selectedView, selectedBrand, gtfReports);
+		if(gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())){
+			selectedView  =  "gMemori";
+		}
+		gtfReportList = getRptListForLoggedInUser(user, selectedView, selectedBrand, gtfReports, gMemoriId, req);
 		}
 		req.setAttribute("selectedView", selectedView);
 		req.setAttribute("brandValue", selectedBrand);
@@ -200,7 +203,8 @@ public class GetReport extends HttpServlet {
 
 	public List<GtfReport> getRptListForLoggedInUser(UserRoleInfo user,
 			String selectedView, String selectedBrand,
-			Map<String, GtfReport> gtfReports) {
+			Map<String, GtfReport> gtfReports, String gMemoriId, HttpServletRequest req ) {
+		String costCenter = "";
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		if (selectedView == null || "".equalsIgnoreCase(selectedView.trim())) {
 			if (selectedBrand != null
@@ -224,6 +228,26 @@ public class GetReport extends HttpServlet {
 			break;
 		case "My Cost Center":
 			gtfReportList = getReportListCC(gtfReports);
+			break;
+		case "gMemori":
+			Map<String, GtfReport> gtfReportMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+			if (gtfReportMap.containsKey(gMemoriId)) {
+				costCenter = gtfReportMap.get(gMemoriId).getCostCenter();
+				req.setAttribute("getCCValue", costCenter);
+				req.setAttribute("selectedView", "My Projects");
+				for (Entry<String, GtfReport> entry : gtfReportMap.entrySet()) {
+					if (entry.getValue().getCostCenter()
+							.equalsIgnoreCase(costCenter)
+							&& (entry.getValue().getEmail()
+									.contains(user.getEmail()) || !user
+									.getRole().equalsIgnoreCase("admin"))) {
+						gtfReportList.add(entry.getValue());
+					}
+				}
+			}else{
+				gtfReportList = getReportList(gtfReports,
+						BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
+			}
 			break;
 		default:
 			gtfReportList = getReportList(gtfReports,
