@@ -904,7 +904,7 @@ String ccView="";
 			window.history.pushState(null, "", "<%=BudgetConstants.APP_URL%>");
 			dataView.refresh();
 			if(!isMatchPresent){
-				alert("Not Project with gMemori Id " +searchString+ " Found!!!");
+				alert("No project with gMemori Id " +searchString+ " Found!!!");
 				searchString = "";
 				$("#txtSearch").val(searchString);
 			}else{
