@@ -997,6 +997,10 @@ function closeWithoutSave() {
 		itemClicked[6] = itemClicked[44];
 	}
 	
+	if(itemClicked[34]=="New projects"){
+		itemClicked[6] = "";
+	}
+	
 	availableTags = [];
 	for (var j = 0; j < ccUsersVar.length; j++) {
 		if (ccUsersVar[j][0] == itemClicked[1]) {
