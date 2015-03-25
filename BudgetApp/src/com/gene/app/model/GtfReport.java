@@ -321,7 +321,7 @@ public class GtfReport implements Serializable,Cloneable {
 	}
 
 	public void setRemarks(String remarks) {
-		this.remarks = EscapeChars.forHTML(remarks);
+		this.remarks = remarks;//EscapeChars.forHTML(remarks);
 	}
 
 	public int getFlag() {
