@@ -236,10 +236,12 @@ String ccView="";
 		     <span id="brandVal"  style="font-size:15;">
 		     Brand : <span id="selectedBrandValue"> </span>
 		     &nbsp;&nbsp;
+		     </br>
 		     </span>
-				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;"><%=(String)request.getAttribute("getCCValue")%></span></input>&nbsp;&nbsp;
+		     </br>
+				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;">Current View(<%=(String)request.getAttribute("getCCValue")%>)</span></input>&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;
-				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">All</span></input><br><br>
+				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">Total MA&S Cost Centers</span></input><br><br>
 				</div>
 				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
 				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; font-size: 10px; letter-spacing:1px;" align= 'right'> Cancel</button>
