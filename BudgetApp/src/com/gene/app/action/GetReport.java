@@ -62,6 +62,7 @@ public class GetReport extends HttpServlet {
 			resp.sendRedirect(loginLink);
 			return;
 		}
+		costCenter = "";
 		email = userService.getCurrentUser().getEmail();
 		user = util.readUserRoleInfo(email);
 		//LOGGER.log(Level.INFO, "email in userService"+email);
@@ -127,14 +128,15 @@ public class GetReport extends HttpServlet {
 		req.setAttribute("getCCValue", selectedCC);
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
 		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
-			req.setAttribute("accessreq", "external");
+			//req.setAttribute("accessreq", "external");
 			req.setAttribute("selectedView", "My Projects");
 			if(costCenter != null && !"".equalsIgnoreCase(costCenter)){
 				req.setAttribute("getCCValue", costCenter);
 			}
 		} else {
-			req.setAttribute("accessreq", "internal");
+			//req.setAttribute("accessreq", "internal");
 		}
+		req.setAttribute("accessreq", "internal");
 		queryGtfRptList = gtfReportList;
 			
 		//LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
@@ -209,7 +211,7 @@ public class GetReport extends HttpServlet {
 	public List<GtfReport> getRptListForLoggedInUser(UserRoleInfo user,
 			String selectedView, String selectedBrand,
 			Map<String, GtfReport> gtfReports, String gMemoriId, HttpServletRequest req ) {
-		
+		boolean found = false;
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		if (selectedView == null || "".equalsIgnoreCase(selectedView.trim())) {
 			if (selectedBrand != null
@@ -235,19 +237,25 @@ public class GetReport extends HttpServlet {
 			gtfReportList = getReportListCC(gtfReports);
 			break;
 		case "gMemori":
-			Map<String, GtfReport> gtfReportMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
-			if (gtfReportMap.containsKey(gMemoriId)) {
-				costCenter = gtfReportMap.get(gMemoriId).getCostCenter();
-				for (Entry<String, GtfReport> entry : gtfReportMap.entrySet()) {
-					if (entry.getValue().getCostCenter()
-							.equalsIgnoreCase(costCenter)
-							&& (entry.getValue().getEmail()
-									.contains(user.getEmail()) || !user
-									.getRole().equalsIgnoreCase("admin"))) {
-						gtfReportList.add(entry.getValue());
-					}
+			if(user.getCostCenter().contains(":")){
+			for (String cc : user.getCostCenter().split(":")) {
+				Map<String, GtfReport> gtfReportMap = util
+						.getAllReportDataFromCache(cc);
+				if (gtfReportMap.containsKey(gMemoriId)) {
+					gtfReportList = getReportList(gtfReportMap,
+							BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
+					costCenter = cc;
+					user.setSelectedCostCenter(costCenter);
+					found =true;
+					break;
 				}
+			}
 			}else{
+				gtfReportList = getReportList(gtfReports,
+						BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
+				found =true;
+			}
+			if(!found){
 				gtfReportList = getReportList(gtfReports,
 						BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
 			}
