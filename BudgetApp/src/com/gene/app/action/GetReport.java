@@ -37,6 +37,7 @@ public class GetReport extends HttpServlet {
 			.getLogger(GetReport.class.getName());*/
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 	DBUtil util = new DBUtil();
+	String costCenter = "";
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		HttpSession session = req.getSession();
@@ -127,6 +128,10 @@ public class GetReport extends HttpServlet {
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
 		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
 			req.setAttribute("accessreq", "external");
+			req.setAttribute("selectedView", "My Projects");
+			if(costCenter != null && !"".equalsIgnoreCase(costCenter)){
+				req.setAttribute("getCCValue", costCenter);
+			}
 		} else {
 			req.setAttribute("accessreq", "internal");
 		}
@@ -204,7 +209,7 @@ public class GetReport extends HttpServlet {
 	public List<GtfReport> getRptListForLoggedInUser(UserRoleInfo user,
 			String selectedView, String selectedBrand,
 			Map<String, GtfReport> gtfReports, String gMemoriId, HttpServletRequest req ) {
-		String costCenter = "";
+		
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		if (selectedView == null || "".equalsIgnoreCase(selectedView.trim())) {
 			if (selectedBrand != null
@@ -233,8 +238,6 @@ public class GetReport extends HttpServlet {
 			Map<String, GtfReport> gtfReportMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 			if (gtfReportMap.containsKey(gMemoriId)) {
 				costCenter = gtfReportMap.get(gMemoriId).getCostCenter();
-				req.setAttribute("getCCValue", costCenter);
-				req.setAttribute("selectedView", "My Projects");
 				for (Entry<String, GtfReport> entry : gtfReportMap.entrySet()) {
 					if (entry.getValue().getCostCenter()
 							.equalsIgnoreCase(costCenter)
