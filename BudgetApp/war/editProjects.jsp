@@ -48,8 +48,8 @@ String ccView="";
 						style="color: #2271B0; white-space: nowrap; height: 117px; width: 220px;">
 						<tr>
 							<td style="padding-left: 20px;"><input type="radio"
-								name="selectedmode" value="planned">Planned <input
-								type="radio" name="selectedmode" value="All" checked="checked">All</td>
+								name="selectedmode" value="planned">Forecast View <input
+								type="radio" name="selectedmode" value="All" checked="checked">Detail View</td>
 						</tr>
 						<tr>
 							<td style="padding-left: 20px;"><input type="checkbox"
@@ -308,7 +308,7 @@ String ccView="";
 					</script>
 
 						<tr align='center'>
-							<td colspan=2>Brand Summary &nbsp;($ in 1000's)</td>
+							<td colspan=2>Annual Brand Summary &nbsp;($ in 1000's)</td>
 							<td><img alt="" src="images/refresh.png" height="25"
 								width="25" align='left' onclick="getBrandTotals()"></td>
 						</tr>
@@ -341,26 +341,25 @@ String ccView="";
 						</tr>
 						<tr>
 							<td>Budget:</td>
-							<td><span id="totalBudget"> <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
+							<td><span id="totalBudget"  style="text-align: right;"> <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
 						</tr>
 
 						<tr>
-							<td>Planned:</td>
-							<td><span id="plannedTotal"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+							<td>Total Forecast:</td>
+							<td><span id="plannedTotal"  style="text-align: right;"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td>Unplanned Total:</td>
-							<td><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
+							<td>Unallocated Forecast:</td>
+							<td><span id="budgetLeftToSpend" style="text-align: right;"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
-							<td>Accrual:</td>
-							<td><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+							<td>Total Accrual:</td>
+							<td><span id="accrualTotal" style="text-align: right;"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id="varTotalLabel" style="color: black">Variance
-									Total:</span></td>
-							<td><span id="varTotalText" style="color: black"><span
+							<td><span id="varTotalLabel" style="color: black">Left To Spend (LTS):</span></td>
+							<td><span id="varTotalText" style="color: black; text-align: right;"><span
 									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
@@ -461,7 +460,7 @@ String ccView="";
 	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
 	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Units",
 	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
-	        			"DEC", "Total", "Remark" ];
+	        			"DEC", "Total", "Comments" ];
 	var noOfNew = 0;
 	var noOfActive = 0;
 	var noOfClosed = 0;
