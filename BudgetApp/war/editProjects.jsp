@@ -695,7 +695,7 @@ String ccView="";
   					}
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-   				if(gmemoriID.indexOf(".") == -1 || d[26] != "New"){ 
+   				if((d[26] == "New" && (gmemoriID.indexOf(".") == -1)) || (d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && viewSelected == "My Brands") ))){ 
    				d[11]="Quarterly Target";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
@@ -731,7 +731,7 @@ String ccView="";
    				} if(jsId % 4 == 2){
 				d[11]="Accrual";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-				if(d[26]!="New" /* && gmemoriID.indexOf(".") == -1  */){
+				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && viewSelected == "My Brands") )){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
 					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
 					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
@@ -766,7 +766,7 @@ String ccView="";
    				} if(jsId % 4 == 3){
 				d[11]="LTS";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
-				if(d[26]!="New" /* && gmemoriID.indexOf(".") == -1 */ ){
+				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && viewSelected == "My Brands") )){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
 					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
 					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";

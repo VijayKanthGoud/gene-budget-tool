@@ -456,7 +456,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Planned" ){
+									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Forecast" ){
 								if (kData[27].toString().indexOf(".") == -1){
 									kData[itemCell] = parseFloat(val);
 								}else if(kData[27] == key){
@@ -508,7 +508,7 @@ function updateMemCache(e, args, tempKey) {
 						d[24]= parseFloat(varTotal);
 					}
 				}
-				if(key== d[34] && d[11]=="Planned" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+				if(key== d[34] && d[11]=="Forecast" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 					var aSave = (aSaveData[iCnt] = {});
 					aSave[0] = d[27];
 					if(d[7] == 0.0){
@@ -531,7 +531,7 @@ function updateMemCache(e, args, tempKey) {
 						d[24]= parseFloat(varTotal);
 					}
 					iCnt++;
-				}else if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+				}else if(key== d[34] && d[11]=="Forecast" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
 					var aSave = (aSaveData[iCnt] = {});
 					aSave[0] = d[27];
 					if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
@@ -604,7 +604,7 @@ function updateMemCache(e, args, tempKey) {
 			$('#statusMessage');
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
-				if(key== d[34] && d[11]=="Planned" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+				if(key== d[34] && d[11]=="Forecast" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
 				
 				d["0"] = d["27"];
 			}}
@@ -658,31 +658,31 @@ function createNewProjects(){
 	$('#noData').hide();
 	var length= data.length;
 	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"",3:"",4:"",5:"",6:"",7:"100.0",8:"",9:"",10:""
-		,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+		,11:"Forecast",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Forecast"};
 	dataView.insertItem(0,item);
 if(addsave ==0){
     var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 				,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
 	var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
 	var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
 	var item4 ={id:"id_"+length+4,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 			,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Closed",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
 	var item5 ={id:"id_"+length+5,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 		,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
 	dataView.insertItem(1,item3);
     dataView.insertItem(2,saveClose);
     dataView.insertItem(3,item2);
@@ -714,23 +714,23 @@ function createIntProjects(){
 	$('#noData').hide();
 	var length= data.length;
 	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"",3:"",4:"",5:"",6:"",7:"100.0",8:"",9:"",10:""
-		,11:"Planned",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+		,11:"Forecast",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Forecast"};
 	dataView.insertItem(0,item);
 	if(addsave ==0){
 	    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 					,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
 		var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 					,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
 		var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 					,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Planned"};
+							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
 	
 		dataView.insertItem(1,item3);
 	    dataView.insertItem(2,saveClose);
@@ -747,7 +747,7 @@ function dummyNewProjects(){
 	var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
 	dataView.insertItem(0,item);
     dataView.refresh(); 
     data=dataView.getItems();
@@ -762,7 +762,7 @@ function dummyActiveProjects(){
 	var item5 ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 		,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
 	if(activeExist==false){
 		data[++iPlace] = item5;
 	}
@@ -775,7 +775,7 @@ function dummyClosedProjects(){
 	var item4 ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 			,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Closed",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Planned"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
 	
 	if(closedExist==false){
 		data[++iPlace] = item4;
@@ -1364,7 +1364,7 @@ function modifyData(data){
 		var rowData = data[cnt];
 		modifiedRowData = [];
 		
-		if(rowData[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().trim() != "" &&rowData[<%=BudgetConstants.$_IN_1000_FIELD%>] == "Planned"){
+		if(rowData[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().trim() != "" &&rowData[<%=BudgetConstants.$_IN_1000_FIELD%>] == "Forecast"){
 			
 			modifiedRowData.prjWBS = rowData[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
 			modifiedRowData.wbsName = "";
