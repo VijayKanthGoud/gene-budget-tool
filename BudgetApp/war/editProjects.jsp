@@ -1350,7 +1350,7 @@ String ccView="";
 				}
 				
 				if (args.item["11"] == "Forecast"
-						&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
+						&& cols[cell].name == "Comments" &&  args.item["26"] !="Total") {
 					return true;
 				} 
 				
