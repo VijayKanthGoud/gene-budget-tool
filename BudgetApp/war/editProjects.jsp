@@ -468,6 +468,7 @@ String ccView="";
 	var activeExist=false;
 	var closedExist=false;
 	var frmStudy=false;
+	var columnValiation=false;
 	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
@@ -961,6 +962,7 @@ String ccView="";
 						}
 						if(isValidBrand == false){
 							args.item[6]=args.item[46][6];
+							columnValiation=true;
 							alert("Enter a valid brand.");
 							grid.invalidate();
 							return;
@@ -970,6 +972,7 @@ String ccView="";
 						for(var j = 0; j < data.length ; j++){
 							if (data[j]["id"] != args.item.id && args.item[0]==data[j][0] && args.item[0]!='') {
 								args.item[0]=args.item[46][0];
+								columnValiation=true;
 								alert("Duplicate gMemoriId !!!");
 								grid.invalidate();
 								return;
@@ -999,6 +1002,7 @@ String ccView="";
 								calculatedPlannedTotal= parseFloat(calculatedPlannedTotal) + parseFloat(item[j]);
 							}
 							if(calculatedPlannedTotal > actualPlannedTotal){
+								columnValiation=true;
 								alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");	
 								item[itemCell]=args.item[45][itemCell-12];
 								grid.invalidate();
@@ -1226,8 +1230,12 @@ String ccView="";
 		// Handeler for click on submit and cancel button under new project creation
 		$(document).on('click', '#submitProjBtn',
 		    function() {
+			if(columnValiation==false){
 				$('#submitProjBtn').prop("disabled",true);
 			 	submitProjects();
+			}else{
+				columnValiation=false;
+			}
 		    }
 		);
 		
