@@ -217,7 +217,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 			gtfReport.setAccrualsMap(setZeroMap);
 			gtfReport.setVariancesMap(setZeroMap);
 			gtfReport.setMultiBrand(isMultibrand);
-			
+			gtfReport.setRemarks("   ");
 
 			if (recvdRow.get(2) != null && !recvdRow.get(2).toString().equals("#")
 					&& !recvdRow.get(2).toString().trim().equals("")) {
@@ -339,6 +339,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
 		    	nwParentGtfReport.setBrand("Smart WBS");
+		    	nwParentGtfReport.setRemarks("   ");
 		    	nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 		    	receivedGtfReports.add(nwParentGtfReport);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
