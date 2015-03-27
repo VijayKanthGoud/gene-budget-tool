@@ -81,7 +81,7 @@
 		}
 		else if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
 			return "<span style='color:#339966; height: 25px; width: 120px; font-weight: bold; font-style: italic;'> "+ Number(value).toFixed(2) +"</span>" 
-		}else if((dataContext["26"] != "Closed") && ((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || 
+		}else if((dataContext["26"] != "Closed") && ((dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1) || 
 				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["27"].toString().indexOf(".") != -1 && dataContext["37"] == true) ||
 				(dataContext["11"] == "Accrual" && dataContext["26"] == "Active" && dataContext["27"].toString().indexOf(".") == -1 && dataContext["37"] == false))
 				)  {
@@ -97,7 +97,7 @@
 			
 		}
 			
-		}/*else if((dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
+		}/*else if((dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1) || (dataContext["11"] == "Accrual" && dataContext["26"] == "Active" ) ){
 			return "<div width = '100%' style='background:#C0CCED'><span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span></div>" ;
 		}*/else{
 			return "<span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span>"; 
@@ -125,7 +125,7 @@
 			  return  "<input type='button' value='"+value+"' id='submitProjBtn' style='font-size: 12px; width:80px; height: 20px; background:#2271B0; color:#FFFFFF'/>";
 		  }else if( value=="Cancel"  && dataContext["35"] == "Buttons"){
 			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#2271B0; color:#FFFFFF' />";
-		  }else if((dataContext["26"] != "Closed") && (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1 && dataContext["26"] != "Total") ){
+		  }else if((dataContext["26"] != "Closed") && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 && dataContext["26"] != "Total") ){
 			  return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>" ;		
 		  }
 	  }
@@ -161,11 +161,11 @@
 		  }
 	  }else if(dataContext[35]=="NewProjects" && value.toString().trim != "" && value != 0){
 		  return "<div width = '100%' style='background:#C0CCED'>" + value +"</div>";
-	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" && dataContext["2"] != "" && dataContext["0"].toString().length==10 ){
+	  }else if(value.toString().trim != "" && dataContext["11"] == "Forecast" && dataContext["26"] != "Total" && dataContext["2"] != "" && dataContext["0"].toString().length==10 ){
 		 /* var initializeURL = "/initiateProject?ccId="+dataContext[47]+"&unixId="+dataContext[48]+"&prj_name="+dataContext[2]+"&dummyGMemId="+dataContext[0];
 		  initializeURL = encodeURI(initializeURL);
 		 */ return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href='#' target='' style='color:green'>Initialize</a></span></div>";
-	  }else if(value.toString().trim != "" && dataContext["11"] == "Planned" && dataContext["26"] != "Total" && dataContext["2"] == "" && dataContext["0"].toString().indexOf(".") == -1 ){
+	  }else if(value.toString().trim != "" && dataContext["11"] == "Forecast" && dataContext["26"] != "Total" && dataContext["2"] == "" && dataContext["0"].toString().indexOf(".") == -1 ){
 		  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
 	  }else{
 		  return "";
@@ -200,22 +200,22 @@
   
   function editableFieldFormatter(row, cell, value, columnDef, dataContext) {
 	  if((dataContext["26"] == "Closed")){
-		  if((typeof value === 'undefined' || value == '')  && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
+		  if((typeof value === 'undefined' || value == '')  && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
 			     return "<div width = '100%'>&nbsp;</div>";
 		  }
 		  return "<div width = '100%'>"+value+"</div>";;
 	  }
-	  if((typeof value != 'undefined' && value != '') && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
+	  if((typeof value != 'undefined' && value != '') && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
 		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
 	  }
 	  
-	  if((typeof value === 'undefined' || value == '')  && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
+	  if((typeof value === 'undefined' || value == '')  && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
 	     return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
   	  }
   }
   
   function poFieldFormatter(row, cell, value, columnDef, dataContext) {
-	  if((dataContext["26"] != "Closed") && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Planned" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total"  && dataContext["26"] != "Active" ))){
+	  if((dataContext["26"] != "Closed") && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total"  && dataContext["26"] != "Active" ))){
 		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
 	  }
 	  return value;

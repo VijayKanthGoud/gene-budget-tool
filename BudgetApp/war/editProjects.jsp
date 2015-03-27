@@ -657,7 +657,7 @@ String ccView="";
     				d[9]="<%=gReport.getPoDesc()%>";
     				d[10]="<%=gReport.getVendor()%>";
     				d[49]="<%=gReport.getUnits()%>";
-    				d[11]="Planned";
+    				d[11]="Forecast";
     				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
     				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
     				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
@@ -696,7 +696,7 @@ String ccView="";
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if(gmemoriID.indexOf(".") == -1 || d[26] != "New"){ 
-   				d[11]="Benchmark";
+   				d[11]="Quarterly Target";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
 				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
@@ -764,7 +764,7 @@ String ccView="";
     					}
    
    				} if(jsId % 4 == 3){
-				d[11]="Variance";
+				d[11]="LTS";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New" /* && gmemoriID.indexOf(".") == -1 */ ){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
@@ -831,19 +831,19 @@ String ccView="";
 				
 				switch(cntTotal) {
 			    case 0:
-			    	d[11] = "Planned";
+			    	d[11] = "Forecast";
 			        break;
 			    case 1:
-			    	d[11] = "Benchmark";
+			    	d[11] = "Quarterly Target";
 			        break;
 			    case 2:
 			    	d[11] = "Accrual";
 			        break;
 			    case 3:
-			    	d[11] = "Variance";
+			    	d[11] = "LTS";
 			        break;
 			    default:
-			    	d[11] = "Planned";
+			    	d[11] = "Forecast";
 		        	break;
 			}
 				d[40] = d[11];
@@ -988,7 +988,7 @@ String ccView="";
 						}
 						
 						if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>
-						&& item[51]!='undefined' && item[11] == "Planned"){
+						&& item[51]!='undefined' && item[11] == "Forecast"){
 							var actualPlannedTotal=parseFloat(item[51]).toFixed();
 							var calculatedPlannedTotal=0.0;
 							for (var j = 12; j < 24; j++) {
@@ -1012,7 +1012,7 @@ String ccView="";
 						var calculatedPlannedTotal=0.0;
 						if(data[temp][11] == 'Accrual'){
 							for (var j = 0; j < data.length - 1; j++) {
-								if (data[j][27] == args.item[27] && data[j][11]=="Planned") {
+								if (data[j][27] == args.item[27] && data[j][11]=="Forecast") {
 									actualPlannedTotal=data[j][24];
 									break;
 								}
@@ -1059,7 +1059,7 @@ String ccView="";
 						
 						if(fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 							
-							//if((item[37]=='undefined' || item[37]==false) || (item[37]==true && data[temp][11]!="Planned")){
+							//if((item[37]=='undefined' || item[37]==false) || (item[37]==true && data[temp][11]!="Forecast")){
 								rowTotal = 0.0;
 								for (var j = 12; j < 24; j++) {
 									if(data[temp][j] == "" || data[temp][j] == "undefined"){
@@ -1089,7 +1089,7 @@ String ccView="";
 							
 							for (var j = 0; j < data.length ; j++) {
 								if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
-									if( data[j][11] == "Planned"){
+									if( data[j][11] == "Forecast"){
 										if(data[j][37] == false && data[j][27].toString().indexOf(".") == -1){
 											verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][itemCell]);
 											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
@@ -1098,7 +1098,7 @@ String ccView="";
 											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
 										}
 									}				
-									if(data[j][11]=="Benchmark"  && data[j][27].toString().indexOf(".") ==-1){
+									if(data[j][11]=="Quarterly Target"  && data[j][27].toString().indexOf(".") ==-1){
 										verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][itemCell]);
 										verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
 									}
@@ -1106,7 +1106,7 @@ String ccView="";
 										verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][itemCell]);
 										verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
 									}
-									if(data[j][11]=="Variance" && data[j][27].toString().indexOf(".") ==-1 ){
+									if(data[j][11]=="LTS" && data[j][27].toString().indexOf(".") ==-1 ){
 										verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][itemCell]);
 										verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
 									}
@@ -1171,7 +1171,7 @@ String ccView="";
 				itemClicked = dataView.getItem(args.row);
 				
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
-						itemClicked[0].toString().trim != "" && itemClicked[11] == "Planned" && itemClicked[26] != "Total" && itemClicked[2] != "" && itemClicked[0].toString().length==10){
+						itemClicked[0].toString().trim != "" && itemClicked[11] == "Forecast" && itemClicked[26] != "Total" && itemClicked[2] != "" && itemClicked[0].toString().length==10){
 					var myPopup = window.open ("", 'gmemori', '');
 					do_the_ajax_call();
 				}else
@@ -1286,7 +1286,7 @@ String ccView="";
 				return false;
 			} 
 			if((role!='Admin') && (args.item["26"]=="Active" || args.item["26"]=="New") && 
-					(args.item["11"] == "Accrual" || args.item["11"] == "Planned") && 
+					(args.item["11"] == "Accrual" || args.item["11"] == "Forecast") && 
 					(args.item["48"]!=null && args.item["48"]!='' && args.item["48"] != userName)){
 				alert("You are not authorised to edit this project !!!");
 				return false;
@@ -1308,18 +1308,18 @@ String ccView="";
 						){
 					return false;
 				}
-				if(cell == 2 && args.item["11"] == "Planned"  && args.item["26"] =="New" ){
+				if(cell == 2 && args.item["11"] == "Forecast"  && args.item["26"] =="New" ){
 					return true;
 				}
-				if (args.item["11"] == "Planned"
+				if (args.item["11"] == "Forecast"
 					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && args.item["26"] =="New") {
 					return true;
 				}
 				var isAnEditableId = false;
-				if(args.item["11"] == "Planned" && args.item[0].toString().indexOf(".") == -1 && cell==4 ){
+				if(args.item["11"] == "Forecast" && args.item[0].toString().indexOf(".") == -1 && cell==4 ){
 					isAnEditableId = true;
 				}
-				if (args.item["11"] == "Planned"
+				if (args.item["11"] == "Forecast"
 									&& (cols[cell].name == "Project Name" || cols[cell].name == "Project WBS" || 
 											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || cols[cell].name == "Units" || isAnEditableId ) &&  
 											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active")) {
@@ -1336,12 +1336,12 @@ String ccView="";
 				}
 				for (var i = month; i < 12; i++) {
 					if (cols[cell].name == monthArray[i]
-							&& ((args.item["11"] == "Planned" && args.item["26"] !="Total") || (args.item["11"] == "Accrual" && args.item["26"] =="Active"))) {
+							&& ((args.item["11"] == "Forecast" && args.item["26"] !="Total") || (args.item["11"] == "Accrual" && args.item["26"] =="Active"))) {
 						return true;
 					} 
 				}
 				
-				if (args.item["11"] == "Planned"
+				if (args.item["11"] == "Forecast"
 						&& cols[cell].name == "Remark" &&  args.item["26"] !="Total") {
 					return true;
 				} 
@@ -1400,12 +1400,12 @@ String ccView="";
 		});
 
 		
-		// Handeling radio button "Planned" and "All"
+		// Handeling radio button "Forecast" and "All"
 		rdoSelectedmode.change(function(e) {
 			Slick.GlobalEditorLock.cancelCurrentEdit();
 			var choice = this.value;
 			if (choice == 'planned') {
-				radioString = 'Planned'
+				radioString = 'Forecast'
 			} else {
 				radioString = "All";
 			}

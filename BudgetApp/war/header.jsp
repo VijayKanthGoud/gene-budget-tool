@@ -88,7 +88,7 @@
 				
 			<%
 			if (userService!= null && userService.isUserLoggedIn()    /* && isGeneUser   */) {
-				userName = "Welcome,   " + user.getNickname() + " (" + role +") !   ";
+				userName = "Welcome,   " + user.getNickname() +" !";
 			} else{%>
 				alert("You are not authorized to access the application!");
 			<%	response.sendRedirect(userService.createLogoutURL(requestUri));

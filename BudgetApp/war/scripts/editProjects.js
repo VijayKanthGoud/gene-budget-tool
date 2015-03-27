@@ -185,10 +185,10 @@ function groupByStatus() {
 					  }
 					  if (g.value == "Total") {
 						return "<span style='color:green'>"
-							+ g.value + "</span>";
+							+ 'Overall' + "</span>";
 					  } 
 						else if (g.value == "New"){
-							var returnStr =  "" + g.value
+							var returnStr =  "" + 'Planned'
 							+ "<span style='color:green'>("
 							+ noOfNew + " items)</span>" ;
 						
@@ -438,7 +438,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Variance"){
+									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="LTS"){
 								kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 								break;
 							}
@@ -469,7 +469,7 @@ function updateMemCache(e, args, tempKey) {
 						var kData = data[iVar];
 						
 						if(key.toString().indexOf(".") != -1 && key == kData[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && 
-								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Variance"){
+								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="LTS"){
 							aSave = (aSaveData[iCnt] = {});
 							kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 							aSave[0] = kData[27];
@@ -483,13 +483,13 @@ function updateMemCache(e, args, tempKey) {
 				if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
 					if(d[11]=="Accrual"){
 						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
-					}else if(d[11]=="Variance"){
+					}else if(d[11]=="LTS"){
 						if( item[43]=='undefined' ||item[43]=="" ){
 							item[43]=0.0;
 						}
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
-							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Benchmark"){
+							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Quarterly Target"){
 								d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
 								break;
 							}
@@ -562,7 +562,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 					//aSave[2] = d["47"];
 					iCnt++;
-				}else if(key== d[34] && d[11]=="Benchmark" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
+				}else if(key== d[34] && d[11]=="Quarterly Target" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {
@@ -1357,7 +1357,7 @@ function modifyData(data){
 	modifiedRowData.total = "Total";
 	modifiedRowData.unit = "Unit";
 	modifiedRowData.poTotal = "PO Total";
-	modifiedRowData.variance = "Variance";
+	modifiedRowData.variance = "LTS";
 	modifiedRowData.forecast = "ForeCast";
 	modifiedData.push(modifiedRowData);
 	for(var cnt = 0; cnt < data.length; cnt++){
