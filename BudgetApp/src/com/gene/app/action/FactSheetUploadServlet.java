@@ -314,7 +314,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		for (Entry<String, ArrayList<GtfReport>> entry : uploadedPOs.entrySet())
 		{
 		    ArrayList<GtfReport> receivedGtfReports = entry.getValue();
-		    if(receivedGtfReports.size() > 1 || receivedGtfReports.get(0).getProject_WBS().trim().startsWith("421.")) {
+		    if(receivedGtfReports.size() > 1 || receivedGtfReports.get(0).getProject_WBS().trim().startsWith("421")) {
 		    	GtfReport nwParentGtfReport = new GtfReport();
 		    	ArrayList<String> childProjList = new ArrayList<String>();
 		    	try {
