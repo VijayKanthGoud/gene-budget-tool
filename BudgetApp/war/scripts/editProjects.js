@@ -251,7 +251,7 @@ function groupByStatus() {
 function sumTotalsFormatter(totals, columnDef) {
 	var val = totals.sum && totals.sum[columnDef.field];
 	if(columnDef.field==11 && totals['group']['value'].toLowerCase() != 'total'){
-		return "<span style='color:rgb(168, 39, 241)'>" + "Totals (Planned)"
+		return "<span style='color:rgb(168, 39, 241)'>" + "Totals (Forecast)"
 		+ "</span> ";
 	}
 	if (val != null

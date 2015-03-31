@@ -1170,4 +1170,13 @@ public class DBUtil {
 		}
 		return poMap;
 	}
+	
+	public Map<String, GtfReport> prepareProjectNameMap(
+			Map<String, GtfReport> costCenterWiseGtfRptMap) {
+		Map<String, GtfReport> poMap = new HashMap<String, GtfReport>();
+		for(Map.Entry<String, GtfReport> gtfEntry:costCenterWiseGtfRptMap.entrySet()){
+				poMap.put(gtfEntry.getValue().getProjectName(), gtfEntry.getValue());
+		}
+		return poMap;
+	}
 }
