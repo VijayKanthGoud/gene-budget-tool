@@ -111,8 +111,8 @@
 				<div style="text-align: center; vertical-align: middle;">
 					<h1
 						style="color: #105596; font-size: 25px; letter-spacing: 5px; padding-top: 8px;">
-						g<span style="font-variant: small-caps;">Memori Budgeting
-							Tool</span>
+						<b>g<span style="font-variant: small-caps;">Memori Budgeting
+							Tool</span></b>
 					</h1>
 
 				</div>
