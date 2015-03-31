@@ -41,7 +41,7 @@ String ccView="";
 <body onload="getBrandTotals();getAvailableTags();">
 	<div align="center">
 		<table
-			style="border: 1px solid gray; background: #EAF4FD; padding: 6px; width: 100%; font-weight: normal; font-size: 14px; color: #2271B0; font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; float: left;">
+			style="border: 1px solid gray; background: #EAF4FD; padding: 6px; width: 100%; font-weight: normal; color: #2271B0; float: left;">
 			<tr>
 				<td style="width: 20%; padding-bottom: 2.5%" rowspan="2">
 					<table class="summarytable"
@@ -66,7 +66,7 @@ String ccView="";
 					<table align="center">
 						<tr>
 							<td width="100px"><span
-								style="color: #105596; font-family: 'trebuchet ms'; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
+								style="color: #105596; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
 									<%
 										String viewSelected = (String)request.getAttribute("selectedView");
 													System.out.println("viewSelected = "+viewSelected);
@@ -81,11 +81,11 @@ String ccView="";
 														}
 									%>
 							</span> <span
-								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">Select
+								style="font-size: 14px; font-weight: bold; color: #105596;">Select
 									View : </span></td>
 							<td><select id="selectedUserView" name="selectedUserView"
 								onchange="selectUserView()" autofocus
-								style="width: 150px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
+								style="width: 150px; color: #105596;">
 									<option <%=prjView%>>My Projects
 										</options>
 									<option <%=brandView%>>My Brands
@@ -98,10 +98,10 @@ String ccView="";
 							<%
 								if(!userInfo.getRole().contains("Admin")) {
 							%><td><span
-								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">Select
+								style="font-size: 14px; font-weight: bold;  color: #105596;">Select
 									Cost Center :</span></td>
 							<td><select id="getCostCenter" name="ccValue"
-								style="width: 102px; height: 23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;"
+								style="width: 102px; height: 23px; color: #105596;"
 								onchange="getCostCenterDetails()">
 									<%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
 									<%
@@ -126,10 +126,10 @@ String ccView="";
 								} else{
 							%>
 							<td><span
-								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">Select
+								style="font-size: 14px; font-weight: bold; color: #105596;">Select
 									Cost Center : </span></td>
 							<td><select id="getCostCenter" name="ccValue"
-								style="width: 100px; height: 23px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;"
+								style="width: 100px; height: 23px; color: #105596;"
 								onchange="getCostCenterDetails()">
 									<%
 										List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
@@ -157,12 +157,12 @@ String ccView="";
  %></td>
 						</tr>
 						<tr id="dropdown">
-							<td style="padding-top: 4%"><span
-								style="font-size: 14px; font-weight: bold; font-family: 'trebuchet ms'; color: #105596;">
+							<td><span
+								style="font-size: 14px; font-weight: bold; color: #105596;">
 									Select Brand :&nbsp;&nbsp; </span></td>
 							<td><select id="getBrand1" name="brandValue"
 								onchange="getProjectsBrandwise()"
-								style="width: 190px; font-family: 'trebuchet ms'; font-size: 16px; color: #105596;">
+								style="width: 190px; color: #105596;">
 									<%
 										String selectedCostCenter = (String)request.getAttribute("getCCValue");
 											if(selectedCostCenter==null || "".equals(selectedCostCenter)){
@@ -243,8 +243,8 @@ String ccView="";
 				&nbsp;&nbsp;&nbsp;
 				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">Total MA&S Cost Centers</span></input><br><br>
 				</div>
-				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
-				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; font-size: 10px; letter-spacing:1px;" align= 'right'> Cancel</button>
+				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
+				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; letter-spacing:1px;" align= 'right'> Cancel</button>
 				
 				</div>
 	<div id="getCostCentreProjects">
@@ -317,7 +317,7 @@ String ccView="";
 							<td>Select Brand:</td>
 							<td colspan="2"><select id="brandType"
 								onchange="getBrandTotals()"
-								style="color: #2271B0; font: normal 12 Arial, Helvetica, sans-serif;">
+								style="color: #2271B0;">
 									<%
 										String option = "";
 									                            if(brandValue==null || brandValue==""){
@@ -386,14 +386,14 @@ String ccView="";
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
 			<button id="deleteSel" class="myButton" value="" onclick="deleteSelectedProjects();"
-				style="height: 20px; font-size: 11px; letter-spacing: 1px;">
+				style="height: 20px;  letter-spacing: 1px;">
 				Delete selected</button>
 			<button id="saveClose" class="myButton" value=""
 				onclick="saveAndClose();"
-				style="height: 20px; font-size: 11px; letter-spacing: 1px;">Save
+				style="height: 20px; letter-spacing: 1px;">Save
 				and close</button>
 			<button class="myButton" value="" onclick="closeWithoutSave();"
-				style="height: 20px; font-size: 11px; letter-spacing: 1px;">
+				style="height: 20px; letter-spacing: 1px;">
 				Cancel</button>
 		</div>
 	</div>
@@ -1910,12 +1910,12 @@ String ccView="";
 	<div width='100%' align=right>
 		<button id="exportButton" class="myButton" value=""
 			onclick="openDownloadPopUp();"
-			style="height: 25px; font-size: 12px; letter-spacing: 1px;"
+			style="height: 25px; letter-spacing: 1px;"
 			align='right'>Export data as excel</button>
 	</div>
 	</br>
 	<!-- <div>
-	<button class="myButton" value="" onclick="onClickAsynch();" style="height: 25px; font-size: 12px; letter-spacing:1px;" align= 'left'>Download All CostCenters</button>
+	<button class="myButton" value="" onclick="onClickAsynch();" style="height: 25px; letter-spacing:1px;" align= 'left'>Download All CostCenters</button>
 	</div>
 	 -->
 	<div id="uploadWindow">

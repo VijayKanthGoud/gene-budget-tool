@@ -1142,6 +1142,12 @@ function submitProjects(){
 			flag=true;
 			break;
 		}
+		if(data[i][6].toString().toLowerCase().indexOf("smart wbs")!=-1 && data[i][37] == true){
+		/*	for(var count = 0; count<){
+				
+			}*/
+			errStr+=7;
+		}
 		switch(errStr) {
 		case 0:
 	        break;

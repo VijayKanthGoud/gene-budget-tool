@@ -21,7 +21,7 @@
 </head>
 <html>
 
-<body>
+<body style="font-family: arial !important;">
 
 <script>
 	$(function() {
@@ -110,7 +110,7 @@
 			<td style="width: 50%; align: center">
 				<div style="text-align: center; vertical-align: middle;">
 					<h1
-						style="color: #105596; font-family: 'trebuchet ms'; font-size: 25px; letter-spacing: 5px; padding-top: 8px;">
+						style="color: #105596; font-size: 25px; letter-spacing: 5px; padding-top: 8px;">
 						g<span style="font-variant: small-caps;">Memori Budgeting
 							Tool</span>
 					</h1>
@@ -118,7 +118,7 @@
 				</div>
 			</td>
 			<td style="width: 35%; float: right">
-					<div style="text-align:right; font-size: 14px;" class="">
+					<div style="text-align:right; font-size: 13px;" class="">
                 Questions? Comments? Issues? Please email <a href="#" data-mailto="gMEMORI_support-d@gene.com" id="mailToSupport">gBMT_Support@gene.com</a>
             </div>
 					<div style="float:right;top:5%; margin: 0 auto; position: relative;">

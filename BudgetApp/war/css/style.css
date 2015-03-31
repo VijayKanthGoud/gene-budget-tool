@@ -1,12 +1,12 @@
 @CHARSET "ISO-8859-1";
 
 body {
-	font-size: 11px !important;
-	font: Arial !important;
+	font-size: 12px !important;
+	font-family: arial !important;
 }
 
 .ui-menu-item {
-	font-size: 13px;
+	font-size: 12px;
 }
 
 #footer {
