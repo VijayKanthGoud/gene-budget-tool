@@ -164,6 +164,7 @@ public class DBUtil {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(UserRoleInfo.class);
 		try{
+			q.setFilter("email==emailParam");
 			q.declareParameters("String emailParam");
 			List<UserRoleInfo> results = (List<UserRoleInfo>) q.execute(email);
 

@@ -65,6 +65,10 @@ public class GetReport extends HttpServlet {
 		costCenter = "";
 		email = userService.getCurrentUser().getEmail();
 		user = util.readUserRoleInfo(email);
+		if(user == null || user.getUserName() == null){
+			resp.sendRedirect(loginLink);
+			return;
+		}
 		//LOGGER.log(Level.INFO, "email in userService"+email);
 		}else{
 		email = user.getEmail();
