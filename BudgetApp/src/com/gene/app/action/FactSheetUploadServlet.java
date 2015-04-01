@@ -32,12 +32,11 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 
 @SuppressWarnings("serial")
 public class FactSheetUploadServlet extends HttpServlet {
-	private final static Logger LOGGER = Logger
-			.getLogger(FactSheetUploadServlet.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(FactSheetUploadServlet.class.getName());
 	DBUtil util = new DBUtil();
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
-	Map<String, ArrayList<GtfReport>> uploadWithOutPos = new HashMap();
-	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap();
+	Map<String, ArrayList<GtfReport>> uploadWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
+	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
 
 	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)

@@ -47,32 +47,29 @@ public class PODetailsUpload extends HttpServlet {
 	boolean isMultibrand = false;
 	int curMonth =0;
 
-	Map<String, GtfReport> uploadedGMems = new HashMap();
-	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap();
-	Map<String, ArrayList<GtfReport>> uploadedWithOutPos = new HashMap();
+	Map<String, GtfReport> uploadedGMems = new HashMap<String, GtfReport>();
+	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
+	Map<String, ArrayList<GtfReport>> uploadedWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
 
-	Map<String, ArrayList<GtfReport>> addedPOs = new HashMap();
-	Map<String, ArrayList<GtfReport>> addedWithOutPos = new HashMap();
+	Map<String, ArrayList<GtfReport>> addedPOs = new HashMap<String, ArrayList<GtfReport>>();
+	Map<String, ArrayList<GtfReport>> addedWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
 
-	Map<String, ArrayList<GtfReport>> updateddPOs = new HashMap();
-	Map<String, ArrayList<GtfReport>> updatedWithOutPos = new HashMap();
+	Map<String, ArrayList<GtfReport>> updateddPOs = new HashMap<String, ArrayList<GtfReport>>();
+	Map<String, ArrayList<GtfReport>> updatedWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		LOGGER.log(Level.INFO, "inside fileupload...");
 		HttpSession session = req.getSession();
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
-		final FileItemFactory fileItemFactory = new DiskFileItemFactory();
-		final ServletFileUpload servletFileUpload = new ServletFileUpload(
-				fileItemFactory);
 		String costCenter = req.getParameter("costCenter");
 		int startRow = Integer.parseInt(req.getParameter("inputFrom"));
 		int endRow = Integer.parseInt(req.getParameter("inputTo"));
 		String objArray = req.getParameter(BudgetConstants.objArray).toString();
 		List<List<String>> rowList = new ArrayList();
-		uploadedPOs = new HashMap();
-		uploadedGMems = new HashMap();
-		uploadedWithOutPos = new HashMap();
+		uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
+		uploadedGMems = new HashMap<String, GtfReport>();
+		uploadedWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
 		curMonth = Calendar.getInstance().get(Calendar.MONTH);
 		try {
 			JSONArray jsonArray = new JSONArray(objArray);
@@ -165,6 +162,7 @@ public class PODetailsUpload extends HttpServlet {
 				}
 			}
 			
+			// Check by matching Project name number
 			if (!Util.isNullOrEmpty(receivedGmemoriId)
 					&& Util.isNullOrEmpty(rcvdRow.get(6).toString())) {
 				if (projNameMap.get(rcvdRow.get(6).toString()) != null) {
@@ -179,7 +177,6 @@ public class PODetailsUpload extends HttpServlet {
 
 			// If multibrand
 			boolean newCreated = false;
-			int multiFlag = 0;
 			String pGmemId = new String(receivedGmemoriId);
 			if (!"".equalsIgnoreCase(receivedGmemoriId)
 					&& (completeGMemoriIds.contains(receivedGmemoriId))) {
@@ -247,7 +244,7 @@ public class PODetailsUpload extends HttpServlet {
 			isMultiBrand = true;
 		}
 
-		/*receivedGtfReport.setCostCenter(costCenter);
+		receivedGtfReport.setCostCenter(costCenter);
 		receivedGtfReport.setBrand(brand);
 		receivedGtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName());
 		receivedGtfReport.setProject_WBS(WBS);
@@ -255,12 +252,10 @@ public class PODetailsUpload extends HttpServlet {
 		receivedGtfReport.setPoNumber(rcvdRow.get(5).toString());
 		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
 		receivedGtfReport.setVendor(rcvdRow.get(7).toString());
-		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
-		.format(Calendar.getInstance().getTime());*/
-		/*String poDesc = receivedGtfReport.getPoDesc();
+		String poDesc = receivedGtfReport.getPoDesc();
 		if(receivedGtfReport.getProjectName() != null && receivedGtfReport.getProjectName().equalsIgnoreCase("")){
 			receivedGtfReport.setProjectName(poDesc);
-		}*/
+		}
 		receivedGtfReport.setSubActivity("");
 		Map<String, Double> receivedAccrualMap = receivedGtfReport
 				.getAccrualsMap();
@@ -309,6 +304,8 @@ public class PODetailsUpload extends HttpServlet {
 		GtfReport gtfReport = new GtfReport();
 		String gMemoriId = "";
 		gtfReport.setMultiBrand(false);
+		
+		// no parent gtf report
 		if(pGtf==null){
 			try {
 				gtfReport.setPoDesc(rcvdRow.get(6).toString());

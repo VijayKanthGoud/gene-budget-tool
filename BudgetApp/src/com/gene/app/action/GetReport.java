@@ -47,12 +47,10 @@ public class GetReport extends HttpServlet {
 		UserService userService;
 		String email ="";
 		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
-		Map<String,GtfReport> completeGtfRptMap = new LinkedHashMap<String,GtfReport>();
 		String selectedBrand = req.getParameter("brandValue");
 		String selectedView = req.getParameter("selectedView");
 		String selectedCC = req.getParameter("getCCValue");
 		String gMemoriId = req.getParameter("gMemoriId");
-		//LOGGER.log(Level.INFO, "Inside GetReport");
 		if(user==null){
 		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
 		String requestUri = req.getRequestURI();
@@ -76,7 +74,6 @@ public class GetReport extends HttpServlet {
 		}
 		user.setSelectedCostCenter((selectedCC==null || "".equalsIgnoreCase(selectedCC.trim()))?user.getSelectedCostCenter():selectedCC);
 	//	gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
-		completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		//LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
 		//List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
 		List<GtfReport> gtfReportList = null;
