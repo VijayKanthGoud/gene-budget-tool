@@ -963,12 +963,12 @@ public class DBUtil {
 										System.out.println("gtfReport.getBrand() in plannedTotal = "+gtfReport.getBrand());
 										System.out.println("gtfReport.getgMemoryId() in plannedTotal = "+gtfReport.getgMemoryId());
 									}
-									if (gtfReport.getBenchmarkMap() != null /*&& !(gtfReport.getgMemoryId().contains("."))*/ ) {
+									if (gtfReport.getBenchmarkMap() != null && !"New".equalsIgnoreCase(gtfReport.getStatus())) {
 										benchMarkTotal = benchMarkTotal
 												+ gtfReport.getBenchmarkMap().get(
 														BudgetConstants.months[j]);
 									}
-									if (gtfReport.getAccrualsMap() != null /*&& !(gtfReport.getgMemoryId().contains("."))*/) {
+									if (gtfReport.getAccrualsMap() != null && !"New".equalsIgnoreCase(gtfReport.getStatus())) {
 										accrualTotal = accrualTotal
 												+ gtfReport.getAccrualsMap().get(
 														BudgetConstants.months[j]);
