@@ -152,6 +152,7 @@ public class AutoSaveData extends HttpServlet {
 								if(gtfReportObj.getMultiBrand()){
 									gtfReportMap = deleteChildProjects(gtfReportObj,gtfReportMap);
 									gtfReportObj.setMultiBrand(false);
+									gtfReportObj.setChildProjectList(new ArrayList<String>());
 								}
 								gtfReportObj.setBrand(strValue);
 								break;
