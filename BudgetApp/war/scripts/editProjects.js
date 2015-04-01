@@ -1127,6 +1127,7 @@ function submitProjects(){
 	var errStr = 0;
 	var storeData=[];
 	var flag = false;
+	var msg = "";
 	for(var i=0;i<addsave;i++){
 
 		/*if( data[i][0] == 'undefined' || data[i][0].toString().trim() ==""){
@@ -1143,10 +1144,32 @@ function submitProjects(){
 			break;
 		}
 		if(data[i][6].toString().toLowerCase().indexOf("smart wbs")!=-1 && data[i][37] == true){
-		/*	for(var count = 0; count<){
-				
-			}*/
-			errStr+=7;
+			var total = 0;
+			var totalMonthly = 0;
+			for(var count = 0; count < data[i][36].length; count++){
+				if(data[i][36][count][7] != ""){
+					if(data[i][36][count][3] == "" || data[i][36][count][3] == "undefined"){
+						data[i][36][count][3] = 0.0;
+					}
+					total = parseFloat(total) + parseFloat(data[i][36][count][3]); 
+				}
+			}
+			
+			for(var count = 12; count < 24; count++){
+				if(data[i][count] == "" || data[i][count] == "undefined"){
+					data[i][count] = 0.0;
+				}
+				totalMonthly = parseFloat(totalMonthly) + parseFloat(data[i][count]);
+			}
+			
+			if(totalMonthly < total){
+				var apnd = ", ";
+				if(msg == ""){
+					apnd = "";
+				}
+				msg += apnd + data[i][2].toString();
+			}
+			
 		}
 		switch(errStr) {
 		case 0:
@@ -1175,6 +1198,11 @@ function submitProjects(){
 		}
 		storeData[i]=data[i];
 	}
+
+	if(msg != ""){
+		alert("For project(s) \""+ msg + "\" entered forecast total is less than allocated total.");
+	}
+	
 	if(flag == true){
 		alert("Please add sub-projects to your multibrand project: "+ data[i][2]);
 		return;
@@ -1189,7 +1217,7 @@ function submitProjects(){
 			data : {objarray: JSON.stringify(storeData),
 				costCenter : costCenter},
 			success : function(result) {
-				alert('Data saved successfully');
+				alert('Project(s) created successfully!!!');
 				storeData=[];
 				window.location.reload(true);
 			},

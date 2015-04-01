@@ -1007,6 +1007,8 @@ String ccView="";
 								item[itemCell]=args.item[45][itemCell-12];
 								grid.invalidate();
 								return;
+							}else if(calculatedPlannedTotal < actualPlannedTotal){
+								alert("Sum of the entered budget of months is less than Total specified for Multi brand project !!!");	
 							}
 							
 						}
@@ -1181,7 +1183,18 @@ String ccView="";
 					do_the_ajax_call();
 				}else
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
-					 addMultiBrandPopUp();
+					if(itemClicked[26] == "New"){
+						var userAccepted = confirm("Do you want to convert it in to a single brand?");
+						if (!userAccepted) {
+							addMultiBrandPopUp();
+						}
+						else{
+							itemClicked[37] = "";
+							itemClicked[36] = false;
+							return;
+						}
+					}
+					 
 				} 
 			if ($(e.target).hasClass("toggle")) {
 				var item = dataView.getItem(args.row);
