@@ -358,8 +358,8 @@ String ccView="";
 							<td><span id="accrualTotal" style="text-align: right;"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id="varTotalLabel" style="color: black">Left To Spend (LTS):</span></td>
-							<td><span id="varTotalText" style="color: black; text-align: right;"><span
+							<td><span id="varTotalLabel" >Left To Spend (LTS):</span></td>
+							<td><span id="varTotalText" style="text-align: right;"><span
 									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
