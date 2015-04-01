@@ -763,7 +763,9 @@ public class DBUtil {
 	public void removeExistingProject(List<GtfReport> gtfReports) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			pm.deletePersistentAll(gtfReports);
+			for(GtfReport gtfs : gtfReports){
+			pm.deletePersistent(pm.getObjectById(gtfs.getClass(),gtfs.getId()));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
