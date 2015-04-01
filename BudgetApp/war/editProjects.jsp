@@ -1193,6 +1193,8 @@ String ccView="";
 							itemClicked[36] = false;
 							return;
 						}
+					}else{
+						addMultiBrandPopUp();
 					}
 					 
 				} 
