@@ -308,14 +308,13 @@ String ccView="";
 					</script>
 
 						<tr align='center'>
-							<td colspan=2>Annual Brand Summary &nbsp;($ in 1000's)</td>
-							<td><img alt="" src="images/refresh.png" height="25"
+							<td colspan=2>Annual Brand Summary &nbsp;($ in 1000's) <img alt="" src="images/refresh.png" height="25"
 								width="25" align='left' onclick="getBrandTotals()"></td>
 						</tr>
 						<tr>
 						<tr>
 							<td>Select Brand:</td>
-							<td colspan="2"><select id="brandType"
+							<td><select id="brandType"
 								onchange="getBrandTotals()"
 								style="color: #2271B0;">
 									<%
@@ -341,25 +340,25 @@ String ccView="";
 						</tr>
 						<tr>
 							<td>Budget:</td>
-							<td><span id="totalBudget"  style="text-align: right;"> <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
+							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
 						</tr>
 
 						<tr>
 							<td>Total Forecast:</td>
-							<td><span id="plannedTotal"  style="text-align: right;"><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
 							<td>Unallocated Forecast:</td>
-							<td><span id="budgetLeftToSpend" style="text-align: right;"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
+							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
 							<td>Total Accrual:</td>
-							<td><span id="accrualTotal" style="text-align: right;"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
 							<td><span id="varTotalLabel" >Left To Spend (LTS):</span></td>
-							<td><span id="varTotalText" style="text-align: right;"><span
+							<td style="text-align: right;"> <span id="varTotalText" ><span
 									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
