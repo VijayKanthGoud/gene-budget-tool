@@ -249,8 +249,8 @@ public class PODetailsUpload extends HttpServlet {
 		}
 
 		receivedGtfReport.setCostCenter(costCenter);
-		receivedGtfReport.setBrand(brand);
-		receivedGtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName());
+		//receivedGtfReport.setBrand(brand);
+		//receivedGtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName());
 		receivedGtfReport.setProject_WBS(WBS);
 		receivedGtfReport.setWBS_Name(WBSName);
 		if(isMultiBrand && !Util.isNullOrEmpty(rcvdRow.get(5).toString()) && Util.isNullOrEmpty(pGtfReport.getPoNumber())){
