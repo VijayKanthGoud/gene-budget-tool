@@ -153,7 +153,7 @@
 			  return "<div width = '100%' style='background:#C0CCED'>"+ value +"</div>";
 		  }
 	  }else if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
-		  var url = "http://memori-dev.appspot.com/editProject?gMemoriId="+val;
+		  var url = "http://memori-qa.appspot.com/editProject?gMemoriId="+val;
 		  if(dataContext["0"].toString().indexOf(".") == -1){
 			  return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span></div>" ;
 		  }else{
