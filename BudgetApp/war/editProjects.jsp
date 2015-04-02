@@ -1166,7 +1166,7 @@ String ccView="";
 				}
 			});
 			if(openPopUp == true){
-			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
+			window.open ("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
 			alert("Project successfully created in Budget Tool. Please continue.");

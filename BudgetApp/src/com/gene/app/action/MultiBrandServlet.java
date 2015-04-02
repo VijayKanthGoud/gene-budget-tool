@@ -73,7 +73,8 @@ public class MultiBrandServlet extends HttpServlet {
 		try {
 			JSONArray jsonArray = new JSONArray(m_data);
 			JSONObject rptObject = jsonArray.getJSONObject(0);
-			projectName = rptObject.getString("4");
+			projectName = rptObject.getString("4").replace("\\", "\\\\")
+					.replace("\"", "\\\"").replace("\'", "\\\'");
 			gMemoriId = rptObject.getString("5").split("\\.")[0];
 			JSONObject rprtObject = null;
 			Map<String, GtfReport> rptList = util.getAllReportsByPrjName(
@@ -148,7 +149,8 @@ public class MultiBrandServlet extends HttpServlet {
 					break;
 				}
 				project_id = rprtObject.getString("0");
-				projectName = rprtObject.getString("4");
+				projectName = rprtObject.getString("4").replace("\\", "\\\\")
+						.replace("\"", "\\\"").replace("\'", "\\\'");
 				brand = rprtObject.getString("1");
 				projectOwner = rprtObject.getString("7");
 				totalValue = rprtObject.getString("3");

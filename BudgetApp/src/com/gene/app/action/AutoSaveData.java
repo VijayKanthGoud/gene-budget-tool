@@ -135,9 +135,13 @@ public class AutoSaveData extends HttpServlet {
 								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_UNIT
 								|| Integer.parseInt(cellNum) == BudgetConstants.CELL_BRAND) {
 							String strValue = cellValue;
+							if(strValue == null){
+								strValue = "";
+							}
 							switch (Integer.parseInt(cellNum)) {
 							case BudgetConstants.CELL_PNAME:
-								gtfReportObj.setProjectName(strValue);
+								gtfReportObj.setProjectName(strValue.replace("\\", "\\\\")
+										.replace("\"", "\\\"").replace("\'", "\\\'"));
 								break;
 							case BudgetConstants.CELL_PWBS:
 								gtfReportObj.setProject_WBS(strValue);

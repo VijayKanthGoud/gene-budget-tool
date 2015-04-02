@@ -163,7 +163,8 @@ public class UpdateStudyInBudget {
 				gtfReport.setFlag(flag);
 				//gtfReport.setRequestor(prjParam.getProjectOwner());
 				gtfReport.setCostCenter(selectedCostCenter);
-				gtfReport.setProjectName(prjParam.getProjectName());
+				gtfReport.setProjectName(prjParam.getProjectName().replace("\\", "\\\\")
+						.replace("\"", "\\\"").replace("\'", "\\\'"));
 				gtfReports.add(gtfReport);
 			}
 		}

@@ -200,7 +200,8 @@ public class StoreReport extends HttpServlet {
 			//boolean isDummyId = isDummyGMemoriId(gMemoriId);
 			
 			gtfReport.setProjectName(rprtObject
-					.getString(BudgetConstants.New_GTFReport_ProjectName));
+					.getString(BudgetConstants.New_GTFReport_ProjectName).replace("\\", "\\\\")
+					.replace("\"", "\\\"").replace("\'", "\\\'"));
 			gtfReport.setBrand(rprtObject.getString(
 					BudgetConstants.New_GTFReport_Brand).trim());
 			gtfReport.setCreateDate(timeStamp);
