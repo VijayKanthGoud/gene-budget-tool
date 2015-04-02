@@ -475,7 +475,7 @@ String ccView="";
 		{ id : 2, name : columnNames[1], field : <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
 		{ id : 3, name : columnNames[2], field :  <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
+		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
 		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
 		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
 		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
@@ -505,7 +505,7 @@ String ccView="";
 		{ id : 2, name : columnNames[1], field :  <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
 		{ id : 3, name : columnNames[2], field : <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink, editor : Slick.Editors.GMemoriText },
+		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
 		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
 		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
@@ -1168,7 +1168,7 @@ String ccView="";
 			window.open ("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
-			alert("Project successfully created in Budget Tool. Please continue.");
+			//alert("Project successfully created in Budget Tool. Please continue.");
 			}
 		}
 		
