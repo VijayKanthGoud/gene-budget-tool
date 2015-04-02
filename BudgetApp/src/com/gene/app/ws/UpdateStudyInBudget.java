@@ -192,7 +192,8 @@ public class UpdateStudyInBudget {
 		gtfRpt.setStatus(BudgetConstants.status_New);
 		gtfRpt.setRequestor(prjParam.getProjectOwner());
 		gtfRpt.setCostCenter(costCenter);
-		gtfRpt.setProjectName(prjParam.getProjectName());
+		gtfRpt.setProjectName(prjParam.getProjectName().replace("\\", "\\\\")
+				.replace("\"", "\\\"").replace("\'", "\\\'"));
 		Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
 		Object[] myBrands = {};
 		CostCenter_Brand ccBrandMap = new CostCenter_Brand();
