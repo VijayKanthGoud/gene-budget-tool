@@ -65,7 +65,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			String request = gson.toJson(prjParam);
 			//String request = prepareInitiatePrjReqURL(ccId, unixId, prj_name);
 			URL url = new URL(
-					"http://memori-qa.appspot.com/web-service/project/preInitiate");
+					"https://memori-qa.appspot.com/web-service/project/preInitiate");
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);
