@@ -206,7 +206,7 @@ public class AutoSaveData extends HttpServlet {
 								if(summaryObj!=null){// && !(gtfReportObj.getgMemoryId().contains("."))){
 								plannedTotal = summaryObj.getPlannedTotal();
 								summaryObj.setPlannedTotal(plannedTotal+newPlannedValue-oldPlannedValue);
-								if(mapType.equalsIgnoreCase("accrual") && /*!(gtfReportObj.getgMemoryId().contains(".")) && */gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
+								if(mapType.equalsIgnoreCase("accrual") && gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
 									oldAccrualValue = accrualMap.get(BudgetConstants.months[Integer
 									                                                        .parseInt(cellNum)]);
 										summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldAccrualValue);
@@ -219,7 +219,7 @@ public class AutoSaveData extends HttpServlet {
 								plannedMap.put(BudgetConstants.months[Integer
 										.parseInt(cellNum)], Double
 										.parseDouble(cellValue));
-								if(gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_New)){
+								if(gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_New)){/*
 									if(summaryObj!=null){
 									benchMarkTotal = summaryObj.getBenchmarkTotal(); 
 									summaryObj.setBenchmarkTotal(benchMarkTotal+newPlannedValue-oldPlannedValue);
@@ -232,7 +232,7 @@ public class AutoSaveData extends HttpServlet {
 																			.parseInt(cellNum)], newPlannedValue);
 									
 									gtfReportObj.setBenchmarkMap(benchMarkMap);
-									}
+									*/}
 								if(mapType.equalsIgnoreCase("accrual") /*&& !(gtfReportObj.getgMemoryId().contains("."))*/){
 									accrualMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);
