@@ -910,7 +910,7 @@ function saveAndClose() {
 				sumTotal : total
 			},
 			success : function(result) {
-				alert('Data saved successfully');
+				alert('Project(s) created successfully!!!');
 				isMultiBrand = false;
 				window.location.reload(true);
 			}
@@ -1178,25 +1178,31 @@ function submitProjects(){
 	    	alert('"gMemori ID" can not be blank.');
 	        break;*/
 	    case 2:
-	    	alert('"Project name" can not be blank.');
+	    	 alert('"Project name" can not be blank.');
+	    	 grid.gotoCell(i+2, 1, false);
 	    	break;
 	   /* case 3:
 	    	alert('"Project name" and "gMemori ID" can not be blank.');
 	        break;*/
 	    case 4:
 	    	alert('"Brand" can not be blank.');
+	    	grid.gotoCell(i+2, 2, false);
 	        break;
 	   /* case 5:
 	    	alert('"Brand" and "gMemori Id" can not be blank.');
 	        break;*/
 	    case 6:
 	    	alert('"Project name" and "Brand" can not be blank.');
+	    	grid.gotoCell(i+2, 1, false);
 	        break;
 	  /*  case 7:
 	    	alert('"Project name", "Brand" and "Gmemori ID" can not be blank.');
 	        break;*/
 		}
 		storeData[i]=data[i];
+		if(errStr != 0){
+			break;
+		}
 	}
 
 	if(msg != ""){
