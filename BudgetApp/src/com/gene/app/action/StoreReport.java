@@ -326,8 +326,10 @@ public class StoreReport extends HttpServlet {
 				Map<String, Double> setZeroMap = new HashMap<String, Double>();
 				Map<String, Double> parentPlannedMap = gtfReport
 						.getPlannedMap();
-				for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
+				for(int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
 					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+				}
+				for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
 					try {
 						value = roundDoubleValue(
 								parentPlannedMap.get(BudgetConstants.months[cnt])
