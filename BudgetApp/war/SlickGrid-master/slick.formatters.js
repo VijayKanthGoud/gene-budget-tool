@@ -147,26 +147,20 @@
 		  val = val.split(".")[0];  
 	  }
 	  if(dataContext[35] == "NewProjects"){
-		  if(value == ""){
-			  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
-		  }else{
-			  return "<div width = '100%' style='background:#C0CCED'>"+ value +"</div>";
-		  }
+			  return "";
 	  }else if(val.length > 0 && val.length <= 6 && dataContext[35]!="NewProjects"){
 		  var url = "https://memori-qa.appspot.com/editProject?gMemoriId="+val;
 		  if(dataContext["0"].toString().indexOf(".") == -1){
-			  return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span></div>" ;
+			  return "<div width = '100%'><span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span></div>" ;
 		  }else{
 			  return "<span ><a id='gmem' href="+url+" target='gmemori' style='color:green'>"+value + "</a></span>" ;
 		  }
 	  }else if(dataContext[35]=="NewProjects" && value.toString().trim != "" && value != 0){
-		  return "<div width = '100%' style='background:#C0CCED'>" + value +"</div>";
+		  return "<div width = '100%'>" + value +"</div>";
 	  }else if(value.toString().trim != "" && dataContext["11"] == "Forecast" && dataContext["26"] != "Total" && dataContext["2"] != "" && dataContext["0"].toString().length==10 ){
-		 /* var initializeURL = "/initiateProject?ccId="+dataContext[47]+"&unixId="+dataContext[48]+"&prj_name="+dataContext[2]+"&dummyGMemId="+dataContext[0];
-		  initializeURL = encodeURI(initializeURL);
-		 */ return "<div width = '100%' style='background:#C0CCED'><span ><a id='gmem' href='#' target='' style='color:green'>Initiate</a></span></div>";
+		 return "<div width = '100%'><span ><a id='gmem' href='#' target='' style='color:green'>Initiate</a></span></div>";
 	  }else if(value.toString().trim != "" && dataContext["11"] == "Forecast" && dataContext["26"] != "Total" && dataContext["2"] == "" && dataContext["0"].toString().indexOf(".") == -1 ){
-		  return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
+		  return "<div width = '100%'>&nbsp;</div>";
 	  }else{
 		  return "";
 	  }
