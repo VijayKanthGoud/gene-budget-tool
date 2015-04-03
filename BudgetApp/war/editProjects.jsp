@@ -1359,7 +1359,7 @@ String ccView="";
 				}
 				for (var i = month; i < 12; i++) {
 					if (cols[cell].name == monthArray[i]
-							&& ((args.item["11"] == "Forecast" && args.item["26"] !="Total") || (args.item["11"] == "Accrual" && args.item["26"] =="Active"))) {
+							&& ((args.item["11"] == "Forecast" && args.item["26"] !="Total"))) {
 						return true;
 					} 
 				}
