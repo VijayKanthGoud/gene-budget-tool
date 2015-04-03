@@ -849,7 +849,9 @@ String ccView="";
 				d[40] = d[11];
 			for (var j = 0; j < totalSize ; j++) {
 				if( (data[j][37] == false && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
-						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1)) ){
+						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
+						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
+				){
 					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
 					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
 					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
