@@ -48,7 +48,7 @@ function getBrandTotals(){
 	var statusCode = <%= request.getAttribute("Error Code")%>;
 	var statusMsg = '<%= request.getAttribute("Error Msg")%>';
 	if(gMemId!=null && gMemId.toString().length==6 && statusCode!=null && statusCode.toString()!=null && statusCode.toString()=='200'){
-		openUrl("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemId);
+		openUrl("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemId);
 		//window.history.pushState("object or string", "Title", "http://gbmt-dev.appspot.com/");
 		//window.location.reload(true);
 	}else if (statusCode!=null && statusCode.toString()!=null && statusCode.toString()!='200'){
@@ -1241,7 +1241,7 @@ function exportExcelData(){
 	var val = $('#selectedUserView').val();
 	var ccVal = $('#getCostCenter').val();
 	var brandValue = $('#getBrand1').val();
-	alert(val+":::::::::"+ccVal+"::::::"+brandValue);
+	//alert(val+":::::::::"+ccVal+"::::::"+brandValue);
 	//code for server side export
 /*	alert($('#getCostCenter').val());*/
 	if($('input:radio[name=selectCC]:checked').val() == 1){
