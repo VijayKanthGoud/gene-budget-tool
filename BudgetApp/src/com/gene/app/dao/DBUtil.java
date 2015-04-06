@@ -17,10 +17,10 @@ import javax.jdo.Query;
 import com.gene.app.model.BudgetSummary;
 import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
+import com.gene.app.model.QTR_CUTOFF_DATES;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.Util;
-import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
@@ -554,6 +554,25 @@ public class DBUtil {
 			pm.close();
 		}
 		return gtfList;
+	}
+	
+	public Map<String,QTR_CUTOFF_DATES> getCutOffDates() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(QTR_CUTOFF_DATES.class);
+		Map<String,QTR_CUTOFF_DATES> cutOffDateList = new LinkedHashMap<String,QTR_CUTOFF_DATES>();
+		try{
+			List<QTR_CUTOFF_DATES> results = (List<QTR_CUTOFF_DATES>) q.execute();
+			if(!results.isEmpty()){
+			for(QTR_CUTOFF_DATES p : results){
+				cutOffDateList.put(p.getQtr(),p);
+			}}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			q.closeAll();
+			pm.close();
+		}
+		return cutOffDateList;
 	}
 	
 	public Map<String,GtfReport> getAllReportData() {
