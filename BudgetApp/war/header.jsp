@@ -108,7 +108,7 @@
 			</a></td>
 
 			<td style="width: 50%; align: center">
-				<div style="text-align: center; vertical-align: middle;">
+				<div style="text-align: center; vertical-align: middle; padding-left:30%">
 					<h1
 						style="color: #105596; font-size: 25px; letter-spacing: 5px; padding-top: 8px;">
 						<b>g<span style="font-variant: small-caps;">Memori Budgeting
