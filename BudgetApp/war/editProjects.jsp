@@ -43,7 +43,7 @@ String ccView="";
 		<table
 			style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
 			<tr>
-				<td style="width: 20%; padding-bottom: 2.5%" rowspan="2">
+				<td style="width: 20%; padding-bottom: 2%;  padding-top: 2%" rowspan="2">
 					<table class="summarytable"
 						style="color: #2271B0; white-space: nowrap; height: 117px; width: 220px;">
 						<tr>
@@ -263,7 +263,7 @@ String ccView="";
 			</form>
 			
 		</div>
-	 	<td style="width: 20%;" rowspan="2">
+	 	<td style="width: 1%;" rowspan="2">
 					<table class="summarytable"
 						style="color: #2271B0; white-space: nowrap; font-weight: bold;">
 						<%
@@ -355,7 +355,7 @@ String ccView="";
 	</div>
 	<div id="statusMessage"></div>
 	<div id="displayGrid"
-		style="width: 100%; height: 58%; min-height: 300px;"></div>
+		style="width: 100%; height: 44.5%; min-height: 200px;"></div>
 	<div id="multibrandEdit">
 		<div id="header"
 			style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"
