@@ -19,6 +19,7 @@ import com.gene.app.dao.DBUtil;
 import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.Util;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -96,7 +97,7 @@ public class UserDetailsUpload extends HttpServlet{
 				}if(!rcvdRow.get(2).toString().trim().equals("")){
 					costCenter1 = rcvdRow.get(2).toString();
 					selectedCostCenter = (costCenter1.contains(":"))?costCenter1.split(":")[0]:costCenter1; 
-				}if(!existingCC.contains(costCenter1)){
+				}if(Util.isNullOrEmpty(existingCC) && !existingCC.contains(costCenter1)){
 					costCenter1 = existingCC+":"+costCenter1;
 				}if(!rcvdRow.get(7).toString().trim().equals("") && !rcvdRow.get(8).toString().trim().equals("")){
 					userName = rcvdRow.get(8).toString()+" "+rcvdRow.get(7).toString();
@@ -144,7 +145,7 @@ public class UserDetailsUpload extends HttpServlet{
 				
 				if(!brandFromDB.contains(rcvdRow.get(3).toString())){
 					total = rcvdRow.get(4).toString().trim().substring(1);
-					brand = brandFromDB+rcvdRow.get(3).toString()+":"+total+";";
+					brand = brandFromDB+brand+rcvdRow.get(3).toString()+":"+total+";";
 				}
 			}
 		}
