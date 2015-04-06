@@ -143,6 +143,11 @@
 			<ul>
                         <li class='last'> <a href ="/admin?tab_sel=1" id="tabs-1">FACT</a></li>
                         <li class='last'><a href ="/admin?tab_sel=2" id="#tabs-2">PO Details</a></li>
+                       <%
+				if (email!=null && !"".equalsIgnoreCase(email) && ("kaviv@gene.com".equals(email) || "siddagov@gene.com".equals(email))) {
+			%> 
+                        <li class='last'><a href ="/admin?tab_sel=3" id="#tabs-2">User Details</a></li>
+                        <% } %>
                     </ul>  
                     </li>  
 			<%

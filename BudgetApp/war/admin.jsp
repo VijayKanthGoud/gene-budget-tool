@@ -28,9 +28,13 @@ ng\:form {
 	  if(document.URL.split("?")[1].toString().split("=")[1] == 1){
 		  selectedTab=1;
 		  document.getElementById("headerid").innerHTML="FACT";
+		}else if(document.URL.split("?")[1].toString().split("=")[1] == 2){
+			  selectedTab=2;
+			  document.getElementById("headerid").innerHTML="PO Details";
 		}else{
-			selectedTab=2;
-			document.getElementById("headerid").innerHTML="PO Details";
+			selectedTab=3;
+			document.getElementById("costCenter").style.display = "none";
+			document.getElementById("headerid").innerHTML="User Details";
 		}
   });
   
@@ -81,7 +85,7 @@ ng\:form {
 						value="" class="">---- Select a sheet ----</option></select>
 			</div>
 			
-			<div class="form-group">
+			<div id = "costCenter" class="form-group">
 			<span style="font-size: 14px; font-weight: bold">Cost  centre :</span><select id="getCostCenter" class="form-control ng-pristine ng-invalid ng-invalid-required" name="ccValue" style="width: 100px;">
 						<%	List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
 						String ccSelected = "7135";
@@ -147,7 +151,7 @@ ng\:form {
 						window.location.reload(true);
 			        }
 				}); 
-		}else{
+		}else if(selectedTab==2){
 		  $.ajax({
 				url : '/podetailsupload',
 				type : 'POST',
@@ -167,7 +171,28 @@ ng\:form {
 					window.location.reload(true);
 		        }
 			}); 
-		}
+		}else{
+			alert("sheet name = "+$('#sheet_name').val());
+			 	  $.ajax({
+						url : '/userdetailsupload',
+						type : 'POST',
+						dataType : 'text',
+						data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
+							sheetName : $('#sheet_name').val(),
+							inputFrom :  $('#From').val(),
+							inputTo :  $('#To').val()},
+						success : function(result) {
+							alert("Uploaded successfully");
+							console.log('Data saved successfully');
+							window.location.reload(true);
+						},
+						error: function(result) {
+							alert("fail");
+							console.log(result);
+							window.location.reload(true);
+				        }
+					});  
+				}
 	}
 	</script>
 
