@@ -3,8 +3,11 @@ package com.gene.app.model;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
 public class UserRoleInfo implements Serializable {
@@ -15,6 +18,11 @@ public class UserRoleInfo implements Serializable {
 				+ ", role=" + role + "]";
 	}
 
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String Id;
+	
 	@Persistent
 	private String UserName;
 

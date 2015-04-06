@@ -20,6 +20,7 @@ import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.Util;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
@@ -210,6 +211,11 @@ public class DBUtil {
 		}
 		return userMap;
 		
+	}
+	
+	public void putUserInfoToCache(Map<String,UserRoleInfo> userMap){
+		String key = UserRoleInfo.class.getName();
+		cache.put(key, userMap);
 	}
 	
 	public String getPrjEmailByName(String prj_owner){
@@ -760,6 +766,35 @@ public class DBUtil {
 			pm.close();
 		}
 	}
+	public void storeUserData(List<UserRoleInfo> userInfoList) {
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistentAll(userInfoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println("closing all datastore call.");
+			pm.close();
+		}
+		/*List<UserRoleInfo> userListFromCache = (List<UserRoleInfo>)cache.get("UserDataCache");
+		if(userListFromCache!=null && !userInfoList.isEmpty()){
+		userListFromCache.addAll(userInfoList);
+		}else{
+			userListFromCache = new ArrayList<UserRoleInfo>();
+		}*/
+	}
+	public void storeCC_BrandData(CostCenter_Brand cc_brand) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistent(cc_brand);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println("closing all datastore call.");
+			pm.close();
+		}
+	}
 	public void removeExistingProject(List<GtfReport> gtfReports) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -805,9 +840,12 @@ public class DBUtil {
 		cache.put(BudgetConstants.GMBT_SUMMARY+costCenter, summary);
 	}
 	// reading costcenter_brand table data and put it in cache
-	
+	public void putCCDataToCache(List<CostCenter_Brand> ccList){
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName()+"readCostCenterBrandMappingData";
+		cache.put(key, ccList);
+	}
 	public List<CostCenter_Brand> readCostCenterBrandMappingData(){
-		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName();
+		String key = BudgetConstants.costCenter+BudgetConstants.seperator+CostCenter_Brand.class.getName()+"readCostCenterBrandMappingData";
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		CostCenter_Brand cost_brand = new CostCenter_Brand();
 		List<CostCenter_Brand> costCenterList = new ArrayList<CostCenter_Brand>();
@@ -815,14 +853,15 @@ public class DBUtil {
 		if(cache.get(key)!=null){
 			costCenterList = (List<CostCenter_Brand>) cache.get(key);
 		}else{
-			for(int i=0;i<BudgetConstants.costCenterList.length;i++){
+			/*for(int i=0;i<BudgetConstants.costCenterList.length;i++){
 				cost_brand = new CostCenter_Brand();
-				cost_brand.setBrandFromDB(BudgetConstants.costCenterBrands[i]);
+				System.out.println("new Text(BudgetConstants.costCenterBrands[i])"+new Text(BudgetConstants.costCenterBrands[i]));
+				cost_brand.setBrandFromDB(new Text(BudgetConstants.costCenterBrands[i]));
 				cost_brand.setCostCenter(BudgetConstants.costCenterList[i]);
 				costCenterList.add(cost_brand);
-			}
+			}*/
 			
-			/*PersistenceManager pm = PMF.get().getPersistenceManager();
+			PersistenceManager pm = PMF.get().getPersistenceManager();
 
 			Query q = pm.newQuery(CostCenter_Brand.class);
 			q.setOrdering("costCenter asc");
@@ -840,7 +879,7 @@ public class DBUtil {
 			}finally{
 				q.closeAll();
 				pm.close();
-			}*/
+			}
 			cache.put(key, costCenterList);
 		}
 		return costCenterList;
@@ -861,14 +900,7 @@ public class DBUtil {
 				}
 			}
 		}else{
-			for(int i=0;i<BudgetConstants.costCenterList.length;i++){
-				cost_brand = new CostCenter_Brand();
-				cost_brand.setBrandFromDB(BudgetConstants.costCenterBrands[i]);
-				cost_brand.setCostCenter(BudgetConstants.costCenterList[i]);
-				results.add(cost_brand);
-				costCenterList.add(BudgetConstants.costCenterList[i]);
-			}
-			cache.put(key, results);
+			readCostCenterBrandMappingData();
 		}
 		return costCenterList;
 	}
@@ -884,6 +916,7 @@ public class DBUtil {
 			String[] budgetArray = null;
 			String[] valueArray = null;
 			String value = "";
+			String total = "";
 			BudgetSummary summary = new BudgetSummary();
 			for(int i=0;i<brandsArray.length;i++){
 				 summary = new BudgetSummary();
@@ -892,7 +925,8 @@ public class DBUtil {
 				for(int j=0;j<budgetArray.length;j++){
 					valueArray = budgetArray[j].split("=");
 					if(j==1){
-						summary.setTotalBudget(Double.parseDouble(valueArray[1]));
+						total = valueArray[0].replace(",", "");
+						summary.setTotalBudget(Double.parseDouble(total));
 						summary.setAccrualTotal(0.0);
 						summary.setBenchmarkTotal(0.0);
 						summary.setVarianceTotal(0.0);

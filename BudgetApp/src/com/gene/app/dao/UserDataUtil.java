@@ -1,17 +1,14 @@
 package com.gene.app.dao;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import javax.jdo.PersistenceManager;
 
 import com.gene.app.model.BudgetSummary;
 import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.UserRoleInfo;
-import com.google.apphosting.api.DatastorePb.Cost;
+import com.google.appengine.api.datastore.Text;
 
 public class UserDataUtil {
 	
@@ -101,22 +98,18 @@ public class UserDataUtil {
 	
 	//String [] costCenter1 = {"307680","235031","307677","235032","307676","307678","7034","7035","7004","7135"};
 	String [] costCenter1 = {"7527","7034","7035","7121","7712","7135","7713","7428","7512","7574","7136","7138"};//"7004","7512","7138","7136"};
-	String []costCenter2 = {"Indirect Product:total=3033.20;",
-			"Actemra:total=1565.0;Rituxan RA:total=948.0;Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
-			"Indirect Product:total=300.0;Avastin:total=4278.0;Tarceva:total=1125.0;Alectinib:total=1034.0;anti-PDL1:total=2250.0;Rituxan Heme/Onc:total=969.0;Gazyva:total=2339.0;GDC-0199:total=689.0;Herceptin:total=850.0;Kadcyla:total=1600.0;Perjeta:total=1340.0;Erivedge:total=1250.0;Zelboraf:total=350.0;Cobimetinib:total=1075.0;BioOnc Pipeline:total=840.0;GDC0941:total=800.0;",
-			"Indirect Product:total=100.0;Nutropin:total=300.0;Tamiflu:total=310.0;Lytics:total=945.0;Ocrelizumab:total=2000.0;Gantenerumab:total=450.0;Crenezumab:total=300.0;Alzheimers:total=200.0;LptD:total=250.0;ACE-910:total=1255.0;IMPACT Pipeline General:total=850.0;Neuroscience Pipeline:total=250.0;",
-			"Indirect Product:total=869.83;",
-			"Indirect Product:total=100.0;Nutropin:total=300.0;Tamiflu:total=310.0;Lytics:total=945.0;Ocrelizumab:total=2000.0;Gantenerumab:total=450.0;Crenezumab:total=300.0;Alzheimers:total=200.0;LptD:total=250.0;ACE-910:total=1255.0;IMPACT Pipeline General:total=850.0;Neuroscience Pipeline:total=250.0;",
-			"Indirect Product:total=1507.83;",
-			//"Indirect Product:total=1825.6; Avastin:total=400.0; Tarceva:total=140.0; Alectinib:total=65.0; anti-PDL1:total=1040.0; Rituxan Heme/Onc:total=275.0; Gazyva:total=125.0; GDC-0199:total=205.0; Herceptin:total=555.0; Kadcyla:total=302.5; Perjeta:total=307.5; Erivedge:total=100.0; Cobimetinib:total=50.0; BioOnc Pipeline:total=100.0; Actemra:total=102.5; Rituxan RA:total=190.0; Esbriet:total=800.0; Lucentis:total=280.0; Pulmozyme:total=4705; Xolair:total=1550.; Lampalizumab:total=50.0; General Immun Pipeline:total=50.0; Lebrikizumab:total=100.0; Valcyte:total=30.0; Nutropin:total=30.0; Tamiflu:total=20.0; Lytics:total=53.5;",
-			"Avastin:total=75.0;Alectinib:total=605.0;GDC-0199:total=100.0;Herceptin:total=20.0;Kadcyla:total=140.0;Perjeta:total=140.0;Erivedge:total=100.0;Cobimetinib:total=170.0;Actemra:total=250.0;Lucentis:total=150.0;Pulmozyme:total=350.0;Lampalizumab:total=185.0;General Immun Pipeline:total=25.0;Tamiflu:total=806.0;Ocrelizumab:total=1215.0;Gantenerumab:total=250.0;Crenezumab:total=150.0;ACE-910:total=650.0;",
-			"Avastin:total=75.0;Alectinib:total=605.0;GDC-0199:total=100.0;Herceptin:total=20.0;Kadcyla:total=140.0;Perjeta:total=140.0;Erivedge:total=100.0;Cobimetinib:total=170.0;Actemra:total=250.0;Lucentis:total=150.0;Pulmozyme:total=350.0;Lampalizumab:total=185.0;General Immun Pipeline:total=25.0;Tamiflu:total=806.0;Ocrelizumab:total=1215.0;Gantenerumab:total=250.0;Crenezumab:total=150.0;ACE-910:total=650.0;",
-			"Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
-			"Actemra:total=1565.0;Rituxan RA:total=948.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
-			"Actemra:total=1223.0;Rituxan RA:total=128.0;Esbriet:total=1300.0;Lucentis:total=1325.0;Pulmozyme:total=315.0;Xolair:total=560.0;Lampalizumab:total=580.0;Etrolizumab:total=450.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1700.0;Indirect Product:total=100.0;"
-			//"Avastin:total=276.00; Tarceva:total=85.98; Alectinib:total=170.56; anti-PDL1:total=630.56; Rituxan Heme/Onc:total=158.84; Gazyva:total=444.90; GDC-0199:total=300.00; Herceptin:total=110.11; Kadcyla:total=677.22; Perjeta:total=112.22; Erivedge:total=92.72; Zelboraf:total=41.00; Cobimetinib:total=260.00; BioOnc Pipeline:total=350.00; Actemra:total=574.00; Rituxan RA:total=207.00; Esbriet:total=250.00; Lucentis:total=304.09; Pulmozyme:total=115.00;Xolair:total=707.57; Etrolizumab:total=50.00; General Immun Pipeline:total=50.00; Lebrikizumab:total=108.00; Valcyte:total=120.00; Ocrelizumab:total=1017.64; Gantenerumab:total=201.00; Crenezumab:total=175.00; Alzheimers:total=174.00; LptD:total=350.00; ACE-910:total=490.00;IMPACT Pipeline General:total=300.00; Neuroscience Pipeline:total=150.00;",
-			//"Avastin:total=1235.0;Tarceva:total=270.0;Alectinib:total=200.0;anti-PDL1:total=605.0;Rituxan Heme/Onc:total=305.0;Gazyva:total=570.0;GDC-0199:total=200.0;Herceptin:total=100.0;Kadcyla:total=550.0;Perjeta:total=550.0;Erivedge:total=290.0;Zelboraf:total=152.0;Cobimetinib:total=168.0;BioOnc Pipeline:total=150.0;Actemra:total=600.0;Rituxan RA:total=238.0;Esbriet:total=400.0;Lucentis:total=135.0;Pulmozyme:total=135.0;Xolair:total=850.0; General Immun Pipeline:total=100.0;Lebrikizumab:total=50.0;Valcyte:total=235.0;Nutropin:total=100.0; Tamiflu:total=225.0;Lytics:total=180.0;Ocrelizumab:total=800.0;Gantenerumab:total=295.0; Crenezumab:total=65.0; Alzheimers:total=90.0;LptD:total=165.0;ACE-910:total=265.0;IMPACT Pipeline General:total=275.0;Neuroscience Pipeline:total=115.0;Indirect Product:total=587.07;",
-			//"Avastin:total=511.0;Tarceva:total=152.0;Alectinib:total=105.0;anti-PDL1:total=650.0;Rituxan Heme/Onc:total=200.0;Gazyva:total=183.0;GDC-0199:total=160.0;Herceptin:total=50.0;Kadcyla:total=110.0;Perjeta:total=115.0;Erivedge:total=50.0;Zelboraf:total=75.0;Cobimetinib:total=100.0;BioOnc Pipeline:total=400.0;Actemra:total=500.0;Rituxan RA:total=150.0;Esbriet:total=400.0;Lucentis:total=275.0;Pulmozyme:total=225.0;Xolair:total=200.0;Lampalizumab:total=275.0;Etrolizumab:total=50.0;General Immun Pipeline:total=20.0;Lebrikizumab:total=325.0;Valcyte:total=200.0;Tamiflu:total=110.0;Lytics:total=85.0;Ocrelizumab:total=440.0;Alzheimers:total=170.0;LptD:total=125.0;ACE-910:total=175.0;IMPACT Pipeline General:total=220.0;Neuroscience Pipeline:total=97.0; Xenical:total=67.5;Invirase:total=67.5;Indirect Product:total=489.22;"
+	String []costCenter2 = {"Indirect Product:3033.20;",
+			"Actemra:1565.0;Rituxan RA:948.0;Esbriet:1800.0;Lucentis:1315.0;Pulmozyme:815.0;Xolair:1560.0;Lampalizumab:680.0;Etrolizumab:150.0;General Immun Pipeline:500.0;Lebrikizumab:1200.0;Indirect Product:100.0;",
+			"Indirect Product:300.0;Avastin:4278.0;Tarceva:1125.0;Alectinib:1034.0;anti-PDL1:2250.0;Rituxan Heme/Onc:969.0;Gazyva:2339.0;GDC-0199:689.0;Herceptin:850.0;Kadcyla:1600.0;Perjeta:1340.0;Erivedge:1250.0;Zelboraf:350.0;Cobimetinib:1075.0;BioOnc Pipeline:840.0;GDC0941:800.0;",
+			"Indirect Product:100.0;Nutropin:300.0;Tamiflu:310.0;Lytics:945.0;Ocrelizumab:2000.0;Gantenerumab:450.0;Crenezumab:300.0;Alzheimers:200.0;LptD:250.0;ACE-910:1255.0;IMPACT Pipeline General:850.0;Neuroscience Pipeline:250.0;",
+			"Indirect Product:869.83;",
+			"Indirect Product:100.0;Nutropin:300.0;Tamiflu:310.0;Lytics:945.0;Ocrelizumab:2000.0;Gantenerumab:450.0;Crenezumab:300.0;Alzheimers:200.0;LptD:250.0;ACE-910:1255.0;IMPACT Pipeline General:850.0;Neuroscience Pipeline:250.0;",
+			"Indirect Product:1507.83;",
+			"Avastin:75.0;Alectinib:605.0;GDC-0199:100.0;Herceptin:20.0;Kadcyla:140.0;Perjeta:140.0;Erivedge:100.0;Cobimetinib:170.0;Actemra:250.0;Lucentis:150.0;Pulmozyme:350.0;Lampalizumab:185.0;General Immun Pipeline:25.0;Tamiflu:806.0;Ocrelizumab:1215.0;Gantenerumab:250.0;Crenezumab:150.0;ACE-910:650.0;",
+			"Avastin:75.0;Alectinib:605.0;GDC-0199:100.0;Herceptin:20.0;Kadcyla:140.0;Perjeta:140.0;Erivedge:100.0;Cobimetinib:170.0;Actemra:250.0;Lucentis:150.0;Pulmozyme:350.0;Lampalizumab:185.0;General Immun Pipeline:25.0;Tamiflu:806.0;Ocrelizumab:1215.0;Gantenerumab:250.0;Crenezumab:150.0;ACE-910:650.0;",
+			"Esbriet:1800.0;Lucentis:1315.0;Pulmozyme:815.0;Xolair:1560.0;Lampalizumab:680.0;Etrolizumab:150.0;General Immun Pipeline:500.0;Lebrikizumab:1200.0;Indirect Product:100.0;",
+			"Actemra:1565.0;Rituxan RA:948.0;Pulmozyme:815.0;Xolair:1560.0;Lampalizumab:680.0;Etrolizumab:150.0;General Immun Pipeline:500.0;Lebrikizumab:1200.0;Indirect Product:100.0;",
+			"Actemra:1223.0;Rituxan RA:128.0;Esbriet:1300.0;Lucentis:1325.0;Pulmozyme:315.0;Xolair:560.0;Lampalizumab:580.0;Etrolizumab:450.0;General Immun Pipeline:500.0;Lebrikizumab:1700.0;Indirect Product:100.0;"
 			};
 	public void insertUserRoleInfo(){
 		String selectedCostCenter = "";
@@ -627,7 +620,8 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		for(int i=0;i<costCenter1.length;i++){
 			cc = new CostCenter_Brand();
 			//cc.setBrandFromDB("Perjeta:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=30000.0;Avastin:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=40000.0;Tarceva:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=50000.0;Onart:planned=0.0:accrual=0.0:benchMark=0.0:variance=0.0:total=60000.0;");
-			cc.setBrandFromDB(costCenter2[i]);
+			System.out.println("new Text(costCenter2[i])::::::::::"+new Text(costCenter2[i]));
+			cc.setBrandFromDB(new Text(costCenter2[i]));
 			cc.setCostCenter(costCenter1[i]);
 			ccList.add(cc);
 		}

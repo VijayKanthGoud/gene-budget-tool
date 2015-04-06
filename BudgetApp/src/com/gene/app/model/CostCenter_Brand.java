@@ -3,22 +3,32 @@ package com.gene.app.model;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable
 public class CostCenter_Brand  implements Serializable {
 	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String Id;
+	
 	@Persistent
 	private String costCenter;
 	@Persistent
-	private String brandFromDB;
+	private Text brandFromDB;
 	
 	private Map<String,Double> brand;
 	public String getBrandFromDB() {
-		return brandFromDB;
+		return brandFromDB.getValue();
 	}
-	public void setBrandFromDB(String brandFromDB) {
+	public void setBrandFromDB(Text brandFromDB) {
 		this.brandFromDB = brandFromDB;
 	}
 	public String getCostCenter() {

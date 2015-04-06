@@ -151,8 +151,8 @@ public interface BudgetConstants {
 	public static final String GMEMORI_COLLECTION = "gMemoriIdCollection";
 	public static final String USER_ROLE_BRAND_OWNER = "brandOwner";
 	public static final String [] costCenterList = {"7527","7034","7035","7121","7712","7135","7713","7428","7512","7574","7136","7138"};//"7004","7512","7138","7136"};
-	public static final String []costCenterBrands = {"Indirect Product:total=3033.20;",
-			"Actemra:total=1565.0;Rituxan RA:total=948.0;Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
+	/*public static final String []costCenterBrands = {"Indirect Product:3033.20;",
+			"Actemra:1565.0;Rituxan RA:948.0;Esbriet:1800.0;Lucentis:1315.0;Pulmozyme:815.0;Xolair:1560.0;Lampalizumab:680.0;Etrolizumab:150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
 			"Indirect Product:total=300.0;Avastin:total=4278.0;Tarceva:total=1125.0;Alectinib:total=1034.0;anti-PDL1:total=2250.0;Rituxan Heme/Onc:total=969.0;Gazyva:total=2339.0;GDC-0199:total=689.0;Herceptin:total=850.0;Kadcyla:total=1600.0;Perjeta:total=1340.0;Erivedge:total=1250.0;Zelboraf:total=350.0;Cobimetinib:total=1075.0;BioOnc Pipeline:total=840.0;GDC0941:total=800.0;",
 			"Indirect Product:total=100.0;Nutropin:total=300.0;Tamiflu:total=310.0;Lytics:total=945.0;Ocrelizumab:total=2000.0;Gantenerumab:total=450.0;Crenezumab:total=300.0;Alzheimers:total=200.0;LptD:total=250.0;ACE-910:total=1255.0;IMPACT Pipeline General:total=850.0;Neuroscience Pipeline:total=250.0;",
 			"Indirect Product:total=869.83;",
@@ -163,6 +163,6 @@ public interface BudgetConstants {
 			"Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
 			"Actemra:total=1565.0;Rituxan RA:total=948.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
 			"Actemra:total=1223.0;Rituxan RA:total=128.0;Esbriet:total=1300.0;Lucentis:total=1325.0;Pulmozyme:total=315.0;Xolair:total=560.0;Lampalizumab:total=580.0;Etrolizumab:total=450.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1700.0;Indirect Product:total=100.0;"
-			};
+			};*/
 
 }

@@ -2,6 +2,7 @@ package com.gene.app.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -49,5 +50,13 @@ public class Util {
 			return new TreeMap();
 		}
 	}
+	
+	/*public static String escapeHTML(String val){
+		String quot = &quot;
+		
+		return "";
+	}
+	
+	private static Map<String,String> escapeSeqMap = new HashMap<String,String>();*/
 	
 }
