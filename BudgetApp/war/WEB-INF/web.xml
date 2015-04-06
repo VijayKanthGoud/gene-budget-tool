@@ -175,6 +175,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>UserDetailsUpload</servlet-name>
+		<servlet-class>com.gene.app.action.UserDetailsUpload</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserDetailsUpload</servlet-name>
+		<url-pattern>/userdetailsupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>downloadFile</servlet-name>
 		<servlet-class>com.gene.app.action.DownloadFileServlet</servlet-class>
 	</servlet>
