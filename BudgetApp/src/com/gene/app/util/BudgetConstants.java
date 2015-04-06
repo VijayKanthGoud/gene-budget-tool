@@ -164,5 +164,11 @@ public interface BudgetConstants {
 			"Actemra:total=1565.0;Rituxan RA:total=948.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
 			"Actemra:total=1223.0;Rituxan RA:total=128.0;Esbriet:total=1300.0;Lucentis:total=1325.0;Pulmozyme:total=315.0;Xolair:total=560.0;Lampalizumab:total=580.0;Etrolizumab:total=450.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1700.0;Indirect Product:total=100.0;"
 			};*/
+	
+	public static final String FORECAST = "Forecast";
+	public static final String ACCRUAL = "Accrual";
+	public static final String QUARTERLY_TARGET = "Quarterly Target"; 
+	public static final String QUARTERLY_LTS = "Quarterly LTS";
+	
 
 }

@@ -366,7 +366,7 @@ function updateMemCache(e, args, tempKey) {
 		cellValue = item[itemCell];
 	}
 	var cellNum = fixedCell - 12;
-	if(item[37]==true && item["11"] == "Accrual" && item[27].toString().indexOf(".") != -1){
+	if(item[37]==true && item["11"] == "<%=BudgetConstants.ACCRUAL%>" && item[27].toString().indexOf(".") != -1){
 		key = item[27];
 	}else{
 		key = item[34];
@@ -428,7 +428,7 @@ function updateMemCache(e, args, tempKey) {
 				var d = data[i];
 				if((key.toString().indexOf(".") != -1) && 
 						key.split(".")[0]== d[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
-					if(d[11]=="Accrual"){
+					if(d[11]=="<%=BudgetConstants.ACCRUAL%>"){
 						var aSave = (aSaveData[iCnt] = {});
 						
 						d[fixedCell] = parseFloat(d[fixedCell]) + parseFloat(item[fixedCell]) - parseFloat(item[50]);
@@ -438,7 +438,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="LTS"){
+									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 								kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 								break;
 							}
@@ -447,7 +447,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Accrual"){
+									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.ACCRUAL%>"){
 								if(kData[27].toString().indexOf(".") != -1){
 									val += parseFloat(kData[itemCell]);
 								}
@@ -456,7 +456,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Forecast" ){
+									key.split(".")[0] == d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.FORECAST%>" ){
 								if (kData[27].toString().indexOf(".") == -1){
 									kData[itemCell] = parseFloat(val);
 								}else if(kData[27] == key){
@@ -469,7 +469,7 @@ function updateMemCache(e, args, tempKey) {
 						var kData = data[iVar];
 						
 						if(key.toString().indexOf(".") != -1 && key == kData[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && 
-								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="LTS"){
+								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 							aSave = (aSaveData[iCnt] = {});
 							kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 							aSave[0] = kData[27];
@@ -481,15 +481,15 @@ function updateMemCache(e, args, tempKey) {
 				}
 
 				if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
-					if(d[11]=="Accrual"){
+					if(d[11]=="<%=BudgetConstants.ACCRUAL%>"){
 						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
-					}else if(d[11]=="LTS"){
+					}else if(d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 						if( item[43]=='undefined' ||item[43]=="" ){
 							item[43]=0.0;
 						}
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
-							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="Quarterly Target"){
+							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"){
 								d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
 								break;
 							}
@@ -508,7 +508,7 @@ function updateMemCache(e, args, tempKey) {
 						d[24]= parseFloat(varTotal);
 					}
 				}
-				if(key== d[34] && d[11]=="Forecast" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+				if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 					var aSave = (aSaveData[iCnt] = {});
 					aSave[0] = d[27];
 					if(d[7] == 0.0){
@@ -531,7 +531,7 @@ function updateMemCache(e, args, tempKey) {
 						d[24]= parseFloat(varTotal);
 					}
 					iCnt++;
-				}else if(key== d[34] && d[11]=="Forecast" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
 					var aSave = (aSaveData[iCnt] = {});
 					aSave[0] = d[27];
 					if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
@@ -562,7 +562,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 					//aSave[2] = d["47"];
 					iCnt++;
-				}else if(key== d[34] && d[11]=="Quarterly Target" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {
@@ -604,7 +604,7 @@ function updateMemCache(e, args, tempKey) {
 			$('#statusMessage');
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
-				if(key== d[34] && d[11]=="Forecast" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+				if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
 				
 				d["0"] = d["27"];
 			}}
@@ -658,31 +658,31 @@ function createNewProjects(){
 	$('#noData').hide();
 	var length= data.length;
 	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"",3:"",4:"",5:"",6:"",7:"100.0",8:"",9:"",10:""
-		,11:"Forecast",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+		,11:"<%=BudgetConstants.FORECAST%>",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	dataView.insertItem(0,item);
 if(addsave ==0){
     var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 				,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
+						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
+						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 				,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 					,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
+						,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	var item4 ={id:"id_"+length+4,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 			,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Closed",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	var item5 ={id:"id_"+length+5,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 		,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	dataView.insertItem(1,item3);
     dataView.insertItem(2,saveClose);
     dataView.insertItem(3,item2);
@@ -714,23 +714,23 @@ function createIntProjects(){
 	$('#noData').hide();
 	var length= data.length;
 	var item ={id:"id_"+length+1,indent:0,0:"",1:"<%=userInfo.getUserName()%>",2:"",3:"",4:"",5:"",6:"",7:"100.0",8:"",9:"",10:""
-		,11:"Forecast",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
+		,11:"<%=BudgetConstants.FORECAST%>",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	dataView.insertItem(0,item);
 	if(addsave ==0){
 	    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 					,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
+							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 		var item2 ={id:"id_"+length+6,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 					,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
+							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 		var item3 ={id:"id_"+length+3,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 					,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 						,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"Forecast"};
+							,31:"",32:"",33:"New",34:"New projects",35:"Buttons",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	
 		dataView.insertItem(1,item3);
 	    dataView.insertItem(2,saveClose);
@@ -747,7 +747,7 @@ function dummyNewProjects(){
 	var item ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	dataView.insertItem(0,item);
     dataView.refresh(); 
     data=dataView.getItems();
@@ -762,7 +762,7 @@ function dummyActiveProjects(){
 	var item5 ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 		,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Active",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	if(activeExist==false){
 		data[++iPlace] = item5;
 	}
@@ -775,7 +775,7 @@ function dummyClosedProjects(){
 	var item4 ={id:"id_"+length,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""
 		,11:"",12:0.0,13:0.0,14:0.0,15:0.0,16:0.0,17:0.0,18:0.0,19:0.0,20:0.0
 			,21:0.0,22:0.0,23:0.0,24:0.0,25:"",26:"Closed",27:"",28:"",29:"",30:""
-				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"Forecast"};
+				,31:"",32:"",33:"New",34:"",35:"",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	
 	if(closedExist==false){
 		data[++iPlace] = item4;
@@ -1352,18 +1352,18 @@ function modifyData(data){
 	modifiedRowData.requestor = "";
 	var today = new Date();
     var month = today.getMonth()+1;
-    month > 0? modifiedRowData.jan = "Actual": modifiedRowData.jan = "Forecast";
-    month > 1? modifiedRowData.feb = "Actual": modifiedRowData.feb = "Forecast";
-    month > 2? modifiedRowData.mar = "Actual": modifiedRowData.mar = "Forecast";
-    month > 3? modifiedRowData.apr = "Actual": modifiedRowData.apr = "Forecast";
-    month > 4? modifiedRowData.may = "Actual": modifiedRowData.may = "Forecast";
-    month > 5? modifiedRowData.jun = "Actual": modifiedRowData.jun = "Forecast";
-    month > 6? modifiedRowData.jul = "Actual": modifiedRowData.jul = "Forecast";
-    month > 7? modifiedRowData.aug = "Actual": modifiedRowData.aug = "Forecast";
-    month > 8? modifiedRowData.sep = "Actual": modifiedRowData.sep = "Forecast";
-    month > 9? modifiedRowData.oct = "Actual": modifiedRowData.oct = "Forecast";
-    month > 10? modifiedRowData.nov = "Actual": modifiedRowData.nov = "Forecast";
-    month > 11? modifiedRowData.dec = "Actual": modifiedRowData.dec = "Forecast";
+    month > 0? modifiedRowData.jan = "Actual": modifiedRowData.jan = "<%=BudgetConstants.FORECAST%>";
+    month > 1? modifiedRowData.feb = "Actual": modifiedRowData.feb = "<%=BudgetConstants.FORECAST%>";
+    month > 2? modifiedRowData.mar = "Actual": modifiedRowData.mar = "<%=BudgetConstants.FORECAST%>";
+    month > 3? modifiedRowData.apr = "Actual": modifiedRowData.apr = "<%=BudgetConstants.FORECAST%>";
+    month > 4? modifiedRowData.may = "Actual": modifiedRowData.may = "<%=BudgetConstants.FORECAST%>";
+    month > 5? modifiedRowData.jun = "Actual": modifiedRowData.jun = "<%=BudgetConstants.FORECAST%>";
+    month > 6? modifiedRowData.jul = "Actual": modifiedRowData.jul = "<%=BudgetConstants.FORECAST%>";
+    month > 7? modifiedRowData.aug = "Actual": modifiedRowData.aug = "<%=BudgetConstants.FORECAST%>";
+    month > 8? modifiedRowData.sep = "Actual": modifiedRowData.sep = "<%=BudgetConstants.FORECAST%>";
+    month > 9? modifiedRowData.oct = "Actual": modifiedRowData.oct = "<%=BudgetConstants.FORECAST%>";
+    month > 10? modifiedRowData.nov = "Actual": modifiedRowData.nov = "<%=BudgetConstants.FORECAST%>";
+    month > 11? modifiedRowData.dec = "Actual": modifiedRowData.dec = "<%=BudgetConstants.FORECAST%>";
 	modifiedRowData.total = "FY";
 	modifiedRowData.unit = "FY";
 	modifiedRowData.poTotal = "FY";
@@ -1398,13 +1398,13 @@ function modifyData(data){
 	modifiedRowData.unit = "Unit";
 	modifiedRowData.poTotal = "PO Total";
 	modifiedRowData.variance = "LTS";
-	modifiedRowData.forecast = "ForeCast";
+	modifiedRowData.forecast = "<%=BudgetConstants.FORECAST%>";
 	modifiedData.push(modifiedRowData);
 	for(var cnt = 0; cnt < data.length; cnt++){
 		var rowData = data[cnt];
 		modifiedRowData = [];
 		
-		if(rowData[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().trim() != "" &&rowData[<%=BudgetConstants.$_IN_1000_FIELD%>] == "Forecast"){
+		if(rowData[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().trim() != "" &&rowData[<%=BudgetConstants.$_IN_1000_FIELD%>] == "<%=BudgetConstants.FORECAST%>"){
 			
 			modifiedRowData.prjWBS = rowData[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
 			modifiedRowData.wbsName = "";
