@@ -41,7 +41,7 @@ String ccView="";
 <body onload="getBrandTotals();getAvailableTags();">
 	<div align="center">
 		<table
-			style="border: 1px solid gray; background: #EAF4FD; padding: 6px; width: 100%; font-weight: normal; color: #2271B0; float: left;">
+			style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
 			<tr>
 				<td style="width: 20%; padding-bottom: 2.5%" rowspan="2">
 					<table class="summarytable"
@@ -62,7 +62,7 @@ String ccView="";
 					UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo");
 				%>
 				<td
-					style="padding-left: 1.5%; padding-top: 1%; width: 50%; text-align: center;">
+					style="padding-left: 1.5%; width: 50%; text-align: center;">
 					<table align="center">
 						<tr>
 							<td width="100px"><span
@@ -200,32 +200,18 @@ String ccView="";
 										}}
 											}
 									%>
-									<%-- <% BudgetSummary summary1 = (BudgetSummary) session.getAttribute("summary");
-							Map<String, BudgetSummary> budgetMap1 = summary1.getBudgetMap();%>
-				 <% String option1 = "";
-                            if(budgetMap1!=null && !budgetMap1.isEmpty()){
-                            	Object[] budgets = budgetMap1.keySet().toArray();
-                            	ArrayList<Object> totallist = new ArrayList<Object>(Arrays.asList(budgets));
-                            	 userlist = new ArrayList<Object>(Arrays.asList(myBrands));
-                            	 totallist.removeAll(userlist);
-                            	Object[] budgets1=totallist.toArray();
-                            for(int i=0;i<budgets1.length;i++){ 
-                            option1 = budgets1[i].toString();
-                            if(brandValue.equals(option1)){%>
-                            <option value="<%=option1 %>" selected><%=option1 %></option>
-                            <%}else{ %>
-                            <option value="<%=option1 %>"><%=option1 %></option>
-                            <%}}} %> --%>
-
 							</select></td>
+						</tr>
+						<tr> 
+						<td style="padding-left: 21.5%; padding-top: 20px;" colspan='2'>
+								<input type=text style="float: left; width: 150px;"
+								id="txtSearch"> <img src="images/search.png" height="20"
+								width="20" align="bottom" style="float: left;"
+								title="Search in Project name, gMemori Id, Brand and Remarks.">
+							</td>
 						</tr>
 
 
-						</td>
-			</tr>
-				
-						
-				</td>
 			</table>
 			<div id="selectthebrand">
 				
@@ -363,14 +349,6 @@ String ccView="";
 							</td>
 						</tr>
 					</table>
-				</td>
-			</tr>
-			<tr style="">
-				<td style="padding-left: 21.5%; padding-bottom: 3%"><input
-					type=text style="float: left; align: center; width: 35%;"
-					id="txtSearch"> <img src="images/search.png" height="20"
-					width="20" align="bottom" style="float: left;"
-					title="Search in Project name, gMemori Id, Brand and Remarks.">
 				</td>
 			</tr>
 		</table>
