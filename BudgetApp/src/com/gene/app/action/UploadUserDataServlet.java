@@ -16,6 +16,7 @@ public class UploadUserDataServlet extends HttpServlet {
 		util.insertCCMapping();
 		util.insertUserRoleInfo();
 		util.insertBudgetSummary();
+		util.insertCutOffDates();
 		resp.sendRedirect("/logout");
 	}
 }

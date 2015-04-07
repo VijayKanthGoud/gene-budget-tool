@@ -1,17 +1,22 @@
 package com.gene.app.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 
 import com.gene.app.model.BudgetSummary;
 import com.gene.app.model.CostCenter_Brand;
+import com.gene.app.model.QuarterCutoffDates;
 import com.gene.app.model.UserRoleInfo;
 import com.google.appengine.api.datastore.Text;
 
 public class UserDataUtil {
 	
+	private final static Logger LOGGER = Logger.getLogger(UserDataUtil.class.getName());
 	// create username array
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2"};//,"","","",""};
 	//String [] userName = {"mathura2","nellurks","siddagov","goldy","kaviv","sreedhac","makodea","singhb15","chinthb2","test","challags"};//,"","","",""};
@@ -632,6 +637,34 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
+			pm.close();
+		}
+	}
+
+	public void insertCutOffDates() {
+		LOGGER.log(Level.INFO, "Adding quarterly Cutoff Dates...");
+		List<QuarterCutoffDates> cDates = new ArrayList<QuarterCutoffDates>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		for (int i = 0; i < 4; i++) {
+			QuarterCutoffDates qcd = new QuarterCutoffDates();
+			qcd.setQtr(i + "");
+			Date date = new Date();
+			date.setDate(10);
+			date.setMonth((i * 3) + 1);
+			qcd.setDateTime(date);
+			LOGGER.log(Level.INFO,
+					"Added Cutoff Dates - Quarter : " + qcd.getQtr()
+							+ " Date : " + date);
+			cDates.add(qcd);
+		}
+		try {
+			pm.makePersistentAll(cDates);
+			LOGGER.log(Level.INFO, "Persisted Cutoff Dates!!!");
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Error while persisting!!!");
+			e.printStackTrace();
+		} finally {
 			pm.close();
 		}
 	}
