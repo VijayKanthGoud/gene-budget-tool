@@ -123,14 +123,19 @@ public class FactSheetUploadServlet extends HttpServlet {
 					&& !recvdRow.get(4).toString().toString().trim().equals("")) {
 				gtfReport.setWBS_Name(recvdRow.get(4).toString());
 			} else {
-				gtfReport.setWBS_Name(recvdRow.get(4).toString());
+				gtfReport.setWBS_Name("");
 			}
 
 			
 
 			if (recvdRow.get(6) != null && !recvdRow.get(6).toString().equals("#")
 					&& !recvdRow.get(6).toString().trim().equals("")) {
-				gtfReport.setBrand(recvdRow.get(6).toString());
+				if("Total Products".equalsIgnoreCase(recvdRow.get(6).toString())){
+					gtfReport.setBrand(gtfReport.getWBS_Name());	
+				}else{
+					gtfReport.setBrand(recvdRow.get(6).toString());
+				}
+				
 			} else {
 				gtfReport.setBrand("No brand");
 			}
@@ -307,6 +312,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 
 	private void changeForMultiBrand(Map<String, ArrayList<GtfReport>> uploadedPOs, List<GtfReport> gtfReports) {
 		Map<String, Double> setZeroMap = new HashMap<String, Double>();
+		Map<String, Double> plannedMap = null;
 		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 		}
@@ -322,6 +328,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
+		    	plannedMap = new HashMap(setZeroMap);
 		    	String gMemoriId = nwParentGtfReport.getgMemoryId();
 		    	int count = 1;
 				double total = 0.0;
@@ -329,12 +336,13 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		Map<String, Double> receivedChildMap = new HashMap(gtfRpt.getPlannedMap());
 		    		for (Entry<String, Double> entryMap : receivedChildMap.entrySet()){
-		    			nwParentGtfReport.getPlannedMap().put(entryMap.getKey(), nwParentGtfReport.getPlannedMap().get(entryMap.getKey()) + entryMap.getValue());
+		    			plannedMap.put(entryMap.getKey(), plannedMap.get(entryMap.getKey()) + entryMap.getValue());
 		    		}
+		    		nwParentGtfReport.setPlannedMap(plannedMap);
 		    		gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
 					total += gtfRpt.getPlannedMap().get("TOTAL");
 					childProjList.add(gMemoriId + "." + (count++));
-		    		childProjList.add(gMemoriId +"."+ (count++));
+		    		//childProjList.add(gMemoriId +"."+ (count++));
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
 		    	nwParentGtfReport.setBrand("Smart WBS");
