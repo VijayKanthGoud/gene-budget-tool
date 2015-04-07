@@ -28,6 +28,9 @@ String ccView="";
 	if (key == null) {
 		key = "";
 	}
+	
+	Map<String, Date> cutofDates = util.getCutOffDates();
+	Date cutOfDate = cutofDates.get(qtr+"");
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"

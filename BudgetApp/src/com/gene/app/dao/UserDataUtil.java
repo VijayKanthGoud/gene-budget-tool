@@ -650,8 +650,8 @@ Map<String,Double> brand7527Map = new LinkedHashMap<String,Double>();
 			QuarterCutoffDates qcd = new QuarterCutoffDates();
 			qcd.setQtr(i + "");
 			Date date = new Date();
-			date.setDate(10);
-			date.setMonth((i * 3) + 1);
+			date.setDate(6);
+			date.setMonth(i * 3);
 			qcd.setDateTime(date);
 			LOGGER.log(Level.INFO,
 					"Added Cutoff Dates - Quarter : " + qcd.getQtr()
