@@ -359,6 +359,8 @@ function updateMemCache(e, args, tempKey) {
 		}
 	}
 	
+	var qtrEditing =  Math.floor((fixedCell - 12) / 3);
+	
 	var cellValue ;
 	if(cell == <%=BudgetConstants.BRAND_CELL%>){
 	cellValue = item[6];
@@ -562,7 +564,8 @@ function updateMemCache(e, args, tempKey) {
 					}
 					//aSave[2] = d["47"];
 					iCnt++;
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && d[26]=="New"){
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
+						((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {

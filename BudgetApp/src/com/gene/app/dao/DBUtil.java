@@ -3,6 +3,7 @@ package com.gene.app.dao;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.jdo.Query;
 import com.gene.app.model.BudgetSummary;
 import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
-import com.gene.app.model.QTR_CUTOFF_DATES;
+import com.gene.app.model.QuarterCutoffDates;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.Util;
@@ -556,15 +557,15 @@ public class DBUtil {
 		return gtfList;
 	}
 	
-	public Map<String,QTR_CUTOFF_DATES> getCutOffDates() {
+	public Map<String,Date> getCutOffDates() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query q = pm.newQuery(QTR_CUTOFF_DATES.class);
-		Map<String,QTR_CUTOFF_DATES> cutOffDateList = new LinkedHashMap<String,QTR_CUTOFF_DATES>();
+		Query q = pm.newQuery(QuarterCutoffDates.class);
+		Map<String,Date> cutOffDateList = new LinkedHashMap<String,Date>();
 		try{
-			List<QTR_CUTOFF_DATES> results = (List<QTR_CUTOFF_DATES>) q.execute();
+			List<QuarterCutoffDates> results = (List<QuarterCutoffDates>) q.execute();
 			if(!results.isEmpty()){
-			for(QTR_CUTOFF_DATES p : results){
-				cutOffDateList.put(p.getQtr(),p);
+			for(QuarterCutoffDates p : results){
+				cutOffDateList.put(p.getQtr(), p.getDateTime());
 			}}
 		}catch(Exception e){
 			e.printStackTrace();

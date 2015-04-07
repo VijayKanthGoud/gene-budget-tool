@@ -2,7 +2,7 @@ package com.gene.app.model;
 
 import java.util.Date;
 
-public class QTR_CUTOFF_DATES {
+public class QuarterCutoffDates {
 
 	private String qtr;
 	private Date dateTime;

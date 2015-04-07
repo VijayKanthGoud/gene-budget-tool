@@ -20,10 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
 import com.gene.app.dao.DBUtil;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
@@ -41,8 +37,8 @@ public class PODetailsUpload extends HttpServlet {
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
 	String brand = "";
 	String PM = "";
-	String WBS = "";
-	String WBSName = "";
+	//String WBS = "";
+	//String WBSName = "";
 	boolean isMultibrand = false;
 	int curMonth =0;
 
@@ -114,6 +110,12 @@ public class PODetailsUpload extends HttpServlet {
 				.prepareProjectNameMap(costCenterWiseGtfRptMap);
 		
 		for (List rcvdRow : rowList) {
+			if(rcvdRow.get(1).toString().trim().isEmpty() && 
+					rcvdRow.get(3).toString().trim().isEmpty() && 
+					rcvdRow.get(5).toString().trim().isEmpty() && 
+					rcvdRow.get(6).toString().trim().isEmpty()){
+				continue;
+			}
 			String receivedGmemoriId = "";
 			if (rcvdRow.get(1).toString().contains(" Total")) {
 				continue;
@@ -127,13 +129,13 @@ public class PODetailsUpload extends HttpServlet {
 				PM = rcvdRow.get(2).toString();
 			}
 
-			if (!rcvdRow.get(3).toString().trim().equals("")) {
+			/*if (!rcvdRow.get(3).toString().trim().equals("")) {
 				WBS = rcvdRow.get(3).toString();
-			}
-
+			}*/
+/*
 			if (!rcvdRow.get(4).toString().trim().equals("")) {
 				WBSName = rcvdRow.get(4).toString();
-			}
+			}*/
 
 			// check gmemory id splitting PO Desc
 			try {
@@ -251,8 +253,8 @@ public class PODetailsUpload extends HttpServlet {
 		receivedGtfReport.setCostCenter(costCenter);
 		//receivedGtfReport.setBrand(brand);
 		//receivedGtfReport.setRequestor(util.readUserRoleInfoByFName(PM).getUserName());
-		receivedGtfReport.setProject_WBS(WBS);
-		receivedGtfReport.setWBS_Name(WBSName);
+		receivedGtfReport.setProject_WBS(rcvdRow.get(3).toString());
+		receivedGtfReport.setWBS_Name(rcvdRow.get(4).toString());
 		if(isMultiBrand && !Util.isNullOrEmpty(rcvdRow.get(5).toString()) && Util.isNullOrEmpty(pGtfReport.getPoNumber())){
 			receivedGtfReport.setPoNumber(pGtfReport.getPoNumber());
 			receivedGtfReport.setStatus("Active");
@@ -267,7 +269,7 @@ public class PODetailsUpload extends HttpServlet {
 		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
 		receivedGtfReport.setVendor(rcvdRow.get(7).toString());
 		String poDesc = receivedGtfReport.getPoDesc();
-		if(receivedGtfReport.getProjectName() != null && receivedGtfReport.getProjectName().equalsIgnoreCase("")){
+		if(receivedGtfReport.getProjectName() != null && receivedGtfReport.getProjectName().trim().equalsIgnoreCase("")){
 			receivedGtfReport.setProjectName(poDesc);
 		}
 		receivedGtfReport.setSubActivity("");
@@ -299,6 +301,7 @@ public class PODetailsUpload extends HttpServlet {
 						roundDoubleValue(
 								Double.parseDouble(val), 2));
 				
+				// updates the future month values
 				if(cnt >=  curMonth){
 					receivedPlannedMap.put(
 							BudgetConstants.months[cnt],
@@ -310,6 +313,8 @@ public class PODetailsUpload extends HttpServlet {
 					receivedParentAccrualMap.put(BudgetConstants.months[cnt],
 							receivedParentAccrualMap.get(BudgetConstants.months[cnt]) - prevVal + roundDoubleValue(
 									Double.parseDouble(val), 2));
+					
+					// updates the future month values
 					if(cnt >=  curMonth){
 						receivedParentPlannedMap.put(BudgetConstants.months[cnt],
 							receivedParentPlannedMap.get(BudgetConstants.months[cnt]) - prevPlannedVal + roundDoubleValue(
@@ -374,8 +379,8 @@ public class PODetailsUpload extends HttpServlet {
 		gtfReport.setgMemoryId(gMemoriId);
 		gtfReport.setBrand(brand);
 		gtfReport.setRequestor(pUserId);
-		gtfReport.setProject_WBS(WBS);
-		gtfReport.setWBS_Name(WBSName);
+		gtfReport.setProject_WBS(rcvdRow.get(3).toString());
+		gtfReport.setWBS_Name(rcvdRow.get(4).toString());
 		//gtfReport.setMultiBrand(false);
 		if(Util.isNullOrEmpty(rcvdRow.get(5).toString().trim())){
 			gtfReport.setPoNumber(rcvdRow.get(5).toString());
@@ -427,22 +432,19 @@ public class PODetailsUpload extends HttpServlet {
 		gtfReport.setVariancesMap(setZeroMap);
 		gtfReport.setEmail(eMailId);
 		gtfReport.setPercent_Allocation(100);
-		gtfReport.setRemarks("   ");
+		gtfReport.setRemarks("");
 		
 		if (!"".equalsIgnoreCase(gtfReport.getPoNumber())) {
-			
 			gtfReport.setStatus("Active");
 			gtfReport.setFlag(2);
-		} else {
-			if(pGtf!=null && pGtf.getgMemoryId()!=null && Util.isNullOrEmpty(pGtf.getPoNumber())){
+		} else if(pGtf!=null && pGtf.getgMemoryId()!=null && Util.isNullOrEmpty(pGtf.getPoNumber())){
 				gtfReport.setPoNumber(pGtf.getPoNumber());
 				gtfReport.setStatus("Active");
 				gtfReport.setFlag(2);	
-			}else{
+		} else{
 				gtfReport.setStatus("New");
 				gtfReport.setFlag(1);
 				gtfReport.setRemarks("Error with project data : PO# is blank");
-			}
 		}
 
 
@@ -546,7 +548,9 @@ public class PODetailsUpload extends HttpServlet {
 				receivedGtfReports.add(nwParentGtfReport);
 				for(GtfReport gtfRpt : receivedGtfReports){
 					nwParentGtfReport.setRemarks(gtfRpt.getRemarks());
-					gtfRpt.setRemarks("");
+					if (gtfRpt.getgMemoryId().contains(".")) {
+						gtfRpt.setRemarks("");
+					}
 					gtfRpt.setMultiBrand(true);
 					gtfRpt.setChildProjectList(childProjList);
 					try{
@@ -589,6 +593,12 @@ public class PODetailsUpload extends HttpServlet {
 			String gMemoriId = nwParentGtfReport.getgMemoryId();
 			int count = nwParentGtfReport.getChildProjectList().size();
 			double total = 0.0;
+			if(nwParentGtfReport.getPlannedMap()==null || nwParentGtfReport.getPlannedMap().isEmpty()){
+				nwParentGtfReport.setPlannedMap(new HashMap(setZeroMap));
+			}
+			if(nwParentGtfReport.getAccrualsMap()==null || nwParentGtfReport.getAccrualsMap().isEmpty()){
+				nwParentGtfReport.setAccrualsMap(new HashMap(setZeroMap));
+			}
 			childProjList = nwParentGtfReport.getChildProjectList();
 			for(String cId : childProjList){
 				existingGtfReports.add(costCenterWiseGtfRptMap.get(cId));

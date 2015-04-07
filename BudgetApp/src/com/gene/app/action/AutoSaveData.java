@@ -2,6 +2,8 @@ package com.gene.app.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,12 @@ public class AutoSaveData extends HttpServlet {
 			fromSession = true;
 		}
 		LOGGER.log(Level.INFO, "objarray : " + objarray);
+		
+		Calendar cal = Calendar.getInstance();
+		int month = cal.get(Calendar.MONTH);
+		int qtr = month / 3;
+		Map<String, Date> cutofDates = util.getCutOffDates();
+		Date cutOfDate = cutofDates.get(qtr+"");
 		/*else if(sessionObjArray!=null){
 		}
 			objarray = sessionObjArray;
@@ -223,19 +231,12 @@ public class AutoSaveData extends HttpServlet {
 								plannedMap.put(BudgetConstants.months[Integer
 										.parseInt(cellNum)], Double
 										.parseDouble(cellValue));
-								if(gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_New)){/*
-									if(summaryObj!=null){
-									benchMarkTotal = summaryObj.getBenchmarkTotal(); 
-									summaryObj.setBenchmarkTotal(benchMarkTotal+newPlannedValue-oldPlannedValue);
-									summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
-									}
-									budgetMap.put(brand, summaryObj);
-									summary.setBudgetMap(budgetMap);
-									util.putSummaryToCache(summary, costCenter);*/
-									benchMarkMap.put(BudgetConstants.months[Integer
+								if(gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_New) || gtfReportObj.getStatus().equalsIgnoreCase(BudgetConstants.status_Active)){
+									if( qtr != (Integer.parseInt(cellNum)/3)  || cutOfDate.after(new Date())){
+										benchMarkMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);
-									gtfReportObj.setBenchmarkMap(benchMarkMap);
-									
+										gtfReportObj.setBenchmarkMap(benchMarkMap);
+									}
 								}
 								if(mapType.equalsIgnoreCase("accrual") /*&& !(gtfReportObj.getgMemoryId().contains("."))*/){
 									accrualMap.put(BudgetConstants.months[Integer
