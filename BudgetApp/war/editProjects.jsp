@@ -1155,11 +1155,16 @@ String ccView="";
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
-				
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
-						itemClicked[0].toString().trim != "" && itemClicked[11] == "<%=BudgetConstants.FORECAST%>" && itemClicked[26] != "Total" && itemClicked[2] != "" && itemClicked[0].toString().length==10){
+						itemClicked[0].toString().trim != "" && itemClicked[11] == "<%=BudgetConstants.FORECAST%>" && itemClicked[26] != "Total" && 
+						itemClicked[2] != "" && itemClicked[0].toString().length==10){
+					if(('<%=role%>'=='Admin' || ('<%=role%>'!='Admin' && itemClicked[1]=='<%=user.getUserName()%>'))){
 					var myPopup = window.open ("", 'gmemori', '');
 					do_the_ajax_call();
+					}else{
+						alert("You are not authorised to initiate project : "+itemClicked[2]);
+						return;
+					}
 				}else
 				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
 					if(itemClicked[26] == "New"){
