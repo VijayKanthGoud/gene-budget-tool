@@ -119,7 +119,7 @@
 			</td>
 			<td style="width: 35%; float: right">
 					<div style="text-align:right; font-size: 13px;" class="">
-                Questions? Comments? Issues? Please email <a href="#" data-mailto="gMEMORI_support-d@gene.com" id="mailToSupport">gBMT_Support@gene.com</a>
+                Questions? Comments? Issues? Please email <a href="#" data-mailto="gMEMORI_support-d@gene.com" id="mailToSupport">gMEMORI_support-d@gene.com</a>
             </div>
 					<div style="float:right;top:5%; margin: 0 auto; position: relative;">
                 <img src="/images/masLogo.png">
