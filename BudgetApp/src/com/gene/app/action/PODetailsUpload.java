@@ -39,6 +39,7 @@ public class PODetailsUpload extends HttpServlet {
 	String PM = "";
 	//String WBS = "";
 	//String WBSName = "";
+	/** The is multibrand. */
 	boolean isMultibrand = false;
 	int curMonth =0;
 
@@ -302,7 +303,7 @@ public class PODetailsUpload extends HttpServlet {
 								Double.parseDouble(val), 2));
 				
 				// updates the future month values
-				if(cnt >=  curMonth){
+				if(cnt <=  curMonth){
 					receivedPlannedMap.put(
 							BudgetConstants.months[cnt],
 							roundDoubleValue(
@@ -315,7 +316,7 @@ public class PODetailsUpload extends HttpServlet {
 									Double.parseDouble(val), 2));
 					
 					// updates the future month values
-					if(cnt >=  curMonth){
+					if(cnt <=  curMonth){
 						receivedParentPlannedMap.put(BudgetConstants.months[cnt],
 							receivedParentPlannedMap.get(BudgetConstants.months[cnt]) - prevPlannedVal + roundDoubleValue(
 									Double.parseDouble(val), 2));
@@ -404,8 +405,6 @@ public class PODetailsUpload extends HttpServlet {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 			try {
 				String val = "";
-				double pVal = 0.0;
-				double pPVal = 0.0;
 				String rcvdStr = rcvdRow.get(cnt + 8).toString();
 				if( rcvdStr.contains("(")){
 					val = "-" + rcvdStr.substring(rcvdStr.indexOf("(")+1, rcvdStr.indexOf(")"));
