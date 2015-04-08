@@ -277,6 +277,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 				// Update if gmemori id already exists else create a new gmemori id either from poDesc or generate new
 				if(gtfRpt != null){
 					removeGtfReports.add(gtfRpt);
+					gtfReport.setId(gtfRpt.getId());
 					gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 				}else{
 					String gMemoriId;
