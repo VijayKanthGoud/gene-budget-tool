@@ -1030,6 +1030,26 @@ function closeWithoutSave() {
 	grid.invalidate();
 }
 
+function addNewRow(){
+	var initMData = (m_data[m_grid.getDataLength()] = {});
+	initMData[0] = "";
+	initMData[1] = "";
+	initMData[2] = "";
+	initMData[3] = "";
+	initMData[4] = "";
+	initMData[5] = "";
+	initMData[6] = "";
+	initMData[7] = "";
+	initMData[8] = false;
+	initMData[9] = "";
+	m_grid.invalidate();
+	m_grid.invalidateRow(m_grid.getSelectedRows());
+	m_grid.updateRowCount();
+	m_grid.render();
+	m_grid.invalidate();
+			
+}
+
 function deleteSelectedProjects() {
 	
 	var pLength = m_data.length;

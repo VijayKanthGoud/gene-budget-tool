@@ -111,6 +111,7 @@ public class PODetailsUpload extends HttpServlet {
 				.prepareProjectNameMap(costCenterWiseGtfRptMap);
 		
 		for (List rcvdRow : rowList) {
+			try{
 			if(rcvdRow.get(1).toString().trim().isEmpty() && 
 					rcvdRow.get(3).toString().trim().isEmpty() && 
 					rcvdRow.get(5).toString().trim().isEmpty() && 
@@ -118,6 +119,7 @@ public class PODetailsUpload extends HttpServlet {
 				continue;
 			}
 			String receivedGmemoriId = "";
+			String poGmemoriId = "";
 			if (rcvdRow.get(1).toString().contains(" Total")) {
 				continue;
 			} else if (!rcvdRow.get(1).toString().trim().equals("")) {
@@ -166,7 +168,48 @@ public class PODetailsUpload extends HttpServlet {
 
 					}
 				}
-			}
+			}else{/*
+				if(Util.isNullOrEmpty(rcvdRow.get(5).toString())){
+					if (poMap.get(rcvdRow.get(5).toString()) != null) {
+						poGmemoriId = poMap.get(rcvdRow.get(5).toString())
+								.getgMemoryId();
+						if (poGmemoriId.contains(".")) {
+							poGmemoriId = poGmemoriId.split("\\.")[0];
+
+						}
+						System.out.println("poGmemoriId is"+poGmemoriId);
+						if(costCenterWiseGtfRptMap.get(poGmemoriId)!=null ){
+							if(costCenterWiseGtfRptMap.get(poGmemoriId).getMultiBrand()){
+								ArrayList<String> childGmems = new ArrayList<>();
+								for(String cGmemId: costCenterWiseGtfRptMap.get(poGmemoriId).getChildProjectList()){
+									GtfReport cGtf = costCenterWiseGtfRptMap.get(cGmemId);
+									if(cGtf!=null){
+										System.out.println("cGtf is"+cGtf.getgMemoryId() + "cGmemId:::"+cGmemId);
+									costCenterWiseGtfRptMap.remove(cGmemId);
+									String newGmemId = "";
+									if (cGmemId.contains(".")) {
+									newGmemId =receivedGmemoriId+"."+cGmemId.split("\\.")[1];
+									}else{
+										newGmemId =receivedGmemoriId;
+									}
+									childGmems.add(newGmemId);
+									cGtf.setgMemoryId(newGmemId);	
+									costCenterWiseGtfRptMap.put(newGmemId, cGtf);
+									}
+								}
+								for(String cGmemId: costCenterWiseGtfRptMap.get(poGmemoriId).getChildProjectList()){
+									costCenterWiseGtfRptMap.get(cGmemId).setChildProjectList(childGmems);;
+								}
+							}else{
+								GtfReport cGtf = costCenterWiseGtfRptMap.get(poGmemoriId);
+								costCenterWiseGtfRptMap.remove(poGmemoriId);
+								cGtf.setgMemoryId(receivedGmemoriId);	
+								costCenterWiseGtfRptMap.put(receivedGmemoriId, cGtf);
+							}
+						}
+					}
+				}
+			*/}
 			
 			// Check by matching Project name number
 			if (!Util.isNullOrEmpty(receivedGmemoriId)
@@ -180,7 +223,7 @@ public class PODetailsUpload extends HttpServlet {
 					}
 				}
 			}
-
+			//util.saveAllReportDataToCache(costCentre, costCenterWiseGtfRptMap);
 			// If multibrand
 			boolean newCreated = false;
 			String pGmemId = new String(receivedGmemoriId);
@@ -222,7 +265,10 @@ public class PODetailsUpload extends HttpServlet {
 						receivedGmemoriId, null);
 			}
 		}
-
+		catch(Exception e){
+			System.out.println(rcvdRow);
+		}
+		}
 		changeForNewMultiBrand(uploadedPOs, gtfReports, costCenterWiseGtfRptMap);
 		changeForNewMultiBrand(uploadedWithOutPos, gtfReports,
 				costCenterWiseGtfRptMap);
@@ -411,11 +457,11 @@ public class PODetailsUpload extends HttpServlet {
 				}else{
 					val = rcvdStr;
 				}
-				if(cnt < curMonth ){
+				/*if(cnt < curMonth ){
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
-				}else{
+				}else{*/
 					plannedMap.put(BudgetConstants.months[cnt], roundDoubleValue(Double.parseDouble(val), 2));
-				}
+				/*}*/
 				receivedMap.put(
 						BudgetConstants.months[cnt],
 						roundDoubleValue(Double.parseDouble(val), 2) );
@@ -531,7 +577,6 @@ public class PODetailsUpload extends HttpServlet {
 						nwParentGtfReport.getAccrualsMap().put(entryMap.getKey(), nwParentGtfReport.getAccrualsMap().get(entryMap.getKey()) + entryMap.getValue());
 					}
 					gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
-					total += gtfRpt.getPlannedMap().get("TOTAL");
 					childProjList.add(gMemoriId + "." + (count++));
 				}
 				nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
@@ -545,6 +590,9 @@ public class PODetailsUpload extends HttpServlet {
 				nwParentGtfReport.setMultiBrand(true);
 
 				receivedGtfReports.add(nwParentGtfReport);
+				for(GtfReport gtfRpt : receivedGtfReports){
+					total += gtfRpt.getPlannedMap().get("TOTAL");
+				}
 				for(GtfReport gtfRpt : receivedGtfReports){
 					nwParentGtfReport.setRemarks(gtfRpt.getRemarks());
 					if (gtfRpt.getgMemoryId().contains(".")) {
@@ -613,7 +661,6 @@ public class PODetailsUpload extends HttpServlet {
 					nwParentGtfReport.getAccrualsMap().put(entryMap.getKey(), nwParentGtfReport.getAccrualsMap().get(entryMap.getKey()) + entryMap.getValue());
 				}
 				gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
-				total += gtfRpt.getPlannedMap().get("TOTAL");
 				childProjList.add(gMemoriId + "." + (count++));
 			}
 			nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
@@ -624,9 +671,17 @@ public class PODetailsUpload extends HttpServlet {
 
 			nwParentGtfReport.setChildProjectList(childProjList);
 			nwParentGtfReport.setBrand("Smart WBS");
-
+			for(GtfReport cList : existingGtfReports){
+				if(cList.getgMemoryId().equalsIgnoreCase(nwParentGtfReport.getgMemoryId())){
+					existingGtfReports.remove(cList);
+					break;
+				}
+			}
 			receivedGtfReports.add(nwParentGtfReport);
 			receivedGtfReports.addAll(existingGtfReports);
+			for(GtfReport gtfRpt : receivedGtfReports){
+				total += gtfRpt.getPlannedMap().get("TOTAL");
+			}
 			for(GtfReport gtfRpt : receivedGtfReports){
 				gtfRpt.setMultiBrand(true);
 				gtfRpt.setChildProjectList(childProjList);

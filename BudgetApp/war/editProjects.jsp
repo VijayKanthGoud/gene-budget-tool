@@ -365,6 +365,9 @@ String ccView="";
 			align=center>Multi-brand</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
+		<button id="addRow" class="myButton1" value="" onclick="addNewRow();" onmouseover="showMessage();" onmouseout="hideMessage();"
+				style="height: 20px;  letter-spacing: 1px;">
+				+</button>
 			<button id="deleteSel" class="myButton" value="" onclick="deleteSelectedProjects();"
 				style="height: 20px;  letter-spacing: 1px;">
 				Delete selected</button>
@@ -1704,7 +1707,7 @@ String ccView="";
 									.toFixed(2);
 							}
 						}
-						if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
+ 						 if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
 							var initMData = (m_data[m_grid.getDataLength()] = {});
 							initMData[0] = "";
 							initMData[1] = "";
@@ -1720,8 +1723,8 @@ String ccView="";
 							m_grid.invalidateRow(m_grid.getSelectedRows());
 							m_grid.updateRowCount();
 							m_grid.render();
-						}
-						m_grid.invalidate();
+						} 
+						m_grid.invalidate(); 
 					}
 					<%-- if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>
 							&& poOwners.toString().indexOf(m_data[row][7]) == -1) {

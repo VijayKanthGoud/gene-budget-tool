@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -92,6 +93,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
 		boolean isMultibrand = false;
 		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
+		List<GtfReport> removeGtfReports = new ArrayList<>();
+		HashMap<String,String> removeGmemoriIds = new HashMap<>();
+		Map<String, GtfReport> costCenterWiseGtfRptMap = util
+				.getAllReportDataFromCache(costCentre);
 		for (List recvdRow : rowList) {
 			try{
 				GtfReport gtfReport = new GtfReport();
@@ -242,7 +247,11 @@ public class FactSheetUploadServlet extends HttpServlet {
 						&& !recvdRow.get(2).toString().trim().equals("")) {
 					gtfReport.setProjectName((recvdRow.get(2).toString()));
 				} else {
-					gtfReport.setProjectName(gtfReport.getPoDesc());
+					if(gtfReport.getPoDesc().indexOf("_")==6){
+						gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
+					}else{
+						gtfReport.setProjectName(gtfReport.getPoDesc());
+					}
 				}
 				if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
 					gtfReport.setBrand(gtfReport.getWBS_Name());
@@ -267,7 +276,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 
 				// Update if gmemori id already exists else create a new gmemori id either from poDesc or generate new
 				if(gtfRpt != null){
-					gtfReport.setId(gtfRpt.getId());
+					removeGtfReports.add(gtfRpt);
 					gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 				}else{
 					String gMemoriId;
@@ -277,6 +286,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 									Math.min(gtfReport.getPoDesc().length(), 6)))
 									+ "";
 							gtfReport.setDummyGMemoriId(false);
+							gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
 						}else{
 							gMemoriId = "" + generator.nextValue();
 							gtfReport.setDummyGMemoriId(true);
@@ -317,18 +327,22 @@ public class FactSheetUploadServlet extends HttpServlet {
 			}
 		}
 
-		changeForMultiBrand(uploadedPOs, gtfReports);
-		changeForMultiBrand(uploadWithOutPos, gtfReports);
+		changeForMultiBrand(uploadedPOs, gtfReports,costCenterWiseGtfRptMap);
+		changeForMultiBrand(uploadWithOutPos, gtfReports,costCenterWiseGtfRptMap);
 		
-		if (gtfReports.size() != 0) {
+		if (gtfReports!=null && !gtfReports.isEmpty() && gtfReports.size() != 0) {
+			if(removeGtfReports!=null && !removeGtfReports.isEmpty() && removeGtfReports.size() >0){
+				util.removeExistingProject(removeGtfReports);
+				util.storeProjectsToCache(removeGtfReports,costCentre, BudgetConstants.OLD);
+			}
 			util.generateProjectIdUsingJDOTxn(gtfReports);
 			util.storeProjectsToCache(gtfReports, costCentre,
 					BudgetConstants.NEW);
-			
+
 		}
 	}
 
-	private void changeForMultiBrand(Map<String, ArrayList<GtfReport>> uploadedPOs, List<GtfReport> gtfReports) {
+	private void changeForMultiBrand(Map<String, ArrayList<GtfReport>> uploadedPOs, List<GtfReport> gtfReports,Map<String, GtfReport> costCenterWiseGtfRptMap) {
 		Map<String, Double> setZeroMap = new HashMap<String, Double>();
 		Map<String, Double> plannedMap = null;
 		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
@@ -342,6 +356,16 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	ArrayList<String> childProjList = new ArrayList<String>();
 		    	try {
 					nwParentGtfReport = (GtfReport) receivedGtfReports.get(0).clone();
+					if(costCenterWiseGtfRptMap!=null && costCenterWiseGtfRptMap.get(nwParentGtfReport.getgMemoryId())!=null){
+						for(String cList : costCenterWiseGtfRptMap.get(nwParentGtfReport.getgMemoryId()).getChildProjectList()){
+							if (!cList.contains(".")) {
+								if(costCenterWiseGtfRptMap.get(cList)!=null ){
+									nwParentGtfReport = costCenterWiseGtfRptMap.get(cList);
+								}
+								break;
+							}
+						}
+					}
 					nwParentGtfReport.setPlannedMap(setZeroMap);
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
@@ -350,6 +374,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	String gMemoriId = nwParentGtfReport.getgMemoryId();
 		    	int count = 1;
 				double total = 0.0;
+				if (gMemoriId.contains(".")) {
+					gMemoriId = gMemoriId.split("\\.")[0];
+
+				}
 		    	childProjList.add(gMemoriId);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		Map<String, Double> receivedChildMap = new HashMap(gtfRpt.getPlannedMap());
@@ -358,9 +386,11 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    		}
 		    		nwParentGtfReport.setPlannedMap(plannedMap);
 		    		gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
-					total += gtfRpt.getPlannedMap().get("TOTAL");
 					childProjList.add(gMemoriId + "." + (count++));
 		    		//childProjList.add(gMemoriId +"."+ (count++));
+		    	}
+		    	for(GtfReport gtfRpt : receivedGtfReports){
+		    		total += gtfRpt.getPlannedMap().get("TOTAL");
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
 		    	nwParentGtfReport.setBrand("Smart WBS");
