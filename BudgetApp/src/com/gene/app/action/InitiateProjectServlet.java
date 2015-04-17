@@ -149,6 +149,8 @@ public class InitiateProjectServlet extends HttpServlet{
 		List<GtfReport> oldgtfRptList = new ArrayList<GtfReport>();
 		String newGMemId = "";
 		GtfReport gtfRpt = new GtfReport();
+		ArrayList<String> newChildList = null;
+		List<String> oldChildList = new ArrayList<String>();
 		if(gtfRptMap!=null && !gtfRptMap.isEmpty() && gtfRptMap.get(gMemoriId)!=null){
 			for(Map.Entry<String, GtfReport> gtfEntry : gtfRptMap.entrySet()){
 				newGMemId = "";
@@ -166,6 +168,14 @@ public class InitiateProjectServlet extends HttpServlet{
 						e.printStackTrace();
 					}
 					gtfRpt.setgMemoryId(newGMemId);
+					oldChildList = gtfRpt.getChildProjectList();
+					newChildList = new ArrayList<String>();
+					if(oldChildList != null && !oldChildList.isEmpty()){
+						for(String chld : oldChildList ){
+							newChildList.add(chld.contains(".")?(gMemIdFrmStudy+chld.substring(chld.indexOf("."))):gMemIdFrmStudy);
+						}
+						gtfRpt.setChildProjectList(newChildList);
+					}
 					gtfRptList.add(gtfRpt);
 				}
 			}
@@ -181,11 +191,10 @@ public class InitiateProjectServlet extends HttpServlet{
 			}
 			System.out.println("gtfRptMap in update"+gtfRptMap);
 			System.out.println("gtfRptList in update"+gtfRptList.get(0).getgMemoryId());
-			//util.saveAllReportDataToCache(costCenter, gtfRptMap);
-			util.storeProjectsToCache(gtfRptList,costCenter, BudgetConstants.NEW);
-			util.generateProjectIdUsingJDOTxn(gtfRptList);
 			util.removeExistingProject(oldgtfRptList);
 			util.storeProjectsToCache(oldgtfRptList,costCenter, BudgetConstants.OLD);
+			util.storeProjectsToCache(gtfRptList,costCenter, BudgetConstants.NEW);
+			util.generateProjectIdUsingJDOTxn(gtfRptList);
 			System.out.println("gtfRptMap from cc = "+util.getAllReportDataFromCache(costCenter));
 		}
 		
