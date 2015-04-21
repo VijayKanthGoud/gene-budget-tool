@@ -422,6 +422,8 @@ String ccView="";
 	
 	// itemclicked global variable is take to use the clicked row (in the grid) data in other methods
 	var itemClicked;
+	var prevItemClicked;
+	var errStrng="";
 	
 	var popUpWindow;
 	
@@ -927,7 +929,7 @@ String ccView="";
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
-					
+					itemClicked = item; 
 					var fixedCell = cell;
 					if ($('#hideColumns').is(":checked")) {
 						fixedCell = cell + numHideColumns;
@@ -1160,7 +1162,10 @@ String ccView="";
 		
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
-				itemClicked = dataView.getItem(args.row);
+				prevItemClicked = itemClicked;
+				if(dataView.getItem(args.row)[6]!= "Save" || errStrng == ""){
+					itemClicked = dataView.getItem(args.row);
+				} 
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
 						itemClicked[0].toString().trim != "" && itemClicked[11] == "<%=BudgetConstants.FORECAST%>" && itemClicked[26] != "Total" && 
 						itemClicked[2] != "" && itemClicked[0].toString().length==10){
@@ -1692,19 +1697,21 @@ String ccView="";
 					sum = 0.0;
 					if (cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>) {
 
-						for (var count = 0; count < m_data.length
-								&& ( m_data[count]["3"] != "" )
-								&& m_data[count]["3"] != "undefined"; count++) {
-							sum = sum + parseFloat(m_data[count]["3"]);
-						}
-						
 						for (var count = 0; count < m_data.length; count++) {
-							if(m_data[count]["3"] == "" 
-									|| m_data[count]["3"] == "undefined"){
+							if(( m_data[count]["3"] != "" )
+									&&   m_data[count]["3"] != "undefined"){
+								sum = sum + parseFloat(m_data[count]["3"]);
+							}
+						}
+						for (var count = 0; count < m_data.length; count++) {
+							if(isNaN(parseFloat(m_data[count]["3"]))){
 								m_data[count]["2"]="";
-							}else{
-							m_data[count]["2"] = (m_data[count]["3"] / sum * 100)
+							}
+							else if(!isNaN(m_data[count]["3"] / sum * 100)){
+								m_data[count]["2"] = (m_data[count]["3"] / sum * 100)
 									.toFixed(2);
+							}else{
+								m_data[count]["2"] = "0";
 							}
 						}
  						 if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
@@ -1852,7 +1859,7 @@ String ccView="";
 		else if(itemClicked[34]=="New projects"){
 			// Start : Code for newly added projects
 			var error=0;
-			var errStrng="";
+			
 			//alert("itemClicked = "+JSON.stringify(itemClicked));
 			if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
 				itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){

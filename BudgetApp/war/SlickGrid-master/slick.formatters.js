@@ -191,10 +191,11 @@
   
   function editableFieldFormatter(row, cell, value, columnDef, dataContext) {
 	  if((dataContext["26"] == "Closed")){
-		  if((typeof value === 'undefined' || value == '')  && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
-			     return "<div width = '100%'>&nbsp;</div>";
+		  if((typeof value != 'undefined' || value != '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
+			     return "<div width = '100%'>"+value+"</div>";
+		  }else{
+		 		return "<div width = '100%'>&nbsp;</div>";
 		  }
-		  return "<div width = '100%'>"+value+"</div>";;
 	  }
 	  if((typeof value != 'undefined' && value != '') && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total" ))){
 		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";

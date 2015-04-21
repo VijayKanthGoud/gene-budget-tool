@@ -1234,6 +1234,7 @@ function submitProjects(){
 	
 	if(flag == true){
 		alert("Please add sub-projects to your multibrand project: "+ data[i][2]);
+		itemClicked = prevItemClicked;
 		return;
 	}
 	//alert(JSON.stringify(storeData));
