@@ -99,6 +99,7 @@ public class UserDetailsUpload extends HttpServlet{
 					selectedCostCenter = (costCenter1.contains(":"))?costCenter1.split(":")[0]:costCenter1; 
 				}if(Util.isNullOrEmpty(existingCC) && !existingCC.contains(costCenter1)){
 					costCenter1 = existingCC+":"+costCenter1;
+					selectedCostCenter = (costCenter1.contains(":"))?costCenter1.split(":")[0]:costCenter1;
 				}if(!rcvdRow.get(7).toString().trim().equals("") && !rcvdRow.get(8).toString().trim().equals("")){
 					userName = rcvdRow.get(8).toString()+" "+rcvdRow.get(7).toString();
 				}if(!rcvdRow.get(10).toString().trim().equals("")){
@@ -152,7 +153,9 @@ public class UserDetailsUpload extends HttpServlet{
 		System.out.println("brand is::::::::"+brand);
 		cc_brand.setCostCenter(costCenter);
 		System.out.println("New Text()::::::"+new Text(brand));
+		if(Util.isNullOrEmpty(brand)){
 		cc_brand.setBrandFromDB(new Text(brand));
+		}
 		if(ccExists){
 			ccList.remove(index);
 		}
