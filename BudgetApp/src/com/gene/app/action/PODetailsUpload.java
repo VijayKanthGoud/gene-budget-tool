@@ -311,6 +311,8 @@ public class PODetailsUpload extends HttpServlet {
 			receivedGtfReport.setPoNumber(rcvdRow.get(5).toString());
 			receivedGtfReport.setStatus("Active");
 			receivedGtfReport.setFlag(2);
+		}else if(!Util.isNullOrEmpty(receivedGtfReport.getPoNumber())){
+			receivedGtfReport.setRemarks("Error with project data : PO# is blank");
 		}
 			
 		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
