@@ -422,8 +422,6 @@ String ccView="";
 	
 	// itemclicked global variable is take to use the clicked row (in the grid) data in other methods
 	var itemClicked;
-	var prevItemClicked;
-	var errStrng="";
 	
 	var popUpWindow;
 	
@@ -1162,10 +1160,7 @@ String ccView="";
 		
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
-				prevItemClicked = itemClicked;
-				if(dataView.getItem(args.row)[6]!= "Save" || errStrng == ""){
-					itemClicked = dataView.getItem(args.row);
-				} 
+				itemClicked = dataView.getItem(args.row);
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
 						itemClicked[0].toString().trim != "" && itemClicked[11] == "<%=BudgetConstants.FORECAST%>" && itemClicked[26] != "Total" && 
 						itemClicked[2] != "" && itemClicked[0].toString().length==10){
@@ -1859,7 +1854,7 @@ String ccView="";
 		else if(itemClicked[34]=="New projects"){
 			// Start : Code for newly added projects
 			var error=0;
-			
+			var errStrng="";
 			//alert("itemClicked = "+JSON.stringify(itemClicked));
 			if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
 				itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){
