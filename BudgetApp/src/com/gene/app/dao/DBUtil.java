@@ -537,14 +537,14 @@ public class DBUtil {
 		q.setOrdering(BudgetConstants.GTFReportOrderingParameters_getReport);
 		q.setFilter("costCenter==costCenterParam");
 		q.declareParameters("String costCenterParam");
-		q.setFilter("status!=statusParam");
-		q.declareParameters("String statusParam");
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
-			List<GtfReport> results = (List<GtfReport>) q.execute(costCenter,"Disabled");
+			List<GtfReport> results = (List<GtfReport>) q.execute(costCenter);
 			if(!results.isEmpty()){
-			for(GtfReport p : results){
-				gtfList.put(p.getgMemoryId(),p);
+			for(GtfReport gtfReport : results){
+				if(!gtfReport.getStatus().equalsIgnoreCase("Disabled")){
+					gtfList.put(gtfReport.getgMemoryId(),gtfReport);
+				}
 			}
 			}
 			if(resetCache){
@@ -587,10 +587,12 @@ public class DBUtil {
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
 			List<GtfReport> results = (List<GtfReport>) q.execute();
-			if(!results.isEmpty()){
-			for(GtfReport p : results){
-				gtfList.put(p.getgMemoryId(),p);
-			}
+			if (!results.isEmpty()) {
+				for (GtfReport gtfReport : results) {
+					if (!gtfReport.getStatus().equalsIgnoreCase("Disabled")) {
+						gtfList.put(gtfReport.getgMemoryId(), gtfReport);
+					}
+				}
 			}
 			//if(resetCache){
 				saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION,gtfList);
@@ -714,30 +716,31 @@ public class DBUtil {
 	
 	public List<GtfReport> readProjectDataByGMemId(String gMemoriId) {
 		GtfReport gtfRpt = new GtfReport();
-		List<GtfReport> results = new ArrayList<GtfReport>();
-		for(String cc: readAllCostCenters()){
-		if(getAllReportDataFromCache(cc).get(gMemoriId)!=null){
-			gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
-			results.add(gtfRpt);
-			break;
-		}
-			
-		}
-		if(gtfRpt==null || !Util.isNullOrEmpty(gtfRpt.getCostCenter())){
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-
-		Query q = pm.newQuery(GtfReport.class);
-		if(gMemoriId!=null && !"".equals(gMemoriId)){
-			q.setFilter("gMemoryId==gMemoryIdParam");
-			q.declareParameters("String gMemoryIdParam");
+		for (String cc : readAllCostCenters()) {
+			if (getAllReportDataFromCache(cc).get(gMemoriId) != null) {
+				gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
+				gtfReportList.add(gtfRpt);
+				break;
+			}
 		}
-		results = (List<GtfReport>)  q.execute(gMemoriId);
-		results.size();
-		q.closeAll();
+		if (gtfRpt == null || !Util.isNullOrEmpty(gtfRpt.getCostCenter())) {
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			Query q = pm.newQuery(GtfReport.class);
+			if (gMemoriId != null && !"".equals(gMemoriId)) {
+				q.setFilter("gMemoryId==gMemoryIdParam");
+				q.declareParameters("String gMemoryIdParam");
+			}
+			gtfReportList = (List<GtfReport>) q.execute(gMemoriId);
+			for(GtfReport gtfReport : gtfReportList){
+				if(gtfReport.getStatus().equalsIgnoreCase("Disabled")){
+					gtfReportList.remove(gtfReport);
+				}
+			}
+			q.closeAll();
 		}
 		//pm.close();
-		return results;
+		return gtfReportList;
 	}
 	
 	public List<GtfReport> readProjectDataById(String gMemoriId, UserRoleInfo user) {
@@ -1281,7 +1284,6 @@ public class DBUtil {
 			gtfReportMap.remove(gtfReport.getgMemoryId());
 		}
 		saveAllReportDataToCache(costCenter, gtfReportMap);
-
 	}
 
 }
