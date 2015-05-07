@@ -4,6 +4,12 @@ var availableTags = [];
 var poOwners=[];
 var ccUsersVar=[];
 function getAvailableTags(){
+	if($('#selectedUserView').val() == 'My Brands'){
+		$("#dropdown").show();
+	}else{
+		$("#dropdown").hide();	
+	}
+	document.getElementById("myIFrm").style.display="none";
 	availableTags[0] = "Smart WBS";
 	var j;
 	<%for(int i=0;i<myBrands.length;i++){%>
@@ -44,21 +50,8 @@ function OpenInNewTab(url) {
 	  win.focus();
 	}
 function getBrandTotals(){
-	/*var gMemId = <%= request.getAttribute("gMemoriId")%>;
-	var statusCode = <%= request.getAttribute("Error Code")%>;
-	var statusMsg = '<%= request.getAttribute("Error Msg")%>';
-	if(gMemId!=null && gMemId.toString().length==6 && statusCode!=null && statusCode.toString()!=null && statusCode.toString()=='200'){
-		openUrl("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemId);
-		//window.history.pushState("object or string", "Title", "http://gbmt-dev.appspot.com/");
-		//window.location.reload(true);
-	}else if (statusCode!=null && statusCode.toString()!=null && statusCode.toString()!='200'){
-		if(statusMsg!=null && statusMsg.toString()!=null && statusMsg.toString()!=''){
-			alert(statusMsg.toString());
-		}
-		//window.history.pushState("object or string", "Title", "http://gbmt-dev.appspot.com/");
-		//window.location.reload(true);
-	}*/
-	if($('#selectedUserView').val() == 'My Brands'){
+	selectUserView1();
+	/*if($('#selectedUserView').val() == 'My Brands'){
 		$("#dropdown").show();
 	}else{
 		$("#dropdown").hide();	
@@ -79,12 +72,13 @@ function getBrandTotals(){
 		url : '/GetSummaryFromCache',
 		type : 'POST',
 		dataType : 'text',
-		data : {costCentre: ccVal},
+		data : {costCentre: ccVal,
+			brand : selectedValue},
 		success : function(result) {
 			summaryResult = result;
 			getSummaryValues();
 		}
-	});
+	});*/
 } 
 /*function ValidateGMemoriId(gMemoriId){
 	//var gMemoriId = document.getElementById("brandType").value; 
@@ -410,6 +404,7 @@ function updateMemCache(e, args, tempKey) {
 					if (index > -1) {
 						availableTags.splice(index, 1);
 					}
+					m_data[0][1]=args.item[44];
 					m_data[0][4]=args.item[2];
 				 	m_data[0][5]=args.item[0]+'.1';
 				 	m_data[0][7]=args.item[1];
@@ -591,6 +586,11 @@ function updateMemCache(e, args, tempKey) {
 			mapType : item[11]
 		},
 		success : function(result) {
+			//alert("success"+JSON.stringify(result));
+			if(JSON.stringify(result).indexOf("<poError>")!=-1){
+				//alert("hi");
+				window.location.reload(true);
+			}
 			$('#statusMessage').text("All changes saved successfully!")
 					.fadeIn(200);
 			$("#statusMessage");
@@ -608,10 +608,8 @@ function updateMemCache(e, args, tempKey) {
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
 				if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
-				
 				d["0"] = d["27"];
 			}}
-			//item["0"] = item["34"];
 			grid.invalidate();
 		}
 	});
@@ -1252,8 +1250,12 @@ function submitProjects(){
 			},
 			error: function(result) {
 				alert(result["responseText"].toString().indexOf("java.lang.Error:"));
-				if(result["responseText"].toString().indexOf("java.lang.Error:")!= -1){
-				alert(JSON.stringify(result["responseText"].toString().split("java.lang.Error:")[1].substring(1,38)));
+				//alert(result["responseText"].toString());
+				if(result["responseText"].toString().indexOf("<poError>:")!=-1){
+					alert("PO Number already exists !!!");
+				}
+				else if(result["responseText"].toString().indexOf("java.lang.Error:")!= -1){
+					alert(JSON.stringify(result["responseText"].toString().split("java.lang.Error:")[1].substring(1,38)));
 				}else{
 					alert("Unknow server error occured.");
 				}
@@ -1527,6 +1529,34 @@ function selectUserView(){
 	}
 }
 
+function selectUserView1(){
+	var val = $('#selectedUserView').val();
+	var ccVal = $('#getCostCenter').val();
+	selectedBrandValue = document.getElementById("brandType").value;
+	if($('#selectedUserView').val()=='My Brands'){
+		$('#selectedView3').val(val);
+		$('#getCostCenter3').val(ccVal);
+		$('#dropdown').show();
+		
+		$('#getBrand3').val(selectedBrandValue);
+		$('#getBrand').submit();
+		
+	}else if($('#selectedUserView').val()=='My Projects'){
+		$('#selectedView2').val(val);
+		$('#getCostCenter2').val(ccVal);
+		$('#getBrand2').val(selectedBrandValue);
+		$('#dropdown').hide();
+		$('#getProjects').submit();
+		
+	}else if($('#selectedUserView').val()=='My Cost Center'){
+		$('#selectedView1').val(val);
+		$('#getCostCenter1').val(ccVal);
+		$('#getBrandCC').val(selectedBrandValue);
+		$('#dropdown').hide();
+		$('#getCostCentre').submit();
+	}
+}
+
 function closepopup(){
 	$('#selectthebrand').hide();
 	$('#back').removeClass('black_overlay').fadeIn(100);
@@ -1573,7 +1603,6 @@ function openBrandPopUp(){
 	$('#back').addClass('black_overlay').fadeIn(100);
 	}
 }
-
 // Code for delete or disable project
 function deleteCurrentProject(){
 	console.log(itemClicked);
@@ -1608,4 +1637,5 @@ function deleteCurrentProject(){
 		}
 	});
 }
+
 

@@ -47,6 +47,7 @@ public class AutoSaveData extends HttpServlet {
 		String email="";
 		String gMemoriIdFromStudy = "";
 		String costCenter = req.getParameter("costCenter").toString();
+		String poErrorMsg = "";
 		//String sessionObjArray = (String)session.getAttribute("objArray");
 		boolean fromSession = false;
 		if (req.getParameter(BudgetConstants.objArray) != null) {
@@ -126,8 +127,14 @@ public class AutoSaveData extends HttpServlet {
 							gtfReportObj.setRemarks(remarks);
 							gtfReportMap.put(keyNum, gtfReportObj);
 						} else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_PONUMBER){
-							LOGGER.log(Level.INFO, "Changing PO NUMBER ... ");
 							String poNumber = cellValue;
+							boolean poExists = util.validatePONum(poNumber);
+							if(poExists){
+								poErrorMsg = "PO Number already exists !!!";
+								throw new Exception("PO Number already exists !!!");
+							}
+							LOGGER.log(Level.INFO, "Changing PO NUMBER ... ");
+							
 							LOGGER.log(Level.INFO, "cellValue : " + cellValue);
 							gtfReportObj.setPoNumber(poNumber);
 							LOGGER.log(Level.INFO, "poNumber : " + poNumber);
@@ -277,13 +284,17 @@ public class AutoSaveData extends HttpServlet {
 				 session.setAttribute("objArray",objarray);
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}catch(Exception e){
+			//resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,"PO Number already exists !!!");
+			//e.printStackTrace();
+			poErrorMsg = "<poError>:"+"PO Number already exists !!!";
 		}
 		if(user != null && user.getSelectedCostCenter() != null){
 			util.putSummaryToCache(summary,costCenter);
 		}
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
 		Gson gson = new Gson();
-		resp.getWriter().write(gson.toJson(summary));
+		resp.getWriter().write(gson.toJson(summary)+poErrorMsg);
 	}
 
 	public Map<String,GtfReport> deleteChildProjects(GtfReport gtfReportObj, Map<String, GtfReport> gtfReportMap){
@@ -302,5 +313,26 @@ public class AutoSaveData extends HttpServlet {
 		util.removeExistingProject(gtfPrjList);
 		gtfReportMap = util.getAllReportDataFromCache(gtfReportObj.getCostCenter());
 		return gtfReportMap;
+	}
+	public String validatePONum1(String PONumber,String cc){
+		System.out.println("PO Number::::::::");
+		//List<CostCenter_Brand> ccList = readCostCenterBrandMappingData();
+		//Map<String, GtfReport> costCenterWiseGtfRptMap = null;
+		//Map<String, GtfReport> poMap = null;
+		String poExists = "false";
+		//if(ccList!=null && !ccList.isEmpty()){
+			//for(CostCenter_Brand cc: ccList){
+			/*	costCenterWiseGtfRptMap = getAllReportDataFromCache(cc);
+				poMap = preparePOMap(costCenterWiseGtfRptMap);
+				if(poMap!=null && !poMap.isEmpty()){
+					if(poMap.get(PONumber)!=null){
+						poExists = "true";
+						//break;
+					}
+				}*/
+			//}
+	//	}
+		//System.out.println("ccList.contains(7121)"+ccList.contains("7121"));
+		return poExists;
 	}
 }

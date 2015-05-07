@@ -41,7 +41,7 @@ String ccView="";
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
 <html>
-<body onload="getBrandTotals();getAvailableTags();">
+<body onload="getAvailableTags();">
 	<div align="center">
 		<table
 			style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
@@ -241,7 +241,7 @@ String ccView="";
 			<form method="GET" id="getCostCentre" action="/getreport">
 			<input type="hidden" name="selectedView" id="selectedView1"/>
 			<input type="hidden" name="getCCValue" id="getCostCenter1"/>
-				
+			<input type="hidden" name="brandValue" id="getBrandCC"/>	
 			</form>
 			
 		</div>
@@ -250,7 +250,7 @@ String ccView="";
 			<form method="GET" id="getProjects" action="/getreport">
 			<input type="hidden" name="selectedView" id="selectedView2"/>
 			<input type="hidden" name="getCCValue" id="getCostCenter2"/>
-				
+			<input type="hidden" name="brandValue" id="getBrand2"/>		
 			</form>
 			
 		</div>	
@@ -311,6 +311,7 @@ String ccView="";
 									                            if(brandValue==null || brandValue==""){
 									            					brandValue = "Avastin";
 									            				} 
+									                            budgetSummary = budgetMap.get(brandValue);
 									                            if(budgetMap!=null && !budgetMap.isEmpty()){
 									                            	Object[] budgets = budgetMap.keySet().toArray();
 									                            for(int i=0;i<budgets.length;i++){ 
@@ -483,7 +484,7 @@ String ccView="";
 		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark},
 		{ id : 100, name : columnNames[26], field : 100, width : 30, formatter : Slick.Formatters.DeleteButton
 	} ];
-	
+
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
@@ -925,7 +926,6 @@ String ccView="";
 					var isValidBrand =false;
 					var item = args.item;
 					var tempKey = item[27];
-					
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
@@ -1027,7 +1027,7 @@ String ccView="";
 					} --%>
 					grid.invalidate();
 			
-					
+
 					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2 && lastKeyPressed == 9){
 						addMultiBrandPopUp();
 					}
@@ -1263,6 +1263,7 @@ String ccView="";
 			}
 		);
 
+		
 		
 		
 		
@@ -1789,7 +1790,7 @@ String ccView="";
 	});
 	
 	function addMultiBrandPopUp(){
-		
+
 		<%selectedCostCenter = (String)request.getAttribute("getCCValue");
 		if(selectedCostCenter==null || "".equals(selectedCostCenter)){
 			selectedCostCenter = userInfo.getSelectedCostCenter();
@@ -1812,7 +1813,6 @@ String ccView="";
 		
 		
 		if(itemClicked[34]!="New projects"){
-			
 			// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
 			var multiBrandCnt = 0 ;	
 			<%GtfReport pGtfReport = new GtfReport();
@@ -1825,7 +1825,7 @@ String ccView="";
 				var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
 				var gMemoriId='<%=gtfReport.getgMemoryId()%>';
 
-					if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
+				if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
 					var d = (m_data[multiBrandCnt++] = {});
 	 				var parent;
 	 				d["0"] = "<%=gtfReport.getId()%>";

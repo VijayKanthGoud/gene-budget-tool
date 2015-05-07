@@ -62,7 +62,7 @@ public class StoreReport extends HttpServlet {
 	}
 
 	public void storeProjectData(String objarray, UserRoleInfo user, HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException {
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		JSONArray jsonArray = null;
 		GtfReport gtfReport = null;
@@ -75,16 +75,20 @@ public class StoreReport extends HttpServlet {
 		String gmultiIdList="";
 		String poNum = "";
 		int flag = 0;
+		String poErrorMsg = "";
 		try {
 			jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
 				gtfReport = new GtfReport();
 				rprtObject = jsonArray.getJSONObject(count);
 				gtfReport.setEmail(user.getEmail());
-				poNum=rprtObject
-				.getString(BudgetConstants.New_GTFReport_PoNumber)
-				.toString().trim();
+				poNum=rprtObject.getString(BudgetConstants.New_GTFReport_PoNumber).toString().trim();
 				if (poNum.length() > 0 && !"0".equalsIgnoreCase(poNum)) {
+					boolean poExists = util.validatePONum(poNum);
+					if(poExists){
+						poErrorMsg = "PO Number already exists !!!";
+						throw new Exception("PO Number already exists !!!");
+					}
 					status = BudgetConstants.status_Active;
 				} else {
 					poNum="";
@@ -173,6 +177,9 @@ public class StoreReport extends HttpServlet {
 			}
 		} catch (JSONException e1) {
 			e1.printStackTrace();
+		}catch(Exception e){
+			poErrorMsg = "<poError>:"+"PO Number already exists !!!";
+			resp.sendError(HttpServletResponse.SC_OK, poErrorMsg);
 		}
 	}
 

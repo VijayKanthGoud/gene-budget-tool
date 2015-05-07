@@ -537,14 +537,14 @@ public class DBUtil {
 		q.setOrdering(BudgetConstants.GTFReportOrderingParameters_getReport);
 		q.setFilter("costCenter==costCenterParam");
 		q.declareParameters("String costCenterParam");
+		q.setFilter("status!=statusParam");
+		q.declareParameters("String statusParam");
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
-			List<GtfReport> results = (List<GtfReport>) q.execute(costCenter);
+			List<GtfReport> results = (List<GtfReport>) q.execute(costCenter,"Disabled");
 			if(!results.isEmpty()){
-			for(GtfReport gtfReport : results){
-				if(!gtfReport.getStatus().equalsIgnoreCase("Disabled")){
-					gtfList.put(gtfReport.getgMemoryId(),gtfReport);
-				}
+			for(GtfReport p : results){
+				gtfList.put(p.getgMemoryId(),p);
 			}
 			}
 			if(resetCache){
@@ -587,12 +587,10 @@ public class DBUtil {
 		Map<String,GtfReport> gtfList = new LinkedHashMap<String,GtfReport>();
 		try{
 			List<GtfReport> results = (List<GtfReport>) q.execute();
-			if (!results.isEmpty()) {
-				for (GtfReport gtfReport : results) {
-					if (!gtfReport.getStatus().equalsIgnoreCase("Disabled")) {
-						gtfList.put(gtfReport.getgMemoryId(), gtfReport);
-					}
-				}
+			if(!results.isEmpty()){
+			for(GtfReport p : results){
+				gtfList.put(p.getgMemoryId(),p);
+			}
 			}
 			//if(resetCache){
 				saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION,gtfList);
@@ -716,31 +714,30 @@ public class DBUtil {
 	
 	public List<GtfReport> readProjectDataByGMemId(String gMemoriId) {
 		GtfReport gtfRpt = new GtfReport();
-		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
-		for (String cc : readAllCostCenters()) {
-			if (getAllReportDataFromCache(cc).get(gMemoriId) != null) {
-				gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
-				gtfReportList.add(gtfRpt);
-				break;
-			}
+		List<GtfReport> results = new ArrayList<GtfReport>();
+		for(String cc: readAllCostCenters()){
+		if(getAllReportDataFromCache(cc).get(gMemoriId)!=null){
+			gtfRpt = getAllReportDataFromCache(cc).get(gMemoriId);
+			results.add(gtfRpt);
+			break;
 		}
-		if (gtfRpt == null || !Util.isNullOrEmpty(gtfRpt.getCostCenter())) {
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			Query q = pm.newQuery(GtfReport.class);
-			if (gMemoriId != null && !"".equals(gMemoriId)) {
-				q.setFilter("gMemoryId==gMemoryIdParam");
-				q.declareParameters("String gMemoryIdParam");
-			}
-			gtfReportList = (List<GtfReport>) q.execute(gMemoriId);
-			for(GtfReport gtfReport : gtfReportList){
-				if(gtfReport.getStatus().equalsIgnoreCase("Disabled")){
-					gtfReportList.remove(gtfReport);
-				}
-			}
-			q.closeAll();
+			
+		}
+		if(gtfRpt==null || !Util.isNullOrEmpty(gtfRpt.getCostCenter())){
+		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Query q = pm.newQuery(GtfReport.class);
+		if(gMemoriId!=null && !"".equals(gMemoriId)){
+			q.setFilter("gMemoryId==gMemoryIdParam");
+			q.declareParameters("String gMemoryIdParam");
+		}
+		results = (List<GtfReport>)  q.execute(gMemoriId);
+		results.size();
+		q.closeAll();
 		}
 		//pm.close();
-		return gtfReportList;
+		return results;
 	}
 	
 	public List<GtfReport> readProjectDataById(String gMemoriId, UserRoleInfo user) {
@@ -1240,6 +1237,28 @@ public class DBUtil {
 				poMap.put(gtfEntry.getValue().getProjectName(), gtfEntry.getValue());
 		}
 		return poMap;
+	}
+	
+	public boolean validatePONum(String PONumber){
+		System.out.println("PO Number::::::::");
+		List<CostCenter_Brand> ccList = readCostCenterBrandMappingData();
+		Map<String, GtfReport> costCenterWiseGtfRptMap = null;
+		Map<String, GtfReport> poMap = null;
+		boolean poExists = false;
+		if(ccList!=null && !ccList.isEmpty()){
+			for(CostCenter_Brand cc: ccList){
+				costCenterWiseGtfRptMap = getAllReportDataFromCache(cc.getCostCenter());
+				poMap = preparePOMap(costCenterWiseGtfRptMap);
+				if(poMap!=null && !poMap.isEmpty()){
+					if(poMap.get(PONumber)!=null){
+						poExists = true;
+						break;
+					}
+				}
+			}
+		}
+		//System.out.println("ccList.contains(7121)"+ccList.contains("7121"));
+		return poExists;
 	}
 	
 	/**

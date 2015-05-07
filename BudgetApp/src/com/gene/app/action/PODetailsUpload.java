@@ -695,11 +695,15 @@ public class PODetailsUpload extends HttpServlet {
 					if (gtfRpt.getgMemoryId().contains(".")) {
 						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
 								.get("TOTAL") / total) * 100 , 2));
-					}}catch(NumberFormatException nfe){
-						gtfRpt.setPercent_Allocation(100.0);
-					}catch(ArithmeticException ae){
-						gtfRpt.setPercent_Allocation(100.0);
 					}
+					else{
+						gtfRpt.setRemarks("Note: Brand accrual distribution different from original forecast.");
+					}
+				}catch(NumberFormatException nfe){
+						gtfRpt.setPercent_Allocation(100.0);
+				}catch(ArithmeticException ae){
+						gtfRpt.setPercent_Allocation(100.0);
+				}
 				gtfReports.add(gtfRpt);
 
 			}

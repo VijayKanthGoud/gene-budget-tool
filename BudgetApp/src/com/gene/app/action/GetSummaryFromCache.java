@@ -21,14 +21,19 @@ public class GetSummaryFromCache extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		String cCentre = "";
+		String brand = "";
 		if (req.getParameter("costCentre") != null) {
 			cCentre = req.getParameter("costCentre").toString();
+		}
+		if (req.getParameter("brand") != null) {
+			brand = req.getParameter("brand").toString();
 		}
 		BudgetSummary summary = new BudgetSummary();
 		if(util.getSummaryFromCache(cCentre) != null){
 			summary = util.getSummaryFromCache(cCentre);
 		}
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
+		req.setAttribute("brandValue",brand);
 		Gson gson = new Gson();
 		resp.getWriter().write(gson.toJson(summary));
 	}
