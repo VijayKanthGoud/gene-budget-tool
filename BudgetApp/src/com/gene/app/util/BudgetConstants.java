@@ -110,6 +110,7 @@ public interface BudgetConstants {
 	public static final String DEC_CELL = "23";
 	public static final String TOTAL_CELL = "24";
 	public static final String REMARK_CELL = "25";
+	public static final String DELETE_CELL = "26";
 
 	// field numbers edit projects
 
@@ -169,6 +170,9 @@ public interface BudgetConstants {
 	public static final String ACCRUAL = "Accrual";
 	public static final String QUARTERLY_TARGET = "Quarterly Target"; 
 	public static final String QUARTERLY_LTS = "Quarterly LTS";
+	
+	public static final String ADMIN = "Admin";
+	public static final String PROJECT_OWNER = "Project Owner";
 	
 
 }

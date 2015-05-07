@@ -27,11 +27,18 @@
         "gMemoriHyperLink":gMemoriHyperLinkFormatter,
         "editableField":editableFieldFormatter,
         "cancelButton":cancelButtonFormatter,
-        "poField":poFieldFormatter
+        "poField":poFieldFormatter,
+        "DeleteButton":DeleteButtonFormatter
       }
     }
   });
 
+  function DeleteButtonFormatter(row, cell, value, columnDef, dataContext) {
+	  if(dataContext[0] != '' && dataContext[0].indexOf('.') == -1 ){
+		  return "<button style='font-size: 12px;  background:RED; color:#FFFFFF' type='button' id='delPrjBtn' val="+dataContext[0]+">X</button>";
+	  }
+  }
+  
   function PercentCompleteFormatter(row, cell, value, columnDef, dataContext) {
     if (value == null || value === "") {
       return "-";
@@ -133,6 +140,14 @@
 	  if(typeof value == "string"){
 		 if( value=="Cancel"  && dataContext["35"] == "Buttons"){
 			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#2271B0; color:#FFFFFF' />";
+		 }else if(value=="Forecast"){
+			 return  "<span title='Projected Spend'>Forecast</span>";
+		 }else if(value=="Quarterly Target"){
+			 return  "<span title='Benchmarks for current quarter'>Quarterly Target</span>";
+		 }else if(value=="Accrual"){
+			 return  "<span title='Spend according to milestones of SOW'>Accrual</span>";
+		 }else if(value=="Quarterly LTS"){
+			 return  "<span title='= Quarterly Target - Accrual'>Quarterly LTS</span>";
 		 }
 	  }
 	  return value;

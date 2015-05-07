@@ -593,7 +593,9 @@ public class PODetailsUpload extends HttpServlet {
 
 				receivedGtfReports.add(nwParentGtfReport);
 				for(GtfReport gtfRpt : receivedGtfReports){
-					total += gtfRpt.getPlannedMap().get("TOTAL");
+					if (gtfRpt.getgMemoryId().contains(".")) {
+						total += gtfRpt.getPlannedMap().get("TOTAL");
+					}
 				}
 				for(GtfReport gtfRpt : receivedGtfReports){
 					nwParentGtfReport.setRemarks(gtfRpt.getRemarks());
@@ -682,7 +684,9 @@ public class PODetailsUpload extends HttpServlet {
 			receivedGtfReports.add(nwParentGtfReport);
 			receivedGtfReports.addAll(existingGtfReports);
 			for(GtfReport gtfRpt : receivedGtfReports){
-				total += gtfRpt.getPlannedMap().get("TOTAL");
+				if (gtfRpt.getgMemoryId().contains(".")) {
+					total += gtfRpt.getPlannedMap().get("TOTAL");
+				}
 			}
 			for(GtfReport gtfRpt : receivedGtfReports){
 				gtfRpt.setMultiBrand(true);

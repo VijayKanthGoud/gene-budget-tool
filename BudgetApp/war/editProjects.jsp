@@ -328,27 +328,27 @@ String ccView="";
 							</select></td>
 						</tr>
 						<tr>
-							<td>Budget:</td>
+							<td><span  title="Current Overall Budget">Budget:</span></td>
 							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
 						</tr>
 
 						<tr>
-							<td>Total Forecast:</td>
+							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
 							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td>Unallocated Forecast:</td>
+							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
 							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
-							<td>Total Accrual:</td>
+							<td >Total Accrual:</td>
 							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id="varTotalLabel" >Left To Spend (LTS):</span></td>
+							<td><span id="varTotalLabel" title="= Budget - Total Accrual" >Left To Spend (LTS):</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
 					</table>
@@ -443,7 +443,7 @@ String ccView="";
 	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
 	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Units",
 	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
-	        			"DEC", "Total", "Comments" ];
+	        			"DEC", "Total", "Comments", "Delete" ];
 	var noOfNew = 0;
 	var noOfActive = 0;
 	var noOfClosed = 0;
@@ -452,7 +452,7 @@ String ccView="";
 	var closedExist=false;
 	var frmStudy=false;
 	var columnValiation=false;
-	
+	var lastKeyPressed;
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
@@ -480,9 +480,10 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark},
+		{ id : 100, name : columnNames[26], field : 100, width : 30, formatter : Slick.Formatters.DeleteButton
 	} ];
-
+	
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
@@ -504,7 +505,8 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark},
+		{ id : 100, name : columnNames[26], field : 100,  width : 30, formatter : Slick.Formatters.DeleteButton
 	}]
 	var searchString = "";
 	
@@ -1026,7 +1028,7 @@ String ccView="";
 					grid.invalidate();
 			
 					
-					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2){
+					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2 && lastKeyPressed == 9){
 						addMultiBrandPopUp();
 					}
 					
@@ -1171,8 +1173,7 @@ String ccView="";
 						alert("You are not authorised to initiate project : "+itemClicked[2]);
 						return;
 					}
-				}else
-				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
+				}else if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
 					if(itemClicked[26] == "New"){
 						var userAccepted = confirm("Do you want to convert it in to a single brand?");
 						if (!userAccepted) {
@@ -1185,7 +1186,7 @@ String ccView="";
 						}
 					}else{
 						addMultiBrandPopUp();
-					}
+				}
 					 
 				} 
 			if ($(e.target).hasClass("toggle")) {
@@ -1199,6 +1200,17 @@ String ccView="";
 					dataView.updateItem(item.id, item);
 				}
 				e.stopImmediatePropagation();
+			}
+			
+			var cell = args.cell;
+			var fixedCell;
+			if ($('#hideColumns').is(":checked")) {
+				fixedCell = cell + numHideColumns;
+			} else {
+				fixedCell = cell;
+			}
+			if(fixedCell == <%=BudgetConstants.DELETE_CELL%>){
+				deleteCurrentProject();
 			}
 		});
 		
@@ -1254,12 +1266,12 @@ String ccView="";
 		
 		
 		
-		
 		// brand select using arrow keys
 		grid.onKeyDown.subscribe(function(e, args) {
 			var cell = args.cell;
 			var row = args.row - 1;
 			var fixedCell = cell;
+			lastKeyPressed = e.which;
 			if ((e.which == 38 || e.which == 40 || e.which == 13) && cell == 2) {
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;

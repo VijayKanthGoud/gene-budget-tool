@@ -1574,5 +1574,38 @@ function openBrandPopUp(){
 	}
 }
 
-
+// Code for delete or disable project
+function deleteCurrentProject(){
+	console.log(itemClicked);
+	var gmemId = $('#delPrjBtn').attr('val');
+	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
+		if(itemClicked[26] != "<%=BudgetConstants.status_New%>" ){
+			alert("Project owner can delete Planned projects only.");
+			return;
+		}
+	}
+	if('<%=userInfo.getRole().contains("Admin")%>' == false){
+		return;
+	}
+	var userAccepted = confirm("Please, confirm: delete project?");
+	if (!userAccepted) {
+		return;
+	}
+	var ccVal = $('#getCostCenter').val();
+	alert(ccVal);
+	$.ajax({
+		url : '/disableProject',
+		type : 'POST',
+		dataType : 'text',
+		data : {gMem: gmemId, costCenter:ccVal},
+		success : function(result) {
+			alert('Successfully deleted project.');
+			window.location.reload(true);
+		},		
+		error : function(result){
+			alert("Error occured while deleting project!!!");
+			window.location.reload(true);
+		}
+	});
+}
 
