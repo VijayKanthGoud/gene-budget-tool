@@ -31,6 +31,7 @@ String ccView="";
 	
 	Map<String, Date> cutofDates = util.getCutOffDates();
 	Date cutOfDate = cutofDates.get(qtr+"");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"
@@ -481,9 +482,9 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark},
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark}/* ,
 		{ id : 100, name : columnNames[26], field : 100, width : 30, formatter : Slick.Formatters.DeleteButton
-	} ];
+	} */ ];
 
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
@@ -506,9 +507,9 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark},
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark}/* ,
 		{ id : 100, name : columnNames[26], field : 100,  width : 30, formatter : Slick.Formatters.DeleteButton
-	}]
+	} */]
 	var searchString = "";
 	
 	// Grouping columns acording to status(New, Active, Closed)
