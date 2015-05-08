@@ -1606,25 +1606,36 @@ function openBrandPopUp(){
 	$('#back').addClass('black_overlay').fadeIn(100);
 	}
 }
+
 // Code for delete or disable project
 function deleteCurrentProject(){
-	console.log(itemClicked);
 	var gmemId = $('#delPrjBtn').attr('val');
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
+		console.log("Not an admin...");
 		if(itemClicked[26] != "<%=BudgetConstants.status_New%>" ){
-			alert("Project owner can delete Planned projects only.");
+			alert("PO exists and the project cannot be deleted.");
 			return;
 		}
-	}
-	if('<%=userInfo.getRole().contains("Admin")%>' == false){
-		return;
+		var cutOffDate = new  Date('<%=sdf.format(cutOfDate)%>');
+		var projectCreateDate = new Date(itemClicked[38].split("_"));
+		var currQtr = '<%=qtr%>';
+		var projCreatedQtr = Math.floor(projectCreateDate.getMonth() / 3);
+		// if project created in this quarter compare creation date with
+		if(projCreatedQtr >= currQtr && cutOffDate > projectCreateDate)
+		{
+			console.log( "Cut Off date is "+cutOffDate+", and  project create date is "+projectCreateDate+". You can proceed to delete the project.");
+		}
+		else{
+			alert('Benchmark exists and the project cannot be deleted.');
+			console.log( "Cut Off date is "+cutOffDate+", and  project create date is "+projectCreateDate+". You can not delete the project, as the project has locked benchmark.");
+			return;
+		}
 	}
 	var userAccepted = confirm("Please, confirm: delete project?");
 	if (!userAccepted) {
 		return;
 	}
 	var ccVal = $('#getCostCenter').val();
-	alert(ccVal);
 	$.ajax({
 		url : '/disableProject',
 		type : 'POST',
