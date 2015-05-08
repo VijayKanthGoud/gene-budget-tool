@@ -404,7 +404,10 @@ function updateMemCache(e, args, tempKey) {
 					if (index > -1) {
 						availableTags.splice(index, 1);
 					}
+					console.log(args.item);
 					m_data[0][1]=args.item[44];
+					m_data[0][3]=args.item[24];
+					m_data[0][2]=100.0;
 					m_data[0][4]=args.item[2];
 				 	m_data[0][5]=args.item[0]+'.1';
 				 	m_data[0][7]=args.item[1];
@@ -588,7 +591,7 @@ function updateMemCache(e, args, tempKey) {
 		success : function(result) {
 			//alert("success"+JSON.stringify(result));
 			if(JSON.stringify(result).indexOf("<poError>")!=-1){
-				//alert("hi");
+				alert("PO Number already exists !!!");
 				window.location.reload(true);
 			}
 			$('#statusMessage').text("All changes saved successfully!")
