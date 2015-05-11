@@ -83,24 +83,39 @@ public class UserDetailsUpload extends HttpServlet{
 		String costCenter1 = costCenter;
 		String role = "Project Owner";
 		for (List rcvdRow : rowList) {
+			costCenter1 = costCenter;
+			 existingCC = "";
 			if (rcvdRow.get(9).toString().trim().equals("")) {
 				continue;
 			}else{
 				if(!rcvdRow.get(9).toString().trim().equals("")){
 					unixId = rcvdRow.get(9).toString();
 					email = unixId+"@gene.com";
+					System.out.println("email ==="+email);
 					userFromDB = userMap.get(email);
 					if(!(userFromDB==null)){
 						existingCC = userFromDB.getCostCenter();
+						System.out.println("!(userFromDB==null) existingCC:::::"+existingCC);
 					}
 					
 				}if(!rcvdRow.get(2).toString().trim().equals("")){
 					costCenter1 = rcvdRow.get(2).toString();
 					selectedCostCenter = (costCenter1.contains(":"))?costCenter1.split(":")[0]:costCenter1; 
-				}if(Util.isNullOrEmpty(existingCC) && !existingCC.contains(costCenter1)){
+					System.out.println("!rcvdRow.get(2).toString().trim().equals( costCenter1 :::::"+costCenter1);
+					System.out.println("!rcvdRow.get(2).toString().trim().equals( selectedCostCenter :::::"+selectedCostCenter);
+				}if(Util.isNullOrEmpty(existingCC)){
+					if(!existingCC.contains(costCenter1)){
+					System.out.println("Util.isNullOrEmpty(existingCC) && !existingCC.contains(costCenter1) ::::: before :::::"+costCenter1);
 					costCenter1 = existingCC+":"+costCenter1;
 					selectedCostCenter = (costCenter1.contains(":"))?costCenter1.split(":")[0]:costCenter1;
-				}if(!rcvdRow.get(7).toString().trim().equals("") && !rcvdRow.get(8).toString().trim().equals("")){
+					System.out.println("Util.isNullOrEmpty(existingCC) && !existingCC.contains(costCenter1) :::::"+costCenter1);
+					System.out.println("Util.isNullOrEmpty(existingCC) && !existingCC.contains(costCenter1) :::::"+selectedCostCenter);
+					}else{
+						costCenter1 = existingCC;
+						selectedCostCenter = (costCenter1.contains(":"))?costCenter1.split(":")[0]:costCenter1;
+					}
+				}
+				if(!rcvdRow.get(7).toString().trim().equals("") && !rcvdRow.get(8).toString().trim().equals("")){
 					userName = rcvdRow.get(8).toString()+" "+rcvdRow.get(7).toString();
 				}if(!rcvdRow.get(10).toString().trim().equals("")){
 					role = rcvdRow.get(10).toString();
