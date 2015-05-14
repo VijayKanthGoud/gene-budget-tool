@@ -31,7 +31,6 @@ String ccView="";
 	
 	Map<String, Date> cutofDates = util.getCutOffDates();
 	Date cutOfDate = cutofDates.get(qtr+"");
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"
@@ -42,7 +41,7 @@ String ccView="";
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
 <html>
-<body onload="getAvailableTags();">
+<body onload="getBrandTotals();getAvailableTags();">
 	<div align="center">
 		<table
 			style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
@@ -242,7 +241,7 @@ String ccView="";
 			<form method="GET" id="getCostCentre" action="/getreport">
 			<input type="hidden" name="selectedView" id="selectedView1"/>
 			<input type="hidden" name="getCCValue" id="getCostCenter1"/>
-			<input type="hidden" name="brandValue" id="getBrandCC"/>	
+				
 			</form>
 			
 		</div>
@@ -251,7 +250,7 @@ String ccView="";
 			<form method="GET" id="getProjects" action="/getreport">
 			<input type="hidden" name="selectedView" id="selectedView2"/>
 			<input type="hidden" name="getCCValue" id="getCostCenter2"/>
-			<input type="hidden" name="brandValue" id="getBrand2"/>		
+				
 			</form>
 			
 		</div>	
@@ -312,7 +311,6 @@ String ccView="";
 									                            if(brandValue==null || brandValue==""){
 									            					brandValue = "Avastin";
 									            				} 
-									                            budgetSummary = budgetMap.get(brandValue);
 									                            if(budgetMap!=null && !budgetMap.isEmpty()){
 									                            	Object[] budgets = budgetMap.keySet().toArray();
 									                            for(int i=0;i<budgets.length;i++){ 
@@ -330,27 +328,27 @@ String ccView="";
 							</select></td>
 						</tr>
 						<tr>
-							<td><span  title="Current Overall Budget">Budget:</span></td>
+							<td>Budget:</td>
 							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
 						</tr>
 
 						<tr>
-							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
+							<td>Total Forecast:</td>
 							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
+							<td>Unallocated Forecast:</td>
 							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
-							<td >Total Accrual:</td>
+							<td>Total Accrual:</td>
 							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id="varTotalLabel" title="= Budget - Total Accrual" >Left To Spend (LTS):</span></td>
+							<td><span id="varTotalLabel" >Left To Spend (LTS):</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></span>
+									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
 					</table>
@@ -445,7 +443,7 @@ String ccView="";
 	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
 	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Units",
 	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
-	        			"DEC", "Total", "Comments", "Delete" ];
+	        			"DEC", "Total", "Comments" ];
 	var noOfNew = 0;
 	var noOfActive = 0;
 	var noOfClosed = 0;
@@ -454,7 +452,7 @@ String ccView="";
 	var closedExist=false;
 	var frmStudy=false;
 	var columnValiation=false;
-	var lastKeyPressed;
+	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
@@ -482,9 +480,8 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark}/* ,
-		{ id : 100, name : columnNames[26], field : 100, width : 30, formatter : Slick.Formatters.DeleteButton
-	} */ ];
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	} ];
 
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
@@ -507,9 +504,8 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark}/* ,
-		{ id : 100, name : columnNames[26], field : 100,  width : 30, formatter : Slick.Formatters.DeleteButton
-	} */]
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	}]
 	var searchString = "";
 	
 	// Grouping columns acording to status(New, Active, Closed)
@@ -927,6 +923,7 @@ String ccView="";
 					var isValidBrand =false;
 					var item = args.item;
 					var tempKey = item[27];
+					
 					var cell = args.cell;
 					var row = args.row;
 					var dataLength = 0;
@@ -1028,8 +1025,8 @@ String ccView="";
 					} --%>
 					grid.invalidate();
 			
-
-					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2 && lastKeyPressed == 9){
+					
+					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2){
 						addMultiBrandPopUp();
 					}
 					
@@ -1174,7 +1171,8 @@ String ccView="";
 						alert("You are not authorised to initiate project : "+itemClicked[2]);
 						return;
 					}
-				}else if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
+				}else
+				if(args.cell == <%=BudgetConstants.BRAND_CELL%> && itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
 					if(itemClicked[26] == "New"){
 						var userAccepted = confirm("Do you want to convert it in to a single brand?");
 						if (!userAccepted) {
@@ -1187,7 +1185,7 @@ String ccView="";
 						}
 					}else{
 						addMultiBrandPopUp();
-				}
+					}
 					 
 				} 
 			if ($(e.target).hasClass("toggle")) {
@@ -1201,17 +1199,6 @@ String ccView="";
 					dataView.updateItem(item.id, item);
 				}
 				e.stopImmediatePropagation();
-			}
-			
-			var cell = args.cell;
-			var fixedCell;
-			if ($('#hideColumns').is(":checked")) {
-				fixedCell = cell + numHideColumns;
-			} else {
-				fixedCell = cell;
-			}
-			if(fixedCell == <%=BudgetConstants.DELETE_CELL%>){
-				deleteCurrentProject();
 			}
 		});
 		
@@ -1273,7 +1260,6 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row - 1;
 			var fixedCell = cell;
-			lastKeyPressed = e.which;
 			if ((e.which == 38 || e.which == 40 || e.which == 13) && cell == 2) {
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;
@@ -1791,7 +1777,7 @@ String ccView="";
 	});
 	
 	function addMultiBrandPopUp(){
-
+		
 		<%selectedCostCenter = (String)request.getAttribute("getCCValue");
 		if(selectedCostCenter==null || "".equals(selectedCostCenter)){
 			selectedCostCenter = userInfo.getSelectedCostCenter();
@@ -1814,6 +1800,7 @@ String ccView="";
 		
 		
 		if(itemClicked[34]!="New projects"){
+			
 			// Start : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
 			var multiBrandCnt = 0 ;	
 			<%GtfReport pGtfReport = new GtfReport();
@@ -1826,7 +1813,7 @@ String ccView="";
 				var contains = '<%=gtfReport.getgMemoryId().contains(".")%>'; 
 				var gMemoriId='<%=gtfReport.getgMemoryId()%>';
 
-				if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
+					if(contains =='true'  && gMemoriId.toLowerCase().indexOf(itemClicked[0])==0 ){ 
 					var d = (m_data[multiBrandCnt++] = {});
 	 				var parent;
 	 				d["0"] = "<%=gtfReport.getId()%>";

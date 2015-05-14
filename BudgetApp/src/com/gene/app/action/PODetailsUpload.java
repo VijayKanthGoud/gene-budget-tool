@@ -311,8 +311,6 @@ public class PODetailsUpload extends HttpServlet {
 			receivedGtfReport.setPoNumber(rcvdRow.get(5).toString());
 			receivedGtfReport.setStatus("Active");
 			receivedGtfReport.setFlag(2);
-		}else if(!Util.isNullOrEmpty(receivedGtfReport.getPoNumber())){
-			receivedGtfReport.setRemarks("Error with project data : PO# is blank");
 		}
 			
 		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
@@ -593,9 +591,7 @@ public class PODetailsUpload extends HttpServlet {
 
 				receivedGtfReports.add(nwParentGtfReport);
 				for(GtfReport gtfRpt : receivedGtfReports){
-					if (gtfRpt.getgMemoryId().contains(".")) {
-						total += gtfRpt.getPlannedMap().get("TOTAL");
-					}
+					total += gtfRpt.getPlannedMap().get("TOTAL");
 				}
 				for(GtfReport gtfRpt : receivedGtfReports){
 					nwParentGtfReport.setRemarks(gtfRpt.getRemarks());
@@ -684,9 +680,7 @@ public class PODetailsUpload extends HttpServlet {
 			receivedGtfReports.add(nwParentGtfReport);
 			receivedGtfReports.addAll(existingGtfReports);
 			for(GtfReport gtfRpt : receivedGtfReports){
-				if (gtfRpt.getgMemoryId().contains(".")) {
-					total += gtfRpt.getPlannedMap().get("TOTAL");
-				}
+				total += gtfRpt.getPlannedMap().get("TOTAL");
 			}
 			for(GtfReport gtfRpt : receivedGtfReports){
 				gtfRpt.setMultiBrand(true);
@@ -695,15 +689,11 @@ public class PODetailsUpload extends HttpServlet {
 					if (gtfRpt.getgMemoryId().contains(".")) {
 						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
 								.get("TOTAL") / total) * 100 , 2));
-					}
-					else{
-						gtfRpt.setRemarks("Note: Brand accrual distribution different from original forecast.");
-					}
-				}catch(NumberFormatException nfe){
+					}}catch(NumberFormatException nfe){
 						gtfRpt.setPercent_Allocation(100.0);
-				}catch(ArithmeticException ae){
+					}catch(ArithmeticException ae){
 						gtfRpt.setPercent_Allocation(100.0);
-				}
+					}
 				gtfReports.add(gtfRpt);
 
 			}
