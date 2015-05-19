@@ -328,16 +328,16 @@ String ccView="";
 							</select></td>
 						</tr>
 						<tr>
-							<td>Budget:</td>
+							<td><span  title="Current Overall Budget">Budget:</span></td>
 							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
 						</tr>
 
 						<tr>
-							<td>Total Forecast:</td>
+							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
 							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td>Unallocated Forecast:</td>
+							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
 							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
@@ -346,7 +346,7 @@ String ccView="";
 							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id="varTotalLabel" >Left To Spend (LTS):</span></td>
+							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
 									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
 							</td>
@@ -400,6 +400,8 @@ String ccView="";
 	<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 	<script src="scripts/fileHandle.js"></script>
 	<script>
+	/*var map = {};
+	var idBrandMap = {}*/
     // rdoSelectedmode holds the radio(Planned/All) button object
 	var rdoSelectedmode = $('input[name="selectedmode"]');
 	
@@ -452,7 +454,7 @@ String ccView="";
 	var closedExist=false;
 	var frmStudy=false;
 	var columnValiation=false;
-	
+	var lastKeyPressed;
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
@@ -680,7 +682,7 @@ String ccView="";
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if((d[26] == "New" && (gmemoriID.indexOf(".") == -1)) || (d[26] !="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") ))){ 
-   				d[11]="<%=BudgetConstants.QUARTERLY_TARGET%>";
+   				d[11]="<%=BudgetConstants.ANNUAL_TARGET%>";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
 				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
@@ -748,7 +750,7 @@ String ccView="";
     					}
    
    				} if(jsId % 4 == 3){
-				d[11]="<%=BudgetConstants.QUARTERLY_LTS%>";
+				d[11]="<%=BudgetConstants.FORECAST_LTS%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
@@ -798,6 +800,9 @@ String ccView="";
 			dummyClosedProjects();
 		} 
 			totalSize=data.length;
+			
+			var forecastMap = {};
+			var accrualMap = {};
 			for (var cntTotal = 0; cntTotal < 4; cntTotal++) {
 				var rowNum = cntTotal + totalSize;
 				var d = (data[rowNum] = {});
@@ -818,40 +823,46 @@ String ccView="";
 			    	d[11] = "<%=BudgetConstants.FORECAST%>";
 			        break;
 			    case 1:
-			    	d[11] = "<%=BudgetConstants.QUARTERLY_TARGET%>";
+			    	d[11] = "<%=BudgetConstants.ANNUAL_TARGET%>";
 			        break;
 			    case 2:
 			    	d[11] = "<%=BudgetConstants.ACCRUAL%>";
 			        break;
 			    case 3:
-			    	d[11] = "<%=BudgetConstants.QUARTERLY_LTS%>";
+			    	d[11] = "<%=BudgetConstants.FORECAST_LTS%>";
 			        break;
 			    default:
 			    	d[11] = "<%=BudgetConstants.FORECAST%>";
 		        	break;
 			}
 				d[40] = d[11];
+				
+				
 			for (var j = 0; j < totalSize ; j++) {
 				if( (data[j][37] == false && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
 						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
 						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
 				){
-					d[12] = parseFloat(d[12]) + parseFloat(data[j][12]);
-					d[13] = parseFloat(d[13]) + parseFloat(data[j][13]);
-					d[14] = parseFloat(d[14]) + parseFloat(data[j][14]);
-					d[15] = parseFloat(d[15]) + parseFloat(data[j][15]);
-					d[16] = parseFloat(d[16]) + parseFloat(data[j][16]);
-					d[17] = parseFloat(d[17]) + parseFloat(data[j][17]);
-					d[18] = parseFloat(d[18]) + parseFloat(data[j][18]);
-					d[19] = parseFloat(d[19]) + parseFloat(data[j][19]);
-					d[20] = parseFloat(d[20]) + parseFloat(data[j][20]);
-					d[21] = parseFloat(d[21]) + parseFloat(data[j][21]);
-					d[22] = parseFloat(d[22]) + parseFloat(data[j][22]);
-					d[23] = parseFloat(d[23]) + parseFloat(data[j][23]);
-					d[24] = parseFloat(d[24]) + parseFloat(data[j][24]);
+					if(d[11] != "<%=BudgetConstants.FORECAST_LTS%>"){
+						for(var i = 0; i <= 12; i++){
+							d[12 + i] = parseFloat(d[12 + i]) + parseFloat(data[j][12 + i]);
+						}
+					}
+					if(d[11] == "<%=BudgetConstants.FORECAST%>"){
+						for(var i = 0; i <= 12; i++){
+							forecastMap[12 + i] = d[12 + i];
+						}
+					} else if(d[11] == "<%=BudgetConstants.ACCRUAL%>"){
+						for(var i = 0; i <= 12; i++){
+							accrualMap[12 + i] = d[12 + i];
+						}
+					} else if(d[11] == "<%=BudgetConstants.FORECAST_LTS%>"){
+						for(var i = 0; i <= 12; i++){
+							d[12 + i] =  forecastMap[12 + i] - accrualMap[12 + i];
+						}
+					}
 				}
 			}
-
 			for (var j = 12; j < 25; j++) {
 				d[j] = d[j].toFixed(2);
 			}
@@ -1026,7 +1037,7 @@ String ccView="";
 					grid.invalidate();
 			
 					
-					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2){
+					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2 && lastKeyPressed == 9){
 						addMultiBrandPopUp();
 					}
 					
@@ -1089,7 +1100,7 @@ String ccView="";
 											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
 										}
 									}				
-									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
+									if(data[j][11]=="<%=BudgetConstants.ANNUAL_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
 										verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][itemCell]);
 										verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
 									}
@@ -1097,7 +1108,7 @@ String ccView="";
 										verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][itemCell]);
 										verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
 									}
-									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_LTS%>" && data[j][27].toString().indexOf(".") ==-1 ){
+									if(data[j][11]=="<%=BudgetConstants.FORECAST_LTS%>" && data[j][27].toString().indexOf(".") ==-1 && data[j][26]!='' ){
 										verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][itemCell]);
 										verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
 									}
@@ -1106,11 +1117,11 @@ String ccView="";
 							data[data.length - 4][itemCell]=verPlannedTotal;
 							data[data.length - 3][itemCell]=verBenchmarkTotal;
 							data[data.length - 2][itemCell]=verAccrualTotal;
-							data[data.length - 1][itemCell]=verVarianceTotal;
+							data[data.length - 1][itemCell]=verPlannedTotal-verAccrualTotal;
 							data[data.length - 4][24]=verPlanned;
 							data[data.length - 3][24]=verBenchmark;
 							data[data.length - 2][24]=verAccrual;
-							data[data.length - 1][24]=verVariance;
+							data[data.length - 1][24]=verPlanned-verAccrual;
 						
 						}
 						grid.invalidate();
@@ -1260,6 +1271,7 @@ String ccView="";
 			var cell = args.cell;
 			var row = args.row - 1;
 			var fixedCell = cell;
+			lastKeyPressed = e.which;
 			if ((e.which == 38 || e.which == 40 || e.which == 13) && cell == 2) {
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;

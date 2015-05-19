@@ -167,8 +167,8 @@ public interface BudgetConstants {
 	
 	public static final String FORECAST = "Forecast";
 	public static final String ACCRUAL = "Accrual";
-	public static final String QUARTERLY_TARGET = "Quarterly Target"; 
-	public static final String QUARTERLY_LTS = "Quarterly LTS";
+	public static final String ANNUAL_TARGET = "Annual Target"; 
+	public static final String FORECAST_LTS = "Forecast LTS";
 	
 
 }

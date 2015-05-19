@@ -605,25 +605,28 @@ public class DBUtil {
 		List<GtfReport> rptList = new ArrayList<GtfReport>();
 		Calendar cal = Calendar.getInstance();
 		int month = cal.get(Calendar.MONTH);
+		double planned = 0.0;
 		double benchMark = 0.0;
 		double accrual = 0.0;
 		double variance = 0.0;
 		Map<String, Double> benchMarkMap;
+		Map<String, Double> plannedMap;
 		Map<String, Double> accrualsMap;
 		Map<String, Double> varianceMap;
 		GtfReport report = new GtfReport();
 		for(int i=0;i<gtfReports.size();i++){
 			report = gtfReports.get(i);
 			benchMarkMap = report.getBenchmarkMap();
+			plannedMap = report.getPlannedMap();
 			accrualsMap = report.getAccrualsMap();
 			varianceMap = report.getVariancesMap();
 			for(int j=0;j<BudgetConstants.months.length-1;j++){
-				if(benchMarkMap!=null){
-					benchMark = benchMarkMap.get(BudgetConstants.months[j]);
+				if(plannedMap!=null){
+					planned = plannedMap.get(BudgetConstants.months[j]);
 				}if(accrualsMap!=null){
 					accrual = accrualsMap.get(BudgetConstants.months[j]);
 				}
-			variance = benchMark-accrual;
+			variance = planned - accrual;
 			if(varianceMap!=null){
 			varianceMap.put(BudgetConstants.months[j], variance);
 			}}
@@ -1042,7 +1045,7 @@ public class DBUtil {
 					summary.setVarianceTotal(benchMarkTotal - accrualTotal);
 					summary.setPlannedTotal(plannedTotal);
 					summary.setBenchmarkTotal(benchMarkTotal);
-					summary.setBudgetLeftToSpend(summary.getTotalBudget()-summary.getPlannedTotal());
+					summary.setBudgetLeftToSpend(summary.getTotalBudget()-summary.getAccrualTotal());
 					brandMap.put(brand, summary);
 				}
 				break;

@@ -237,6 +237,9 @@ public class AutoSaveData extends HttpServlet {
 																			.parseInt(cellNum)], newPlannedValue);
 										gtfReportObj.setBenchmarkMap(benchMarkMap);
 									}
+									varianceMap
+											.put(BudgetConstants.months[Integer.parseInt(cellNum)],
+													newPlannedValue - accrualMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]));
 								}
 								if(mapType.equalsIgnoreCase("accrual") /*&& !(gtfReportObj.getgMemoryId().contains("."))*/){
 									accrualMap.put(BudgetConstants.months[Integer
