@@ -140,7 +140,7 @@
 		 }else if(value=="Accrual"){
 			 return  "<span title='Spend according to milestones of SOW'>Accrual</span>";
 		 }else if(value=="Forecast LTS"){
-			 return  "<span title='= Forecast - Accrual'>Forecast LTS</span>";
+			 return  "<span title='Total Forecast - Accrual'>Forecast LTS</span>";
 		 }
 	  }
 	  return value;
