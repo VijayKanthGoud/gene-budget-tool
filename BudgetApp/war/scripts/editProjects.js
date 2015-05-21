@@ -1163,6 +1163,13 @@ function submitProjects(){
 		if( data[i][6] == 'undefined' || data[i][6].toString().trim() ==""){
 			errStr += 4;	
 		}
+		if(data[i][8] != 'undefined' || data[i][8]!=""){
+			for(var j=0; j<i;j++){
+				if(data[j][8] == data[i][8]){
+					errStr += 5;
+				}
+			}
+		}
 		if(data[i][6].toString().toLowerCase().indexOf("smart wbs")!=-1 && data[i][37] == false){
 			flag=true;
 			break;
@@ -1215,6 +1222,10 @@ function submitProjects(){
 	   /* case 5:
 	    	alert('"Brand" and "gMemori Id" can not be blank.');
 	        break;*/
+	    case 5:
+	    	alert('Po Number cannot be same');
+	    	grid.gotoCell(i+2, 9, false);
+	        break;
 	    case 6:
 	    	alert('"Project name" and "Brand" can not be blank.');
 	    	grid.gotoCell(i+2, 1, false);
