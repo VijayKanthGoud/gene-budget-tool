@@ -275,8 +275,8 @@ function searchProject(item) {
                                         searchString.toLowerCase()) == -1)
                         && (searchString != "" && item[30].toLowerCase().indexOf(
                                         searchString.toLowerCase()) == -1) && item[26] != "Total")
-                        || (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase().indexOf(
-                                        radioString.toLowerCase()) == -1)) {
+                        || (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase() !=
+                                        radioString.toLowerCase())) {
                 return false;
         }
 
