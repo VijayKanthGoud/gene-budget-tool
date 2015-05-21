@@ -308,6 +308,9 @@ function searchProject(item) {
         return status;
 }
 
+var forecast_cur = 0.0;
+var accrual_cur = 0.0;
+
 function updateMemCache(e, args, tempKey) {
 	$('#statusMessage').text("Saving data...").fadeIn(200);
 	var cell = args.cell;
@@ -438,7 +441,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
+									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.FORECAST_LTS%>"){
 								kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 								break;
 							}
@@ -469,7 +472,7 @@ function updateMemCache(e, args, tempKey) {
 						var kData = data[iVar];
 						
 						if(key.toString().indexOf(".") != -1 && key == kData[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && 
-								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
+								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.FORECAST_LTS%>"){
 							aSave = (aSaveData[iCnt] = {});
 							kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 							aSave[0] = kData[27];
@@ -483,13 +486,13 @@ function updateMemCache(e, args, tempKey) {
 				if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
 					if(d[11]=="<%=BudgetConstants.ACCRUAL%>"){
 						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
-					}else if(d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
+					}else if(d[11]=="<%=BudgetConstants.FORECAST_LTS%>"){
 						if( item[43]=='undefined' ||item[43]=="" ){
 							item[43]=0.0;
 						}
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
-							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"){
+							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.ANNUAL_TARGET%>"){
 								d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
 								break;
 							}
@@ -509,6 +512,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 				}
 				if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+					forecast_cur = d[fixedCell];
 					var aSave = (aSaveData[iCnt] = {});
 					aSave[0] = d[27];
 					if(d[7] == 0.0){
@@ -562,7 +566,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 					//aSave[2] = d["47"];
 					iCnt++;
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.ANNUAL_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
 						((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
@@ -573,6 +577,10 @@ function updateMemCache(e, args, tempKey) {
 						varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
 					}	
 					d[24]= parseFloat(varTotal);
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.ACCRUAL%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
+					accrual_cur = d[fixedCell];
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
+					d[itemCell]= parseFloat(forecast_cur - accrual_cur);
 				}
 			}
 		}
@@ -639,7 +647,7 @@ function getSummaryValues(){
 				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
 				$('#budgetLeftToSpend').text(((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2)).toFixed(2));
 				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
-				$('#varianceTotal').text((value.varianceTotal).toFixed(2));
+				$('#varianceTotal').text((value.budgetLeftToSpend).toFixed(2));
 				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 == 0){
 					$(varTotalLabel).css('background-color', '#FFFFFF');
 					$(varTotalText).css('background-color', '#FFFFFF');
@@ -1163,7 +1171,7 @@ function submitProjects(){
 		if( data[i][6] == 'undefined' || data[i][6].toString().trim() ==""){
 			errStr += 4;	
 		}
-		if(data[i][8] != 'undefined' || data[i][8]!=""){
+		if(data[i][8] != 'undefined' && data[i][8]!=""){
 			for(var j=0; j<i;j++){
 				if(data[j][8] == data[i][8]){
 					errStr += 5;

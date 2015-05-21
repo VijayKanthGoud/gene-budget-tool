@@ -83,7 +83,7 @@
 	  var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
 	 
 	  if(dataContext["35"] != "Buttons"){
-		if(dataContext[35] == "NewProjects"){
+		if(dataContext[35] == "NewProjects" && columnDef['name'] != "Total"){
 			return "<div width = '100%' style='background:#C0CCED'><span style='color:#2271B0'> "+ Number(value).toFixed(2) +"</span></div>" ;
 		}
 		else if(dataContext["26"] == "Total" || columnDef["name"] == "Total"){
@@ -142,12 +142,12 @@
 			  return  "<input type='button' value='"+value+"' id='cnclProjBtn' style='font-size: 12px;  width:80px; height: 20px; background:#2271B0; color:#FFFFFF' />";
 		 }else if(value=="Forecast"){
 			 return  "<span title='Projected Spend'>Forecast</span>";
-		 }else if(value=="Quarterly Target"){
-			 return  "<span title='Benchmarks for current quarter'>Quarterly Target</span>";
+		 }else if(value=="Annual Target"){
+			 return  "<span title='Benchmarks for current quarter'>Annual Target</span>";
 		 }else if(value=="Accrual"){
 			 return  "<span title='Spend according to milestones of SOW'>Accrual</span>";
-		 }else if(value=="Quarterly LTS"){
-			 return  "<span title='= Quarterly Target - Accrual'>Quarterly LTS</span>";
+		 }else if(value=="Forecast LTS"){
+			 return  "<span title='Total Forecast - Accrual'>Forecast LTS</span>";
 		 }
 	  }
 	  return value;
