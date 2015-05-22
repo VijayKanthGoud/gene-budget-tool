@@ -582,7 +582,7 @@ public class PODetailsUpload extends HttpServlet {
 				nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 				Map<String, Double> receivedChildVarMap = new HashMap(nwParentGtfReport.getAccrualsMap());
 				for (Entry<String, Double> entryMap : receivedChildVarMap.entrySet()){
-					nwParentGtfReport.getVariancesMap().put(entryMap.getKey(), nwParentGtfReport.getBenchmarkMap().get(entryMap.getKey()) - nwParentGtfReport.getAccrualsMap().get(entryMap.getKey()));
+					nwParentGtfReport.getVariancesMap().put(entryMap.getKey(), nwParentGtfReport.getPlannedMap().get(entryMap.getKey()) - nwParentGtfReport.getAccrualsMap().get(entryMap.getKey()));
 				}
 
 				nwParentGtfReport.setChildProjectList(childProjList);
@@ -666,7 +666,7 @@ public class PODetailsUpload extends HttpServlet {
 			nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 			Map<String, Double> receivedChildVarMap = new HashMap(nwParentGtfReport.getAccrualsMap());
 			for (Entry<String, Double> entryMap : receivedChildVarMap.entrySet()){
-				nwParentGtfReport.getVariancesMap().put(entryMap.getKey(), nwParentGtfReport.getBenchmarkMap().get(entryMap.getKey()) - nwParentGtfReport.getAccrualsMap().get(entryMap.getKey()));
+				nwParentGtfReport.getVariancesMap().put(entryMap.getKey(), nwParentGtfReport.getPlannedMap().get(entryMap.getKey()) - nwParentGtfReport.getAccrualsMap().get(entryMap.getKey()));
 			}
 
 			nwParentGtfReport.setChildProjectList(childProjList);
