@@ -249,7 +249,7 @@ public class StoreReport extends HttpServlet {
 			gtfReport.setPlannedMap(plannedMap);
 			gtfReport.setBenchmarkMap(plannedMap);
 			gtfReport.setAccrualsMap(setZeroMap);
-			gtfReport.setVariancesMap(setZeroMap);
+			gtfReport.setVariancesMap(plannedMap);
 			gtfReport.setMultiBrand(isMultibrand);
 			gtfReports.add(gtfReport);
 			
@@ -353,7 +353,7 @@ public class StoreReport extends HttpServlet {
 				gtfReport.setPlannedMap(plannedMap);
 				gtfReport.setBenchmarkMap(plannedMap);
 				gtfReport.setAccrualsMap(setZeroMap);
-				gtfReport.setVariancesMap(setZeroMap);
+				gtfReport.setVariancesMap(plannedMap);
 				gtfReport.setMultiBrand(true);
 				gmultiIdList.add(gtfReport.getgMemoryId());
 				gtfReports.add(gtfReport);
