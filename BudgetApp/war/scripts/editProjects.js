@@ -443,7 +443,7 @@ function updateMemCache(e, args, tempKey) {
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
 							if(key.toString().indexOf(".") != -1 && 
-									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.FORECAST_LTS%>"){
+									key.split(".")[0]== d[27]   && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 								kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 								break;
 							}
@@ -474,7 +474,7 @@ function updateMemCache(e, args, tempKey) {
 						var kData = data[iVar];
 						
 						if(key.toString().indexOf(".") != -1 && key == kData[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && 
-								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.FORECAST_LTS%>"){
+								fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 							aSave = (aSaveData[iCnt] = {});
 							kData[itemCell] = parseFloat(kData[itemCell])  - parseFloat(item[fixedCell]) + parseFloat(item[50]);
 							aSave[0] = kData[27];
@@ -488,13 +488,13 @@ function updateMemCache(e, args, tempKey) {
 				if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
 					if(d[11]=="<%=BudgetConstants.ACCRUAL%>"){
 						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
-					}else if(d[11]=="<%=BudgetConstants.FORECAST_LTS%>"){
+					}else if(d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 						if( item[43]=='undefined' ||item[43]=="" ){
 							item[43]=0.0;
 						}
 						for(var iVar=0;iVar<data.length;iVar++){
 							var kData = data[iVar];
-							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.ANNUAL_TARGET%>"){
+							if(key== kData[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && kData[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"){
 								d[itemCell] = parseFloat(kData[itemCell])  - parseFloat(cellValue);
 								break;
 							}
@@ -568,7 +568,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 					//aSave[2] = d["47"];
 					iCnt++;
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.ANNUAL_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
 						((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
@@ -581,13 +581,16 @@ function updateMemCache(e, args, tempKey) {
 					d[24]= parseFloat(varTotal);
 				}else if(key== d[34] && d[11]=="<%=BudgetConstants.ACCRUAL%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
 					accrual_cur = d[fixedCell];
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
 					d[itemCell]= parseFloat(forecast_cur - accrual_cur);
 				}
 			}
 		}
 		
 	if(singleBrandToMulti!=true){
+		alert(aSaveData);
+		return;
+		
 	$.ajax({
 		url : '/AutoSaveData',
 		type : 'POST',

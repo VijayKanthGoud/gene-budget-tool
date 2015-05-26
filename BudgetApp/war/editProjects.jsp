@@ -682,7 +682,7 @@ String ccView="";
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if((d[26] == "New" && (gmemoriID.indexOf(".") == -1)) || (d[26] !="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") ))){ 
-   				d[11]="<%=BudgetConstants.ANNUAL_TARGET%>";
+   				d[11]="<%=BudgetConstants.QUARTERLY_TARGET%>";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
 				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
@@ -750,7 +750,7 @@ String ccView="";
     					}
    
    				} if(jsId % 4 == 3){
-				d[11]="<%=BudgetConstants.FORECAST_LTS%>";
+				d[11]="<%=BudgetConstants.QUARTERLY_LTS%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
@@ -843,7 +843,7 @@ String ccView="";
 						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
 						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
 				){
-					if(d[11] != "<%=BudgetConstants.FORECAST_LTS%>"){
+					if(d[11] != "<%=BudgetConstants.QUARTERLY_LTS%>"){
 						for(var i = 0; i <= 12; i++){
 							d[12 + i] = parseFloat(d[12 + i]) + parseFloat(data[j][12 + i]);
 						}
@@ -856,7 +856,7 @@ String ccView="";
 						for(var i = 0; i <= 12; i++){
 							accrualMap[12 + i] = d[12 + i];
 						}
-					} else if(d[11] == "<%=BudgetConstants.FORECAST_LTS%>"){
+					} else if(d[11] == "<%=BudgetConstants.QUARTERLY_LTS%>"){
 						for(var i = 0; i <= 12; i++){
 							d[12 + i] =  forecastMap[12 + i] - accrualMap[12 + i];
 						}
@@ -1100,7 +1100,7 @@ String ccView="";
 											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
 										}
 									}				
-									if(data[j][11]=="<%=BudgetConstants.ANNUAL_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
+									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
 										verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][itemCell]);
 										verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
 									}
@@ -1108,7 +1108,7 @@ String ccView="";
 										verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][itemCell]);
 										verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
 									}
-									if(data[j][11]=="<%=BudgetConstants.FORECAST_LTS%>" && data[j][27].toString().indexOf(".") ==-1 && data[j][26]!='' ){
+									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_LTS%>" && data[j][27].toString().indexOf(".") ==-1 && data[j][26]!='' ){
 										verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][itemCell]);
 										verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
 									}

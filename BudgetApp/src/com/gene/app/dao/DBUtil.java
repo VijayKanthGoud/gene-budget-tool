@@ -1042,7 +1042,7 @@ public class DBUtil {
 					}
 					}
 					summary.setAccrualTotal(accrualTotal);
-					summary.setVarianceTotal(benchMarkTotal - accrualTotal);
+					summary.setVarianceTotal(plannedTotal - accrualTotal);
 					summary.setPlannedTotal(plannedTotal);
 					summary.setBenchmarkTotal(benchMarkTotal);
 					summary.setBudgetLeftToSpend(summary.getTotalBudget()-summary.getAccrualTotal());
