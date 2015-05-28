@@ -588,9 +588,6 @@ function updateMemCache(e, args, tempKey) {
 		}
 		
 	if(singleBrandToMulti!=true){
-		alert(aSaveData);
-		return;
-		
 	$.ajax({
 		url : '/AutoSaveData',
 		type : 'POST',
