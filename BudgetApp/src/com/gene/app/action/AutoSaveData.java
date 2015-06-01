@@ -239,9 +239,10 @@ public class AutoSaveData extends HttpServlet {
 									}
 									varianceMap
 											.put(BudgetConstants.months[Integer.parseInt(cellNum)],
-													newPlannedValue - accrualMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]));
+													benchMarkMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]) - accrualMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]));
 								}
-								if(mapType.equalsIgnoreCase("accrual") /*&& !(gtfReportObj.getgMemoryId().contains("."))*/){
+								// Accrual map is not editable
+								/*if(mapType.equalsIgnoreCase("accrual") && !(gtfReportObj.getgMemoryId().contains("."))){
 									accrualMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);
 									varianceMap.put(BudgetConstants.months[Integer
@@ -249,7 +250,7 @@ public class AutoSaveData extends HttpServlet {
 																			.parseInt(cellNum)]) - newPlannedValue);
 									gtfReportObj.setAccrualsMap(accrualMap);
 									gtfReportObj.setVariancesMap(varianceMap);
-								}
+								}*/
 								gtfReportObj.setPlannedMap(plannedMap);
 								gtfReportMap.put(keyNum, gtfReportObj);
 							}

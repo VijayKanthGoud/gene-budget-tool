@@ -316,6 +316,7 @@ function searchProject(item) {
 
 var forecast_cur = 0.0;
 var accrual_cur = 0.0;
+var quarterly_tar_cur = 0.0;
 
 function updateMemCache(e, args, tempKey) {
 	$('#statusMessage').text("Saving data...").fadeIn(200);
@@ -579,10 +580,24 @@ function updateMemCache(e, args, tempKey) {
 						varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
 					}	
 					d[24]= parseFloat(varTotal);
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.ACCRUAL%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
+				}
+				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
+					quarterly_tar_cur = d[fixedCell];
+				}
+				if(key== d[34] && d[11]=="<%=BudgetConstants.ACCRUAL%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
 					accrual_cur = d[fixedCell];
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
-					d[itemCell]= parseFloat(forecast_cur - accrual_cur);
+				}
+				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
+					d[itemCell]= parseFloat(quarterly_tar_cur - accrual_cur);
+					varTotal = 0.0;
+					for (var j = 12; j < 24; j++) {
+						if(d[j] == "" || d[j] == "undefined"){
+							d[j] = 0.0;
+						}
+						varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
+					}	
+					d[24]= parseFloat(varTotal);
+					
 				}
 			}
 		}
@@ -642,7 +657,6 @@ function getSummaryValues(){
 			if(key==selectedValue){
 				//alert("val = "+selectedValue);
 				value = obj.budgetMap[key];
-				
 				$('#totalBudget').text((value.totalBudget).toFixed(2));
 				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
 				$('#budgetLeftToSpend').text(((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2)).toFixed(2));

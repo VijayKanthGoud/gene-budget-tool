@@ -400,8 +400,6 @@ String ccView="";
 	<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 	<script src="scripts/fileHandle.js"></script>
 	<script>
-	/*var map = {};
-	var idBrandMap = {}*/
     // rdoSelectedmode holds the radio(Planned/All) button object
 	var rdoSelectedmode = $('input[name="selectedmode"]');
 	
@@ -801,7 +799,7 @@ String ccView="";
 		} 
 			totalSize=data.length;
 			
-			var forecastMap = {};
+			var quarterlyTargetMap = {};
 			var accrualMap = {};
 			for (var cntTotal = 0; cntTotal < 4; cntTotal++) {
 				var rowNum = cntTotal + totalSize;
@@ -836,30 +834,24 @@ String ccView="";
 		        	break;
 			}
 				d[40] = d[11];
-				
-				
+				 
+			var compareString = "";
 			for (var j = 0; j < totalSize ; j++) {
-				if( (data[j][37] == false && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
-						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
-						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
+				if(data[j][11] == "<%=BudgetConstants.QUARTERLY_TARGET%>"){
+					compareString =  "<%=BudgetConstants.ANNUAL_TARGET%>"
+				}else if(data[j][11] == "<%=BudgetConstants.QUARTERLY_LTS%>"){
+					compareString =  "<%=BudgetConstants.FORECAST_LTS%>"
+				}else{
+					compareString = data[j][11];
+				}
+				
+				
+				if( (data[j][37] == false && d[11]==compareString && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
+						 (data[j][37] == true && d[11]==compareString && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
+						 (data[j][37] == true && d[11]==compareString && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
 				){
-					if(d[11] != "<%=BudgetConstants.QUARTERLY_LTS%>"){
-						for(var i = 0; i <= 12; i++){
-							d[12 + i] = parseFloat(d[12 + i]) + parseFloat(data[j][12 + i]);
-						}
-					}
-					if(d[11] == "<%=BudgetConstants.FORECAST%>"){
-						for(var i = 0; i <= 12; i++){
-							forecastMap[12 + i] = d[12 + i];
-						}
-					} else if(d[11] == "<%=BudgetConstants.ACCRUAL%>"){
-						for(var i = 0; i <= 12; i++){
-							accrualMap[12 + i] = d[12 + i];
-						}
-					} else if(d[11] == "<%=BudgetConstants.QUARTERLY_LTS%>"){
-						for(var i = 0; i <= 12; i++){
-							d[12 + i] =  forecastMap[12 + i] - accrualMap[12 + i];
-						}
+					for(var i = 0; i <= 12; i++){
+						d[12 + i] = parseFloat(d[12 + i]) + parseFloat(data[j][12 + i]);
 					}
 				}
 			}
@@ -1117,11 +1109,11 @@ String ccView="";
 							data[data.length - 4][itemCell]=verPlannedTotal;
 							data[data.length - 3][itemCell]=verBenchmarkTotal;
 							data[data.length - 2][itemCell]=verAccrualTotal;
-							data[data.length - 1][itemCell]=verPlannedTotal-verAccrualTotal;
+							data[data.length - 1][itemCell]=verBenchmarkTotal-verAccrualTotal;
 							data[data.length - 4][24]=verPlanned;
 							data[data.length - 3][24]=verBenchmark;
 							data[data.length - 2][24]=verAccrual;
-							data[data.length - 1][24]=verPlanned-verAccrual;
+							data[data.length - 1][24]=verBenchmark-verAccrual;
 						
 						}
 						grid.invalidate();
