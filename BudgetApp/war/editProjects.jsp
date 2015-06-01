@@ -1109,11 +1109,11 @@ String ccView="";
 							data[data.length - 4][itemCell]=verPlannedTotal;
 							data[data.length - 3][itemCell]=verBenchmarkTotal;
 							data[data.length - 2][itemCell]=verAccrualTotal;
-							data[data.length - 1][itemCell]=verBenchmarkTotal-verAccrualTotal;
+							data[data.length - 1][itemCell]=verVarianceTotal;
 							data[data.length - 4][24]=verPlanned;
 							data[data.length - 3][24]=verBenchmark;
 							data[data.length - 2][24]=verAccrual;
-							data[data.length - 1][24]=verBenchmark-verAccrual;
+							data[data.length - 1][24]=verVariance;
 						
 						}
 						grid.invalidate();
