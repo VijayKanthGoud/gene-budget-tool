@@ -348,7 +348,7 @@ String ccView="";
 						<tr>
 							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
+									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
 					</table>
@@ -865,7 +865,11 @@ String ccView="";
 						}
 					} else if(d[11] == "<%=BudgetConstants.QUARTERLY_LTS%>"){
 						for(var i = 0; i <= 12; i++){
-							d[12 + i] =  quarterlyTargetMap[12 + i] - accrualMap[12 + i];
+							if(!isNaN(quarterlyTargetMap[12 + i] - accrualMap[12 + i])){
+								d[12 + i] =  quarterlyTargetMap[12 + i] - accrualMap[12 + i];
+							}else{
+								d[12 + i] =  0.0;
+							}
 						}
 					}
 				}
