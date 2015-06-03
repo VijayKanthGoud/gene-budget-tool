@@ -142,9 +142,9 @@
 		 }else if(value=="Accrual"){
 			 return  "<span title='Spend according to milestones of SOW'>Accrual</span>";
 		 }else if(value=="Forecast LTS"){
-			 return  "<span title='Quarterly Target - Accrual'>Forecast LTS</span>";
+			 return  "<span title='= Quarterly Target - Accrual'>Forecast LTS</span>";
 		 }else if(value=="Quarterly LTS"){
-			 return  "<span title='Quarterly Target - Accrual'>Quarterly LTS</span>";
+			 return  "<span title='= Quarterly Target - Accrual'>Quarterly LTS</span>";
 		 }
 	  }
 	  return value;

@@ -342,7 +342,7 @@ String ccView="";
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
-							<td><span title = "= Total Dollars Spent" >Total Accrual:</td>
+							<td><span title = "Total Dollars Spent" >Total Accrual:</td>
 							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
