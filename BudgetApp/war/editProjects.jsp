@@ -461,6 +461,7 @@ String ccView="";
 	var columns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[1], field : <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
+		{ id : 100, name : columnNames[26], field : <%=BudgetConstants.DELETE_FIELD%>,  width : 60, formatter : Slick.Formatters.DeleteButton},
 		{ id : 3, name : columnNames[2], field :  <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
@@ -484,14 +485,14 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark}/* ,
-		{ id : 100, name : columnNames[26], field : 100, width : 30, formatter : Slick.Formatters.DeleteButton
-	} */ ];
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	}];
 
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[1], field :  <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
+		{ id : 100, name : columnNames[26], field :  <%=BudgetConstants.DELETE_FIELD%>,  width : 60, formatter : Slick.Formatters.DeleteButton},
 		{ id : 3, name : columnNames[2], field : <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
@@ -509,9 +510,8 @@ String ccView="";
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark}/* ,
-		{ id : 100, name : columnNames[26], field : 100,  width : 30, formatter : Slick.Formatters.DeleteButton
-	} */]
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	}]
 	var searchString = "";
 	
 	// Grouping columns acording to status(New, Active, Closed)
@@ -525,7 +525,7 @@ String ccView="";
 		enableCellNavigation : true,
 		asyncEditorLoading : false,
 		autoEdit : true,
-		frozenColumn : 3,
+		frozenColumn : 4,
 		enableColumnReorder: false
 	};
 
@@ -946,9 +946,9 @@ String ccView="";
 					} else {
 						fixedCell = cell;
 					}
-					var itemCell = fixedCell;
+					var itemCell = fixedCell - 1;
 					// Code for brand column(dropdown and validation)
-					if(/* args.item["34"]=="New projects" && */ args.cell == <%=BudgetConstants.BRAND_CELL%> ){
+					if( args.cell == <%=BudgetConstants.BRAND_CELL%> ){
 						for(var i=0;i< availableTags.length;i++){
 							if(availableTags[i].toString().trim().toLowerCase()===args.item[6].toString().trim().toLowerCase()){
 								args.item[6]=availableTags[i].toString();
@@ -958,10 +958,11 @@ String ccView="";
 							}
 						}
 						if(isValidBrand == false){
+							var enteredBrand = args.item[6];
 							args.item[6]=args.item[46][6];
 							columnValiation=true;
-							alert("Enter a valid brand.");
 							grid.invalidate();
+							alert("'" + enteredBrand + "' is not a valid brand. Enter a valid brand.");
 							return;
 						}
 					}
@@ -1038,7 +1039,7 @@ String ccView="";
 					grid.invalidate();
 			
 
-					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == 2 && lastKeyPressed == 9){
+					if(args.item[6].toString().toLowerCase().indexOf("smart wbs") != -1 && args.item[35] == "NewProjects" && cell == <%=BudgetConstants.BRAND_CELL%> && lastKeyPressed == 9){
 						addMultiBrandPopUp();
 					}
 					
@@ -1219,8 +1220,11 @@ String ccView="";
 			} else {
 				fixedCell = cell;
 			}
-			if(fixedCell == <%=BudgetConstants.DELETE_CELL%>){
+			if(cell == <%=BudgetConstants.DELETE_CELL%> && itemClicked[0] != '' && itemClicked[0].indexOf('.') == -1 && itemClicked[35] != 'NewProjects'){
 				deleteCurrentProject();
+			}
+			if(cell == <%=BudgetConstants.DELETE_CELL%> && itemClicked[35] == 'NewProjects'){
+				deleteCurrentRow(itemClicked['id']);
 			}
 		});
 		
@@ -1283,7 +1287,7 @@ String ccView="";
 			var row = args.row - 1;
 			var fixedCell = cell;
 			lastKeyPressed = e.which;
-			if ((e.which == 38 || e.which == 40 || e.which == 13) && cell == 2) {
+			if ((e.which == 38 || e.which == 40 || e.which == 13) && cell == "<%=BudgetConstants.BRAND_CELL%>") {
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;
 				}
@@ -1345,7 +1349,7 @@ String ccView="";
 						){
 					return false;
 				}
-				if(cell == 2 && args.item["11"] == "<%=BudgetConstants.FORECAST%>"  && args.item["26"] =="New" ){
+				if(cell == "<%=BudgetConstants.BRAND_CELL%>" && args.item["11"] == "<%=BudgetConstants.FORECAST%>"  && args.item["26"] =="New" ){
 					return true;
 				}
 				if (args.item["11"] == "<%=BudgetConstants.FORECAST%>"

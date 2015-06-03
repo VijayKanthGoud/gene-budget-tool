@@ -34,8 +34,8 @@
   });
 
   function DeleteButtonFormatter(row, cell, value, columnDef, dataContext) {
-	  if(dataContext[0] != '' && dataContext[0].indexOf('.') == -1 ){
-		  return "<button style='font-size: 12px;  background:RED; color:#FFFFFF' type='button' id='delPrjBtn' val="+dataContext[0]+">X</button>";
+	  if((dataContext[0] != '' && dataContext[0].indexOf('.') == -1) || (dataContext[35] == "NewProjects")){
+		  return "<button class='myButton' style='position: absolute; width=30px' title='Click to disable project.' type='button' id='delPrjBtn' val="+dataContext[0]+">Delete</button>";
 	  }
   }
   

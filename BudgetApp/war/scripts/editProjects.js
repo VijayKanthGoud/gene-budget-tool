@@ -333,7 +333,7 @@ function updateMemCache(e, args, tempKey) {
 	if(cell <= <%=BudgetConstants.PROJECT_OWNER_CELL%>){
 		fixedCell = cell;
 	}
-	var itemCell = fixedCell;
+	var itemCell = fixedCell - 1;
 	
 	if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
@@ -364,7 +364,7 @@ function updateMemCache(e, args, tempKey) {
 	}else{
 		cellValue = item[itemCell];
 	}
-	var cellNum = fixedCell - 12;
+	var cellNum = fixedCell - 13;
 	if(item[37]==true && item["11"] == "<%=BudgetConstants.ACCRUAL%>" && item[27].toString().indexOf(".") != -1){
 		key = item[27];
 	}else{
@@ -379,7 +379,7 @@ function updateMemCache(e, args, tempKey) {
 	if( fixedCell == <%=BudgetConstants.REMARK_CELL%>){
 			var aSave = (aSaveData[0] = {});
 			aSave[0] = key;
- 		aSave[1] = cellValue;
+			aSave[1] = cellValue;
  		//aSave[2] = d["47"];
 		}else if(cell == <%=BudgetConstants.BRAND_CELL%>){
 			if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1){
@@ -1218,25 +1218,25 @@ function submitProjects(){
 	        break;*/
 	    case 2:
 	    	 alert('"Project name" can not be blank.');
-	    	 grid.gotoCell(i+2, 1, false);
+	    	 grid.gotoCell(i+2, <%=BudgetConstants.PROJECT_NAME_CELL%>, false);
 	    	break;
 	   /* case 3:
 	    	alert('"Project name" and "gMemori ID" can not be blank.');
 	        break;*/
 	    case 4:
 	    	alert('"Brand" can not be blank.');
-	    	grid.gotoCell(i+2, 2, false);
+	    	grid.gotoCell(i+2,  <%=BudgetConstants.BRAND_CELL%>, false);
 	        break;
 	   /* case 5:
 	    	alert('"Brand" and "gMemori Id" can not be blank.');
 	        break;*/
 	    case 5:
 	    	alert('Po Number cannot be same');
-	    	grid.gotoCell(i+2, 9, false);
+	    	grid.gotoCell(i+2, <%=BudgetConstants.PO_NUMBER_CELL%>, false);
 	        break;
 	    case 6:
 	    	alert('"Project name" and "Brand" can not be blank.');
-	    	grid.gotoCell(i+2, 1, false);
+	    	grid.gotoCell(i+2, <%=BudgetConstants.PROJECT_NAME_CELL%>, false);
 	        break;
 	  /*  case 7:
 	    	alert('"Project name", "Brand" and "Gmemori ID" can not be blank.');
@@ -1671,4 +1671,7 @@ function deleteCurrentProject(){
 	});
 }
 
-
+function deleteCurrentRow(id){
+	dataView.deleteItem(id);
+	addsave=addsave-1;
+}
