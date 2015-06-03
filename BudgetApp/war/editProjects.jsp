@@ -346,7 +346,7 @@ String ccView="";
 							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id = "varTotalLabel" title = "Budget - Total Accrual" >Budget LTS:</span></td>
+							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
 									id="varianceTotal"><%=Math.round(budgetSummary.getVarianceTotal() * 10.0) / 10.0%></span></span>
 							</td>
