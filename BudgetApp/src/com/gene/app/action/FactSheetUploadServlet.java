@@ -239,7 +239,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 				gtfReport.setPlannedMap(plannedMap);
 				gtfReport.setBenchmarkMap(plannedMap);
 				gtfReport.setAccrualsMap(setZeroMap);
-				gtfReport.setVariancesMap(setZeroMap);
+				gtfReport.setVariancesMap(plannedMap);
 				gtfReport.setMultiBrand(isMultibrand);
 				gtfReport.setRemarks("   ");
 

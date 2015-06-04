@@ -229,7 +229,7 @@ public class AutoSaveData extends HttpServlet {
 									oldAccrualValue = accrualMap.get(BudgetConstants.months[Integer
 									                                                        .parseInt(cellNum)]);
 										summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()+newPlannedValue-oldAccrualValue);
-										summaryObj.setVarianceTotal(summaryObj.getPlannedTotal()-summaryObj.getAccrualTotal());
+										summaryObj.setVarianceTotal(summaryObj.getBenchmarkTotal()-summaryObj.getAccrualTotal());
 								}
 								budgetMap.put(brand, summaryObj);
 								summary.setBudgetMap(budgetMap);
@@ -246,9 +246,9 @@ public class AutoSaveData extends HttpServlet {
 									}
 									varianceMap
 											.put(BudgetConstants.months[Integer.parseInt(cellNum)],
-													newPlannedValue - accrualMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]));
+													benchMarkMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]) - accrualMap.get(BudgetConstants.months[Integer.parseInt(cellNum)]));
 								}
-								// Commented since accrual is no more editable
+								// Accrual map is not editable
 								/*if(mapType.equalsIgnoreCase("accrual") && !(gtfReportObj.getgMemoryId().contains("."))){
 									accrualMap.put(BudgetConstants.months[Integer
 																			.parseInt(cellNum)], newPlannedValue);

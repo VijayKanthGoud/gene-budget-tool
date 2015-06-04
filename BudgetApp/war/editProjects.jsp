@@ -344,11 +344,11 @@ String ccView="";
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
-							<td >Total Accrual:</td>
+							<td><span title = "Total Dollars Spent" >Total Accrual:</td>
 							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
-							<td><span id = "varTotalLabel" title = "Budget - Total Accrual" >Budget LTS:</span></td>
+							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
 									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></span>
 							</td>
@@ -686,7 +686,7 @@ String ccView="";
    				if(jsId % 4 == 1){
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if((d[26] == "New" && (gmemoriID.indexOf(".") == -1)) || (d[26] !="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") ))){ 
-   				d[11]="<%=BudgetConstants.ANNUAL_TARGET%>";
+   				d[11]="<%=BudgetConstants.QUARTERLY_TARGET%>";
 				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
 				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
 				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
@@ -754,7 +754,7 @@ String ccView="";
     					}
    
    				} if(jsId % 4 == 3){
-				d[11]="<%=BudgetConstants.FORECAST_LTS%>";
+				d[11]="<%=BudgetConstants.QUARTERLY_LTS%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
 					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
@@ -805,7 +805,7 @@ String ccView="";
 		} 
 			totalSize=data.length;
 			
-			var forecastMap = {};
+			var quarterlyTargetMap = {};
 			var accrualMap = {};
 			for (var cntTotal = 0; cntTotal < 4; cntTotal++) {
 				var rowNum = cntTotal + totalSize;
@@ -840,27 +840,41 @@ String ccView="";
 		        	break;
 			}
 				d[40] = d[11];
+				 
+			var compareString = "";
 			for (var j = 0; j < totalSize ; j++) {
-				if( (data[j][37] == false && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
-						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
-						 (data[j][37] == true && d[11]==data[j][11] && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
+				if(data[j][11] == "<%=BudgetConstants.QUARTERLY_TARGET%>"){
+					compareString =  "<%=BudgetConstants.ANNUAL_TARGET%>"
+				}else if(data[j][11] == "<%=BudgetConstants.QUARTERLY_LTS%>"){
+					compareString =  "<%=BudgetConstants.FORECAST_LTS%>"
+				}else{
+					compareString = data[j][11];
+				}
+				
+				if( (data[j][37] == false && d[11]==compareString && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1)) ||
+						 (data[j][37] == true && d[11]==compareString && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") != -1) && ('<%=viewSelected%>' == 'My Brands')) ||
+						 (data[j][37] == true && d[11]==compareString && data[j][0]!= 'undefined' && data[j][27] != "" && (data[j][27].indexOf(".") == -1) && ('<%=viewSelected%>' != 'My Brands'))		 
 				){
-					if(d[11] != "<%=BudgetConstants.FORECAST_LTS%>"){
+					if(d[11] != "<%=BudgetConstants.QUARTERLY_LTS%>"){
 						for(var i = 0; i <= 12; i++){
 							d[12 + i] = parseFloat(d[12 + i]) + parseFloat(data[j][12 + i]);
 						}
 					}
-					if(d[11] == "<%=BudgetConstants.FORECAST%>"){
+					if(d[11] == "<%=BudgetConstants.QUARTERLY_TARGET%>"){
 						for(var i = 0; i <= 12; i++){
-							forecastMap[12 + i] = d[12 + i];
+							quarterlyTargetMap[12 + i] = d[12 + i];
 						}
 					} else if(d[11] == "<%=BudgetConstants.ACCRUAL%>"){
 						for(var i = 0; i <= 12; i++){
 							accrualMap[12 + i] = d[12 + i];
 						}
-					} else if(d[11] == "<%=BudgetConstants.FORECAST_LTS%>"){
+					} else if(d[11] == "<%=BudgetConstants.QUARTERLY_LTS%>"){
 						for(var i = 0; i <= 12; i++){
-							d[12 + i] =  forecastMap[12 + i] - accrualMap[12 + i];
+							if(!isNaN(quarterlyTargetMap[12 + i] - accrualMap[12 + i])){
+								d[12 + i] =  quarterlyTargetMap[12 + i] - accrualMap[12 + i];
+							}else{
+								d[12 + i] =  0.0;
+							}
 						}
 					}
 				}
@@ -1102,7 +1116,7 @@ String ccView="";
 											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
 										}
 									}				
-									if(data[j][11]=="<%=BudgetConstants.ANNUAL_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
+									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
 										verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][itemCell]);
 										verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
 									}
@@ -1110,7 +1124,7 @@ String ccView="";
 										verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][itemCell]);
 										verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
 									}
-									if(data[j][11]=="<%=BudgetConstants.FORECAST_LTS%>" && data[j][27].toString().indexOf(".") ==-1 && data[j][26]!='' ){
+									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_LTS%>" && data[j][27].toString().indexOf(".") ==-1 && data[j][26]!='' ){
 										verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][itemCell]);
 										verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
 									}
@@ -1119,12 +1133,12 @@ String ccView="";
 							data[data.length - 4][itemCell]=verPlannedTotal;
 							data[data.length - 3][itemCell]=verBenchmarkTotal;
 							data[data.length - 2][itemCell]=verAccrualTotal;
-							data[data.length - 1][itemCell]=verPlannedTotal-verAccrualTotal;
+							data[data.length - 1][itemCell]=verBenchmarkTotal-verAccrualTotal;
 							data[data.length - 4][24]=verPlanned;
 							data[data.length - 3][24]=verBenchmark;
 							data[data.length - 2][24]=verAccrual;
-							data[data.length - 1][24]=verPlanned-verAccrual;
-						
+							data[data.length - 1][24]=verBenchmark-verAccrual;
+							
 						}
 						grid.invalidate();
 						dataView.refresh();
