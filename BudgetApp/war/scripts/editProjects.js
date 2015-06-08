@@ -265,21 +265,31 @@ function searchProject(item) {
         if (item[33] != "New") {
                 status = false;
         }
+        var arr = [];
+        if(item[37] == true){
+        	arr =  item[53].slice(0);;
+        	var limit = arr.length;
+        	for (var i = 0; i < limit; i++) {
+        		arr[i] = idBrandMap[arr[i]];
+        	}
+        }
         if ((((item[27].toString().length > 9) || searchString != "" && item[27].toLowerCase().indexOf(
                         searchString.toLowerCase()) == -1)
-                        && (searchString != "" && item[28].toLowerCase().indexOf(
-                                        searchString.toLowerCase()) == -1)
+                        && (searchString != "" && ((item[37] == true && arr.join().toLowerCase().indexOf(
+                                searchString.toLowerCase()) == -1) || ((item[37] != true  && item[28].toLowerCase().indexOf(
+                                        searchString.toLowerCase()) == -1))))
                         && (searchString != "" && item[29].toLowerCase().indexOf(
                                         searchString.toLowerCase()) == -1)
                         && (searchString != "" && item[32].toLowerCase().indexOf(
                                         searchString.toLowerCase()) == -1)
                         && (searchString != "" && item[30].toLowerCase().indexOf(
                                         searchString.toLowerCase()) == -1) && item[26] != "Total")
-                        || (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase().indexOf(
-                                        radioString.toLowerCase()) == -1)) {
+                        || (radioString != "All" && item[40] !="undefined" && item[40].toLowerCase() != 
+                                        radioString.toLowerCase())) {
                 return false;
+        }else{
+        	map[item[27] + ":" + item[11]] = item;
         }
-
         if (item.parent != null) {
                 var parent = data[item.parent];
                 while (parent) {
@@ -1689,3 +1699,75 @@ function deleteCurrentRow(id){
 	dataView.deleteItem(id);
 	addsave=addsave-1;
 }
+
+function calculateTotal(){
+	console.log("called... ")
+	var accrualTotalItem, forecastTotalItem, quarterlyTargetTotalItem, quarterlyLTSTotalItem;
+		// get the items for totals, sets values to zero so that new value will be summed up and replace current
+	for (var key in map) {
+		if(map[key][26] == "Total"){
+			if(key.split(":")[1].trim() == "<%=BudgetConstants.FORECAST%>"){
+				 forecastTotalItem = map[key];
+				 for(var i =0; i<=12; i++){
+					 forecastTotalItem[i + 12] = 0.0; 
+				 }
+			}else if(key.split(":")[1].trim() == "<%=BudgetConstants.ACCRUAL%>"){
+				accrualTotalItem = map[key];
+				 for(var i =0; i<=12; i++){
+					 accrualTotalItem[i + 12] = 0.0; 
+				 }
+			}else if(key.split(":")[1].trim() == "<%=BudgetConstants.ANNUAL_TARGET%>"){
+				quarterlyTargetTotalItem = map[key];
+				for(var i =0; i<=12; i++){
+					quarterlyTargetTotalItem[i + 12] = 0.0; 
+				}
+			}else if(key.split(":")[1].trim() == "<%=BudgetConstants.FORECAST_LTS%>"){
+				quarterlyLTSTotalItem = map[key];
+				for(var i =0; i<=12; i++){
+					quarterlyLTSTotalItem[i + 12] = 0.0; 
+				}
+			}
+		}
+     }
+			
+	// Recalculation of total according to search criteria
+	var prevKey = "";
+	var forecastTotalItem, accrualTotalItem, quarterlyLTSTotalItem, quarterlyLTSTotalItem ;
+	for (var key in map) {
+		if((prevKey=='') || (key.split(":")[0].trim() == prevKey) || (key.split(":")[0].trim() != prevKey && key.split(":")[0].trim().indexOf(prevKey) == -1 )){// match with previous gmemId
+		if(map[key][26] != "Total"){
+				if(key.split(":")[1].trim() == "<%=BudgetConstants.FORECAST%>"){
+					for(var i =0; i<=12; i++){
+						forecastTotalItem[i + 12] = parseFloat(forecastTotalItem[i + 12]) + parseFloat(map[key][i + 12]);
+					}
+				}
+				else if(key.split(":")[1].trim() == "<%=BudgetConstants.ACCRUAL%>" && map[key][26] != 'New'){
+					for(var i =0; i<=12; i++){
+						accrualTotalItem[i + 12] = parseFloat(accrualTotalItem[i + 12]) + parseFloat(map[key][i + 12]);
+					}
+				}
+				else if(key.split(":")[1].trim() == "<%=BudgetConstants.ANNUAL_TARGET%>"){
+					for(var i =0; i<=12; i++){
+						quarterlyTargetTotalItem[i + 12] = parseFloat(quarterlyTargetTotalItem[i + 12]) + parseFloat(map[key][i + 12]);
+					}
+				}
+				<%-- else if(key.split(":")[1].trim() == "<%=BudgetConstants.FORECAST_LTS%>"){
+					for(var i =0; i<=12; i++){
+						quarterlyLTSTotalItem[i + 12] = parseFloat(quarterlyLTSTotalItem[i + 12]) + parseFloat(map[key][i + 12]);
+					}
+				} --%>
+				if(key.split(":")[0].trim().indexOf(".") == -1){// doesnt contain dot
+					prevKey = key.split(":")[0].trim();
+				}  
+			}
+		}
+   	}
+	
+	for(var i =0; i<=12; i++){
+		quarterlyLTSTotalItem[i + 12] = parseFloat(quarterlyTargetTotalItem[i + 12]) - parseFloat(accrualTotalItem[i + 12]);
+	}
+	
+	prevKey = "";
+	grid.invalidate();
+	console.log("Finished");
+	}

@@ -402,8 +402,8 @@ String ccView="";
 	<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 	<script src="scripts/fileHandle.js"></script>
 	<script>
-	/*var map = {};
-	var idBrandMap = {}*/
+	var map = {};
+	var idBrandMap = {}
     // rdoSelectedmode holds the radio(Planned/All) button object
 	var rdoSelectedmode = $('input[name="selectedmode"]');
 	
@@ -585,7 +585,9 @@ String ccView="";
 		<%String requestor = "";
 		String role="";
 		for (int i = 0; i < gtfReports.size(); i++) {
-			boolean isFirst = true;
+			boolean isFirst = true;%>
+			idBrandMap['<%=gtfReports.get(i).getgMemoryId()%>'] = '<%=gtfReports.get(i).getBrand()%>';
+			<%
 			for (int count = 0; count < 4; count++) {%>
 			
 			<%GtfReport gReport = gtfReports.get(i);%>
@@ -628,6 +630,12 @@ String ccView="";
 				d[48]="<%=requestor%>";
 				<% role = user.getRole();%>
 				d[50]="<%=role%>";
+				d[53]= [];
+				<%if(gReport.getChildProjectList() != null && gReport.getChildProjectList().size() != 0){
+				%>	
+				d[53] = <%=gReport.getChildProjectList()%>;
+				<%}
+				%>
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -1427,6 +1435,7 @@ String ccView="";
 
 		// Handeling search textbox 
 		$("#txtSearch").keyup(function(e) {
+			map = {};
 			Slick.GlobalEditorLock.cancelCurrentEdit();
 			// clear on Esc
 			if (e.which == 27) {
@@ -1436,22 +1445,21 @@ String ccView="";
 			searchString = searchString.replace(/</g, "&lt;");
 			searchString = searchString.replace(/>/g, "&gt;");
 			
-			
-	    if (searchString != "") {
-			dataView.expandGroup("Active");
-			dataView.expandGroup("Closed");
-			dataView.expandGroup("New");
-		} else {
-			
-			dataView.collapseGroup("New");
-			dataView.collapseGroup("Active");
-			dataView.collapseGroup("Closed");
-		}
-		dataView.refresh();
-		if(!isMatchPresent && searchString != ""){
-			alert("No Search Results Found!");	
-		}
-		
+		    if (searchString != "") {
+				dataView.expandGroup("Active");
+				dataView.expandGroup("Closed");
+				dataView.expandGroup("New");
+			} else {
+				
+				dataView.collapseGroup("New");
+				dataView.collapseGroup("Active");
+				dataView.collapseGroup("Closed");
+			}
+			dataView.refresh();
+			if(!isMatchPresent && searchString != ""){
+				alert("No Search Results Found!");	
+			}
+			calculateTotal();
 		});
 
 		
