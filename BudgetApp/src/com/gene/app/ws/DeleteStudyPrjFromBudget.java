@@ -154,7 +154,7 @@ public class DeleteStudyPrjFromBudget {
 					System.out.println("status Code"+eObj.getStatusCode());
 					System.out.println("status Message"+eObj.getStatusMessage());
 					return eObj;
-				}if(Util.isNullOrEmpty(gtfReport.getStatus()) && !"Planned".equalsIgnoreCase(gtfReport.getStatus())){
+				}if(Util.isNullOrEmpty(gtfReport.getStatus()) && !"New".equalsIgnoreCase(gtfReport.getStatus())){
 					eObj.setStatusCode(408);
 					eObj.setStatusMessage("Project status is not Planned !!!");
 					System.out.println("status Code"+eObj.getStatusCode());
