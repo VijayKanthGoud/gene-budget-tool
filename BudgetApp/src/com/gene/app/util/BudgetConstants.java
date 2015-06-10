@@ -46,7 +46,7 @@ public interface BudgetConstants {
 
 	public static final int CELL_PONUMBER = -3;
 	public static final int CELL_REMARKS = 13;
-	public static final int CELL_PNAME = -12;
+	public static final int CELL_PNAME = -11;
 	public static final int CELL_BRAND = -10;
 	public static final int CELL_PWBS = -6;
 	public static final int CELL_SUBACTVTY = -5;
@@ -86,32 +86,30 @@ public interface BudgetConstants {
 
 	public static final String STATUS_CELL = "0";
 	public static final String PROJECT_NAME_CELL = "1";
-	public static final String DELETE_CELL = "2";
-	public static final String BRAND_CELL = "3";
-	public static final String $_IN_THOUSAND_CELL = "4";
-	public static final String GMEMORI_ID_CELL = "5";
-	public static final String PROJECT_OWNER_CELL = "6";
-	public static final String PROJECT_WBS_CELL = "7";
-	public static final String SUBACTIVITY_CELL = "8";
-	public static final String ALLOCATION_PERCENTAGE_CELL = "9";
-	public static final String PO_NUMBER_CELL = "10";
-	public static final String VENDOR_CELL = "11";
-	public static final String UNIT_CELL = "12";
-	public static final String JAN_CELL = "13";
-	public static final String FEB_CELL = "14";
-	public static final String MAR_CELL = "15";
-	public static final String APR_CELL = "16";
-	public static final String MAY_CELL = "17";
-	public static final String JUN_CELL = "18";
-	public static final String JUL_CELL = "19";
-	public static final String AUG_CELL = "20";
-	public static final String SEP_CELL = "21";
-	public static final String OCT_CELL = "22";
-	public static final String NOV_CELL = "23";
-	public static final String DEC_CELL = "24";
-	public static final String TOTAL_CELL = "25";
-	public static final String REMARK_CELL = "26";
-	
+	public static final String BRAND_CELL = "2";
+	public static final String $_IN_THOUSAND_CELL = "3";
+	public static final String GMEMORI_ID_CELL = "4";
+	public static final String PROJECT_OWNER_CELL = "5";
+	public static final String PROJECT_WBS_CELL = "6";
+	public static final String SUBACTIVITY_CELL = "7";
+	public static final String ALLOCATION_PERCENTAGE_CELL = "8";
+	public static final String PO_NUMBER_CELL = "9";
+	public static final String VENDOR_CELL = "10";
+	public static final String UNIT_CELL = "11";
+	public static final String JAN_CELL = "12";
+	public static final String FEB_CELL = "13";
+	public static final String MAR_CELL = "14";
+	public static final String APR_CELL = "15";
+	public static final String MAY_CELL = "16";
+	public static final String JUN_CELL = "17";
+	public static final String JUL_CELL = "18";
+	public static final String AUG_CELL = "19";
+	public static final String SEP_CELL = "20";
+	public static final String OCT_CELL = "21";
+	public static final String NOV_CELL = "22";
+	public static final String DEC_CELL = "23";
+	public static final String TOTAL_CELL = "24";
+	public static final String REMARK_CELL = "25";
 
 	// field numbers edit projects
 
@@ -141,7 +139,6 @@ public interface BudgetConstants {
 	public static final String DEC_FIELD = "23";
 	public static final String TOTAL_FIELD = "24";
 	public static final String REMARK_FIELD = "25";
-	public static final String DELETE_FIELD = "100";
 
 	// cell numbers edit project multiple brand pop up
 	public static final String MB_CHECKBOX_CELL = "0";

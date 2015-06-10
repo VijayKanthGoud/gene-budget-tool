@@ -447,7 +447,7 @@ String ccView="";
 	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
 	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Units",
 	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
-	        			"DEC", "Total", "Comments", "Delete" ];
+	        			"DEC", "Total", "Comments"];
 	var noOfNew = 0;
 	var noOfActive = 0;
 	var noOfClosed = 0;
@@ -461,7 +461,6 @@ String ccView="";
 	var columns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[1], field : <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
-		{ id : 100, name : columnNames[26], field : <%=BudgetConstants.DELETE_FIELD%>,  width : 60, formatter : Slick.Formatters.DeleteButton},
 		{ id : 3, name : columnNames[2], field :  <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
@@ -484,15 +483,13 @@ String ccView="";
 		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
-	}];
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter}
+	 ];
 
 	//Columns displayed when hide columns is checked
 	var hidecolumns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
 		{ id : 2, name : columnNames[1], field :  <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
-		{ id : 100, name : columnNames[26], field :  <%=BudgetConstants.DELETE_FIELD%>,  width : 60, formatter : Slick.Formatters.DeleteButton},
 		{ id : 3, name : columnNames[2], field : <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
@@ -509,9 +506,8 @@ String ccView="";
 		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
-		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
-	}]
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter}
+	]
 	var searchString = "";
 	
 	// Grouping columns acording to status(New, Active, Closed)
@@ -525,7 +521,7 @@ String ccView="";
 		enableCellNavigation : true,
 		asyncEditorLoading : false,
 		autoEdit : true,
-		frozenColumn : 4,
+		frozenColumn : 3,
 		enableColumnReorder: false
 	};
 
@@ -968,7 +964,7 @@ String ccView="";
 					} else {
 						fixedCell = cell;
 					}
-					var itemCell = fixedCell - 1;
+					var itemCell = fixedCell;
 					// Code for brand column(dropdown and validation)
 					if( args.cell == <%=BudgetConstants.BRAND_CELL%> ){
 						for(var i=0;i< availableTags.length;i++){
@@ -1241,12 +1237,6 @@ String ccView="";
 				fixedCell = cell + numHideColumns;
 			} else {
 				fixedCell = cell;
-			}
-			if(cell == <%=BudgetConstants.DELETE_CELL%> && itemClicked[0] != '' && itemClicked[0].indexOf('.') == -1 && itemClicked[35] != 'NewProjects'){
-				deleteCurrentProject();
-			}
-			if(cell == <%=BudgetConstants.DELETE_CELL%> && itemClicked[35] == 'NewProjects'){
-				deleteCurrentRow(itemClicked['id']);
 			}
 		});
 		

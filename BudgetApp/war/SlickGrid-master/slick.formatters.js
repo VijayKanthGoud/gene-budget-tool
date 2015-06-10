@@ -32,12 +32,6 @@
       }
     }
   });
-
-  function DeleteButtonFormatter(row, cell, value, columnDef, dataContext) {
-	  if((dataContext[0] != '' && dataContext[0].indexOf('.') == -1) || (dataContext[35] == "NewProjects")){
-		  return "<button class='myButton' style='position: absolute; width=30px' title='Click to disable project.' type='button' id='delPrjBtn' val="+dataContext[0]+">Delete</button>";
-	  }
-  }
   
   function PercentCompleteFormatter(row, cell, value, columnDef, dataContext) {
     if (value == null || value === "") {
@@ -209,6 +203,9 @@
   }
   
   function editableFieldFormatter(row, cell, value, columnDef, dataContext) {
+	  if(columnDef['name'] == "Project Name" && dataContext[11] == "Quarterly Target" && dataContext[35] != "NewProjects"  && dataContext[26] != "Total"){
+		  return "<button class='myButton' style='margin-left:auto;margin-right:auto;display:block;' type='button' id='delPrjBtn' value="+dataContext[27]+" onClick = 'deleteCurrentProject(this)'>Delete</button>";
+	  }
 	  if((dataContext["26"] == "Closed")){
 		  if((typeof value != 'undefined' || value != '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
 			     return "<div width = '100%'>"+value+"</div>";

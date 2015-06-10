@@ -344,7 +344,7 @@ function updateMemCache(e, args, tempKey) {
 	if(cell <= <%=BudgetConstants.PROJECT_OWNER_CELL%>){
 		fixedCell = cell;
 	}
-	var itemCell = fixedCell - 1;
+	var itemCell = fixedCell;
 	
 	if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
@@ -367,7 +367,7 @@ function updateMemCache(e, args, tempKey) {
 		}
 	}
 	
-	var qtrEditing =  Math.floor((fixedCell - 13) / 3);
+	var qtrEditing =  Math.floor((fixedCell - 12) / 3);
 	
 	var cellValue ;
 	if(cell == <%=BudgetConstants.BRAND_CELL%>){
@@ -375,7 +375,7 @@ function updateMemCache(e, args, tempKey) {
 	}else{
 		cellValue = item[itemCell];
 	}
-	var cellNum = fixedCell - 13;
+	var cellNum = fixedCell - 12;
 	if(item[37]==true && item["11"] == "<%=BudgetConstants.ACCRUAL%>" && item[27].toString().indexOf(".") != -1){
 		key = item[27];
 	}else{
@@ -1651,8 +1651,8 @@ function openBrandPopUp(){
 }
 
 // Code for delete or disable project
-function deleteCurrentProject(){
-	var gmemId = $('#delPrjBtn').attr('val');
+function deleteCurrentProject(delBtnClicked){
+	var gmemId = delBtnClicked.value;
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
 		console.log("Not an admin...");
 		if(itemClicked[26] != "<%=BudgetConstants.status_New%>" ){
@@ -1695,10 +1695,6 @@ function deleteCurrentProject(){
 	});
 }
 
-function deleteCurrentRow(id){
-	dataView.deleteItem(id);
-	addsave=addsave-1;
-}
 
 function calculateTotal(){
 	console.log("called... ")
