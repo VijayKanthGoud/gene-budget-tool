@@ -9,7 +9,14 @@ public class ProjectParameters {
 	private List<String> costCentres;
 	private String pStatus;
 	private String projectOwner;
+	private String unixId;
 	
+	public String getUnixId() {
+		return unixId;
+	}
+	public void setUnixId(String unixId) {
+		this.unixId = unixId;
+	}
 	public String getpStatus() {
 		return pStatus;
 	}

@@ -1653,6 +1653,7 @@ function openBrandPopUp(){
 // Code for delete or disable project
 function deleteCurrentProject(delBtnClicked){
 	var gmemId = delBtnClicked.value;
+	var projectOwner = itemClicked[1];
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
 		console.log("Not an admin...");
 		if(itemClicked[26] != "<%=BudgetConstants.status_New%>" ){
@@ -1683,10 +1684,20 @@ function deleteCurrentProject(delBtnClicked){
 		url : '/disableProject',
 		type : 'POST',
 		dataType : 'text',
-		data : {gMem: gmemId, costCenter:ccVal},
+		data : {gMem: gmemId, costCenter:ccVal, projectOwner:projectOwner},
 		success : function(result) {
+			if(result==null){
+				alert("Error occured while deleting project!!!");
+			}else{
+			var obj = $.parseJSON(result);
+			//alert(obj.statusMessage+"::::::::::"+obj.statusCode);
+			if(obj.statusCode==200){
 			alert('Successfully deleted project.');
 			window.location.reload(true);
+			}else{
+				alert(obj.statusMessage);
+			}
+			}
 		},		
 		error : function(result){
 			alert("Error occured while deleting project!!!");

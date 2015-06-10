@@ -32,7 +32,7 @@ public class GmemStudy extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		resp.sendRedirect("https://memori-qa.appspot.com");
+		resp.sendRedirect("http://memori-dev.appspot.com");
 	}
 
 }

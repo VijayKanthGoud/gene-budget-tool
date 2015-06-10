@@ -8,6 +8,7 @@ import javax.ws.rs.core.Application;
          public Set<Class<?>> getClasses() {
              Set<Class<?>> s = new HashSet<Class<?>>();
              s.add(UpdateStudyInBudget.class);
+             s.add(DeleteStudyPrjFromBudget.class);
              return s;
          }
     }
