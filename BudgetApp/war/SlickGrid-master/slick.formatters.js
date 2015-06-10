@@ -27,8 +27,7 @@
         "gMemoriHyperLink":gMemoriHyperLinkFormatter,
         "editableField":editableFieldFormatter,
         "cancelButton":cancelButtonFormatter,
-        "poField":poFieldFormatter,
-        "DeleteButton":DeleteButtonFormatter
+        "poField":poFieldFormatter
       }
     }
   });
