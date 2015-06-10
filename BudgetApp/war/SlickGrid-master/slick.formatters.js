@@ -202,7 +202,7 @@
   }
   
   function editableFieldFormatter(row, cell, value, columnDef, dataContext) {
-	  if(columnDef['name'] == "Project Name" && dataContext[11] == "Quarterly Target" && dataContext[35] != "NewProjects"  && dataContext[26] != "Total"){
+	  if(columnDef['name'] == "Project Name" && dataContext[11] == "Quarterly Target" && dataContext[35] != "NewProjects"  && dataContext[26] != "Total" && dataContext[27].indexOf('.') == -1){
 		  return "<button class='myButton' style='margin-left:auto;margin-right:auto;display:block;' type='button' id='delPrjBtn' value="+dataContext[27]+" onClick = 'deleteCurrentProject(this)'>Delete</button>";
 	  }
 	  if((dataContext["26"] == "Closed")){
