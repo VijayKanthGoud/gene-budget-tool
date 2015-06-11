@@ -632,6 +632,13 @@ String ccView="";
 				d[53] = <%=gReport.getChildProjectList()%>;
 				<%}
 				%>
+				<%if(gReport.getRequestor().contains(":")){ %>
+					d[54] = "<%=gReport.getRequestor().split(":")[0]%>";
+				<%}else{
+				%>
+					d[54] = "<%=gReport.getRequestor()%>";
+				<%}
+				%>
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -1063,7 +1070,7 @@ String ccView="";
 					
 					if(args.item["34"] != "New projects"){
 						updateMemCache(e, args, tempKey);
-						for(var counter = 0; counter<data.length; counter++ ){
+						<%--	for(var counter = 0; counter<data.length; counter++ ){
 							if(data[counter][34] != "New projects"){
 								dataLength++;
 							}
@@ -1144,7 +1151,8 @@ String ccView="";
 							data[data.length - 1][24]=verBenchmark-verAccrual;
 							
 						}
-						grid.invalidate();
+						grid.invalidate();--%>
+						calculateTotal();
 						dataView.refresh();
 					}
 		});

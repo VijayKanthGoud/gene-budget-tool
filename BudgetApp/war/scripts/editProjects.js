@@ -439,7 +439,9 @@ function updateMemCache(e, args, tempKey) {
 		}else{
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
-				if((key.toString().indexOf(".") != -1) && 
+				
+				// Commented as Accrual is not editable as per current bussiness case
+				/*if((key.toString().indexOf(".") != -1) && 
 						key.split(".")[0]== d[27] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
 					if(d[11]=="<%=BudgetConstants.ACCRUAL%>"){
 						var aSave = (aSaveData[iCnt] = {});
@@ -520,7 +522,7 @@ function updateMemCache(e, args, tempKey) {
 
 						d[24]= parseFloat(varTotal);
 					}
-				}
+				} */
 				if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
 					forecast_cur =  d[itemCell];
 					var aSave = (aSaveData[iCnt] = {});
@@ -528,13 +530,15 @@ function updateMemCache(e, args, tempKey) {
 					if(d[7] == 0.0){
 						d[7]=100.0;
 					}
-					if(item[11]=='Accrual'){
+					// Commented as Accrual is not editable as per current bussiness case
+					/*if(item[11]=='Accrual'){
 						d[itemCell]=parseFloat(cellValue).toFixed(2);
-					}
+					}*/
 					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 					//aSave[2] = d["47"];
 					d[itemCell]=aSave[1];
-					if(item[37]== false){
+					// Commented to remove restriction of calculating total for multibrand.
+					//if(item[37]== false){
 						varTotal = 0.0;
 						for (var j = 12; j < 24; j++) {
 							if(d[j] == "" || d[j] == "undefined"){
@@ -543,7 +547,7 @@ function updateMemCache(e, args, tempKey) {
 							varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
 						}
 						d[24]= parseFloat(varTotal);
-					}
+					//}
 					iCnt++;
 				}else if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
 					var aSave = (aSaveData[iCnt] = {});
@@ -1652,8 +1656,8 @@ function openBrandPopUp(){
 
 // Code for delete or disable project
 function deleteCurrentProject(delBtnClicked){
-	var gmemId = delBtnClicked.value;
-	var projectOwner = itemClicked[1];
+	var gmemId = delBtnClicked.value.split('~')[0];
+	var projectOwner = delBtnClicked.value.split('~')[1];
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
 		console.log("Not an admin...");
 		if(itemClicked[26] != "<%=BudgetConstants.status_New%>" ){
@@ -1708,7 +1712,6 @@ function deleteCurrentProject(delBtnClicked){
 
 
 function calculateTotal(){
-	console.log("called... ")
 	var accrualTotalItem, forecastTotalItem, quarterlyTargetTotalItem, quarterlyLTSTotalItem;
 		// get the items for totals, sets values to zero so that new value will be summed up and replace current
 	for (var key in map) {
@@ -1758,11 +1761,6 @@ function calculateTotal(){
 						quarterlyTargetTotalItem[i + 12] = parseFloat(quarterlyTargetTotalItem[i + 12]) + parseFloat(map[key][i + 12]);
 					}
 				}
-				<%-- else if(key.split(":")[1].trim() == "<%=BudgetConstants.FORECAST_LTS%>"){
-					for(var i =0; i<=12; i++){
-						quarterlyLTSTotalItem[i + 12] = parseFloat(quarterlyLTSTotalItem[i + 12]) + parseFloat(map[key][i + 12]);
-					}
-				} --%>
 				if(key.split(":")[0].trim().indexOf(".") == -1){// doesnt contain dot
 					prevKey = key.split(":")[0].trim();
 				}  
@@ -1776,5 +1774,4 @@ function calculateTotal(){
 	
 	prevKey = "";
 	grid.invalidate();
-	console.log("Finished");
-	}
+}
