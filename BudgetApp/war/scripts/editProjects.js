@@ -1658,14 +1658,15 @@ function openBrandPopUp(){
 function deleteCurrentProject(delBtnClicked){
 	var gmemId = delBtnClicked.value.split('~')[0];
 	var projectOwner = delBtnClicked.value.split('~')[1];
+	var projectCreateDate = new Date(delBtnClicked.value.split('~')[2].split("_"));
+	var projStatus = delBtnClicked.value.split('~')[3];
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
 		console.log("Not an admin...");
-		if(itemClicked[26] != "<%=BudgetConstants.status_New%>" ){
+		if(projStatus != "<%=BudgetConstants.status_New%>" ){
 			alert("PO exists and the project cannot be deleted.");
 			return;
 		}
 		var cutOffDate = new  Date('<%=sdf.format(cutOfDate)%>');
-		var projectCreateDate = new Date(itemClicked[38].split("_"));
 		var currQtr = '<%=qtr%>';
 		var projCreatedQtr = Math.floor(projectCreateDate.getMonth() / 3);
 		// if project created in this quarter compare creation date with
