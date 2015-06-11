@@ -135,12 +135,14 @@ public class DeleteStudyPrjFromBudget {
 		int prjCreationQtr = 0;
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-		Date cutOffDate = util.getCutOffDates().get(currQtr);
-		
+		Map<String,Date> cutOffDateMap =  util.getCutOffDates();
+		Date cutOffDate =cutOffDateMap.get(currQtr+"");
+		System.out.println("cutOffDate :::"+cutOffDate+ "currQtr = "+currQtr);
 		for(Map.Entry<String, GtfReport> gtfEntry: gtfRptMap.entrySet()){
 			status = "";
 			if(gtfEntry.getKey().contains(gMemoriId) && gtfEntry.getKey().length()<=10){
 				gtfReport = gtfEntry.getValue();
+				System.out.println("gtfReport.getCreateDate() :::"+gtfReport.getCreateDate());
 				try {
 					cal.setTime(sdf.parse(gtfReport.getCreateDate()));
 				System.out.println("prjParam.getProjectOwner() : "+prjParam.getProjectOwner() +"::::" +gtfReport.getRequestor());
@@ -167,7 +169,7 @@ public class DeleteStudyPrjFromBudget {
 						System.out.println("status Code"+eObj.getStatusCode());
 						System.out.println("status Message"+eObj.getStatusMessage());
 						return eObj;
-				} else if((cal.get(Calendar.MONTH)/3) >= currQtr && (cutOffDate.after(sdf.parse(gtfReport.getCreateDate())))){
+				} else if((cal.get(Calendar.MONTH)/3) >= currQtr && (cutOffDate.before(sdf.parse(gtfReport.getCreateDate())))){
 						eObj.setStatusCode(406);
 						eObj.setStatusMessage("Project has locked benchmark!!!");
 						return eObj;
