@@ -165,15 +165,15 @@ public class DeleteStudyPrjFromBudget {
 				}
 				if ((Util.isNullOrEmpty(gtfReport.getPoNumber()))) {
 						eObj.setStatusCode(407);
-						eObj.setStatusMessage("Project cannot be deleted in gMemori Budget, as PO number exists !!!");
+						eObj.setStatusMessage("PO exists and the project cannot be deleted!!!");
 						System.out.println("status Code"+eObj.getStatusCode());
 						System.out.println("status Message"+eObj.getStatusMessage());
 						return eObj;
 				} else if((cal.get(Calendar.MONTH)/3) >= currQtr && (cutOffDate.before(sdf.parse(gtfReport.getCreateDate())))){
 						eObj.setStatusCode(406);
-						eObj.setStatusMessage("Project has locked benchmark!!!");
+						eObj.setStatusMessage("Benchmark exists and the project cannot be deleted!!!");
 						return eObj;
-				}else{
+				} else{
 						status = "Disabled";
 				}
 				
