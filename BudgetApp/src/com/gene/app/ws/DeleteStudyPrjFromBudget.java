@@ -87,14 +87,18 @@ public class DeleteStudyPrjFromBudget {
 			gtfRptlst = util.readProjectDataByGMemId(prjParam.getgMemoriId());
 			if(gtfRptlst!=null && !gtfRptlst.isEmpty()){
 				gtfRpt = gtfRptlst.get(0);
-			} 
+			} else{
+				eObj.setStatusCode(404);
+				eObj.setStatusMessage("Project doesn't exist in costCenter " +costCenterList+" !!!");
+			}
 		}if( gtfRpt!=null && Util.isNullOrEmpty(gtfRpt.getgMemoryId()) && !selectedCC.contains(gtfRpt.getCostCenter())){
 			eObj.setStatusCode(404);
 			eObj.setStatusMessage("Project doesn't exist in costCenter " +costCenterList+" !!!");
 			System.out.println("status Code"+eObj.getStatusCode());
 			System.out.println("status Message"+eObj.getStatusMessage());
 			return eObj;
-		}if(gtfRpt!=null && (gtfRpt.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfRpt.getRequestor().split(":")[1]) ) ||
+		}if(gtfRpt!=null && Util.isNullOrEmpty(gtfRpt.getRequestor()) 
+				&& (gtfRpt.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfRpt.getRequestor().split(":")[1]) ) ||
 				(!gtfRpt.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfRpt.getRequestor()))){
 			eObj.setStatusCode(403);
 			eObj.setStatusMessage("User is not authorised to delete the project !!!");
@@ -169,11 +173,11 @@ public class DeleteStudyPrjFromBudget {
 						System.out.println("status Code"+eObj.getStatusCode());
 						System.out.println("status Message"+eObj.getStatusMessage());
 						return eObj;
-				} else if((cal.get(Calendar.MONTH)/3) >= currQtr && (cutOffDate.before(sdf.parse(gtfReport.getCreateDate())))){
+				} else if(/*cal.get(Calendar.MONTH)/3) >= currQtr &&*/ cutOffDate.after(sdf.parse(gtfReport.getCreateDate()))){
 						eObj.setStatusCode(406);
 						eObj.setStatusMessage("Benchmark exists and the project cannot be deleted!!!");
 						return eObj;
-				} else{
+				}else{
 						status = "Disabled";
 				}
 				
@@ -195,6 +199,7 @@ public class DeleteStudyPrjFromBudget {
 		util.storeProjectsToCache(gtfReports, selectedCostCenter, BudgetConstants.NEW);
 		eObj.setStatusCode(200);
 		eObj.setStatusMessage("Successful !!!");
+		System.out.println("gftReport List :::::"+util.getAllReportDataFromCache(selectedCostCenter));
 		return eObj;
 	}
 }

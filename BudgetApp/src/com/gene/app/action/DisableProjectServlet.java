@@ -41,6 +41,8 @@ public class DisableProjectServlet extends HttpServlet {
 		String gMemoriId = "";
 		String costCenter = "";
 		String unixId = "";
+		Gson gson = new Gson();
+		DBUtil util = new DBUtil();
 		if(Util.isNullOrEmpty(req.getParameter("gMem"))){
 			gMemoriId = req.getParameter("gMem");
 		}if(Util.isNullOrEmpty(req.getParameter("costCenter"))){
@@ -50,19 +52,25 @@ public class DisableProjectServlet extends HttpServlet {
 			unixId = req.getParameter("projectOwner");
 		}
 		LOGGER.log(Level.INFO, "Request received to disable: " + gMemoriId);
-		ProjectParameters prjParam = new ProjectParameters();
-		prjParam.setgMemoriId(gMemoriId);
-		/*List<String> costCenters = new ArrayList<String>();
-		costCenters.add(costCenter);
-		prjParam.setCostCentres(costCenters);*/
-		prjParam.setUnixId(unixId);
-		ErrorObject respFrmStudy = deleteProjectFromStudy(req,resp,prjParam);
-		DBUtil util = new DBUtil();
-		if(respFrmStudy.getStatusCode()==200){
-		util.disableProject(gMemoriId, costCenter);
+		if(gMemoriId.length()==10){
+			util.disableProject(gMemoriId, costCenter);
+			ErrorObject respFrmStudy = new ErrorObject();
+			respFrmStudy.setStatusCode(200);
+			respFrmStudy.setStatusMessage("Project deleted Successfully !!!");
+			resp.getWriter().write(gson.toJson(respFrmStudy));
+		}else{
+			ProjectParameters prjParam = new ProjectParameters();
+			prjParam.setgMemoriId(gMemoriId);
+			/*List<String> costCenters = new ArrayList<String>();
+			costCenters.add(costCenter);
+			prjParam.setCostCentres(costCenters);*/
+			prjParam.setUnixId(unixId);
+			ErrorObject respFrmStudy = deleteProjectFromStudy(req,resp,prjParam);
+			if(respFrmStudy.getStatusCode()==200){
+			util.disableProject(gMemoriId, costCenter);			
 		}
 	}
-	
+	}
 	public ErrorObject deleteProjectFromStudy(HttpServletRequest req,
 			HttpServletResponse resp, ProjectParameters prjParam){
 		ErrorObject respFrmStudy = new ErrorObject();
@@ -122,7 +130,7 @@ public class DisableProjectServlet extends HttpServlet {
 			gson = new Gson();
 			resp.getWriter().write(gson.toJson(respFrmStudy));
 		} else {
-			throw new Exception();
+			throw new Exception("Response Code is : "+responseCode);
 		}
 
 	} catch (Exception e) {

@@ -1670,14 +1670,13 @@ function deleteCurrentProject(delBtnClicked){
 		var currQtr = '<%=qtr%>';
 		var projCreatedQtr = Math.floor(projectCreateDate.getMonth() / 3);
 		// if project created in this quarter compare creation date with
-		if(projCreatedQtr >= currQtr && cutOffDate > projectCreateDate)
-		{
-			console.log( "Cut Off date is "+cutOffDate+", and  project create date is "+projectCreateDate+". You can proceed to delete the project.");
-		}
-		else{
+		if(projectCreateDate < cutOffDate){
 			alert('Benchmark exists and the project cannot be deleted.');
 			console.log( "Cut Off date is "+cutOffDate+", and  project create date is "+projectCreateDate+". You can not delete the project, as the project has locked benchmark.");
-			return;
+			return;			
+		}
+		else{
+			console.log( "Cut Off date is "+cutOffDate+", and  project create date is "+projectCreateDate+". You can proceed to delete the project.");
 		}
 	}
 	var userAccepted = confirm("Please, confirm: delete project?");
@@ -1695,7 +1694,7 @@ function deleteCurrentProject(delBtnClicked){
 				alert("Error occured while deleting project!!!");
 			}else{
 			var obj = $.parseJSON(result);
-			//alert(obj.statusMessage+"::::::::::"+obj.statusCode);
+			//alert(result+"::::::::::"+obj);
 			if(obj.statusCode==200){
 			alert('Successfully deleted project.');
 			window.location.reload(true);

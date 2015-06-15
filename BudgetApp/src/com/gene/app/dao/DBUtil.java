@@ -641,12 +641,24 @@ public class DBUtil {
 		Map<String,GtfReport> gtfReportList = new LinkedHashMap<String,GtfReport>();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 		gtfReportList = (Map<String,GtfReport>)cache.get(costCenter);
+		gtfReportList = getReportDataByStatus(gtfReportList);
 		if(gtfReportList==null || gtfReportList.size()==0){
 			gtfReportList = getReport(costCenter, true);
 			}
 		return gtfReportList;
 	}
 	
+	public Map<String,GtfReport> getReportDataByStatus(Map<String,GtfReport> gtfReportList){
+		Map<String,GtfReport> gtfRptMap = new HashMap<String,GtfReport>();
+		if(gtfReportList!=null && !gtfReportList.isEmpty()){
+			for(Map.Entry<String, GtfReport> gtfEntry:gtfReportList.entrySet()){
+				if(!"Disabled".equals(gtfEntry.getValue().getStatus())){
+					gtfRptMap.put(gtfEntry.getKey(), gtfEntry.getValue());
+				}
+			}
+		}
+		return gtfRptMap;
+	}
 	public Map<String,GtfReport> getAllReportDataCollectionFromCache(String gMemoriCollection){
 		Map<String,GtfReport> gtfReportList = new LinkedHashMap<String,GtfReport>();
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
@@ -701,7 +713,10 @@ public class DBUtil {
 		List<GtfReport> results = (List<GtfReport>) q.execute(projectName,email);
 		if(!results.isEmpty()){
 		for (GtfReport p : results) {
+			if(!"Disabled".equals(p.getStatus())){
 			gtfReportList.add(p);
+			
+			}
 		}
 		}/*}catch(Exception e){
 			e.printStackTrace();
@@ -1074,10 +1089,12 @@ public class DBUtil {
 			} else if (listType != null
 					&& !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.NEW.equalsIgnoreCase(listType.trim())) {
-				gtfReportFromCache.put(report.getgMemoryId(), report);
-				gtfAllReportFromCache.put(report.getgMemoryId(), report);
-				uniqueGtfRptKey = createKeyForXlPrjUpload(report);
-				uniqueGtfReportMap.put(uniqueGtfRptKey, report);
+				//if(!"Disabled".equals(report.getStatus())){
+					gtfReportFromCache.put(report.getgMemoryId(), report);
+					gtfAllReportFromCache.put(report.getgMemoryId(), report);
+					uniqueGtfRptKey = createKeyForXlPrjUpload(report);
+					uniqueGtfReportMap.put(uniqueGtfRptKey, report);					
+			//	}
 			}
 		}
 		cache.put(costCenter, gtfReportFromCache);
@@ -1280,10 +1297,11 @@ public class DBUtil {
 			}
 		}
 		saveAllDataToDataStore(gtfReportList);
-		for (GtfReport gtfReport : gtfReportList) {
+		/*for (GtfReport gtfReport : gtfReportList) {
 			gtfReportMap.remove(gtfReport.getgMemoryId());
 		}
-		saveAllReportDataToCache(costCenter, gtfReportMap);
+		saveAllReportDataToCache(costCenter, gtfReportMap);*/
+		storeProjectsToCache(gtfReportList, costCenter, BudgetConstants.NEW);
 	}
 
 }
