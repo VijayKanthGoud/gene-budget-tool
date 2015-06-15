@@ -63,6 +63,7 @@
 		Boolean isAdmin = false;
 		String userName = "";
 		String logoutLink = "";
+		String userRole = "";
 		DBUtil util = new DBUtil();
 			
 		/*  UserDataUtil util1 = new UserDataUtil();
@@ -75,13 +76,13 @@
 			isAdmin = userService.isUserAdmin();
 			boolean isGeneUser = false;//util.readUserRoleInfo(email,costCenter);
 			UserRoleInfo userInfo = util.readUserRoleInfo(email);
-			String role = "";
+			userRole = "";
 			if(userInfo!=null){
 				session.setAttribute("userInfo", userInfo);
 				if(email.equalsIgnoreCase(userInfo.getEmail())){
 					isGeneUser = true;
-					role = userInfo.getRole();
-					LOGGER.log(Level.INFO, "Logged in user role : "+role);
+					userRole = userInfo.getRole();
+					LOGGER.log(Level.INFO, "Logged in user role : "+userRole);
 				}
 			}
 	%>
@@ -137,7 +138,7 @@
 			<li><a style = "cursor: hand;" id="homeLink" ><span>Study</span></a></li>
 			<!-- <li class='last'><a href='/'><span>Reports</span></a></li> -->
 			<%
-				if (role!=null && !"".equalsIgnoreCase(role) && ("Admin".equals(role))) {
+				if (userRole!=null && !"".equalsIgnoreCase(userRole) && ("Admin".equals(userRole))) {
 			%>
 			<li class='last'><a href='#'><span>Imports</span></a>
 			<ul>

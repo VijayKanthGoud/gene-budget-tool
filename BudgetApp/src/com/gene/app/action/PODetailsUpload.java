@@ -58,6 +58,10 @@ public class PODetailsUpload extends HttpServlet {
 		LOGGER.log(Level.INFO, "inside fileupload...");
 		HttpSession session = req.getSession();
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
+		if(user != null && !user.getRole().equalsIgnoreCase("admin")){
+			resp.sendError(411, "User doesn't have permission to upload.");
+			return;
+		}
 		String costCenter = req.getParameter("costCenter");
 		int startRow = Integer.parseInt(req.getParameter("inputFrom"));
 		int endRow = Integer.parseInt(req.getParameter("inputTo"));

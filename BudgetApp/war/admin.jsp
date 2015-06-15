@@ -45,6 +45,7 @@ ng\:form {
 </head>
 
 <body>
+<% if(userRole.equalsIgnoreCase("admin")){ %>
 
 
 
@@ -277,6 +278,9 @@ ng\:form {
 					}
 				});
 	</script>
+<%}else{
+	response.sendRedirect("/getreport");
+}%>
 
 </body>
 </html>

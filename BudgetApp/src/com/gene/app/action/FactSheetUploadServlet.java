@@ -46,6 +46,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 		UserService userService = UserServiceFactory.getUserService();
 		User userLoggedIn = userService.getCurrentUser();
 		UserRoleInfo user = util.readUserRoleInfo(userLoggedIn.getEmail());
+		if(user != null && !user.getRole().equalsIgnoreCase("admin")){
+			resp.sendError(411, "User doesn't have permission to upload.");
+			return;
+		}
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		String [] objArrayStr = objarray.split("],");
 		System.out.println("objArrayStr = "+objArrayStr.length);
