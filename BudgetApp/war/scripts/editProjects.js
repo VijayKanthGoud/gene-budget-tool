@@ -266,7 +266,7 @@ function searchProject(item) {
                 status = false;
         }
         var arr = [];
-        if(item[37] == true){
+        if(item[37] == true && item[35] != 'NewProjects'){
         	arr =  item[53].slice(0);;
         	var limit = arr.length;
         	for (var i = 0; i < limit; i++) {
