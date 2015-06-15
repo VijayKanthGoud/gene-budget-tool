@@ -80,7 +80,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			LOGGER.log(Level.INFO, "Request :" + request.toString());
 			writer.write(request);
 			writer.close();
-
+			ErrorObject respFrmStudy = new ErrorObject();
 			final int responseCode = connection.getResponseCode();
 			LOGGER.log(Level.INFO, "Response Code is" + responseCode);
 			if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -88,7 +88,7 @@ public class InitiateProjectServlet extends HttpServlet{
 				JSONTokener response_tokens = new JSONTokener(connection.getInputStream());
 				JSONObject response = new JSONObject();
 				String errString="";
-				ErrorObject respFrmStudy = new ErrorObject();
+				
 				try {
 					response = new JSONObject(response_tokens);
 					respFrmStudy = gson.fromJson(response.toString(), ErrorObject.class);
@@ -129,7 +129,10 @@ public class InitiateProjectServlet extends HttpServlet{
 				/*RequestDispatcher rd = req.getRequestDispatcher("/getreport");
 				rd.forward(req, resp);*/
 			} else {
-				throw new Exception();
+				//throw new Exception("Response Code is : "+responseCode);
+				respFrmStudy.setStatusCode(connection.getResponseCode());
+				respFrmStudy.setStatusMessage(connection.getResponseMessage());
+				resp.getWriter().write(gson.toJson(respFrmStudy));
 			}
 
 		} catch (Exception e) {
