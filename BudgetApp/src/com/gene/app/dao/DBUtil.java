@@ -277,220 +277,6 @@ public class DBUtil {
 		return summary;
 	}
 	
-	/*public BudgetSummary readUserBasedBudgetFromDB(String email,String costCenter) {
-		boolean isGeneUser = false;
-		String key = costCenter+BudgetConstants.seperator+BudgetSummary.class.getName();
-		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
-		budgetMap = readAllBudgetSummary(costCenter);
-		BudgetSummary summary = new BudgetSummary();
-		if(budgetMap!=null && !budgetMap.isEmpty()){
-		summary = budgetMap.get(email);
-		}
-		return summary;
-	}*/
-
-	/*public BudgetSummary readBudgetSummary(String email,String costCenter,
-			List<GtfReport> gtfReports,UserRoleInfo user) {
-		double benchMarkTotal = 0.0;
-		double varianceTotal = 0.0;
-		double plannedTotal = 0.0;
-		double accrualsTotal = 0.0;
-		double tempBenchMarkTotal = 0.0;
-		double tempVarianceTotal = 0.0;
-		double tempPlannedTotal = 0.0;
-		double tempAccrualsTotal = 0.0;
-		BudgetSummary summaryFromDB = null;
-		//summaryFromDB = readBudgetSummaryFromDB(email,costCenter);
-		GtfReport report = null;
-		String month = "";
-		Object[] brand = {};
-		String brandValue = "";
-		Set<String> brandSet = new TreeSet<String>();
-		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
-		BudgetSummary summaryByBrand = new BudgetSummary();
-		if (gtfReports != null && !gtfReports.isEmpty()) {
-			for(int i=0;i<gtfReports.size();i++){
-				brandSet.add(gtfReports.get(i).getBrand());
-			}
-			System.out.println("brandset = "+brandSet);
-			brand = brandSet.toArray();
-			for(int k = 0; k<brand.length; k++){
-				brandValue = brand[k].toString();
-			for (int i = 0; i < gtfReports.size(); i++) {
-				report = (GtfReport) gtfReports.get(i);
-				if(brandValue!=null && !"".equalsIgnoreCase(brandValue.trim()) && brandValue.equals(report.getBrand())){
-					summaryByBrand = budgetMap.get(brandValue);
-					if(summaryByBrand==null){
-						summaryByBrand = new BudgetSummary();
-					}
-				benchMarkTotal = 0.0;
-				varianceTotal = 0.0;
-				plannedTotal = 0.0;
-				accrualsTotal = 0.0;
-				for(int j=0;j<BudgetConstants.months.length-1;j++){
-					month = BudgetConstants.months[j];
-				if(report.getBenchmarkMap()!=null){
-				benchMarkTotal = benchMarkTotal	+ report.getBenchmarkMap().get(month);
-				}if(report.getPlannedMap()!=null){
-				plannedTotal = plannedTotal	+ report.getPlannedMap().get(month);
-				}if(report.getVariancesMap()!=null){
-				varianceTotal = varianceTotal + report.getVariancesMap().get(month);
-				}if(report.getAccrualsMap()!=null){
-				accrualsTotal = accrualsTotal + report.getAccrualsMap().get(month);
-				}
-				}
-				summaryByBrand.setTotalBudget(summaryFromDB.getTotalBudget());
-				summaryByBrand.setProjectOwnerEmail(summaryFromDB.getProjectOwnerEmail());
-				tempPlannedTotal = summaryByBrand.getPlannedTotal();
-				summaryByBrand.setPlannedTotal(plannedTotal+tempPlannedTotal);
-				tempBenchMarkTotal = summaryByBrand.getBenchmarkTotal();
-				summaryByBrand.setBenchmarkTotal(benchMarkTotal+tempBenchMarkTotal);
-				tempVarianceTotal = summaryByBrand.getVarianceTotal();
-				summaryByBrand.setVarianceTotal(varianceTotal+tempVarianceTotal);
-				tempAccrualsTotal = summaryByBrand.getAccrualTotal();
-				summaryByBrand.setAccrualTotal(accrualsTotal+tempAccrualsTotal);
-				summaryByBrand.setBudgetLeftToSpend(summaryFromDB.getTotalBudget() - summaryByBrand.getAccrualTotal());
-				if(summaryByBrand.getBenchmarkTotal() == 0){
-					summaryByBrand.setBenchmarkTotal(1);
-					summaryByBrand.setPercentageVarianceTotal(0);
-				}else{
-							summaryByBrand
-									.setPercentageVarianceTotal((summaryByBrand
-											.getBenchmarkTotal() - summaryByBrand
-											.getAccrualTotal())
-											/ summaryByBrand
-													.getBenchmarkTotal());
-				}
-				budgetMap.put(brandValue, summaryByBrand);
-				}
-				
-			}
-			
-			}
-		}
-		BudgetSummary summary = new BudgetSummary();
-		summary.setBudgetMap(budgetMap);
-		double variancePercentage = 0.0;
-		summary.setTotalBudget(summaryFromDB.getTotalBudget());
-		summary.setProjectOwnerEmail(summaryFromDB.getProjectOwnerEmail());
-		summary.setPlannedTotal(plannedTotal);
-		summary.setBenchmarkTotal(benchMarkTotal);
-		summary.setVarianceTotal(varianceTotal);
-		summary.setBudgetLeftToSpend(summaryFromDB.getTotalBudget()-accrualsTotal);
-		summary.setAccrualTotal(accrualsTotal);
-		if(benchMarkTotal == 0){
-			benchMarkTotal = 1;
-			variancePercentage = 0;
-		}else{
-			variancePercentage = (benchMarkTotal-accrualsTotal)/benchMarkTotal;
-		}
-		summary.setPercentageVarianceTotal(variancePercentage);
-		return summary;
-	}
-		*/
-	
-	/*public BudgetSummary readBudgetSummary(String email,String costCenter,
-			List<GtfReport> gtfReports,UserRoleInfo user) {
-		double benchMarkTotal = 0.0;
-		double varianceTotal = 0.0;
-		double plannedTotal = 0.0;
-		double accrualsTotal = 0.0;
-		double tempBenchMarkTotal = 0.0;
-		double tempVarianceTotal = 0.0;
-		double tempPlannedTotal = 0.0;
-		double tempAccrualsTotal = 0.0;
-		BudgetSummary summaryFromDB = null;
-		//summaryFromDB = readBudgetSummaryFromDB(email,costCenter);
-		GtfReport report = null;
-		String month = "";
-		Object[] brand = {};
-		String brandValue = "";
-		Double brandBudget = 0.0;
-		Map<String,Double> brandMap = user.getBrand();
-		Set<String> brandSet = new TreeSet<String>();
-		brandSet = brandMap.keySet();
-		Map<String,BudgetSummary> budgetMap = new LinkedHashMap<String,BudgetSummary>();
-		BudgetSummary summaryByBrand = new BudgetSummary();
-		if (gtfReports != null && !gtfReports.isEmpty()) {
-			for(int i=0;i<gtfReports.size();i++){
-				brandSet.add(gtfReports.get(i).getBrand());
-			}
-			System.out.println("brandset = "+brandSet);
-			brand = brandSet.toArray();
-			for(int k = 0; k<brand.length; k++){
-				brandValue = brand[k].toString();
-				brandBudget = brandMap.get(brandValue);
-			for (int i = 0; i < gtfReports.size(); i++) {
-				report = (GtfReport) gtfReports.get(i);
-				if(brandValue!=null && !"".equalsIgnoreCase(brandValue.trim()) && brandValue.equals(report.getBrand())){
-					summaryByBrand = budgetMap.get(brandValue);
-					if(summaryByBrand==null){
-						summaryByBrand = new BudgetSummary();
-					}
-				benchMarkTotal = 0.0;
-				varianceTotal = 0.0;
-				plannedTotal = 0.0;
-				accrualsTotal = 0.0;
-				for(int j=0;j<BudgetConstants.months.length-1;j++){
-					month = BudgetConstants.months[j];
-				if(report.getBenchmarkMap()!=null){
-				benchMarkTotal = benchMarkTotal	+ report.getBenchmarkMap().get(month);
-				}if(report.getPlannedMap()!=null){
-				plannedTotal = plannedTotal	+ report.getPlannedMap().get(month);
-				}if(report.getVariancesMap()!=null){
-				varianceTotal = varianceTotal + report.getVariancesMap().get(month);
-				}if(report.getAccrualsMap()!=null){
-				accrualsTotal = accrualsTotal + report.getAccrualsMap().get(month);
-				}
-				}
-				summaryByBrand.setTotalBudget(brandBudget);
-				summaryByBrand.setProjectOwnerEmail(email);
-				tempPlannedTotal = summaryByBrand.getPlannedTotal();
-				summaryByBrand.setPlannedTotal(plannedTotal+tempPlannedTotal);
-				tempBenchMarkTotal = summaryByBrand.getBenchmarkTotal();
-				summaryByBrand.setBenchmarkTotal(benchMarkTotal+tempBenchMarkTotal);
-				tempVarianceTotal = summaryByBrand.getVarianceTotal();
-				summaryByBrand.setVarianceTotal(varianceTotal+tempVarianceTotal);
-				tempAccrualsTotal = summaryByBrand.getAccrualTotal();
-				summaryByBrand.setAccrualTotal(accrualsTotal+tempAccrualsTotal);
-				summaryByBrand.setBudgetLeftToSpend(brandBudget - summaryByBrand.getAccrualTotal());
-				if(summaryByBrand.getBenchmarkTotal() == 0){
-					summaryByBrand.setBenchmarkTotal(1);
-					summaryByBrand.setPercentageVarianceTotal(0);
-				}else{
-							summaryByBrand
-									.setPercentageVarianceTotal((summaryByBrand
-											.getBenchmarkTotal() - summaryByBrand
-											.getAccrualTotal())
-											/ summaryByBrand
-													.getBenchmarkTotal());
-				}
-				budgetMap.put(brandValue, summaryByBrand);
-				}
-				
-			}
-			
-			}
-		}
-		BudgetSummary summary = new BudgetSummary();
-		summary.setBudgetMap(budgetMap);
-		double variancePercentage = 0.0;
-		summary.setTotalBudget(brandBudget);
-		summary.setProjectOwnerEmail(email);
-		summary.setPlannedTotal(plannedTotal);
-		summary.setBenchmarkTotal(benchMarkTotal);
-		summary.setVarianceTotal(varianceTotal);
-		summary.setBudgetLeftToSpend(brandBudget-accrualsTotal);
-		summary.setAccrualTotal(accrualsTotal);
-		if(benchMarkTotal == 0){
-			benchMarkTotal = 1;
-			variancePercentage = 0;
-		}else{
-			variancePercentage = (benchMarkTotal-accrualsTotal)/benchMarkTotal;
-		}
-		summary.setPercentageVarianceTotal(variancePercentage);
-		return summary;
-	}*/
 	
 	public void saveAllReportDataToCache(String costCenter,Map<String,GtfReport> gtfReportList){
 		cache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
@@ -709,7 +495,7 @@ public class DBUtil {
 		}
 		
 		
-		//try {
+		try {
 		List<GtfReport> results = (List<GtfReport>) q.execute(projectName,email);
 		if(!results.isEmpty()){
 		for (GtfReport p : results) {
@@ -718,14 +504,14 @@ public class DBUtil {
 			
 			}
 		}
-		}/*}catch(Exception e){
+		}}catch(Exception e){
 			e.printStackTrace();
 		}finally {
 			q.closeAll();
 			pm.close();
-		}*/
-		q.closeAll();
-		pm.close();
+		}
+		//q.closeAll();
+		//pm.close();
 		return gtfReportList;
 	}
 	
@@ -746,13 +532,18 @@ public class DBUtil {
 				q.setFilter("gMemoryId==gMemoryIdParam");
 				q.declareParameters("String gMemoryIdParam");
 			}
+			try{
 			gtfReportList = (List<GtfReport>) q.execute(gMemoriId);
 			for(GtfReport gtfReport : gtfReportList){
 				if(gtfReport.getStatus().equalsIgnoreCase("Disabled")){
 					gtfReportList.remove(gtfReport);
 				}
+			}}catch(Exception e){
+				e.printStackTrace();
+			}finally {
+				q.closeAll();
+				pm.close();
 			}
-			q.closeAll();
 		}
 		//pm.close();
 		return gtfReportList;
@@ -787,9 +578,16 @@ public class DBUtil {
 			q.setFilter("gMemoryId==gMemoryIdParam");
 			q.declareParameters("String gMemoryIdParam");
 		}
+		try{
 		results = (List<GtfReport>)  q.execute(gMemoriId);
 		results.size();
-		q.closeAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			q.closeAll();
+			pm.close();
+		}
+		//q.closeAll();
 		}
 		//pm.close();
 		return results;
@@ -1089,12 +887,10 @@ public class DBUtil {
 			} else if (listType != null
 					&& !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.NEW.equalsIgnoreCase(listType.trim())) {
-				//if(!"Disabled".equals(report.getStatus())){
 					gtfReportFromCache.put(report.getgMemoryId(), report);
 					gtfAllReportFromCache.put(report.getgMemoryId(), report);
 					uniqueGtfRptKey = createKeyForXlPrjUpload(report);
 					uniqueGtfReportMap.put(uniqueGtfRptKey, report);					
-			//	}
 			}
 		}
 		cache.put(costCenter, gtfReportFromCache);

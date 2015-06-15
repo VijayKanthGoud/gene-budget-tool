@@ -85,11 +85,14 @@ public class DeleteStudyPrjFromBudget {
 		List<GtfReport>	gtfRptlst = new ArrayList<GtfReport>();
 		if(prjParam.getgMemoriId()!=null && !"".equals(prjParam.getgMemoriId())){
 			gtfRptlst = util.readProjectDataByGMemId(prjParam.getgMemoriId());
+			System.out.println("gtfRptlst = "+gtfRptlst);
 			if(gtfRptlst!=null && !gtfRptlst.isEmpty()){
 				gtfRpt = gtfRptlst.get(0);
+				System.out.println("gtfRpt = "+gtfRpt);
 			} else{
 				eObj.setStatusCode(404);
 				eObj.setStatusMessage("Project doesn't exist in costCenter " +costCenterList+" !!!");
+				return eObj;
 			}
 		}if( gtfRpt!=null && Util.isNullOrEmpty(gtfRpt.getgMemoryId()) && !selectedCC.contains(gtfRpt.getCostCenter())){
 			eObj.setStatusCode(404);
