@@ -91,7 +91,7 @@ public class DeleteStudyPrjFromBudget {
 				System.out.println("gtfRpt = "+gtfRpt);
 			} else{
 				eObj.setStatusCode(404);
-				eObj.setStatusMessage("Project doesn't exist in costCenter " +costCenterList+" !!!");
+				eObj.setStatusMessage("Project does not exist in costCenter " +costCenterList+" !!!");
 				return eObj;
 			}
 		}if( gtfRpt!=null && Util.isNullOrEmpty(gtfRpt.getgMemoryId()) && !selectedCC.contains(gtfRpt.getCostCenter())){
@@ -131,7 +131,7 @@ public class DeleteStudyPrjFromBudget {
 		if(!isGMemIdExists){
 			//disableProjectInBudget(prjParam,costCenterList.get(0));
 			eObj.setStatusCode(404);
-			eObj.setStatusMessage("Project doesn't exist in costCenter "+ costCenterList+" !!!");
+			eObj.setStatusMessage("Project does not exist in costCenter "+ costCenterList+" !!!");
 			System.out.println("status Code"+eObj.getStatusCode());
 			System.out.println("status Message"+eObj.getStatusMessage());
 			return eObj;
