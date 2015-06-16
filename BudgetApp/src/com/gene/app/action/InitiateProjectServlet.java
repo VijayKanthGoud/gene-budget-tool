@@ -52,8 +52,9 @@ public class InitiateProjectServlet extends HttpServlet{
 	}
 
 	public void storeRprtTogMemori(HttpServletRequest req,
-			HttpServletResponse resp, ProjectParameters prjParam) {
-
+			HttpServletResponse resp, ProjectParameters prjParam) throws IOException{
+		Gson gson = new Gson();
+		ErrorObject respFrmStudy = new ErrorObject();
 		try {
 			ArrayList<String> scopes = new ArrayList<>();
 			scopes.add("https://www.googleapis.com/auth/userinfo.email");
@@ -61,7 +62,7 @@ public class InitiateProjectServlet extends HttpServlet{
 					.getAppIdentityService();
 			AppIdentityService.GetAccessTokenResult accessToken = appIdentity
 					.getAccessToken(scopes);
-			Gson gson = new Gson();
+			
 			String request = gson.toJson(prjParam);
 			//String request = prepareInitiatePrjReqURL(ccId, unixId, prj_name);
 			URL url = new URL(
@@ -80,7 +81,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			LOGGER.log(Level.INFO, "Request :" + request.toString());
 			writer.write(request);
 			writer.close();
-			ErrorObject respFrmStudy = new ErrorObject();
+			
 			final int responseCode = connection.getResponseCode();
 			LOGGER.log(Level.INFO, "Response Code is" + responseCode);
 			if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -139,6 +140,9 @@ public class InitiateProjectServlet extends HttpServlet{
 			// Error handling elided.
 			String result = e.getMessage();
 			System.out.println("result:::" + result);
+			respFrmStudy.setStatusCode(414);
+			respFrmStudy.setStatusMessage(result);
+			resp.getWriter().write(gson.toJson(respFrmStudy));
 			req.setAttribute("Error Msg",  e.getMessage() +"::::"+e.getStackTrace());
 		}
 
