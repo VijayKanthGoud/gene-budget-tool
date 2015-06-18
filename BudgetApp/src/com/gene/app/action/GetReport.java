@@ -257,6 +257,7 @@ public class GetReport extends HttpServlet {
 				found =true;
 			}
 			if(!found){
+				costCenter = user.getSelectedCostCenter();
 				gtfReportList = getReportList(gtfReports,
 						BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
 			}

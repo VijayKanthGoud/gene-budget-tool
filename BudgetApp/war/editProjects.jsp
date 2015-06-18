@@ -926,13 +926,16 @@ String ccView="";
 		dataView.endUpdate();
 		groupByStatus();
 		
+		var isSearch = false;
 		if(document.URL.toString().indexOf("gMemoriId=") != -1){
 			if("<%=request.getParameter("gMemoriId") != null %>" == "true"){
 				searchString = "<%=request.getParameter("gMemoriId")%>" ; 
+				isSearch = true;
 			}
 			
 			$("#txtSearch").val(searchString);
 			window.history.pushState(null, "", "<%=BudgetConstants.APP_URL%>");
+			map = {};
 			dataView.refresh();
 			if(!isMatchPresent){
 				alert("No project with gMemori Id " +searchString+ " Found!!!");
@@ -952,6 +955,11 @@ String ccView="";
 	<%}else{%>
 	    grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
 	<%}%>
+	
+		if(isSearch && isMatchPresent){
+			calculateTotal();
+		}
+		
 		// initialize the grid
 		//grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
 		//register the group item metadata provider to add expand/collapse group handlers
