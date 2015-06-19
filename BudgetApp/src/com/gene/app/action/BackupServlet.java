@@ -1,16 +1,17 @@
 package com.gene.app.action;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gene.app.dao.DBUtil;
-
 @SuppressWarnings("serial")
-public class UpdateType extends HttpServlet {
+public class BackupServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -19,7 +20,16 @@ public class UpdateType extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		DBUtil dbUtil = new DBUtil();
-		dbUtil.updateReports();
+		try {
+		    URL url = new URL("https://google.com/");
+		    URLConnection URLConnection = url.openConnection();
+		    URLConnection.connect();
+		} 
+		catch (MalformedURLException e) { 
+		    System.out.println("Malformed url");
+		} 
+		catch (IOException e) {   
+			System.out.println("IO exception");
+		}
 	}
 }

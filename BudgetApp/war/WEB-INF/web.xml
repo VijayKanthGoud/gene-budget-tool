@@ -148,12 +148,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>promoteType</servlet-name>
-		<servlet-class>com.gene.app.action.UpdateType</servlet-class>
+		<servlet-name>backup</servlet-name>
+		<servlet-class>com.gene.app.action.BackupServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>promoteType</servlet-name>
-		<url-pattern>/cron/promote</url-pattern>
+		<servlet-name>backup</servlet-name>
+		<url-pattern>/cron/backup</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
