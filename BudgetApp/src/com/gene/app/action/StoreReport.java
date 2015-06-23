@@ -200,10 +200,10 @@ public class StoreReport extends HttpServlet {
 						.getString(BudgetConstants.New_GTFReport_gMemoriId));
 				
 			}
-			boolean isValidGMemoriId = util.validategMemoriId(gtfReport.getgMemoryId());
-			if(isValidGMemoriId){
+			//boolean isValidGMemoriId = util.validategMemoriId(gtfReport.getgMemoryId());
+			/*if(isValidGMemoriId){
 				throw new Error(gtfReport.getgMemoryId()+" : gMemoriId already exists !!!");
-			}
+			}*/
 			//boolean isDummyId = isDummyGMemoriId(gMemoriId);
 			
 			gtfReport.setProjectName(rprtObject
