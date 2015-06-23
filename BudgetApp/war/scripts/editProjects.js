@@ -1696,7 +1696,7 @@ function deleteCurrentProject(delBtnClicked){
 			var obj = $.parseJSON(result);
 			//alert(result+"::::::::::"+obj);
 			if(obj.statusCode==200){
-			alert('Successfully deleted project.');
+			alert('Project ' + gmemId + ' successfully deleted.');
 			window.location.reload(true);
 			}else{
 				alert(obj.statusMessage);
