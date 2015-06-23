@@ -92,7 +92,7 @@ public class AutoSaveData extends HttpServlet {
 		JSONArray jsonArray = null;
 		JSONObject rprtArray = null;
 		Map<String, GtfReport> gtfReportMap =  new LinkedHashMap<String,GtfReport>();
-		Map<String, GtfReport> completeGtfRptMap =  new LinkedHashMap<String,GtfReport>();
+		//Map<String, GtfReport> completeGtfRptMap =  new LinkedHashMap<String,GtfReport>();
 		Map<String, GtfReport> editedGtfReportMap =  new LinkedHashMap<String,GtfReport>();
 		String keyNum = "";
 		String sessionKey = "";
@@ -102,7 +102,7 @@ public class AutoSaveData extends HttpServlet {
 			jsonArray = new JSONArray(objarray);
 			gtfReportMap = util
 					.getAllReportDataFromCache(costCenter);
-			completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+			//completeGtfRptMap = util.getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 			for (int count = 0; count < jsonArray.length(); count++) {
 				rprtArray = jsonArray.getJSONObject(count);
 				keyNum = rprtArray.getString("0");
@@ -188,7 +188,7 @@ public class AutoSaveData extends HttpServlet {
 								
 							}
 							gtfReportMap.put(keyNum, gtfReportObj);	
-						}else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_GMEMORI_ID){
+						}else if(Integer.parseInt(cellNum) == BudgetConstants.CELL_GMEMORI_ID){/*
 							boolean result = util.validategMemoriId(cellValue);
 							if(result){
 								throw new Error("gMemori Id already exists");
@@ -201,7 +201,7 @@ public class AutoSaveData extends HttpServlet {
 							gtfReportObj.setDummyGMemoriId(false);
 							gtfReportMap.put(gMemoriIdFromStudy, gtfReportObj);
 							completeGtfRptMap.put(gMemoriIdFromStudy, gtfReportObj);
-						}
+						*/}
 							else {
 						
 							Map<String, Double> plannedMap = gtfReportObj
@@ -271,7 +271,7 @@ public class AutoSaveData extends HttpServlet {
 						.getAttribute(BudgetConstants.KEY);
 				util.saveAllReportDataToCache(costCenter,
 						gtfReportMap);
-				util.saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, gtfReportMap);
+				//util.saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, gtfReportMap);
 				String[] keys = {};
 				List<GtfReport> gtfList = new ArrayList<GtfReport>();
 				if(sessionKey!=null){
