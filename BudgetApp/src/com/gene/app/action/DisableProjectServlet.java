@@ -84,7 +84,7 @@ public class DisableProjectServlet extends HttpServlet {
 		Gson gson = new Gson();
 		String request = gson.toJson(prjParam);
 		URL url = new URL(
-				"http://memori-qa.appspot.com/web-service/project/deactivate");
+				"http://memori-dev.appspot.com/web-service/project/deactivate");
 		HttpURLConnection connection = (HttpURLConnection) url
 				.openConnection();
 		connection.setDoOutput(true);
@@ -93,7 +93,7 @@ public class DisableProjectServlet extends HttpServlet {
 		connection.addRequestProperty("Authorization", "OAuth "
 				+ accessToken.getAccessToken());
 		connection.setInstanceFollowRedirects(false);
-
+		connection.setConnectTimeout(20000);
 		OutputStreamWriter writer = new OutputStreamWriter(
 				connection.getOutputStream());
 		LOGGER.log(Level.INFO, "Request :" + request.toString());
