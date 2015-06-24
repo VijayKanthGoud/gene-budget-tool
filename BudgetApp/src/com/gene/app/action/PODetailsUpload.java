@@ -77,6 +77,7 @@ public class PODetailsUpload extends HttpServlet {
 		curMonth = Calendar.getInstance().get(Calendar.MONTH);
 		try {
 			JSONArray jsonArray = new JSONArray(objArray);
+			//endRow = endRow < jsonArray.length()? endRow : jsonArray.length();
 			for (int count = startRow - 1; count < endRow; count++) {
 				List list = new ArrayList();
 				for (int k = 0; k < jsonArray.getJSONArray(count).length(); k++) {
