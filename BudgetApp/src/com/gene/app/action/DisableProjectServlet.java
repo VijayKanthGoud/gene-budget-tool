@@ -18,6 +18,7 @@ import org.json.JSONTokener;
 
 import com.gene.app.dao.DBUtil;
 import com.gene.app.model.ProjectParameters;
+import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.Util;
 import com.gene.app.ws.exception.ErrorObject;
 import com.google.appengine.api.appidentity.AppIdentityService;
@@ -93,7 +94,7 @@ public class DisableProjectServlet extends HttpServlet {
 		connection.addRequestProperty("Authorization", "OAuth "
 				+ accessToken.getAccessToken());
 		connection.setInstanceFollowRedirects(false);
-		connection.setConnectTimeout(20000);
+		connection.setConnectTimeout(BudgetConstants.TIME_OUT_PERIOD);
 		OutputStreamWriter writer = new OutputStreamWriter(
 				connection.getOutputStream());
 		LOGGER.log(Level.INFO, "Request :" + request.toString());

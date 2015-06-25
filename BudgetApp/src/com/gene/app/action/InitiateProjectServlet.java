@@ -75,7 +75,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			connection.addRequestProperty("Authorization", "OAuth "
 					+ accessToken.getAccessToken());
 			connection.setInstanceFollowRedirects(false);
-			connection.setConnectTimeout(20000);
+			connection.setConnectTimeout(BudgetConstants.TIME_OUT_PERIOD);
 			OutputStreamWriter writer = new OutputStreamWriter(
 					connection.getOutputStream());
 			LOGGER.log(Level.INFO, "Request :" + request.toString());

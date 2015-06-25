@@ -323,7 +323,7 @@ var accrual_cur = 0.0;
 var quarterly_tar_cur = 0.0;
 
 function updateMemCache(e, args, tempKey) {
-	$('#statusMessage').text("Saving data...").fadeIn(200);
+	
 	var cell = args.cell;
 	var item = args.item;
 	var fixedCell = cell;
@@ -393,7 +393,7 @@ function updateMemCache(e, args, tempKey) {
 			aSave[1] = cellValue;
  		//aSave[2] = d["47"];
 		}else if(cell == <%=BudgetConstants.BRAND_CELL%>){
-			if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1){
+			if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1 && lastKeyPressed == 9){
 				//alert(cellValue+"::::"+args.item[37] +"::::"+cellNum);
 				<%
 				//MemcacheService cacheCCJs = MemcacheServiceFactory.getMemcacheService();
@@ -418,22 +418,24 @@ function updateMemCache(e, args, tempKey) {
 					if (index > -1) {
 						availableTags.splice(index, 1);
 					}
-					m_data[0][1]=args.item[44];
-					m_data[0][3]=args.item[24];
+					m_data[0][1]=itemClicked[44];
+					m_data[0][3]=itemClicked[24];
 					m_data[0][2]=100.0;
-					m_data[0][4]=args.item[2];
-				 	m_data[0][5]=args.item[0]+'.1';
-				 	m_data[0][7]=args.item[1];
+					m_data[0][4]=itemClicked[2];
+				 	m_data[0][5]=itemClicked[0]+'.1';
+				 	m_data[0][7]=itemClicked[1];
 				 	singleBrandToMulti=true;
 				 	$('#multibrandEdit').show().fadeIn(100);
 					displayMultibrandGrid();
 					$('#back').addClass('black_overlay').fadeIn(100);
 				}
+			}else if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1){
+				alert('Click on "Smart WBS" to add sub projects.');
+				return;
 			}else{
 				var aSave = (aSaveData[0] = {});
 				aSave[0] = key;
-	 		aSave[1] = cellValue;
-	 		//aSave[2] = d["47"];
+				aSave[1] = cellValue;
 			}
 			
 		}else{
@@ -614,6 +616,7 @@ function updateMemCache(e, args, tempKey) {
 		}
 		
 	if(singleBrandToMulti!=true){
+		$('#statusMessage').text("Saving data...").fadeIn(200);
 	$.ajax({
 		url : '/AutoSaveData',
 		type : 'POST',

@@ -1834,7 +1834,15 @@ String ccView="";
 	});
 	
 	function addMultiBrandPopUp(){
-
+		if(itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
+			m_data[0][1]=itemClicked[44];
+			m_data[0][3]=itemClicked[24];
+			m_data[0][2]=100.0;
+			m_data[0][4]=itemClicked[2];
+		 	m_data[0][5]=itemClicked[0]+'.1';
+		 	m_data[0][7]=itemClicked[1];
+		 	singleBrandToMulti=true;
+		}
 		<%selectedCostCenter = (String)request.getAttribute("getCCValue");
 		if(selectedCostCenter==null || "".equals(selectedCostCenter)){
 			selectedCostCenter = userInfo.getSelectedCostCenter();
