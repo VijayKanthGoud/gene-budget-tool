@@ -1770,11 +1770,11 @@ function calculateTotal(){
 			}
 		}
    	}
-	
-	for(var i =0; i<=12; i++){
-		quarterlyLTSTotalItem[i + 12] = parseFloat(quarterlyTargetTotalItem[i + 12]) - parseFloat(accrualTotalItem[i + 12]);
+	if(radioString == 'All'){
+		for(var i =0; i<=12; i++){
+			quarterlyLTSTotalItem[i + 12] = parseFloat(quarterlyTargetTotalItem[i + 12]) - parseFloat(accrualTotalItem[i + 12]);
+		}
 	}
-	
 	prevKey = "";
 	grid.invalidate();
 }
