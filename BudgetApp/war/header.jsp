@@ -27,7 +27,7 @@
 	$(function() {
 		$('#homeLink').click(function() {
 			if(typeof popUpWindow === 'undefined'){
-				openUrl('http://memori-qa.appspot.com');
+				openUrl('http://memori-dev.appspot.com');
 	    	}else{
 	    		var userAccepted = confirm("gMemori app is already opened. Want to reload?");
 				if (!userAccepted) {
@@ -36,7 +36,7 @@
 					}
 			    	return;
 				}else{
-					openUrl('http://memori-qa.appspot.com');
+					openUrl('http://memori-dev.appspot.com');
 					if (window.focus) {
 						popUpWindow.focus()
 					}
@@ -149,6 +149,9 @@
 			%> 
                         <li class='last'><a href ="/admin?tab_sel=3" id="#tabs-2">User Details</a></li>
                         <% } %>
+                        <% if(email!=null && !"".equalsIgnoreCase(email) && "kaviv@gene.com".equals(email) || "siddagov@gene.com".equals(email)){ %>
+                         <li class='last'><a href ="/recovery_conversion.jsp" id="#tabs-2">Recover Data from CS</a></li>
+                         <% }%>
                     </ul>  
                     </li>  
 			<%

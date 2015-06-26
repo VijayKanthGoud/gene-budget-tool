@@ -31,10 +31,14 @@ ng\:form {
 		}else if(document.URL.split("?")[1].toString().split("=")[1] == 2){
 			  selectedTab=2;
 			  document.getElementById("headerid").innerHTML="PO Details";
-		}else{
+		}else if(document.URL.split("?")[1].toString().split("=")[1] == 3){
 			selectedTab=3;
 			document.getElementById("costCenter").style.display = "none";
 			document.getElementById("headerid").innerHTML="User Details";
+		}else {
+			selectedTab=4;
+			document.getElementById("costCenter").style.display = "none";
+			document.getElementById("headerid").innerHTML="BackUp to Cloud Storage";
 		}
   });
   
@@ -172,16 +176,35 @@ ng\:form {
 					window.location.reload(true);
 		        }
 			}); 
-		}else{
+		}else if(selectedTab==3){
+			alert("sheet name = "+$('#sheet_name').val());
+		 	  $.ajax({
+					url : '/userdetailsupload',
+					type : 'POST',
+					dataType : 'text',
+					data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
+						sheetName : $('#sheet_name').val(),
+						inputFrom :  $('#From').val(),
+						inputTo :  $('#To').val()},
+					success : function(result) {
+						alert("Uploaded successfully");
+						console.log('Data saved successfully');
+						window.location.reload(true);
+					},
+					error: function(result) {
+						alert("fail");
+						console.log(result);
+						window.location.reload(true);
+			        }
+				});  
+			}
+		else{
 			alert("sheet name = "+$('#sheet_name').val());
 			 	  $.ajax({
-						url : '/userdetailsupload',
+						url : '/backup',
 						type : 'POST',
 						dataType : 'text',
-						data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
-							sheetName : $('#sheet_name').val(),
-							inputFrom :  $('#From').val(),
-							inputTo :  $('#To').val()},
+						data : {},
 						success : function(result) {
 							alert("Uploaded successfully");
 							console.log('Data saved successfully');

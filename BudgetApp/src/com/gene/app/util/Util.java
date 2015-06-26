@@ -1,10 +1,18 @@
 package com.gene.app.util;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import com.google.appengine.tools.cloudstorage.GcsService;
+import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
+import com.google.appengine.tools.cloudstorage.ListItem;
+import com.google.appengine.tools.cloudstorage.ListResult;
+import com.google.appengine.tools.cloudstorage.RetryParams;
 
 public class Util {
 	
@@ -49,6 +57,29 @@ public class Util {
 		}else{
 			return new TreeMap();
 		}
+	}
+	
+	public static List<String> getFileNamesFromCS(String bucketName){
+		 final GcsService gcsService = GcsServiceFactory.createGcsService(new RetryParams.Builder()
+	     .initialRetryDelayMillis(10)
+	     .retryMaxAttempts(10)
+	     .totalRetryPeriodMillis(15000)
+	     .build());
+		List<String> fileNameList = new ArrayList<String>();
+		 ListResult res;
+		try {
+			res = gcsService.list(BudgetConstants.BUCKET_NAME, null);
+			while (res.hasNext()) {
+				 ListItem item = res.next();
+				 System.out.println("res = "+item.getName());
+				 fileNameList.add(item.getName());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		return fileNameList;
 	}
 	
 	/*public static String escapeHTML(String val){
