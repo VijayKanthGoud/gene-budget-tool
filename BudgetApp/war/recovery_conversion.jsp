@@ -19,9 +19,9 @@
 </head>
 
 <body onload="setDownloadDefaults();">
-<h1>Hello Google Cloud Storage!</h1>
+<br/><br/>
 <%
-	  List<String> fileNameList = new ArrayList<String>();%>
+  List<String> fileNameList = new ArrayList<String>();%>
   <table>
   <tr>
       <td style="font-weight: bold;">Download a file from Google Cloud Storage:</td>
@@ -42,7 +42,7 @@
         </form>
         <form action="/recovery_conversion.jsp" method="get" name="submitGet">
           <div>
-            <input type="submit" onclick='changeGetPath(this)' value="Download Content" />
+            <input type="submit" onclick='changeGetPath(this)' value="Restore Data" />
           </div>
         </form>
       </td>
