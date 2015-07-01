@@ -1822,14 +1822,19 @@ String ccView="";
 
 	}
 	
+	var resized = false;
 	$(window).resize(function() {
 		grid.resizeCanvas();
 		if($(window).width() < 900){
 			$('#cautionWindow').show().fadeIn(100);
 			$('#back').addClass('black_overlay').fadeIn(100);
+			resized = true;
 		}else{
 			$('#cautionWindow').hide();
-			$('#back').removeClass('black_overlay').fadeIn(100);
+			if(resized){
+				$('#back').removeClass('black_overlay').fadeIn(100);
+				resized = false;
+			}
 		}
 	});
 	
