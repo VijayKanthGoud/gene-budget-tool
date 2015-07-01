@@ -209,6 +209,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>InitiateProjectServlet</servlet-name>
 		<url-pattern>/initiateProject</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>RecoveryServlet</servlet-name>
+	<servlet-class>com.gene.app.action.RecoveryServlet</servlet-class>
+</servlet>
+	<servlet-mapping>
+		<servlet-name>RecoveryServlet</servlet-name>
+		<url-pattern>/gcs/*</url-pattern>
+	</servlet-mapping>
+       
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 			<servlet-class>

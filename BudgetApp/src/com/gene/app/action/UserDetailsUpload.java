@@ -25,7 +25,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 
 public class UserDetailsUpload extends HttpServlet{
-	private final static Logger LOGGER = Logger.getLogger(PODetailsUpload.class
+	private final static Logger LOGGER = Logger.getLogger(UserDetailsUpload.class
 			.getName());
 	DBUtil util = new DBUtil();
 	String unixId = "";

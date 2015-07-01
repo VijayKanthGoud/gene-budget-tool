@@ -535,6 +535,11 @@
         e.preventDefault();
         args.grid.navigatePrev();
       } else if (e.which == $.ui.keyCode.TAB) {
+    	$input.val($input.val().replace(/</g, "&lt;"));
+      	$input.val($input.val().replace(/>/g, "&gt;"));
+      	if($input.val().trim().length == 0){
+      		$input.val("");
+      	}
         e.preventDefault();
         args.grid.navigateNext();
       }
@@ -544,7 +549,7 @@
     	$input.val($input.val().replace(/</g, "&lt;"));
     	$input.val($input.val().replace(/>/g, "&gt;"));
     	if($input.val().trim().length == 0){
-    	$input.val("");
+    		$input.val("");
     	}
       args.commitChanges();
     };

@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.http.client.ClientProtocolException;
 
 import com.gene.app.dao.DBUtil;
+import com.gene.app.exception.DuplicatePOException;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
@@ -72,10 +72,8 @@ public class StoreReport extends HttpServlet {
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 				.format(Calendar.getInstance().getTime());
 		String status = "";
-		String gmultiIdList="";
 		String poNum = "";
 		int flag = 0;
-		String poErrorMsg = "";
 		try {
 			jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
@@ -86,8 +84,7 @@ public class StoreReport extends HttpServlet {
 				if (poNum.length() > 0 && !"0".equalsIgnoreCase(poNum)) {
 					boolean poExists = util.validatePONum(poNum);
 					if(poExists){
-						poErrorMsg = "PO Number already exists !!!";
-						throw new Exception("PO Number already exists !!!");
+						throw new DuplicatePOException("<poError>:"+"PO Number already exists !!!");
 					}
 					status = BudgetConstants.status_Active;
 				} else {
@@ -177,9 +174,8 @@ public class StoreReport extends HttpServlet {
 			}
 		} catch (JSONException e1) {
 			e1.printStackTrace();
-		}catch(Exception e){
-			poErrorMsg = "<poError>:"+"PO Number already exists !!!";
-			resp.sendError(HttpServletResponse.SC_OK, poErrorMsg);
+		}catch(DuplicatePOException dupPOExcp){
+			resp.sendError(HttpServletResponse.SC_OK, dupPOExcp.getMessage());
 		}
 	}
 

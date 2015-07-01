@@ -79,7 +79,7 @@ public interface BudgetConstants {
 	public static final String OLD = "old";
 	public static final String NEW = "new";
 
-	public static final String APP_URL = "https://gmbt-qa.appspot.com";
+	public static final String APP_URL = "https://gbudget-dev.appspot.com/";
 	
 	// cell numbers edit projects
 	public static final String NUMBER_OF_HDN_COLS = "6";
@@ -139,6 +139,7 @@ public interface BudgetConstants {
 	public static final String DEC_FIELD = "23";
 	public static final String TOTAL_FIELD = "24";
 	public static final String REMARK_FIELD = "25";
+	public static final String PROJECT_NAME_SEARCH_FIELD = "29";
 
 	// cell numbers edit project multiple brand pop up
 	public static final String MB_CHECKBOX_CELL = "0";

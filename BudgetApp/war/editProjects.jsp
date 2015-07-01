@@ -1200,7 +1200,7 @@ String ccView="";
 				}
 			});
 			if(openPopUp == true){
-			window.open ("http://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
+			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
 			//alert("Project successfully created in Budget Tool. Please continue.");
@@ -1834,7 +1834,7 @@ String ccView="";
 	});
 	
 	function addMultiBrandPopUp(){
-		if(itemClicked[6].toString().toLowerCase().indexOf("smart wbs")!=-1){
+		if(!(itemClicked[37]) && itemClicked[35] != "NewProjects"){
 			m_data[0][1]=itemClicked[44];
 			m_data[0][3]=itemClicked[24];
 			m_data[0][2]=100.0;

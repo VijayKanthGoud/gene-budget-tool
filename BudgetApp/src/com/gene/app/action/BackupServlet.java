@@ -122,25 +122,7 @@ public class BackupServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	/*  String[] splits = req.getRequestURI().split("/", 4);
-    GcsFilename fileName = getFileName(splits);
-    if (SERVE_USING_BLOBSTORE_API) {
-      BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-      BlobKey blobKey = blobstoreService.createGsBlobKey(
-          "/gs/" + fileName.getBucketName() + "/" + fileName.getObjectName());
-      blobstoreService.serve(blobKey, resp);
-    } else {
-      GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(fileName, 0, BUFFER_SIZE);
-      InputStream is = Channels.newInputStream(readChannel);
-      String gtfRptString = getStringFromInputStream(is);
-      System.out.println("gtfRptString = "+gtfRptString);
-      Gson gson = new Gson();
-      List<GtfReport> gtfRptList = gson.fromJson(gtfRptString, new TypeToken<List<GtfReport>>(){}.getType());
-      System.out.println("gtfRptList = "+gtfRptList);
-      saveAllDataToDataStore(gtfRptList);
-      copy(Channels.newInputStream(readChannel), resp.getOutputStream());
-    }*/
-	  doPost(req, resp);
+		  doPost(req, resp);
   }
   public void removeExistingProject() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();

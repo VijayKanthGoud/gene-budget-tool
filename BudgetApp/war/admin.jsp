@@ -132,9 +132,29 @@ ng\:form {
  --%><script>
  
 	function uploadData(){
-		//console.log(JSON.stringify(excelValue.sheets["Main"].data));
+	
+		if($('#sheet_name') == 'undefined' || $('#sheet_name').val() == ''){
+			alert("No sheet selected. Please upload a file and select a sheet to upload.");
+			return;
+		}
+		
+		var fromLine = $('#From').val();
+		var toLine = $('#To').val();
+		if((fromLine == '') || (Math.floor(fromLine) != fromLine && !$.isNumeric(fromLine))){
+			alert("Please enter 'From Line number'.");
+			return;
+		}		
+		if((toLine == '') || (Math.floor(toLine) != toLine && !$.isNumeric(toLine))){
+			alert("Please enter 'To Line number'.");
+			return;
+		}		
+		if(parseInt(toLine) < parseInt(fromLine)){
+			alert("'To line' can not be less than 'From line'.");
+			return;
+		}
+		
 		$('#loadBtn').hide();
-		 $('#loadImg').removeAttr( "style" )
+		$('#loadImg').removeAttr( "style" );
 		if(selectedTab==1){
 			
 			  $.ajax({

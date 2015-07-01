@@ -568,6 +568,13 @@ function updateMemCache(e, args, tempKey) {
 						aSave[1] = d[<%=BudgetConstants.PO_NUMBER_FIELD%>];
 					}else if(fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%>){
 						d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
+						if(d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] != 'undefined' && d[<%=BudgetConstants.PROJECT_NAME_FIELD%>].trim() != ""){
+							aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
+						}else{
+							alert("Project name can not be blank!!!");
+							d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = d[<%=BudgetConstants.PROJECT_NAME_SEARCH_FIELD%>];
+							return;
+						}
 						aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
 					}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
 						if(d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().indexOf(".")!=-1){
@@ -1302,8 +1309,6 @@ function submitProjects(){
 				window.location.reload(true);
 			},
 			error: function(result) {
-				alert(result["responseText"].toString().indexOf("java.lang.Error:"));
-				//alert(result["responseText"].toString());
 				if(result["responseText"].toString().indexOf("<poError>:")!=-1){
 					alert("PO Number already exists !!!");
 				}
