@@ -1,9 +1,7 @@
 package com.gene.app.action;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -12,12 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gene.app.dao.PMF;
-import com.gene.app.dao.UserDataUtil;
 import com.gene.app.model.BudgetSummary;
 import com.gene.app.model.CostCenter_Brand;
 import com.gene.app.model.GtfReport;
+import com.gene.app.model.QuarterCutoffDates;
 import com.gene.app.model.UserRoleInfo;
-import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
@@ -41,6 +38,10 @@ public class DeleteTableServlet extends HttpServlet {
 			break;
 		case "costcenterbrand":
 			q = pm.newQuery(CostCenter_Brand.class);
+			listToBeDeleted = (List) q.execute();
+			break;
+		case "quartercutoffdates":
+			q = pm.newQuery(QuarterCutoffDates.class);
 			listToBeDeleted = (List) q.execute();
 			break;
 		case "userroleinfo":

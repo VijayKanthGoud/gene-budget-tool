@@ -13,6 +13,7 @@
     <option value="gtfreport">GTFReport</option>
     <option value="costcenterbrand">CostCenter_Brand</option>
     <option value="userroleinfo">UserRoleInfo</option>
+    <option value="quartercutoffdates">QuarterCutoffDates</option>
   </select>
   <input type="submit" value="Delete">
 </form>
