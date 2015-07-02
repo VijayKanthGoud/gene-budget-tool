@@ -27,7 +27,7 @@
 	$(function() {
 		$('#homeLink').click(function() {
 			if(typeof popUpWindow === 'undefined'){
-				openUrl('https://memori-dev.appspot.com');
+				openUrl('https://memori-qa.appspot.com');
 	    	}else{
 	    		var userAccepted = confirm("gMemori app is already opened. Want to reload?");
 				if (!userAccepted) {
@@ -36,7 +36,7 @@
 					}
 			    	return;
 				}else{
-					openUrl('https://memori-dev.appspot.com');
+					openUrl('https://memori-qa.appspot.com');
 					if (window.focus) {
 						popUpWindow.focus()
 					}

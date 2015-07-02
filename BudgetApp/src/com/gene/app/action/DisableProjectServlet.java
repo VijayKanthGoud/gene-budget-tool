@@ -85,7 +85,7 @@ public class DisableProjectServlet extends HttpServlet {
 		Gson gson = new Gson();
 		String request = gson.toJson(prjParam);
 		URL url = new URL(
-				"https://memori-dev.appspot.com/web-service/project/deactivate");
+				"https://memori-qa.appspot.com/web-service/project/deactivate");
 		HttpURLConnection connection = (HttpURLConnection) url
 				.openConnection();
 		connection.setDoOutput(true);
