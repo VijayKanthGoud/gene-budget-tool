@@ -437,7 +437,13 @@ function updateMemCache(e, args, tempKey) {
 				aSave[0] = key;
 				aSave[1] = cellValue;
 			}
-			
+			for(var i=0;i<data.length;i++){
+				var d = data[i];
+				if(key== d[34] && !singleBrandToMulti && (fixedCell ==  <%=BudgetConstants.BRAND_CELL%>) && ((d[26]=="New" || d[26]=="Active") )){
+					d[<%=BudgetConstants.BRAND_SEARCH_FIELD%>] = args.item[<%=BudgetConstants.BRAND_FIELD%>];
+					d[<%=BudgetConstants.BRAND_DUPLICATE_FIELD%>] = args.item[<%=BudgetConstants.BRAND_FIELD%>]; 
+				}
+			}
 		}else{
 			for(var i=0;i<data.length;i++){
 				var d = data[i];
@@ -551,7 +557,7 @@ function updateMemCache(e, args, tempKey) {
 						d[24]= parseFloat(varTotal);
 					//}
 					iCnt++;
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> || fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.FORECAST%>" && ( fixedCell == <%=BudgetConstants.PROJECT_NAME_CELL%> || fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%> || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> /*|| fixedCell == <%=BudgetConstants.BRAND_CELL%>*/)){
 					var aSave = (aSaveData[iCnt] = {});
 					aSave[0] = d[27];
 					if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
@@ -607,6 +613,10 @@ function updateMemCache(e, args, tempKey) {
 				if(key== d[34] && d[11]=="<%=BudgetConstants.ACCRUAL%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
 					accrual_cur = d[itemCell];
 				}
+				if(key== d[34] && (fixedCell ==  <%=BudgetConstants.PROJECT_NAME_CELL%>) && ((d[26]=="New" || d[26]=="Active") )){
+					d[<%=BudgetConstants.PROJECT_NAME_SEARCH_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
+					d[<%=BudgetConstants.PROJECT_NAME_GID_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>] + " :: " + d[<%=BudgetConstants.PROJECT_NAME_GID_FIELD%>].split("::")[1]; 
+				}								
 				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
 					d[itemCell]= parseFloat(quarterly_tar_cur - accrual_cur);
 					varTotal = 0.0;
@@ -645,7 +655,7 @@ function updateMemCache(e, args, tempKey) {
 			$("#statusMessage");
 			summaryResult = result;
 			getSummaryValues();
-			if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>' || cellNum == '<%=BudgetConstants.CELL_GMEMORI_ID%>' || cellNum == '<%=BudgetConstants.CELL_BRAND%>' || cellNum == '<%=BudgetConstants.CELL_PNAME%>'){
+			if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>' /*|| cellNum == '<%=BudgetConstants.CELL_GMEMORI_ID%>'*/ || (cellNum == '<%=BudgetConstants.CELL_BRAND%>' && (singleBrandToMulti || multiBrandToSingle) /*|| cellNum == '<%=BudgetConstants.CELL_PNAME%>'*/)){
 				window.location.reload(true);
 			}
 		},

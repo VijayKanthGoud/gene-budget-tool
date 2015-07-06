@@ -140,6 +140,9 @@ public interface BudgetConstants {
 	public static final String TOTAL_FIELD = "24";
 	public static final String REMARK_FIELD = "25";
 	public static final String PROJECT_NAME_SEARCH_FIELD = "29";
+	public static final String PROJECT_NAME_GID_FIELD = "42";
+	public static final String BRAND_SEARCH_FIELD = "28";
+	public static final String BRAND_DUPLICATE_FIELD = "44";
 
 	// cell numbers edit project multiple brand pop up
 	public static final String MB_CHECKBOX_CELL = "0";

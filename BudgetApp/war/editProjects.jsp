@@ -441,6 +441,7 @@ String ccView="";
 		d[6] = "";
 		d[7] = "";
  	} 
+	var multiBrandToSingle = false;
 	var radioString = "All";
 	var totalSize = 0;
 	var numHideColumns = <%=BudgetConstants.NUMBER_OF_HDN_COLS%>;
@@ -1210,6 +1211,7 @@ String ccView="";
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
 				itemClicked = dataView.getItem(args.row);
+				console.log(itemClicked);
 				if(args.cell == <%=BudgetConstants.GMEMORI_ID_CELL%> &&
 						itemClicked[0].toString().trim != "" && itemClicked[11] == "<%=BudgetConstants.FORECAST%>" && itemClicked[26] != "Total" && 
 						itemClicked[2] != "" && itemClicked[0].toString().length==10){
@@ -1227,6 +1229,7 @@ String ccView="";
 							addMultiBrandPopUp();
 						}
 						else{
+							multiBrandToSingle = true;
 							itemClicked[37] = "";
 							itemClicked[36] = false;
 							return;
