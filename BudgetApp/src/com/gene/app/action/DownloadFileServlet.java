@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
@@ -18,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -221,7 +221,13 @@ public class DownloadFileServlet extends HttpServlet {
 			row.createCell(cellCount++).setCellValue(
 					gtfReport.getPercent_Allocation());
 			row.createCell(cellCount++).setCellValue(gtfReport.getPoNumber());
-			row.createCell(cellCount++).setCellValue(gtfReport.getPoDesc());
+			String poDesc = "";
+			if(Util.isNullOrEmpty(gtfReport.getgMemoryId()) && gtfReport.getgMemoryId().length()<10){
+				poDesc = gtfReport.getgMemoryId()+"_"+gtfReport.getProjectName();
+			}else{
+				poDesc = gtfReport.getProjectName();
+			}
+			row.createCell(cellCount++).setCellValue(poDesc);
 			row.createCell(cellCount++).setCellValue(gtfReport.getVendor());
 			if(gtfReport.getRequestor().contains(":")){
 				requestor = gtfReport.getRequestor().split(":")[0];
@@ -243,6 +249,7 @@ public class DownloadFileServlet extends HttpServlet {
 			}
 			row.createCell(cellCount++).setCellValue(total);
 			row.createCell(cellCount++).setCellValue(gtfReport.getUnits());
+			row.createCell(cellCount+2).setCellValue(StringEscapeUtils.unescapeHtml(gtfReport.getRemarks()));
 			cellCount = 0;
 		}
 		
@@ -272,9 +279,10 @@ public class DownloadFileServlet extends HttpServlet {
 		}
 		Cell cell = row1.createCell(24);
 		cell.setCellValue("Check");
-		
+		Cell cell1 = row1.createCell(25);
+		cell1.setCellValue("Check");
 		Row row2 = sheet.createRow(2);
-		for(int cnt = 0; cnt <= 24; cnt++){
+		for(int cnt = 0; cnt <= 25; cnt++){
 			Cell cellR1 = row2.createCell(cnt);
 			if(cnt == 0){
 				cellR1.setCellValue("Project WBS");
@@ -300,6 +308,8 @@ public class DownloadFileServlet extends HttpServlet {
 				cellR1.setCellValue("PO Total");
 			}else if(cnt == 24){
 				cellR1.setCellValue("Variance");
+			}else if(cnt == 25){
+				cellR1.setCellValue("Remarks");
 			}
 		}
 		int count = 9;

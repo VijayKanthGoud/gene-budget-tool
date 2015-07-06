@@ -1764,7 +1764,7 @@ String ccView="";
 							}
 							else if(!isNaN(m_data[count]["3"] / sum * 100)){
 								m_data[count]["2"] = (m_data[count]["3"] / sum * 100)
-									.toFixed(2);
+									.toFixed(4);
 							}else{
 								m_data[count]["2"] = "0";
 							}

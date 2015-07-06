@@ -253,7 +253,7 @@ function sumTotalsFormatter(totals, columnDef) {
 					.toLowerCase()
 					) {
 		return "<span style='color:rgb(168, 39, 241)'>" 
-				+ ((Math.round(parseFloat(val) * 100) / 100)).toFixed(2)
+				+ ((Math.round(parseFloat(val) * 100) / 100)).toFixed(4)
 				+ "</span> ";
 	}
 	return "";
@@ -542,7 +542,7 @@ function updateMemCache(e, args, tempKey) {
 					/*if(item[11]=='Accrual'){
 						d[itemCell]=parseFloat(cellValue).toFixed(2);
 					}*/
-					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(4);
 					//aSave[2] = d["47"];
 					d[itemCell]=aSave[1];
 					// Commented to remove restriction of calculating total for multibrand.
