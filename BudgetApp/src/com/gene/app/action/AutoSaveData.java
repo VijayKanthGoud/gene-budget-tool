@@ -61,6 +61,9 @@ public class AutoSaveData extends HttpServlet {
 		double oldPlannedValue = 0.0;
 		double newPlannedValue = 0.0;
 		double plannedTotal = 0.0;
+		double accrualTotal = 0.0;
+		double varianceTotal = 0.0;
+		double benchMarkTotal = 0.0;
 		double oldAccrualValue = 0.0;
 
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
@@ -79,7 +82,7 @@ public class AutoSaveData extends HttpServlet {
 
 		Map<String, BudgetSummary> budgetMap = summary.getBudgetMap();
 		BudgetSummary summaryObj = new BudgetSummary();
-
+		BudgetSummary newSummaryObj = new BudgetSummary();
 		JSONArray jsonArray = null;
 		JSONObject rprtArray = null;
 
@@ -163,6 +166,26 @@ public class AutoSaveData extends HttpServlet {
 								gtfReportObj.setVendor(strValue);
 								break;
 							case BudgetConstants.CELL_BRAND:
+								summaryObj = budgetMap.get(gtfReportObj.getBrand());
+								newSummaryObj = budgetMap.get(strValue);
+								for(int i=0;i<BudgetConstants.months.length;i++){
+								plannedTotal = plannedTotal+gtfReportObj.getPlannedMap().get(BudgetConstants.months[i]);
+								benchMarkTotal = benchMarkTotal+gtfReportObj.getPlannedMap().get(BudgetConstants.months[i]);
+								varianceTotal = varianceTotal+gtfReportObj.getPlannedMap().get(BudgetConstants.months[i]);
+								accrualTotal = accrualTotal+gtfReportObj.getPlannedMap().get(BudgetConstants.months[i]);
+								}
+								newSummaryObj.setPlannedTotal(newSummaryObj.getPlannedTotal()+plannedTotal);
+								newSummaryObj.setBenchmarkTotal(newSummaryObj.getBenchmarkTotal()+benchMarkTotal);
+								newSummaryObj.setVarianceTotal(newSummaryObj.getVarianceTotal()+varianceTotal);
+								newSummaryObj.setAccrualTotal(newSummaryObj.getAccrualTotal()+accrualTotal);
+								summaryObj.setPlannedTotal(summaryObj.getPlannedTotal()-plannedTotal);
+								summaryObj.setBenchmarkTotal(summaryObj.getBenchmarkTotal()-benchMarkTotal);
+								summaryObj.setVarianceTotal(summaryObj.getVarianceTotal()-varianceTotal);
+								summaryObj.setAccrualTotal(summaryObj.getAccrualTotal()-accrualTotal);
+								budgetMap.put(gtfReportObj.getBrand(), summaryObj);
+								budgetMap.put(strValue, newSummaryObj);
+								summary.setBudgetMap(budgetMap);
+								util.putSummaryToCache(summary, costCenter);
 								if (gtfReportObj.getMultiBrand()) {
 									gtfReportMap = deleteChildProjects(
 											gtfReportObj, gtfReportMap);
