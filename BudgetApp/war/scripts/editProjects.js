@@ -1680,6 +1680,11 @@ function deleteCurrentProject(delBtnClicked){
 	var projStatus = delBtnClicked.value.split('~')[3];
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
 		console.log("Not an admin...");
+		if(projectOwner != '<%=userInfo.getUserName()%>'){
+			console.log("ProjectOwner : " + projectOwner + ". Logged in user :" + '<%=userInfo.getUserName()%>');
+			alert("You are not authorized to delete the project.");
+			return;
+		}
 		if(projStatus != "<%=BudgetConstants.status_New%>" ){
 			alert("PO exists and the project cannot be deleted.");
 			return;

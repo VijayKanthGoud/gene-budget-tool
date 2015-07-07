@@ -79,7 +79,7 @@ public interface BudgetConstants {
 	public static final String OLD = "old";
 	public static final String NEW = "new";
 
-	public static final String APP_URL = "https://gmbt-qa.appspot.com/";
+	public static final String APP_URL = "https://gbudget-dev.appspot.com/";
 	
 	// cell numbers edit projects
 	public static final String NUMBER_OF_HDN_COLS = "6";
@@ -175,7 +175,7 @@ public interface BudgetConstants {
 	public static final String FORECAST_LTS = "Quarterly LTS";
 	public static final String QUARTERLY_TARGET = "Quarterly Target"; 
 	public static final String QUARTERLY_LTS = "Quarterly LTS";
-	public static final String BUCKET_NAME = "budget-mgmt-tool-bucket";
+	public static final String BUCKET_NAME = "gmbt-qa";
 	public static final int TIME_OUT_PERIOD = 20000;
 	
 
