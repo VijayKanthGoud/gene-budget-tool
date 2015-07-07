@@ -460,7 +460,16 @@ String ccView="";
 	var lastKeyPressed;
 	
 	function specialCharValidator(value) {
-		  if ((!/[^a-zA-Z0-9 .]/.test(value))) {
+		  if ((!/[^a-zA-Z0-9 .-_]/.test(value))) {
+			  return {valid: true, msg: null};
+		  }
+		  else {
+			  return {valid: false, msg: "Please enter valid characters."};
+		  }
+	}
+	
+	function projectWBSValidator(value) {
+		  if ((!/[^a-zA-Z0-9.]/.test(value))) {
 			  return {valid: true, msg: null};
 		  }
 		  else {
@@ -476,7 +485,7 @@ String ccView="";
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
 		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
-		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
+		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: projectWBSValidator},
 		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
 		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text},
 		{ id : 10, name : columnNames[9], field : <%=BudgetConstants.PO_NUMBER_FIELD%>, width : 90, editor : Slick.Editors.PONumberText, formatter : Slick.Formatters.poField},
