@@ -252,13 +252,13 @@ public class MultiBrandServlet extends HttpServlet {
 						newChildGtfReport.setPoDesc(gtfRpt.getPoDesc());
 						newChildGtfReport.setPoNumber(gtfRpt.getPoNumber());
 						newChildGtfReport.setProject_WBS(gtfRpt.getProject_WBS());
-						String remarks = gtfRpt.getRemarks();
+						/*String remarks = gtfRpt.getRemarks();
 						if (remarks.contains("\"")) {
 							remarks = remarks.replace("\\", "\\\\")
 									.replace("\"", "\\\"")
 									.replace("\'", "\\\'");
-						}
-						newChildGtfReport.setRemarks(remarks);
+						}*/
+						newChildGtfReport.setRemarks("");
 						newChildGtfReport.setStatus(gtfRpt.getStatus());
 						newChildGtfReport.setSubActivity(gtfRpt.getSubActivity());
 						newChildGtfReport.setVendor(gtfRpt.getVendor());

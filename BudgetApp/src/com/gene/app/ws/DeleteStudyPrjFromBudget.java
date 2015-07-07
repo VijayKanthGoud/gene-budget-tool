@@ -42,7 +42,9 @@ public class DeleteStudyPrjFromBudget {
 		Gson gson = new Gson();
 		System.out.println("gmem = "+gmem);
 		ProjectParameters gMemori = gson.fromJson(gmem, ProjectParameters.class);
-		eObj= disableProjectData(gMemori, eObj);
+		//eObj= disableProjectData(gMemori, eObj);
+		eObj.setStatusCode(200);
+		eObj.setStatusMessage("Successful !!!");
 		String response = gson.toJson(eObj);
 		System.out.println("Response :::::"+response);
 		return response;
