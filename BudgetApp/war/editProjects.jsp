@@ -1035,7 +1035,7 @@ String ccView="";
 								}
 								calculatedPlannedTotal= parseFloat(calculatedPlannedTotal) + parseFloat(item[j]);
 							}
-							if(calculatedPlannedTotal > actualPlannedTotal){
+							/* if(calculatedPlannedTotal > actualPlannedTotal){
 								columnValiation=true;
 								alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");	
 								item[itemCell]=args.item[45][itemCell-12];
@@ -1043,7 +1043,7 @@ String ccView="";
 								return;
 							}else if(calculatedPlannedTotal < actualPlannedTotal){
 								alert("Sum of the entered budget of months is less than Total specified for Multi brand project !!!");	
-							}
+							} */
 							
 						}
 						<%-- if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){ 
