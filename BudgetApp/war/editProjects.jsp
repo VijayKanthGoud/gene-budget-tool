@@ -211,7 +211,7 @@ String ccView="";
 								<input type=text style="float: left; width: 150px;"
 								id="txtSearch"> <img src="images/search.png" height="20"
 								width="20" align="bottom" style="float: left;"
-								title="Search in Project name, gMemori Id, Brand and Remarks.">
+								title="Search in Project Name, gMemori Id, Brand and Comments.">
 							</td>
 						</tr>
 
@@ -458,6 +458,16 @@ String ccView="";
 	var frmStudy=false;
 	var columnValiation=false;
 	var lastKeyPressed;
+	
+	function specialCharValidator(value) {
+		  if ((!/[^a-zA-Z0-9 ]/.test(value))) {
+			  return {valid: true, msg: null};
+		  }
+		  else {
+			  return {valid: false, msg: "Please enter valid characters."};
+		  }
+	}
+	
 	// Columns displayed when hide columns is unchecked
 	var columns = [ 
 		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
@@ -466,11 +476,11 @@ String ccView="";
 		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
 		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
-		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
-		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
+		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
+		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
 		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text},
 		{ id : 10, name : columnNames[9], field : <%=BudgetConstants.PO_NUMBER_FIELD%>, width : 90, editor : Slick.Editors.PONumberText, formatter : Slick.Formatters.poField},
-		{ id : 11, name : columnNames[10], field : <%=BudgetConstants.VENDOR_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
+		{ id : 11, name : columnNames[10], field : <%=BudgetConstants.VENDOR_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
 		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.UNIT_FIELD%>, width : 90, editor : Slick.Editors.Integer, formatter : Slick.Formatters.editableField},
 		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
 		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
