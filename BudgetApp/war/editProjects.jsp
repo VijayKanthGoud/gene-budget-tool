@@ -460,7 +460,7 @@ String ccView="";
 	var lastKeyPressed;
 	
 	function specialCharValidator(value) {
-		  if ((!/[^a-zA-Z0-9 ]/.test(value))) {
+		  if ((!/[^a-zA-Z0-9 .]/.test(value))) {
 			  return {valid: true, msg: null};
 		  }
 		  else {
