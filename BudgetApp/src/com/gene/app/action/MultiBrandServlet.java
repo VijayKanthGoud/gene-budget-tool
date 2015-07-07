@@ -127,7 +127,7 @@ public class MultiBrandServlet extends HttpServlet {
 					paretnGtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
 					plannedMap = gtfRpt.getPlannedMap();
 					plannedMap.put(BudgetConstants.total,
-							roundDoubleValue(Double.parseDouble(sumTotal), 2));
+							roundDoubleValue(Double.parseDouble(sumTotal), 5));
 					parentPlannedMap = new LinkedHashMap<String, Double>(
 							plannedMap);
 					paretnGtfReport.setPlannedMap(parentPlannedMap);
@@ -214,7 +214,7 @@ public class MultiBrandServlet extends HttpServlet {
 								value = roundDoubleValue(
 										parentPlannedMap.get(BudgetConstants.months[cnt])
 												* percentageAllocation / 100,
-										2);
+										5);
 								plannedMap.put(BudgetConstants.months[cnt],
 										value);
 							} catch (Exception e) {
@@ -281,7 +281,7 @@ public class MultiBrandServlet extends HttpServlet {
 								value = roundDoubleValue(
 										parentPlannedMap.get(BudgetConstants.months[cnt])
 												* percentageAllocation / 100,
-										2);
+										5);
 								plannedMap.put(BudgetConstants.months[cnt],
 										value);
 							} catch (NumberFormatException e) {
