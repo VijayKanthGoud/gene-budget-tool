@@ -331,26 +331,27 @@ String ccView="";
 						</tr>
 						<tr>
 							<td><span  title="Current Overall Budget">Budget:</span></td>
-							<td style="text-align: right;"><span id="totalBudget"  > <%=Util.roundDoubleValue(budgetSummary.getTotalBudget(),4)%></span></td>
+							<td style="text-align: right;"><span id="totalBudget"  > <%=new DecimalFormat("0.0000").format(Util.roundDoubleValue(budgetSummary.getTotalBudget(),4))%></span></td>
 						</tr>
 
 						<tr>
 							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
-							<td style="text-align: right;"><span id="plannedTotal"  ><%=Util.roundDoubleValue(budgetSummary.getPlannedTotal(),4)%></span></td>
+							<td style="text-align: right;"><span id="plannedTotal"  ><%=new DecimalFormat("0.0000").format(Util.roundDoubleValue(budgetSummary.getPlannedTotal(),4))%></span></td>
 						</tr>
 						<tr>
 							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
-							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Util.roundDoubleValue((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal()),4) %></span></td>
+							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=new DecimalFormat("0.0000").format(Util.roundDoubleValue((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal()),4)) %></span></td>
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
 							<td><span title = "Total Dollars Spent" >Total Accrual:</td>
-							<td style="text-align: right;"><span id="accrualTotal"><%=Util.roundDoubleValue(budgetSummary.getAccrualTotal(),4)%></span></td>
+							
+							<td style="text-align: right;"><span id="accrualTotal"><%=new DecimalFormat("0.0000").format(Util.roundDoubleValue(budgetSummary.getAccrualTotal(),4))%></span></td>
 						</tr>
 						<tr>
 							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=Util.roundDoubleValue(budgetSummary.getBudgetLeftToSpend(), 4)%></span></span>
+									id="varianceTotal"><%=new DecimalFormat("#.0000").format(Util.roundDoubleValue(budgetSummary.getBudgetLeftToSpend(), 4))%></span></span>
 							</td>
 						</tr>
 					</table>
@@ -557,7 +558,6 @@ String ccView="";
 	
 	
 	$(function() {
-		
 		
 		if($(window).width() < 900){
 			$('#cautionWindow').show().fadeIn(100);
