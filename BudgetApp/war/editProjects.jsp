@@ -99,9 +99,9 @@ String ccView="";
 							</select></td>
 						</tr>
 						<tr>
-							<%
+							<%-- <%
 								if(!userInfo.getRole().contains("Admin")) {
-							%><td><span
+							%> --%><td><span
 								style="font-size: 14px; font-weight: bold;  color: #105596;">Select
 									Cost Center :</span></td>
 							<td><select id="getCostCenter" name="ccValue"
@@ -126,10 +126,10 @@ String ccView="";
 										} } }
 									%>
 							</select></td>
-							<%
+							<%-- <%
 								} else{
-							%>
-							<td><span
+							%> --%>
+							<%-- <td><span
 								style="font-size: 14px; font-weight: bold; color: #105596;">Select
 									Cost Center : </span></td>
 							<td><select id="getCostCenter" name="ccValue"
@@ -155,10 +155,11 @@ String ccView="";
 									<%
 										} } }
 									%>
-							</select> <%
- 	}String selectedView = (String)request.getAttribute("selectedView");
+							</select> --%> <%
+ 	//}
+				String selectedView = (String)request.getAttribute("selectedView");
  				String selectedBrand = (String)request.getAttribute("brandValue");
- %></td>
+ %><!-- </td> -->
 						</tr>
 						<tr id="dropdown">
 							<td><span
@@ -1375,12 +1376,12 @@ String ccView="";
 			if((args.item["27"].toString().indexOf(".") != -1 && args.item["37"] == true && args.item["11"] == "<%=BudgetConstants.ACCRUAL%>") ){
 				args.item[50]=args.item[fixedCell];
 			}
-			if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin"){
+			/* if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin" ){
 				return false;
-			} 
-			if((role!='Admin') && (args.item["26"]=="Active" || args.item["26"]=="New") && 
-					(args.item["11"] == "<%=BudgetConstants.ACCRUAL%>" || args.item["11"] == "<%=BudgetConstants.FORECAST%>") && 
-					(args.item["48"]!=null && args.item["48"]!='' && args.item["48"] != userName)){
+			} */ 
+			if( /* (role!='Admin') &&  */ (args.item["26"]=="Active" || args.item["26"]=="New") && 
+					(args.item["11"] == "<%=BudgetConstants.ACCRUAL%>" <%-- || args.item["11"] == "<%=BudgetConstants.FORECAST%>" --%>) && 
+					(args.item["48"]!=null && args.item["48"]!=''/*   && args.item["48"] != userName*/ ) ){
 				alert("You are not authorised to edit this project !!!");
 				return false;
 			}
@@ -1703,12 +1704,12 @@ String ccView="";
 			if((m_data[row]["7"] .toString().trim() == "" || m_data[row]["1"] .toString().trim() == "") && cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>){
 				return false;
 			}
-			if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
+			<%-- if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
 				return false ;
-			}
-			if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
+			} --%>
+			<%-- if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
 				return false ;
-			}
+			} --%>
 			if ((args.item[0].toString().trim() != "" && itemClicked[26] == "Active")
 					|| (itemClicked[26] == "Closed")) {
 				return false;
