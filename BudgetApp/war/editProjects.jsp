@@ -314,8 +314,13 @@ String ccView="";
 									            					brandValue = "Avastin";
 									            				} 
 									                            budgetSummary = budgetMap.get(brandValue);
+									                            
+									                            LOGGER.log(Level.INFO, "budgetSummary"+brandValue);
 									                            if(budgetMap!=null && !budgetMap.isEmpty()){
 									                            	Object[] budgets = budgetMap.keySet().toArray();
+									                            	if(budgetSummary == null){
+										                            	budgetSummary = budgetMap.get(budgets[0]);
+										                            }
 									                            for(int i=0;i<budgets.length;i++){ 
 									                            option = budgets[i].toString();
 									                            if(brandValue.equals(option)){
@@ -955,7 +960,8 @@ String ccView="";
 			}
 			
 			$("#txtSearch").val(searchString);
-			window.history.pushState(null, "", "<%=BudgetConstants.APP_URL%>");
+			var url_string = window.location.href.split("?")[0];
+			window.history.pushState(null, "", url_string);
 			map = {};
 			dataView.refresh();
 			if(!isMatchPresent){

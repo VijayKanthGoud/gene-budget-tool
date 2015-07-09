@@ -78,13 +78,16 @@
 			UserRoleInfo userInfo = util.readUserRoleInfo(email);
 			userRole = "";
 			if(userInfo!=null){
-				session.setAttribute("userInfo", userInfo);
 				if(email.equalsIgnoreCase(userInfo.getEmail())){
 					isGeneUser = true;
 					userRole = userInfo.getRole();
+					session.setAttribute("userInfo", userInfo);
 					LOGGER.log(Level.INFO, "Logged in user role : "+userRole);
 				}
-			}
+			}else{
+                response.sendRedirect("/unautherizedUser.jsp");
+                return;
+        }
 	%>
 				
 			<%
@@ -92,7 +95,7 @@
 				userName = "Welcome,   " + user.getNickname() +" !";
 			} else{%>
 				alert("You are not authorized to access the application!");
-			<%	response.sendRedirect(userService.createLogoutURL(requestUri));
+			<%	response.sendRedirect("/unautherizedUser.jsp");
 			} 
 			%>
 

@@ -64,7 +64,7 @@ public class GetReport extends HttpServlet {
 		email = userService.getCurrentUser().getEmail();
 		user = util.readUserRoleInfo(email);
 		if(user == null || user.getUserName() == null){
-			resp.sendRedirect(loginLink);
+			resp.sendRedirect("/unautherizedUser.jsp"); 
 			return;
 		}
 		//LOGGER.log(Level.INFO, "email in userService"+email);

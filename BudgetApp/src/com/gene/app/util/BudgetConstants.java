@@ -79,8 +79,6 @@ public interface BudgetConstants {
 	public static final String OLD = "old";
 	public static final String NEW = "new";
 
-	public static final String APP_URL = "https://gmbt-qa.appspot.com/";
-	
 	// cell numbers edit projects
 	public static final String NUMBER_OF_HDN_COLS = "6";
 
