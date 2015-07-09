@@ -174,6 +174,11 @@ public class AutoSaveData extends HttpServlet {
 								varianceTotal = varianceTotal+gtfReportObj.getPlannedMap().get(BudgetConstants.months[i]);
 								accrualTotal = accrualTotal+gtfReportObj.getPlannedMap().get(BudgetConstants.months[i]);
 								}
+								if(summaryObj == null){
+									summaryObj = new BudgetSummary();
+								}if(newSummaryObj == null){
+									newSummaryObj = new BudgetSummary();
+								}
 								newSummaryObj.setPlannedTotal(newSummaryObj.getPlannedTotal()+plannedTotal);
 								newSummaryObj.setBenchmarkTotal(newSummaryObj.getBenchmarkTotal()+benchMarkTotal);
 								newSummaryObj.setVarianceTotal(newSummaryObj.getVarianceTotal()+varianceTotal);
