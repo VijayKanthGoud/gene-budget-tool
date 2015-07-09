@@ -1055,13 +1055,13 @@ String ccView="";
 								}
 								calculatedPlannedTotal= parseFloat(calculatedPlannedTotal) + parseFloat(item[j]);
 							}
-							/* if(calculatedPlannedTotal > actualPlannedTotal){
+							 if(calculatedPlannedTotal > actualPlannedTotal){
 								columnValiation=true;
 								alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");	
 								item[itemCell]=args.item[45][itemCell-12];
 								grid.invalidate();
 								return;
-							}else if(calculatedPlannedTotal < actualPlannedTotal){
+							}/*else if(calculatedPlannedTotal < actualPlannedTotal){
 								alert("Sum of the entered budget of months is less than Total specified for Multi brand project !!!");	
 							} */
 							
