@@ -49,7 +49,7 @@
 	<div style="background-color: #EAF4FD;width: 100%;height: 75%;font-size: 20px;
   font-family: arial;">
   <br/>
-		You are not Authorized to Access this Application.<br>
+		You are not authorized to access this application.<br>
 		<a href="<%= url%>">Click here</a> to logout and login as another user.
 	</div>
 	<%@ include file="footer.jsp"%>
