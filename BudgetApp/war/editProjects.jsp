@@ -111,6 +111,7 @@ String ccView="";
 									<%
 										String ccSelected = (String)request.getAttribute("getCCValue");
 													String[] costcenter1= userInfo.getCostCenter().split(":");
+													Arrays.sort(costcenter1);
 													String costc;
 												   	if(costcenter1!=null){
 														for(int k=0;k<costcenter1.length;k++){
@@ -1227,7 +1228,7 @@ String ccView="";
 				}
 			});
 			if(openPopUp == true){
-			window.open ("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
+			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
 			//alert("Project successfully created in Budget Tool. Please continue.");
