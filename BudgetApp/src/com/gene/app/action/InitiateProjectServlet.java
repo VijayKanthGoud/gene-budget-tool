@@ -175,6 +175,7 @@ public class InitiateProjectServlet extends HttpServlet{
 						e.printStackTrace();
 					}
 					gtfRpt.setgMemoryId(newGMemId);
+					gtfRpt.setDummyGMemoriId(false);
 					oldChildList = gtfRpt.getChildProjectList();
 					newChildList = new ArrayList<String>();
 					if(oldChildList != null && !oldChildList.isEmpty()){
@@ -198,7 +199,7 @@ public class InitiateProjectServlet extends HttpServlet{
 			}
 			System.out.println("gtfRptMap in update"+gtfRptMap);
 			System.out.println("gtfRptList in update"+gtfRptList.get(0).getgMemoryId());
-			util.removeExistingProject(oldgtfRptList);
+			//util.removeExistingProject(oldgtfRptList);
 			util.storeProjectsToCache(oldgtfRptList,costCenter, BudgetConstants.OLD);
 			util.storeProjectsToCache(gtfRptList,costCenter, BudgetConstants.NEW);
 			util.generateProjectIdUsingJDOTxn(gtfRptList);
