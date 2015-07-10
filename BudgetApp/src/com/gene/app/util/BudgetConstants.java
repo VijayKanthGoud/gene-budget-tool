@@ -173,7 +173,7 @@ public interface BudgetConstants {
 	public static final String FORECAST_LTS = "Quarterly LTS";
 	public static final String QUARTERLY_TARGET = "Quarterly Target"; 
 	public static final String QUARTERLY_LTS = "Quarterly LTS";
-	public static final String BUCKET_NAME = "gmbt-qa";
+	public static final String BUCKET_NAME = "gmbt-qa-sp2b01-bucket";
 	public static final int TIME_OUT_PERIOD = 20000;
 	
 
