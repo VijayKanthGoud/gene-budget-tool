@@ -468,7 +468,7 @@ String ccView="";
 	var lastKeyPressed;
 	
 	function specialCharValidator(value) {
-		  if ((!/[^a-zA-Z0-9 .-_]/.test(value))) {
+		  if ((!/[^a-zA-Z0-9. -]/.test(value))) {
 			  return {valid: true, msg: null};
 		  }
 		  else {
@@ -1228,7 +1228,7 @@ String ccView="";
 				}
 			});
 			if(openPopUp == true){
-			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
+			window.open ("https://memori-qa.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
 			//alert("Project successfully created in Budget Tool. Please continue.");
