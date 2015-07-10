@@ -235,15 +235,9 @@ public class DownloadFileServlet extends HttpServlet {
 				requestor = gtfReport.getRequestor();
 			}
 			row.createCell(cellCount++).setCellValue(util.readUserRoleInfoByName(requestor).getFullName());
-			Map<String, Double> map = gtfReport.getAccrualsMap();
+			Map<String, Double> map = gtfReport.getPlannedMap();
 			double total = 0.0;
-			//boolean hasEntered=false;
-			//int currMonth = Calendar.getInstance().get(Calendar.MONTH);
 			for(int count = 0; count < map.size() - 1; count++){
-				//if(!hasEntered && currMonth<count){
-					//map = gtfReport.getPlannedMap();
-					//hasEntered=true;
-				//}
 				row.createCell(cellCount++).setCellValue(map.get(BudgetConstants.months[count]));
 				total += map.get(BudgetConstants.months[count]);
 			}
