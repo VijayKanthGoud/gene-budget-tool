@@ -633,6 +633,28 @@ function updateMemCache(e, args, tempKey) {
 		}
 		
 	if(singleBrandToMulti!=true){
+		if(item[37] == true && item[11]=="<%=BudgetConstants.FORECAST%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
+			var mTotal =0.0;
+			var iTotal =0.0;
+			for(var j=0;j<aSaveData.length;j++){
+				var mSave = aSaveData[j];
+				if(mSave[0].toString().indexOf(".") == -1){
+					mTotal = parseFloat(mSave[1]).toFixed(2);
+				}else if(j < aSaveData.length-1){
+					iTotal= (parseFloat(iTotal)+ parseFloat(mSave[1])).toFixed(2);
+				}else if(j==aSaveData.length-1){
+					mSave[1] = (parseFloat(mTotal) - parseFloat(iTotal)).toFixed(2);
+					for(var i=0;i<data.length;i++){
+						var d = data[i];
+						if(d[27] == mSave[0]){
+							d[itemCell] = mSave[1];
+						}
+					}
+				}
+
+			}
+		}
+	//	console.log(JSON.stringify(aSaveData));
 		$('#statusMessage').text("Saving data...").fadeIn(200);
 	$.ajax({
 		url : '/AutoSaveData',

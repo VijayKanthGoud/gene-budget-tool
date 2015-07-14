@@ -1799,16 +1799,16 @@ String ccView="";
 							}
 							else if(!isNaN(m_data[count]["3"] / sum * 100)){
 								if(count < numOfBrands-1){
-								m_data[count]["2"] = parseInt((m_data[count]["3"] / sum * 100))
+								m_data[count]["2"] = parseFloat((m_data[count]["3"] / sum * 100)).toFixed(2);
 																	;
 								}else{
 									for(var count = 0;count < numOfBrands-1; count++){
 										if(( m_data[count]["3"] != "" )
 												&&   m_data[count]["3"] != "undefined"){
-											percentSum = parseInt(percentSum) + parseInt(m_data[count]["2"]);
+											percentSum = parseFloat(percentSum) + parseFloat(m_data[count]["2"]);
 										}
 									}
-									m_data[count]["2"] = (100 - parseInt(percentSum));
+									m_data[count]["2"] = (100 - parseFloat(percentSum)).toFixed(2);
 								}
 							}else{
 								m_data[count]["2"] = "0";
