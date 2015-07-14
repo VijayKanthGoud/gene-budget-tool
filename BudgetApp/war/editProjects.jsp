@@ -315,8 +315,6 @@ String ccView="";
 									            					brandValue = "Avastin";
 									            				} 
 									                            budgetSummary = budgetMap.get(brandValue);
-									                            
-									                            LOGGER.log(Level.INFO, "budgetSummary"+brandValue);
 									                            if(budgetMap!=null && !budgetMap.isEmpty()){
 									                            	Object[] budgets = budgetMap.keySet().toArray();
 									                            	if(budgetSummary == null){
@@ -338,27 +336,26 @@ String ccView="";
 						</tr>
 						<tr>
 							<td><span  title="Current Overall Budget">Budget:</span></td>
-							<td style="text-align: right;"><span id="totalBudget"  > <%=new DecimalFormat("0.0000").format(Util.roundDoubleValue(budgetSummary.getTotalBudget(),4))%></span></td>
+							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
 						</tr>
 
 						<tr>
 							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
-							<td style="text-align: right;"><span id="plannedTotal"  ><%=new DecimalFormat("0.0000").format(Util.roundDoubleValue(budgetSummary.getPlannedTotal(),4))%></span></td>
+							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
 							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
-							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=new DecimalFormat("0.0000").format(Util.roundDoubleValue((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal()),4)) %></span></td>
+							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
 							<td><span title = "Total Dollars Spent" >Total Accrual:</td>
-							
-							<td style="text-align: right;"><span id="accrualTotal"><%=new DecimalFormat("0.0000").format(Util.roundDoubleValue(budgetSummary.getAccrualTotal(),4))%></span></td>
+							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
 						</tr>
 						<tr>
 							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=new DecimalFormat("#.0000").format(Util.roundDoubleValue(budgetSummary.getBudgetLeftToSpend(), 4))%></span></span>
+									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></span>
 							</td>
 						</tr>
 					</table>
@@ -375,7 +372,7 @@ String ccView="";
 			align=center>Multi-brand</div>
 		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
 		<div align='center'>
-		<button id="addRow" class="myButton1" value="" onclick="addNewRow();" onmouseover="showMessage();" onmouseout="hideMessage();"
+		<button id="addRow" class="myButton1" value="" onclick="addNewRow();"
 				style="height: 20px;  letter-spacing: 1px;">
 				+</button>
 			<button id="deleteSel" class="myButton" value="" onclick="deleteSelectedProjects();"
@@ -688,24 +685,24 @@ String ccView="";
     				d[10]="<%=gReport.getVendor()%>";
     				d[49]="<%=gReport.getUnits()%>";
     				d[11]="<%=BudgetConstants.FORECAST%>";
-    				d[12]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
-    				d[13]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
-    				d[14]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
-    				d[15]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
-    				d[16]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
-    				d[17]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
-    				d[18]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
-    				d[19]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
-    				d[20]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
-    				d[21]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
-    				d[22]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
-    				d[23]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
+    				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
+    				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
+    				d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
+    				d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
+    				d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
+    				d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
+    				d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
+    				d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
+    				d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
+    				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
+    				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
     				d[41]="<%=gReport.getPercent_Allocation()%>";
     				d[51]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				<%-- if(<%=gReport.getMultiBrand()%> == true){
     					d[24]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				}else{ --%>
-    					d[24]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
+    					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
 						gtfReports.get(i).getPlannedMap().get("FEB") + 
 						gtfReports.get(i).getPlannedMap().get("MAR") + 
 						gtfReports.get(i).getPlannedMap().get("APR") + 
@@ -727,19 +724,19 @@ String ccView="";
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if((d[26] == "New" && (gmemoriID.indexOf(".") == -1)) || (d[26] !="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") ))){ 
    				d[11]="<%=BudgetConstants.QUARTERLY_TARGET%>";
-				d[12]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
-				d[13]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
-				d[14]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
-				d[15]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
-				d[16]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
-				d[17]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
-				d[18]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
-				d[19]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
-				d[20]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
-				d[21]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
-				d[22]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
-				d[23]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
-				d[24]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
+				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
+				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
+				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
+				d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
+				d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
+				d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
+				d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
+				d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
+				d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
+				d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
+				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
+				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+				d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
 						gtfReports.get(i).getBenchmarkMap().get("FEB") + 
     					gtfReports.get(i).getBenchmarkMap().get("MAR") + 
     					gtfReports.get(i).getBenchmarkMap().get("APR") + 
@@ -762,19 +759,19 @@ String ccView="";
 				d[11]="<%=BudgetConstants.ACCRUAL%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
-					d[12]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
-					d[13]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
-					d[14]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
-					d[15]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
-					d[16]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
-					d[17]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
-					d[18]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
-					d[19]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
-					d[20]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
-					d[21]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
-					d[22]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
-					d[23]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
-					d[24]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
+					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
+					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
+					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
+					d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
+					d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
+					d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
+					d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
+					d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
+					d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
+					d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
+					d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
+					d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
 							gtfReports.get(i).getAccrualsMap().get("FEB") + 
     				gtfReports.get(i).getAccrualsMap().get("MAR") + 
     				gtfReports.get(i).getAccrualsMap().get("APR") + 
@@ -797,19 +794,19 @@ String ccView="";
 				d[11]="<%=BudgetConstants.QUARTERLY_LTS%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
-					d[12]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
-					d[13]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
-					d[14]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
-					d[15]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
-					d[16]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
-					d[17]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
-					d[18]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
-					d[19]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
-					d[20]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
-					d[21]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
-					d[22]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
-					d[23]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
-					d[24]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
+					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
+					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
+					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
+					d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
+					d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
+					d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
+					d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
+					d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
+					d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
+					d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
+					d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
+					d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
 						gtfReports.get(i).getVariancesMap().get("FEB") + 
     					gtfReports.get(i).getVariancesMap().get("MAR") + 
     					gtfReports.get(i).getVariancesMap().get("APR") + 
@@ -920,7 +917,7 @@ String ccView="";
 				}
 			}
 			for (var j = 12; j < 25; j++) {
-				d[j] = d[j].toFixed(4);
+				d[j] = d[j].toFixed(2);
 			}
 			d[25] = "";
 			d[26] = "Total";
@@ -1053,7 +1050,7 @@ String ccView="";
 						
 						if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>
 						&& item[51]!='undefined' && item[11] == "<%=BudgetConstants.FORECAST%>"){
-							var actualPlannedTotal=parseFloat(item[51]).toFixed(4);
+							var actualPlannedTotal=parseFloat(item[51]).toFixed(2);
 							var calculatedPlannedTotal=0.0;
 							for (var j = 12; j < 24; j++) {
 								if(item[j] == "" || item[j] == "undefined"){
@@ -1777,12 +1774,23 @@ String ccView="";
 					var row = args.row;
 					var isValidBrand = false;
 					sum = 0.0;
+					index = 0;
+					percentSum = 0.0;
+					var numOfBrands = 0;
+					//alert(cell);
+					for (var count = 0; count < m_data.length; count++) {
+						if(( m_data[count]["1"] != "" )
+								&&   m_data[count]["1"] != "undefined"){
+							numOfBrands=numOfBrands+1;
+						}
+					}
 					if (cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>) {
-
+							//alert("hi");
 						for (var count = 0; count < m_data.length; count++) {
 							if(( m_data[count]["3"] != "" )
 									&&   m_data[count]["3"] != "undefined"){
 								sum = sum + parseFloat(m_data[count]["3"]);
+								index = count;
 							}
 						}
 						for (var count = 0; count < m_data.length; count++) {
@@ -1790,12 +1798,25 @@ String ccView="";
 								m_data[count]["2"]="";
 							}
 							else if(!isNaN(m_data[count]["3"] / sum * 100)){
-								m_data[count]["2"] = (m_data[count]["3"] / sum * 100)
-									.toFixed(4);
+								if(count < numOfBrands-1){
+								m_data[count]["2"] = parseInt((m_data[count]["3"] / sum * 100))
+																	;
+								}else{
+									for(var count = 0;count < numOfBrands-1; count++){
+										if(( m_data[count]["3"] != "" )
+												&&   m_data[count]["3"] != "undefined"){
+											percentSum = parseInt(percentSum) + parseInt(m_data[count]["2"]);
+										}
+									}
+									m_data[count]["2"] = (100 - parseInt(percentSum));
+								}
 							}else{
 								m_data[count]["2"] = "0";
 							}
 						}
+						/* console.log("m_data[index][2]"+ index +":::::"+ m_data[index]["2"]);
+						console.log("m_data[index][3]"+m_data[index]["3"] + ""+percentSum);
+						console.log(m_data);  */
  						 if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
 							var initMData = (m_data[m_grid.getDataLength()] = {});
 							initMData[0] = "";

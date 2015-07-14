@@ -253,7 +253,7 @@ function sumTotalsFormatter(totals, columnDef) {
 					.toLowerCase()
 					) {
 		return "<span style='color:rgb(168, 39, 241)'>" 
-				+ ((Math.round(parseFloat(val) * 10000) / 10000)).toFixed(4)
+				+ ((Math.round(parseFloat(val) * 10000) / 10000)).toFixed(2)
 				+ "</span> ";
 	}
 	return "";
@@ -542,7 +542,7 @@ function updateMemCache(e, args, tempKey) {
 					/*if(item[11]=='Accrual'){
 						d[itemCell]=parseFloat(cellValue).toFixed(2);
 					}*/
-					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(4);
+					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
 					//aSave[2] = d["47"];
 					d[itemCell]=aSave[1];
 					// Commented to remove restriction of calculating total for multibrand.
@@ -597,7 +597,7 @@ function updateMemCache(e, args, tempKey) {
 					iCnt++;
 				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
 						((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
-					d[itemCell]=parseFloat(cellValue).toFixed(4);
+					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {
 						if(d[j] == "" || d[j] == "undefined"){
@@ -691,16 +691,16 @@ function getSummaryValues(){
 			if(key==selectedValue){
 				//alert("val = "+selectedValue);
 				value = obj.budgetMap[key];
-				$('#totalBudget').text((value.totalBudget).toFixed(4));
-				$('#plannedTotal').text((value.plannedTotal).toFixed(4));
-				$('#budgetLeftToSpend').text(((value.totalBudget).toFixed(4) - (value.plannedTotal).toFixed(4)).toFixed(4));
-				$('#accrualTotal').text((value.accrualTotal).toFixed(4));
-				$('#varianceTotal').text((value.budgetLeftToSpend).toFixed(4));
-				if((value.varianceTotal).toFixed(4)/(value.totalBudget).toFixed(4) *100 == 0){
+				$('#totalBudget').text((value.totalBudget).toFixed(2));
+				$('#plannedTotal').text((value.plannedTotal).toFixed(2));
+				$('#budgetLeftToSpend').text(((value.totalBudget).toFixed(2) - (value.plannedTotal).toFixed(2)).toFixed(2));
+				$('#accrualTotal').text((value.accrualTotal).toFixed(2));
+				$('#varianceTotal').text((value.budgetLeftToSpend).toFixed(2));
+				if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 == 0){
 					$(varTotalLabel).css('background-color', '#FFFFFF');
 					$(varTotalText).css('background-color', '#FFFFFF');
 				}
-				else if((value.varianceTotal).toFixed(4)/(value.totalBudget).toFixed(4) *100 < 5){
+				else if((value.varianceTotal).toFixed(2)/(value.totalBudget).toFixed(2) *100 < 5){
 					$(varTotalLabel).css('background-color', 'yellow');
 					$(varTotalText).css('background-color', 'yellow');
 				}else{
@@ -1155,7 +1155,7 @@ function deleteSelectedProjects() {
 	}
 	for (var count = 0; count < m_data.length && m_data[count]["3"] != ""
 			&& m_data[count]["3"] != "undefined"; count++) {
-		m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(4);
+		m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
 	}
 
 	if (m_data[0]["3"] == "") {
