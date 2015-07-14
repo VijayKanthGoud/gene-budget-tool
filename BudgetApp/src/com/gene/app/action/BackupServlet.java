@@ -194,8 +194,11 @@ public class BackupServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	  String requestURI = "/gcs/budget-mgmt-tool-bucket/GtfReport";
+	  /*String requestURI = "/gcs/budget-mgmt-tool-bucket/GtfReport";
 	  String[] splits = requestURI.split("/", 4);//req.getRequestURI().split("/", 4);
+*/
+	  String requestURI = req.getRequestURI();
+	  String[] splits = requestURI.split("/", 4);
 	  Date datetime = new Date();
 	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 	  String date = sdf.format(datetime);

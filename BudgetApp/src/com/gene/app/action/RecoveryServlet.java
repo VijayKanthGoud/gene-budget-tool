@@ -43,7 +43,7 @@ public class RecoveryServlet extends HttpServlet {
      .build());
 
  /**Used below to determine the size of chucks to read in. Should be > 1kb and < 10MB */
- private static final int BUFFER_SIZE = 2 * 1024 * 1024;
+ private static final int BUFFER_SIZE = 10 * 1024 * 1024;
  
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -68,7 +68,9 @@ public class RecoveryServlet extends HttpServlet {
 			List<GtfReport> gtfRptList = gson.fromJson(gtfRptString,
 					new TypeToken<List<GtfReport>>() {
 					}.getType());
-			System.out.println("gtfRptList = " + gtfRptList);
+			//System.out.println("gtfRptList = " + gtfRptList);
+			//List<GtfReport> gtfRptListFrmCS = new ArrayList<GtfReport>();
+		//	saveAllDataToDataStoreNoJDO(gtfRptList);
 			saveAllDataToDataStore(gtfRptList);
 			copy(Channels.newInputStream(readChannel), resp.getOutputStream());
 			RequestDispatcher rd = req.getRequestDispatcher("/recovery_conversion.jsp");
@@ -80,6 +82,45 @@ public class RecoveryServlet extends HttpServlet {
 			}
 		}
 	}
+	
+	/*public void saveAllDataToDataStoreNoJDO(List<GtfReport> gtfReportList){
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		for(GtfReport gtfRprt: gtfReportList){
+		Entity gtfRpt = new Entity("GtfReport");
+		gtfRpt.setProperty("accrualsMap",gtfRprt.getAccrualsMap());
+		gtfRpt.setProperty("benchmarkMap",gtfRprt.getBenchmarkMap());
+		gtfRpt.setProperty("brand",gtfRprt.getBrand());
+		gtfRpt.setProperty("childProjectList",gtfRprt.getChildProjectList());
+		gtfRpt.setProperty("costCenter",gtfRprt.getCostCenter());
+		gtfRpt.setProperty("createDate",gtfRprt.getCreateDate());
+		gtfRpt.setProperty("isDummyGMemoriId",gtfRprt.isDummyGMemoriId());
+		gtfRpt.setProperty("email",gtfRprt.getEmail());
+		gtfRpt.setProperty("flag",gtfRprt.getFlag());
+		gtfRpt.setProperty("gMemoryId",gtfRprt.getgMemoryId());
+		gtfRpt.setProperty("Id",gtfRprt.getId());
+		gtfRpt.setProperty("multiBrand",gtfRprt.getMultiBrand());
+		gtfRpt.setProperty("percent_Allocation",gtfRprt.getPercent_Allocation());
+		gtfRpt.setProperty("plannedMap",gtfRprt.getPlannedMap());
+		gtfRpt.setProperty("poDesc",gtfRprt.getPoDesc());
+		gtfRpt.setProperty("poNumber",gtfRprt.getPoNumber());
+		gtfRpt.setProperty("project_WBS",gtfRprt.getProject_WBS());
+		gtfRpt.setProperty("projectName",gtfRprt.getProjectName());
+		gtfRpt.setProperty("qual_Quant",gtfRprt.getQual_Quant());
+		gtfRpt.setProperty("remarks",gtfRprt.getRemarks());
+		gtfRpt.setProperty("requestor",gtfRprt.getRequestor());
+		gtfRpt.setProperty("status",gtfRprt.getStatus());
+		gtfRpt.setProperty("study_Side",gtfRprt.getStudy_Side());
+		gtfRpt.setProperty("subActivity",gtfRprt.getSubActivity());
+		gtfRpt.setProperty("units",gtfRprt.getUnits());
+		gtfRpt.setProperty("variancesMap",gtfRprt.getVariancesMap());
+		gtfRpt.setProperty("vendor",gtfRprt.getVendor());
+		gtfRpt.setProperty("WBS_Name",gtfRprt.getWBS_Name());
+		gtfRpt.setProperty("year",gtfRprt.getYear());
+
+		datastore.put(gtfRpt);
+		}
+	}*/
 	 
 	 private GcsFilename getFileName(String [] splits) {
 		  //System.out.println("req.getRequestURI()"+req.getRequestURI());
@@ -134,12 +175,49 @@ public class RecoveryServlet extends HttpServlet {
 		}
 	 
 	 public void saveAllDataToDataStore(List<GtfReport> gtfReportList){
+		 GtfReport gtf = null;
+			List<GtfReport> gtfRptListFrmCS = new ArrayList<GtfReport>();
+			  if(gtfReportList!=null && !gtfReportList.isEmpty()){
+			  for(GtfReport gtfRpt:gtfReportList){
+				gtf = new GtfReport();
+				gtf.setAccrualsMap(gtfRpt.getAccrualsMap());
+				gtf.setBenchmarkMap(gtfRpt.getBenchmarkMap());
+				gtf.setBrand(gtfRpt.getBrand());
+				gtf.setChildProjectList(gtfRpt.getChildProjectList());
+				gtf.setCostCenter(gtfRpt.getCostCenter());
+				gtf.setCreateDate(gtfRpt.getCreateDate());
+				gtf.setDummyGMemoriId(gtfRpt.isDummyGMemoriId());
+				gtf.setEmail(gtfRpt.getEmail());
+				gtf.setFlag(gtfRpt.getFlag());
+				gtf.setgMemoryId(gtfRpt.getgMemoryId());
+				gtf.setId(gtfRpt.getId());
+				gtf.setMultiBrand(gtfRpt.getMultiBrand());
+				gtf.setPercent_Allocation(gtfRpt.getPercent_Allocation());
+				gtf.setPlannedMap(gtfRpt.getPlannedMap());
+				gtf.setPoDesc(gtfRpt.getPoDesc());
+				gtf.setPoNumber(gtfRpt.getPoNumber());
+				gtf.setProject_WBS(gtfRpt.getProject_WBS());
+				gtf.setProjectName(gtfRpt.getProjectName());
+				gtf.setQual_Quant(gtfRpt.getQual_Quant());
+				gtf.setRemarks(gtfRpt.getRemarks());
+				gtf.setRequestor(gtfRpt.getRequestor());
+				gtf.setStatus(gtfRpt.getStatus());
+				gtf.setStudy_Side(gtfRpt.getStudy_Side());
+				gtf.setSubActivity(gtfRpt.getSubActivity());
+				gtf.setUnits(gtfRpt.getUnits());
+				gtf.setVariancesMap(gtfRpt.getVariancesMap());
+				gtf.setVendor(gtfRpt.getVendor());
+				gtf.setWBS_Name(gtfRpt.getWBS_Name());
+				gtf.setYear(gtfRpt.getYear());
+				gtfRptListFrmCS.add(gtf);
+			}
+		}
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 			//Transaction tx = pm.currentTransaction();
 			try {
 			//	tx.begin();
-				if(gtfReportList!=null && !gtfReportList.isEmpty()){
-					for(GtfReport gtfRpt: gtfReportList){
+				if(gtfRptListFrmCS!=null && !gtfRptListFrmCS.isEmpty()){
+					for(GtfReport gtfRpt: gtfRptListFrmCS){
 						pm.makePersistent(gtfRpt);
 					}
 				}
