@@ -190,7 +190,7 @@ public class RecoveryServlet extends HttpServlet {
 				gtf.setEmail(gtfRpt.getEmail());
 				gtf.setFlag(gtfRpt.getFlag());
 				gtf.setgMemoryId(gtfRpt.getgMemoryId());
-				gtf.setId(gtfRpt.getId());
+				//gtf.setId(gtfRpt.getId());
 				gtf.setMultiBrand(gtfRpt.getMultiBrand());
 				gtf.setPercent_Allocation(gtfRpt.getPercent_Allocation());
 				gtf.setPlannedMap(gtfRpt.getPlannedMap());

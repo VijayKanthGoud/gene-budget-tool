@@ -53,6 +53,7 @@ public class BackupServlet extends HttpServlet {
 
 
 
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -77,6 +78,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gene.app.dao.PMF;
 import com.gene.app.model.GtfReport;
+import com.gene.app.util.BudgetConstants;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -194,11 +196,11 @@ public class BackupServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	  /*String requestURI = "/gcs/budget-mgmt-tool-bucket/GtfReport";
+	  String requestURI = "/gcs/"+BudgetConstants.BUCKET_NAME+"/GtfReport";
 	  String[] splits = requestURI.split("/", 4);//req.getRequestURI().split("/", 4);
-*/
-	  String requestURI = req.getRequestURI();
-	  String[] splits = requestURI.split("/", 4);
+
+	 /* String requestURI = req.getRequestURI();
+	  String[] splits = requestURI.split("/", 4);*/
 	  Date datetime = new Date();
 	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 	  String date = sdf.format(datetime);

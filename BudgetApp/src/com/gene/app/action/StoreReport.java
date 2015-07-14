@@ -336,7 +336,7 @@ public class StoreReport extends HttpServlet {
 					try {
 						value = roundDoubleValue(
 								parentPlannedMap.get(BudgetConstants.months[cnt])
-										* percent_allocation / 100, 5);
+										* percent_allocation / 100, 2);
 						plannedMap.put(BudgetConstants.months[cnt], value);
 					} catch (NumberFormatException e) {
 						plannedMap.put(BudgetConstants.months[cnt], 0.0);

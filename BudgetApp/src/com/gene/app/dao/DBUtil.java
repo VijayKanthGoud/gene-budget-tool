@@ -153,7 +153,7 @@ public class DBUtil {
 	
 	public boolean validategMemoriId(String gMemoriId) {
 		Map<String, GtfReport> completeGtfRptMap = new LinkedHashMap<String, GtfReport>();
-		completeGtfRptMap = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+		//completeGtfRptMap = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		boolean isGMemIdExists = false;
 		if (gMemoriId != null && !"".equals(gMemoriId.trim())) {
 			isGMemIdExists = completeGtfRptMap.containsKey(gMemoriId);
@@ -381,7 +381,7 @@ public class DBUtil {
 				}
 			}
 			//if(resetCache){
-				saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION,gtfList);
+				//saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION,gtfList);
 			//}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -872,7 +872,7 @@ public class DBUtil {
 	public void storeProjectsToCache(List<GtfReport> gtfReports,
 			String costCenter, String listType) {
 		Map<String, GtfReport> gtfReportFromCache = getAllReportDataFromCache(costCenter);
-		Map<String, GtfReport> gtfAllReportFromCache = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+		//Map<String, GtfReport> gtfAllReportFromCache = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 		Map<String, GtfReport> uniqueGtfReportMap = prepareUniqueGtfRptMap(costCenter);
 		GtfReport report = new GtfReport();
 		String uniqueGtfRptKey = "";
@@ -881,20 +881,20 @@ public class DBUtil {
 			if (listType != null && !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.OLD.equalsIgnoreCase(listType.trim())) {
 				gtfReportFromCache.remove(report.getgMemoryId());
-				gtfAllReportFromCache.remove(report.getgMemoryId());
+				//gtfAllReportFromCache.remove(report.getgMemoryId());
 				uniqueGtfRptKey = createKeyForXlPrjUpload(report);
 				uniqueGtfReportMap.remove(uniqueGtfRptKey);
 			} else if (listType != null
 					&& !"".equalsIgnoreCase(listType.trim())
 					&& BudgetConstants.NEW.equalsIgnoreCase(listType.trim())) {
 					gtfReportFromCache.put(report.getgMemoryId(), report);
-					gtfAllReportFromCache.put(report.getgMemoryId(), report);
+					//gtfAllReportFromCache.put(report.getgMemoryId(), report);
 					uniqueGtfRptKey = createKeyForXlPrjUpload(report);
 					uniqueGtfReportMap.put(uniqueGtfRptKey, report);					
 			}
 		}
 		cache.put(costCenter, gtfReportFromCache);
-		cache.put(BudgetConstants.GMEMORI_COLLECTION, gtfAllReportFromCache);
+	//	cache.put(BudgetConstants.GMEMORI_COLLECTION, gtfAllReportFromCache);
 		updateUniqueGtfMap(costCenter, uniqueGtfReportMap);
 		
 	}
@@ -918,7 +918,7 @@ public class DBUtil {
 		int month = cal.get(Calendar.MONTH);
 		try {
 			gtfReports = (List<GtfReport>) q.execute("Active");
-			Map<String, GtfReport> completeGtfRptList = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
+			//Map<String, GtfReport> completeGtfRptList = getAllReportDataCollectionFromCache(BudgetConstants.GMEMORI_COLLECTION);
 			if (!gtfReports.isEmpty()) {
 				for (GtfReport gtfReport : gtfReports) {
 					Map<String, Double> benchMarkMap = new LinkedHashMap<String, Double>();
@@ -940,13 +940,13 @@ public class DBUtil {
 					gtfMap =  getAllReportDataFromCache(gtfReport.getCostCenter());
 					if(gtfMap ==null ){
 						gtfMap = new LinkedHashMap<String, GtfReport>();
-					}if(completeGtfRptList == null){
+					}/*if(completeGtfRptList == null){
 						completeGtfRptList = new LinkedHashMap<String, GtfReport>();
-					}
+					}*/
 					gtfMap.put(gtfReport.getgMemoryId(), gtfReport);
-					completeGtfRptList.put(gtfReport.getgMemoryId(), gtfReport);
+					//completeGtfRptList.put(gtfReport.getgMemoryId(), gtfReport);
 					saveAllReportDataToCache(gtfReport.getCostCenter(), gtfMap);
-					saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, completeGtfRptList);
+					//saveAllReportDataToCache(BudgetConstants.GMEMORI_COLLECTION, completeGtfRptList);
 				}
 			}
 			pm.makePersistentAll(gtfReports);

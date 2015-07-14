@@ -409,7 +409,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    		try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
 						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-								.get("TOTAL") / total) * 100 , 5));
+								.get("TOTAL") / total) * 100 , 2));
 					}}catch(NumberFormatException nfe){
 						gtfRpt.setPercent_Allocation(100.0);
 					}catch(ArithmeticException ae){
