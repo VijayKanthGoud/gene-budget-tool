@@ -23,26 +23,25 @@
 <%
   List<String> fileNameList = new ArrayList<String>();%>
   <table>
-  <tr>
-      <td style="font-weight: bold;">Download a file from Google Cloud Storage:</td>
-    </tr>
     <tr>
       <td>
         <form name="getFile">
           <div>
-            Bucket: <span id="bucket" style="font: 14"><%=BudgetConstants.BUCKET_NAME %></span>
-            File Name: <select name="fileName" id="fileName" >
+            <b>Bucket:</b> <span id="bucket" style="font: 14"><%=BudgetConstants.BUCKET_NAME %></span>
+            <br/>
+            <br/>
+            <b>File Name:</b> <select name="fileName" id="fileName" >
             <% fileNameList = Util.getFileNamesFromCS(BudgetConstants.BUCKET_NAME);
             for(String fileName:fileNameList){ %>
             <option value=<%= fileName%>><%= fileName%></option>
             <%} %> 
             </select> 
-            <!-- <input type="text" name="fileName" id="fileName" /> -->
           </div>
+          <br/><br/>
         </form>
         <form action="/recovery_conversion.jsp" method="get" name="submitGet">
           <div>
-            <input type="submit" onclick='changeGetPath(this)' value="Restore Data" />
+            <input id='submtButton' type="submit" onclick='changeGetPath(this)' value="Restore Data" />
           </div>
         </form>
       </td>
@@ -63,14 +62,31 @@
       }
 
       function changeGetPath() {
-        var bucket = '<%= BudgetConstants.BUCKET_NAME%>';
-        var filename =  document.getElementById("fileName").value;
-        if (bucket == null || bucket == "" || filename == null || filename == "") {
-          alert("Both Bucket and FileName are required");
-          return false;
-        } else {
-          document.submitGet.action = "/gcs/" + bucket + "/" + filename;
-        }
+    	  var bucket = '<%= BudgetConstants.BUCKET_NAME%>';
+          var filename =  document.getElementById("fileName").value;
+    	  $('#submtButton').prop("disabled",true);
+    	  $("#submtButton").attr('value', 'Restoring...');
+          if (bucket == null || bucket == "" || filename == null || filename == "") {
+              alert("FileName is required");
+              return false;
+          } else {
+		  $.ajax({
+				url : "/gcs/" + bucket + "/" + filename,
+				type : 'GET',
+				async: true,
+				dataType : 'text',
+				success : function(result) {
+					alert("Success");
+					$('#submtButton').prop("disabled",false);
+					$("#submtButton").attr('value', 'Restore Data');
+				},
+				error : function(result){
+					alert("Error");
+					$('#submtButton').prop("disabled",false);
+					$("#submtButton").attr('value', 'Restore Data');
+				}
+			});
+      	}
       }
 
     </script>
