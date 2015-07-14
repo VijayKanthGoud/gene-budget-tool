@@ -399,6 +399,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
 		    	nwParentGtfReport.setBrand("Smart WBS");
+		    	nwParentGtfReport.setPercent_Allocation(100.0);
 		    	nwParentGtfReport.setRemarks("   ");
 		    	nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 		    	receivedGtfReports.add(nwParentGtfReport);
