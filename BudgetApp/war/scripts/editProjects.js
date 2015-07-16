@@ -682,7 +682,7 @@ function updateMemCache(e, args, tempKey) {
 			}
 		},
 		error : function(result){
-			alert("gMemoriId already exists !!!");
+			//alert("gMemoriId already exists !!!");
 			$('#statusMessage').text("")
 			.fadeIn(200);
 			$('#statusMessage');
