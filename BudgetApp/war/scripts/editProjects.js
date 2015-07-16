@@ -983,6 +983,12 @@ function saveAndClose() {
 	//alert(JSON.stringify(m_data));
 	if (itemClicked["34"] != "New projects") {
 		$.ajax({
+			beforeSend: function(msg){
+				if(disableGrid){
+					$('#back').addClass('black_overlay').fadeIn(100);
+					$('#loader_image').show().fadeIn(100);
+				}
+		    },
 			url : '/multiBrandServlet',
 			type : 'POST',
 			dataType : 'json',
@@ -997,6 +1003,8 @@ function saveAndClose() {
 				window.location.reload(true);
 			}
 		});
+		$('#back').removeClass('black_overlay').fadeIn(100);
+		$('#loader_image').hide();
 	}
 	
 	for (var j = 0; j < m_data.length; j++) {
@@ -1330,6 +1338,10 @@ function submitProjects(){
 	var costCenter = $('#getCostCenter').val();
 	if(errStr == 0){
 		 $.ajax({
+			 beforeSend: function(msg){
+				$('#back').addClass('black_overlay').fadeIn(100);
+				$('#loader_image').show().fadeIn(100);
+			},
 			url : '/storereport',
 			type : 'POST',
 			dataType : 'json',
@@ -1352,6 +1364,8 @@ function submitProjects(){
 				$('#submitProjBtn').prop("disabled",false);
 	        }
 		});  
+		$('#back').removeClass('black_overlay').fadeIn(100);
+		$('#loader_image').hide();
 	}else{
 		$('#submitProjBtn').prop("disabled",false);
 	}

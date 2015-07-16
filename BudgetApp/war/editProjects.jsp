@@ -1903,8 +1903,11 @@ String ccView="";
 			}
 		}
 	});
-	
+	var disableGrid = false;
 	function addMultiBrandPopUp(){
+		if(itemClicked[35] != "NewProjects"){
+			disableGrid = true;
+		}
 		if(!(itemClicked[37]) && itemClicked[35] != "NewProjects"){
 			m_data[0][1]=itemClicked[44];
 			m_data[0][3]=itemClicked[24];
@@ -2101,5 +2104,8 @@ String ccView="";
 <iframe id="myIFrm" name="myIFrm" src="" style="visibility: hidden">
 
 </iframe>
+<div id="loader_image" style="vertical-align: middle;">
+            <img src="images/loading.gif" width="35px" height='35px'/>
+</div>
 
 </html>
