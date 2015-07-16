@@ -1785,6 +1785,21 @@ String ccView="";
 						}
 					}
 					if (cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>) {
+							if(( args.item[3] != "" )
+									&&   args.item[3] != "undefined"){
+								if(parseFloat(args.item[3]) <=0 ){
+									if(args.item[10]=="" || args.item[10] == undefined){
+										args.item[3] = 0;
+										args.item[2] = 0.0;
+									}else{
+									args.item[3] = args.item[10];
+									args.item[2] = args.item[11];
+									}
+									alert("MB Total cannot be less than or equal to zero.");
+									m_grid.invalidate();
+									return;
+								}
+							}
 							//alert("hi");
 						for (var count = 0; count < m_data.length; count++) {
 							if(( m_data[count]["3"] != "" )
@@ -1945,6 +1960,8 @@ String ccView="";
 					d["5"] =  "<%=gtfReport.getgMemoryId()%>";
 					d["7"] = "<%=requestor%>";
 					d["9"] = "preExisting";
+					d["10"] = "<%=total%>";
+					d["11"] = "<%=gtfReport.getPercent_Allocation()%>";
 				}
 					
 			<%}%>
