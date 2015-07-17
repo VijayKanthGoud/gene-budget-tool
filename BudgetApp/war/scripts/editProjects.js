@@ -657,6 +657,12 @@ function updateMemCache(e, args, tempKey) {
 	//	console.log(JSON.stringify(aSaveData));
 		$('#statusMessage').text("Saving data...").fadeIn(200);
 	$.ajax({
+		beforeSend: function(msg){
+			 if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>'){
+				$('#back').addClass('black_overlay').fadeIn(100);
+				$('#loader_image').show().fadeIn(100);
+			 }
+		},
 		url : '/AutoSaveData',
 		type : 'POST',
 		dataType : 'text',
@@ -1001,10 +1007,16 @@ function saveAndClose() {
 				alert('Project(s) created successfully!!!');
 				isMultiBrand = false;
 				window.location.reload(true);
+				$('#back').removeClass('black_overlay').fadeIn(100);
+				$('#loader_image').hide();
+			},
+			error: function(result) {
+				$('#back').removeClass('black_overlay').fadeIn(100);
+				$('#loader_image').hide();
 			}
+			
 		});
-		$('#back').removeClass('black_overlay').fadeIn(100);
-		$('#loader_image').hide();
+		
 	}
 	
 	for (var j = 0; j < m_data.length; j++) {
@@ -1362,10 +1374,11 @@ function submitProjects(){
 					alert("Unknow server error occured.");
 				}
 				$('#submitProjBtn').prop("disabled",false);
+				$('#back').removeClass('black_overlay').fadeIn(100);
+				$('#loader_image').hide();
 	        }
-		});  
-		$('#back').removeClass('black_overlay').fadeIn(100);
-		$('#loader_image').hide();
+		}); 
+		
 	}else{
 		$('#submitProjBtn').prop("disabled",false);
 	}
