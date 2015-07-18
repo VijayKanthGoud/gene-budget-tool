@@ -399,7 +399,6 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
 		    	nwParentGtfReport.setBrand("Smart WBS");
-		    	nwParentGtfReport.setPercent_Allocation(100.0);
 		    	nwParentGtfReport.setRemarks("   ");
 		    	nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 		    	receivedGtfReports.add(nwParentGtfReport);
@@ -409,7 +408,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    		try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
 						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-								.get("TOTAL") / total) * 100 , 2));
+								.get("TOTAL") / total) * 100 , 5));
 					}}catch(NumberFormatException nfe){
 						gtfRpt.setPercent_Allocation(100.0);
 					}catch(ArithmeticException ae){
