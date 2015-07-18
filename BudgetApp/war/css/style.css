@@ -259,19 +259,3 @@ div.dhtmlx_window_active,div.dhx_modal_cover_dv {
 	overflow: auto;
     border-radius: 1em;
 }
-
-#loader_image{
-	font: Arial;
-	font-size: 14px;
-	color:white;
-	font-weight:bold;
-	display: none;
-	position: absolute;
-	top: 40%;
-	left: 49%;
-	align: center;
-	padding: 1px;
-	z-index: 1002;
-	overflow: auto;
-    border-radius: 1em;
-}
