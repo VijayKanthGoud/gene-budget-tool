@@ -153,19 +153,7 @@ public interface BudgetConstants {
 	public static final String GMEMORI_COLLECTION = "gMemoriIdCollection";
 	public static final String USER_ROLE_BRAND_OWNER = "brandOwner";
 	public static final String [] costCenterList = {"7527","7034","7035","7121","7712","7135","7713","7428","7512","7574","7136","7138"};//"7004","7512","7138","7136"};
-	/*public static final String []costCenterBrands = {"Indirect Product:3033.20;",
-			"Actemra:1565.0;Rituxan RA:948.0;Esbriet:1800.0;Lucentis:1315.0;Pulmozyme:815.0;Xolair:1560.0;Lampalizumab:680.0;Etrolizumab:150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
-			"Indirect Product:total=300.0;Avastin:total=4278.0;Tarceva:total=1125.0;Alectinib:total=1034.0;anti-PDL1:total=2250.0;Rituxan Heme/Onc:total=969.0;Gazyva:total=2339.0;GDC-0199:total=689.0;Herceptin:total=850.0;Kadcyla:total=1600.0;Perjeta:total=1340.0;Erivedge:total=1250.0;Zelboraf:total=350.0;Cobimetinib:total=1075.0;BioOnc Pipeline:total=840.0;GDC0941:total=800.0;",
-			"Indirect Product:total=100.0;Nutropin:total=300.0;Tamiflu:total=310.0;Lytics:total=945.0;Ocrelizumab:total=2000.0;Gantenerumab:total=450.0;Crenezumab:total=300.0;Alzheimers:total=200.0;LptD:total=250.0;ACE-910:total=1255.0;IMPACT Pipeline General:total=850.0;Neuroscience Pipeline:total=250.0;",
-			"Indirect Product:total=869.83;",
-			"Indirect Product:total=100.0;Nutropin:total=300.0;Tamiflu:total=310.0;Lytics:total=945.0;Ocrelizumab:total=2000.0;Gantenerumab:total=450.0;Crenezumab:total=300.0;Alzheimers:total=200.0;LptD:total=250.0;ACE-910:total=1255.0;IMPACT Pipeline General:total=850.0;Neuroscience Pipeline:total=250.0;",
-			"Indirect Product:total=1507.83;",
-			"Avastin:total=75.0;Alectinib:total=605.0;GDC-0199:total=100.0;Herceptin:total=20.0;Kadcyla:total=140.0;Perjeta:total=140.0;Erivedge:total=100.0;Cobimetinib:total=170.0;Actemra:total=250.0;Lucentis:total=150.0;Pulmozyme:total=350.0;Lampalizumab:total=185.0;General Immun Pipeline:total=25.0;Tamiflu:total=806.0;Ocrelizumab:total=1215.0;Gantenerumab:total=250.0;Crenezumab:total=150.0;ACE-910:total=650.0;",
-			"Avastin:total=75.0;Alectinib:total=605.0;GDC-0199:total=100.0;Herceptin:total=20.0;Kadcyla:total=140.0;Perjeta:total=140.0;Erivedge:total=100.0;Cobimetinib:total=170.0;Actemra:total=250.0;Lucentis:total=150.0;Pulmozyme:total=350.0;Lampalizumab:total=185.0;General Immun Pipeline:total=25.0;Tamiflu:total=806.0;Ocrelizumab:total=1215.0;Gantenerumab:total=250.0;Crenezumab:total=150.0;ACE-910:total=650.0;",
-			"Esbriet:total=1800.0;Lucentis:total=1315.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
-			"Actemra:total=1565.0;Rituxan RA:total=948.0;Pulmozyme:total=815.0;Xolair:total=1560.0;Lampalizumab:total=680.0;Etrolizumab:total=150.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1200.0;Indirect Product:total=100.0;",
-			"Actemra:total=1223.0;Rituxan RA:total=128.0;Esbriet:total=1300.0;Lucentis:total=1325.0;Pulmozyme:total=315.0;Xolair:total=560.0;Lampalizumab:total=580.0;Etrolizumab:total=450.0;General Immun Pipeline:total=500.0;Lebrikizumab:total=1700.0;Indirect Product:total=100.0;"
-			};*/
+
 	
 	public static final String FORECAST = "Forecast";
 	public static final String ACCRUAL = "Accrual";
@@ -173,8 +161,13 @@ public interface BudgetConstants {
 	public static final String FORECAST_LTS = "Quarterly LTS";
 	public static final String QUARTERLY_TARGET = "Quarterly Target"; 
 	public static final String QUARTERLY_LTS = "Quarterly LTS";
-	public static final String BUCKET_NAME = "gmbt-qa-sp2b01-bucket";
+	public static final String BUCKET_NAME = "budget-mgmt-tool-bucket";
 	public static final int TIME_OUT_PERIOD = 20000;
+	
+	// RecoveryServlet.java
+	public static final String FILENAME = "fileName";
+	public static final String STATUS = "status";
+	public static final String COUNT = "count";
 	
 
 }

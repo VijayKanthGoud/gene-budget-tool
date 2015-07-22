@@ -39,15 +39,19 @@ public class DeleteStudyPrjFromBudget {
 	public String updateProjectDetails(String gmem,@Context HttpServletRequest httpRequest, @Context HttpServletResponse httpResponse)
 			throws IOException {
 		ErrorObject eObj = new ErrorObject();
+		 final String url = httpRequest.getRequestURL().toString();
+         final String baseURL = url.substring(0, url.length()
+                            - httpRequest.getRequestURI().length())
+                            + httpRequest.getContextPath() + "/";
 		Gson gson = new Gson();
 		System.out.println("gmem = "+gmem);
 		ProjectParameters gMemori = gson.fromJson(gmem, ProjectParameters.class);
-		eObj= disableProjectData(gMemori, eObj);
+		eObj= disableProjectData(gMemori, eObj,baseURL);
 		String response = gson.toJson(eObj);
 		System.out.println("Response :::::"+response);
 		return response;
 	}
-	public ErrorObject disableProjectData(ProjectParameters prjParam, ErrorObject eObj){
+	public ErrorObject disableProjectData(ProjectParameters prjParam, ErrorObject eObj,String baseURL){
 		DBUtil util = new DBUtil();
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
 		List<String> selectedCC = new ArrayList<>();
@@ -55,6 +59,7 @@ public class DeleteStudyPrjFromBudget {
 		List<String> costCenterList = prjParam.getCostCentres();
 		String pUnixId = prjParam.getProjectOwner();
 		UserRoleInfo userInfo = util.readUserRoleInfoByName(pUnixId);
+		String costCenter ="";
 		System.out.println("userInfo"+userInfo.getUserName());
 		System.out.println("costCenterList"+costCenterList);
 		System.out.println("userInfo.getCostCenter() :::"+userInfo.getCostCenter());
@@ -88,6 +93,7 @@ public class DeleteStudyPrjFromBudget {
 			System.out.println("gtfRptlst = "+gtfRptlst);
 			if(gtfRptlst!=null && !gtfRptlst.isEmpty()){
 				gtfRpt = gtfRptlst.get(0);
+				costCenter = gtfRpt.getCostCenter();
 				System.out.println("gtfRpt = "+gtfRpt);
 			} else{
 				eObj.setStatusCode(404);
@@ -198,8 +204,8 @@ public class DeleteStudyPrjFromBudget {
 		}
 		System.out.println("status Code"+eObj.getStatusCode());
 		System.out.println("status Message"+eObj.getStatusMessage());
-		util.generateProjectIdUsingJDOTxn(gtfReports);
-		util.storeProjectsToCache(gtfReports, selectedCostCenter, BudgetConstants.NEW);
+		util.generateProjectIdUsingJDOTxn(gtfReports,"",baseURL,costCenter);
+	//	util.storeProjectsToCache(null,gtfReports, selectedCostCenter);
 		eObj.setStatusCode(200);
 		eObj.setStatusMessage("Successful !!!");
 		System.out.println("gftReport List :::::"+util.getAllReportDataFromCache(selectedCostCenter));
