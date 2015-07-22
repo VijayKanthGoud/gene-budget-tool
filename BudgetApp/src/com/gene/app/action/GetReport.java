@@ -31,7 +31,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class GetReport extends HttpServlet {
-	
+
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 	DBUtil util = new DBUtil();
 	String costCenter = "";
@@ -74,14 +74,9 @@ public class GetReport extends HttpServlet {
 		Map<String, Double> userBrandMap = new LinkedHashMap<String, Double>();
 		Object[] myBrands = {};
 
-		gtfReports = util.getAllReportDataFromCache(user
-				.getSelectedCostCenter());
-
 		if (user.getRole() != null
 				&& !"".equalsIgnoreCase(user.getRole().trim())
-				&& user.getRole().contains("Admin")
-				&& !(gMemoriId != null && !""
-						.equalsIgnoreCase(gMemoriId.trim()))) {
+				&& user.getRole().contains("Admin")) {
 			if (selectedView == null
 					|| "".equalsIgnoreCase(selectedView.trim())
 					|| selectedCC == null
@@ -92,21 +87,21 @@ public class GetReport extends HttpServlet {
 				user.setCostCenter("7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138:7004");
 			}
 			if (!Util.isNullOrEmpty(selectedBrand)) {
-				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
+				CostCenter_Brand ccBrandObj = new CostCenter_Brand();
 				List<CostCenter_Brand> costCenterList = util
 						.readCostCenterBrandMappingData();
 				for (CostCenter_Brand ccBrand : costCenterList) {
 					if (selectedCC.equalsIgnoreCase(ccBrand.getCostCenter()
 							.trim())) {
-						ccBrandMap = ccBrand;
+						ccBrandObj = ccBrand;
 						break;
 					}
 				}
-				if (ccBrandMap.getBrandFromDB().contains("Avastin")) {
+				if (ccBrandObj.getBrandFromDB().contains("Avastin")) {
 					selectedBrand = "Avastin";
 				} else {
 					userBrandMap = util
-							.getBrandMap(ccBrandMap.getBrandFromDB());
+							.getBrandMap(ccBrandObj.getBrandFromDB());
 					Map<String, Double> sortedMap = new TreeMap<String, Double>(
 							userBrandMap);
 					myBrands = sortedMap.keySet().toArray();
@@ -114,9 +109,17 @@ public class GetReport extends HttpServlet {
 				}
 			}
 		}
+		gtfReports = util.getAllReportDataFromCache(selectedCC);
+		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
+			selectedView = "gMemori";
+		}
 		gtfReportList = getRptListForLoggedInUser(user, selectedView,
 				selectedBrand, gtfReports, gMemoriId, req);
 
+		req.setAttribute("selectedView", selectedView);
+		req.setAttribute("brandValue", selectedBrand);
+		req.setAttribute("getCCValue", selectedCC);
+		req.setAttribute("accessreq", "internal");
 		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
 		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
 			req.setAttribute("accessreq", "external");
@@ -125,10 +128,6 @@ public class GetReport extends HttpServlet {
 				req.setAttribute("getCCValue", costCenter);
 			}
 		}
-		req.setAttribute("selectedView", selectedView);
-		req.setAttribute("brandValue", selectedBrand);
-		req.setAttribute("getCCValue", selectedCC);
-		req.setAttribute("accessreq", "internal");
 		queryGtfRptList = gtfReportList;
 
 		if (queryGtfRptList != null && !queryGtfRptList.isEmpty()) {
