@@ -1118,7 +1118,7 @@ String ccView="";
 				},
 				url : '/initiateProject',
 				type : 'GET',
-				async: true,
+				async: false,
 				dataType : 'text',
 				data : {ccId: itemClicked[47],
 					unixId: itemClicked[48],
@@ -1151,7 +1151,7 @@ String ccView="";
 					$('#back').removeClass('black_overlay').fadeIn(100);
 					$('#loader_image').hide();
 				}
-			});
+			});				
 					
 		}
 		
