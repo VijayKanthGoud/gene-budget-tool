@@ -1110,12 +1110,15 @@ String ccView="";
 					}
 		});
 		function do_the_ajax_call(){
-			var openPopUp =  false;
 			var gMemoriId ;
 			$.ajax({
+				beforeSend: function(msg){
+					$('#back').addClass('black_overlay').fadeIn(100);
+					$('#loader_image').show().fadeIn(100);
+				},
 				url : '/initiateProject',
 				type : 'GET',
-				async: false,
+				async: true,
 				dataType : 'text',
 				data : {ccId: itemClicked[47],
 					unixId: itemClicked[48],
@@ -1129,6 +1132,8 @@ String ccView="";
 						
 						gMemoriId = obj.newGMemId;
 						openPopUp =  true;
+						window.location.reload(true);
+						window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 						
 					}else{
 						if(obj!=null && obj.statusMessage!=null){
@@ -1136,17 +1141,18 @@ String ccView="";
 						}else{
 							alert("Error occured during synchronization with Study : \n Internal error occured.");
 						}
+						$('#back').removeClass('black_overlay').fadeIn(100);
+						$('#loader_image').hide();
 					}
+					
 				},
 				error : function(result){
 					alert("Error occured during synchronization with Study : \n Internal error occured.");
+					$('#back').removeClass('black_overlay').fadeIn(100);
+					$('#loader_image').hide();
 				}
 			});
-			if(openPopUp == true){
-			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
-			openPopUp =  false;
-			window.location.reload(true);
-			}
+					
 		}
 		
 		grid.onClick.subscribe(function(e, args) {

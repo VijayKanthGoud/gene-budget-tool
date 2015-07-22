@@ -1755,6 +1755,10 @@ function deleteCurrentProject(delBtnClicked){
 	}
 	var ccVal = $('#getCostCenter').val();
 	$.ajax({
+		beforeSend: function(msg){
+			$('#back').addClass('black_overlay').fadeIn(100);
+			$('#loader_image').show().fadeIn(100);
+	    },
 		url : '/disableProject',
 		type : 'POST',
 		dataType : 'text',
@@ -1769,6 +1773,8 @@ function deleteCurrentProject(delBtnClicked){
 			alert('Project ' + gmemId + ' successfully deleted.');
 			window.location.reload(true);
 			}else{
+				$('#back').removeClass('black_overlay').fadeIn(100);
+				$('#loader_image').hide();
 				alert(obj.statusMessage);
 			}
 			}
