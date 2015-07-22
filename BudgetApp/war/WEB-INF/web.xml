@@ -12,7 +12,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>StoreReport</servlet-name>
 		<url-pattern>/storereport</url-pattern>
 	</servlet-mapping>
-	
+	<servlet>
+		<servlet-name>AsncyStoreReport</servlet-name>
+		<servlet-class>com.gene.app.dao.AsyncJDODatastore</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AsncyStoreReport</servlet-name>
+		<url-pattern>/ansycStoreGtfReports</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>GetReport</servlet-name>
 		<servlet-class>com.gene.app.action.GetReport</servlet-class>
@@ -213,12 +221,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet>
 	<servlet-name>RecoveryServlet</servlet-name>
 	<servlet-class>com.gene.app.action.RecoveryServlet</servlet-class>
-</servlet>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>RecoveryServlet</servlet-name>
 		<url-pattern>/gcs/*</url-pattern>
 	</servlet-mapping>
-       
+    
+	<servlet>
+	<servlet-name>RecoverDataServlet</servlet-name>
+	<servlet-class>com.gene.app.action.RecoverDataServlet</servlet-class>
+</servlet>
+	<servlet-mapping>
+		<servlet-name>RecoverDataServlet</servlet-name>
+		<url-pattern>/recoverDataServlet</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 			<servlet-class>
