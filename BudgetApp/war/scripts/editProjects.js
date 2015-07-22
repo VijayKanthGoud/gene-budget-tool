@@ -1007,8 +1007,6 @@ function saveAndClose() {
 				alert('Project(s) created successfully!!!');
 				isMultiBrand = false;
 				window.location.reload(true);
-				$('#back').removeClass('black_overlay').fadeIn(100);
-				$('#loader_image').hide();
 			},
 			error: function(result) {
 				$('#back').removeClass('black_overlay').fadeIn(100);
