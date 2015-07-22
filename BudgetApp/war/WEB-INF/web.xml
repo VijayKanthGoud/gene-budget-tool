@@ -29,14 +29,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>GetReport</servlet-name>
 		<url-pattern>/getreport</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>gmemstudy</servlet-name>
-		<servlet-class>com.gene.app.action.GmemStudy</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>gmemstudy</servlet-name>
-		<url-pattern>/study</url-pattern>
-	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>ListProject</servlet-name>
 		<jsp-file>/editProjects.jsp</jsp-file>
