@@ -1105,88 +1105,6 @@ String ccView="";
 					
 					if(args.item["34"] != "New projects"){
 						updateMemCache(e, args, tempKey);
-						<%--	for(var counter = 0; counter<data.length; counter++ ){
-							if(data[counter][34] != "New projects"){
-								dataLength++;
-							}
-						}
-						// Caluculation of total (columnwise)
-						var verPlannedTotal=0.0;
-						var verBenchmarkTotal=0.0;
-						var verAccrualTotal=0.0;
-						var verVarianceTotal=0.0;
-						var verPlanned=0.0;
-						var verBenchmark=0.0;
-						var verAccrual=0.0;
-						var verVariance=0.0;
-						var rowTotal=0.0;
-						
-						if(fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
-							
-							//if((item[37]=='undefined' || item[37]==false) || (item[37]==true && data[temp][11]!="Forecast")){
-								rowTotal = 0.0;
-								for (var j = 12; j < 24; j++) {
-									if(data[temp][j] == "" || data[temp][j] == "undefined"){
-										data[temp][j] = 0.0;
-									}
-									rowTotal = parseFloat(rowTotal)
-												+ parseFloat(data[temp][j]);
-								}
-								data[temp][24]=parseFloat(rowTotal).toFixed(2);
-								if(item[37]==true){
-									for (var j = 0; j < data.length ; j++) {
-										if( data[j][0].toString().indexOf(".") != -1 && data[j][0].toString().split(".")[0] == item[0] ){
-											rowTotal = 0.0;
-											for (var k = 12; k < 24; k++) {
-												if(data[j][k] == "" || data[j][k] == "undefined"){
-													data[j][k] = 0.0;
-												}
-												rowTotal = parseFloat(rowTotal)
-															+ parseFloat(data[j][k]);
-											}
-											data[j][24]=parseFloat(rowTotal).toFixed(2);
-										}
-									}
-								}
-							//}
-							
-							
-							for (var j = 0; j < data.length ; j++) {
-								if(data[j][26] != 'Total' && data[j][0] != 'undefined' && data[j]["34"] != "New projects"){
-									if( data[j][11] == "<%=BudgetConstants.FORECAST%>"){
-										if(data[j][37] == false && data[j][27].toString().indexOf(".") == -1){
-											verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][itemCell]);
-											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
-										}else if(data[j][37] == true && data[j][27].toString().indexOf(".") != -1){
-											verPlannedTotal= parseFloat(verPlannedTotal) + parseFloat(data[j][itemCell]);
-											verPlanned= parseFloat(verPlanned) + parseFloat(data[j][24]);
-										}
-									}				
-									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_TARGET%>"  && data[j][27].toString().indexOf(".") ==-1){
-										verBenchmarkTotal= parseFloat(verBenchmarkTotal) + parseFloat(data[j][itemCell]);
-										verBenchmark= parseFloat(verBenchmark) + parseFloat(data[j][24]);
-									}
-									if(data[j][11]=="<%=BudgetConstants.ACCRUAL%>" && data[j][27].toString().indexOf(".") ==-1 ){
-										verAccrualTotal= parseFloat(verAccrualTotal) + parseFloat(data[j][itemCell]);
-										verAccrual= parseFloat(verAccrual) + parseFloat(data[j][24]);
-									}
-									if(data[j][11]=="<%=BudgetConstants.QUARTERLY_LTS%>" && data[j][27].toString().indexOf(".") ==-1 && data[j][26]!='' ){
-										verVarianceTotal= parseFloat(verVarianceTotal) + parseFloat(data[j][itemCell]);
-										verVariance= parseFloat(verVariance) + parseFloat(data[j][24]);
-									}
-								}
-							}
-							data[data.length - 4][itemCell]=verPlannedTotal;
-							data[data.length - 3][itemCell]=verBenchmarkTotal;
-							data[data.length - 2][itemCell]=verAccrualTotal;
-							data[data.length - 1][itemCell]=verBenchmarkTotal-verAccrualTotal;
-							data[data.length - 4][24]=verPlanned;
-							data[data.length - 3][24]=verBenchmark;
-							data[data.length - 2][24]=verAccrual;
-							data[data.length - 1][24]=verBenchmark-verAccrual;
-							
-						}
-						grid.invalidate();--%>
 						calculateTotal();
 						dataView.refresh();
 					}
@@ -1228,7 +1146,6 @@ String ccView="";
 			window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
 			openPopUp =  false;
 			window.location.reload(true);
-			//alert("Project successfully created in Budget Tool. Please continue.");
 			}
 		}
 		
@@ -1348,7 +1265,7 @@ String ccView="";
 				if ($('#hideColumns').is(":checked")) {
 					fixedCell = cell + numHideColumns;
 				}
-				data[row][fixedCell] = 0.0;
+				//data[row][fixedCell] = 0.0;
 				updateTotals(cell, row, fixedCell, args);
 				if (!grid.getEditorLock().commitCurrentEdit()) {
 					return;
