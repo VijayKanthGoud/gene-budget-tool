@@ -59,6 +59,10 @@ public class MultiBrandServlet extends HttpServlet {
 		LOGGER.log(Level.INFO, "User email is : " + email);
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
 				.format(Calendar.getInstance().getTime());
+		 final String url = req.getRequestURL().toString();
+         final String baseURL = url.substring(0, url.length()
+                            - req.getRequestURI().length())
+                            + req.getContextPath() + "/";
 		// List containing the project and all its sub-projects retrieved
 		List<GtfReport> oldGtfReportList = new ArrayList<GtfReport>();
 		if (user == null || user.getEmail().equalsIgnoreCase("")) {
@@ -105,6 +109,7 @@ public class MultiBrandServlet extends HttpServlet {
 				GtfReport paretnGtfReport = new GtfReport();
 				if (gtfRpt.getgMemoryId().equalsIgnoreCase(gMemoriId)) {
 					LOGGER.log(Level.INFO, "Parent project is : " + gMemoriId);
+					paretnGtfReport.setId(gtfRpt.getId());
 					paretnGtfReport.setCreateDate(gtfRpt.getCreateDate());
 					paretnGtfReport.setYear(gtfRpt.getYear());
 					paretnGtfReport.setgMemoryId(gtfRpt.getgMemoryId());
@@ -177,6 +182,7 @@ public class MultiBrandServlet extends HttpServlet {
 						plannedMap = gtfRpt.getPlannedMap();
 						childGtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 						gmultiIdList.add(gtfRpt.getgMemoryId());
+						childGtfReport.setId(gtfRpt.getId());
 						childGtfReport.setBrand(gtfRpt.getBrand());
 						childGtfReport.setEmail(gtfRpt.getEmail());
 						childGtfReport.setFlag(gtfRpt.getFlag());
@@ -245,19 +251,13 @@ public class MultiBrandServlet extends HttpServlet {
 						newChildGtfReport.setRequestor(projectOwner + ":"
 								+ user.getUserName());
 						email = gtfRpt.getEmail();
-						newChildGtfReport.setEmail(prj_owner_email + ":" + email);
+						newChildGtfReport.setEmail(email);
 						newChildGtfReport.setFlag(gtfRpt.getFlag());
 						newChildGtfReport.setMultiBrand(true);
 						newChildGtfReport.setPercent_Allocation(percentageAllocation);
 						newChildGtfReport.setPoDesc(gtfRpt.getPoDesc());
 						newChildGtfReport.setPoNumber(gtfRpt.getPoNumber());
 						newChildGtfReport.setProject_WBS(gtfRpt.getProject_WBS());
-						/*String remarks = gtfRpt.getRemarks();
-						if (remarks.contains("\"")) {
-							remarks = remarks.replace("\\", "\\\\")
-									.replace("\"", "\\\"")
-									.replace("\'", "\\\'");
-						}*/
 						newChildGtfReport.setRemarks("");
 						newChildGtfReport.setStatus(gtfRpt.getStatus());
 						newChildGtfReport.setSubActivity(gtfRpt.getSubActivity());
@@ -312,13 +312,12 @@ public class MultiBrandServlet extends HttpServlet {
 			LOGGER.log(Level.INFO,
 					"Number of reports removed from the datastore : "
 							+ oldGtfReportList.size());
-			util.removeExistingProject(oldGtfReportList);
-			util.storeProjectsToCache(oldGtfReportList,user.getSelectedCostCenter(), BudgetConstants.OLD);
+			//util.removeExistingProject(oldGtfReportList,baseURL);
 			LOGGER.log(Level.INFO,
 					"Number of reports new report(s) inserted in to the datastore : "
 							+ masterGtfReportList.size());
-			util.generateProjectIdUsingJDOTxn(masterGtfReportList);
-			util.storeProjectsToCache(masterGtfReportList,user.getSelectedCostCenter(),BudgetConstants.NEW);
+			util.generateProjectIdUsingJDOTxn(masterGtfReportList,"",baseURL,costCenter);
+			//util.storeProjectsToCache(oldGtfReportList,masterGtfReportList,user.getSelectedCostCenter());
 			session.setAttribute("userInfo",user);
 		} catch (JSONException e) {
 			LOGGER.log(Level.SEVERE, "JSONException caught in Multibrand Servlet :" + e);

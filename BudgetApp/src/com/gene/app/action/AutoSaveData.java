@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.gene.app.dao.CostCenterCacheUtil;
 import com.gene.app.dao.DBUtil;
 import com.gene.app.model.BudgetSummary;
 import com.gene.app.model.GtfReport;
@@ -33,7 +34,7 @@ public class AutoSaveData extends HttpServlet {
 	private final static Logger LOGGER = Logger.getLogger(AutoSaveData.class
 			.getName());
 	DBUtil util = new DBUtil();
-
+	CostCenterCacheUtil costCenterCacheUtil = new CostCenterCacheUtil();
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		LOGGER.log(Level.INFO, "Autosave called...");
@@ -57,7 +58,10 @@ public class AutoSaveData extends HttpServlet {
 		Date cutOfDate = cutofDates.get(qtr + "");
 		LOGGER.log(Level.INFO, "cutOfDate : " + cutOfDate);
 		String brand = "";
-
+		 final String url = req.getRequestURL().toString();
+         final String baseURL = url.substring(0, url.length()
+                            - req.getRequestURI().length())
+                            + req.getContextPath() + "/";
 		double oldPlannedValue = 0.0;
 		double newPlannedValue = 0.0;
 		double plannedTotal = 0.0;
@@ -193,7 +197,7 @@ public class AutoSaveData extends HttpServlet {
 								util.putSummaryToCache(summary, costCenter);
 								if (gtfReportObj.getMultiBrand()) {
 									gtfReportMap = deleteChildProjects(
-											gtfReportObj, gtfReportMap);
+											gtfReportObj, gtfReportMap,baseURL,costCenter);
 									gtfReportObj.setMultiBrand(false);
 									gtfReportObj
 											.setChildProjectList(new ArrayList<String>());
@@ -296,7 +300,7 @@ public class AutoSaveData extends HttpServlet {
 					}
 				}
 			}
-			util.saveAllReportDataToCache(costCenter, gtfReportMap);
+			//util.saveAllReportDataToCache(costCenter, gtfReportMap);
 			String[] keys = {};
 			List<GtfReport> gtfList = new ArrayList<GtfReport>();
 			if (sessionKey != null) {
@@ -305,7 +309,8 @@ public class AutoSaveData extends HttpServlet {
 					gtfList.add(gtfReportMap.get(keys[i]));
 				}
 			}
-			util.saveAllDataToDataStore(gtfList);
+			costCenterCacheUtil.putCostCenterDataToCache(costCenter, gtfReportMap);
+			util.generateProjectIdUsingJDOTxn(gtfList,"",baseURL,costCenter);
 			session.setAttribute(BudgetConstants.KEY, sessionKey);
 			session.setAttribute("objArray", objarray);
 		} catch (JSONException e) {
@@ -330,7 +335,7 @@ public class AutoSaveData extends HttpServlet {
 	 * @return the map containing all reports for that cost center
 	 */
 	public Map<String, GtfReport> deleteChildProjects(GtfReport gtfReport,
-			Map<String, GtfReport> gtfReportMap) {
+			Map<String, GtfReport> gtfReportMap,String baseURL,String costCenter) {
 		List<String> childPrjList = gtfReport.getChildProjectList();
 		List<GtfReport> gtfPrjList = new ArrayList<GtfReport>();
 		if (childPrjList != null && !childPrjList.isEmpty()) {
@@ -342,9 +347,7 @@ public class AutoSaveData extends HttpServlet {
 				}
 			}
 		}
-		util.storeProjectsToCache(gtfPrjList, gtfReport.getCostCenter(),
-				BudgetConstants.OLD);
-		util.removeExistingProject(gtfPrjList);
+		util.removeExistingProject(gtfPrjList,baseURL,costCenter);
 		gtfReportMap = util
 				.getAllReportDataFromCache(gtfReport.getCostCenter());
 		return gtfReportMap;

@@ -50,6 +50,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 			resp.sendError(411, "User doesn't have permission to upload.");
 			return;
 		}
+		final String url = req.getRequestURL().toString();
+        final String baseURL = url.substring(0, url.length()
+                           - req.getRequestURI().length())
+                           + req.getContextPath() + "/";
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		String [] objArrayStr = objarray.split("],");
 		System.out.println("objArrayStr = "+objArrayStr.length);
@@ -89,11 +93,11 @@ public class FactSheetUploadServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
-		createGTFReports(user, user,rowList, gtfReports,costCentre);
+		createGTFReports(user, user,rowList, gtfReports,costCentre,baseURL);
 	}
 
 	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
-		List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre) {
+		List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre,String baseURL) {
 		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
 		boolean isMultibrand = false;
 		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
@@ -280,7 +284,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 
 				// Update if gmemori id already exists else create a new gmemori id either from poDesc or generate new
 				if(gtfRpt != null){
-					removeGtfReports.add(gtfRpt);
+				//	removeGtfReports.add(gtfRpt);
 					gtfReport.setId(gtfRpt.getId());
 					gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 				}else{
@@ -337,12 +341,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 		
 		if (gtfReports!=null && !gtfReports.isEmpty() && gtfReports.size() != 0) {
 			if(removeGtfReports!=null && !removeGtfReports.isEmpty() && removeGtfReports.size() >0){
-				util.removeExistingProject(removeGtfReports);
-				util.storeProjectsToCache(removeGtfReports,costCentre, BudgetConstants.OLD);
+			//	util.removeExistingProject(removeGtfReports,baseURL);
 			}
-			util.generateProjectIdUsingJDOTxn(gtfReports);
-			util.storeProjectsToCache(gtfReports, costCentre,
-					BudgetConstants.NEW);
+			util.generateProjectIdUsingJDOTxn(gtfReports,"",baseURL,costCentre);
+			//util.storeProjectsToCache(removeGtfReports,gtfReports, costCentre);
 
 		}
 	}

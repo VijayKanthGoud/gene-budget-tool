@@ -9,37 +9,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gene.app.dao.DBUtil;
 import com.gene.app.dao.PMF;
 import com.gene.app.model.GtfReport;
 import com.gene.app.util.BudgetConstants;
-import com.gene.app.util.Util;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsInputChannel;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
-import com.google.appengine.tools.cloudstorage.ListItem;
-import com.google.appengine.tools.cloudstorage.ListResult;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 public class RecoveryServlet extends HttpServlet {
-	 public static final boolean SERVE_USING_BLOBSTORE_API = false;
 	 
 	 private final GcsService gcsService = GcsServiceFactory.createGcsService(new RetryParams.Builder()
      .initialRetryDelayMillis(10)
      .retryMaxAttempts(10)
-     .totalRetryPeriodMillis(15000)
+     .totalRetryPeriodMillis(480000)
      .build());
 
  /**Used below to determine the size of chucks to read in. Should be > 1kb and < 10MB */
@@ -48,82 +43,45 @@ public class RecoveryServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		String URI = req.getRequestURI();
+		DatastoreService datastoreService = DatastoreServiceFactory
+				.getDatastoreService();
+
 		String[] splits = req.getRequestURI().split("/", 4);
 		GcsFilename fileName = getFileName(splits);
-		if (SERVE_USING_BLOBSTORE_API) {
-			BlobstoreService blobstoreService = BlobstoreServiceFactory
-					.getBlobstoreService();
-			BlobKey blobKey = blobstoreService
-					.createGsBlobKey("/gs/" + fileName.getBucketName() + "/"
-							+ fileName.getObjectName());
-			blobstoreService.serve(blobKey, resp);
-		} else {
-			GcsInputChannel readChannel = gcsService
-					.openPrefetchingReadChannel(fileName, 0, BUFFER_SIZE);
-			InputStream is = Channels.newInputStream(readChannel);
-			String gtfRptString = getStringFromInputStream(is);
-			System.out.println("gtfRptString = " + gtfRptString);
-			Gson gson = new Gson();
-			List<GtfReport> gtfRptList = gson.fromJson(gtfRptString,
-					new TypeToken<List<GtfReport>>() {
-					}.getType());
-			//System.out.println("gtfRptList = " + gtfRptList);
-			//List<GtfReport> gtfRptListFrmCS = new ArrayList<GtfReport>();
-		//	saveAllDataToDataStoreNoJDO(gtfRptList);
-			saveAllDataToDataStore(gtfRptList);
-			copy(Channels.newInputStream(readChannel), resp.getOutputStream());
-			RequestDispatcher rd = req.getRequestDispatcher("/recovery_conversion.jsp");
-			try {
-				rd.forward(req, resp);
-			} catch (ServletException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		Entity recoveryStatusEntity = new Entity("RecoveryStatus");
+		recoveryStatusEntity.setProperty(BudgetConstants.FILENAME,
+				fileName.getObjectName());
+		recoveryStatusEntity.setProperty(BudgetConstants.STATUS, "initiated");
+		recoveryStatusEntity.setProperty(BudgetConstants.COUNT, 0);
+		Key recoveryStatusEntityKey = datastoreService
+				.put(recoveryStatusEntity);
+
+		GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(
+				fileName, 0, BUFFER_SIZE);
+		InputStream is = Channels.newInputStream(readChannel);
+		String gtfRptString = getStringFromInputStream(is);
+		System.out.println("gtfRptString = " + gtfRptString);
+		Gson gson = new Gson();
+		List<GtfReport> gtfRptList = gson.fromJson(gtfRptString,
+				new TypeToken<List<GtfReport>>() {
+				}.getType());
+		saveAllDataToDataStore(gtfRptList);
+		copy(Channels.newInputStream(readChannel), resp.getOutputStream());
+
+		try {
+			Entity recoveredStatusEntity = datastoreService.get(recoveryStatusEntityKey);
+			recoveredStatusEntity.setProperty(BudgetConstants.STATUS, "completed");
+			recoveredStatusEntity.setProperty(BudgetConstants.COUNT, gtfRptList.size());
+			datastoreService.put(recoveredStatusEntity);
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
 		}
+
 	}
 	
-	/*public void saveAllDataToDataStoreNoJDO(List<GtfReport> gtfReportList){
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-		for(GtfReport gtfRprt: gtfReportList){
-		Entity gtfRpt = new Entity("GtfReport");
-		gtfRpt.setProperty("accrualsMap",gtfRprt.getAccrualsMap());
-		gtfRpt.setProperty("benchmarkMap",gtfRprt.getBenchmarkMap());
-		gtfRpt.setProperty("brand",gtfRprt.getBrand());
-		gtfRpt.setProperty("childProjectList",gtfRprt.getChildProjectList());
-		gtfRpt.setProperty("costCenter",gtfRprt.getCostCenter());
-		gtfRpt.setProperty("createDate",gtfRprt.getCreateDate());
-		gtfRpt.setProperty("isDummyGMemoriId",gtfRprt.isDummyGMemoriId());
-		gtfRpt.setProperty("email",gtfRprt.getEmail());
-		gtfRpt.setProperty("flag",gtfRprt.getFlag());
-		gtfRpt.setProperty("gMemoryId",gtfRprt.getgMemoryId());
-		gtfRpt.setProperty("Id",gtfRprt.getId());
-		gtfRpt.setProperty("multiBrand",gtfRprt.getMultiBrand());
-		gtfRpt.setProperty("percent_Allocation",gtfRprt.getPercent_Allocation());
-		gtfRpt.setProperty("plannedMap",gtfRprt.getPlannedMap());
-		gtfRpt.setProperty("poDesc",gtfRprt.getPoDesc());
-		gtfRpt.setProperty("poNumber",gtfRprt.getPoNumber());
-		gtfRpt.setProperty("project_WBS",gtfRprt.getProject_WBS());
-		gtfRpt.setProperty("projectName",gtfRprt.getProjectName());
-		gtfRpt.setProperty("qual_Quant",gtfRprt.getQual_Quant());
-		gtfRpt.setProperty("remarks",gtfRprt.getRemarks());
-		gtfRpt.setProperty("requestor",gtfRprt.getRequestor());
-		gtfRpt.setProperty("status",gtfRprt.getStatus());
-		gtfRpt.setProperty("study_Side",gtfRprt.getStudy_Side());
-		gtfRpt.setProperty("subActivity",gtfRprt.getSubActivity());
-		gtfRpt.setProperty("units",gtfRprt.getUnits());
-		gtfRpt.setProperty("variancesMap",gtfRprt.getVariancesMap());
-		gtfRpt.setProperty("vendor",gtfRprt.getVendor());
-		gtfRpt.setProperty("WBS_Name",gtfRprt.getWBS_Name());
-		gtfRpt.setProperty("year",gtfRprt.getYear());
-
-		datastore.put(gtfRpt);
-		}
-	}*/
 	 
 	 private GcsFilename getFileName(String [] splits) {
-		  //System.out.println("req.getRequestURI()"+req.getRequestURI());
 	    if (!splits[0].equals("") || !splits[1].equals("gcs")) {
 	      throw new IllegalArgumentException("The URL is not formed as expected. " +
 	          "Expecting /gcs/<bucket>/<object>");

@@ -5,11 +5,9 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -33,146 +31,135 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class GetReport extends HttpServlet {
-	/*private final static Logger LOGGER = Logger
-			.getLogger(GetReport.class.getName());*/
+	
 	MemcacheService cache = MemcacheServiceFactory.getMemcacheService();
 	DBUtil util = new DBUtil();
 	String costCenter = "";
+
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		HttpSession session = req.getSession();
-		String queryString = req.getQueryString();
 		resp.setContentType(BudgetConstants.contentType);
-		UserRoleInfo user = (UserRoleInfo)session.getAttribute("userInfo");
+		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
 		UserService userService;
-		String email ="";
-		Map<String,GtfReport> gtfReports = new LinkedHashMap<String,GtfReport>();
+		String email = "";
+		Map<String, GtfReport> gtfReports = new LinkedHashMap<String, GtfReport>();
 		String selectedBrand = req.getParameter("brandValue");
 		String selectedView = req.getParameter("selectedView");
 		String selectedCC = req.getParameter("getCCValue");
 		String gMemoriId = req.getParameter("gMemoriId");
-		if(user==null){
-		userService = UserServiceFactory.getUserService();//(User)session.getAttribute("loggedInUser");
-		String requestUri = req.getRequestURI();
-		Principal userPrincipal = req.getUserPrincipal();
-		String loginLink = userService.createLoginURL(requestUri);
-		if(userPrincipal==null){
-			resp.sendRedirect(loginLink);
-			return;
-		}
-		costCenter = "";
-		email = userService.getCurrentUser().getEmail();
-		user = util.readUserRoleInfo(email);
-		if(user == null || user.getUserName() == null){
-			resp.sendRedirect("/unautherizedUser.jsp"); 
-			return;
-		}
-		//LOGGER.log(Level.INFO, "email in userService"+email);
-		}else{
-		email = user.getEmail();
-		//LOGGER.log(Level.INFO, "email in session UserRoleInfo"+email);
-		}
-		user.setSelectedCostCenter((selectedCC==null || "".equalsIgnoreCase(selectedCC.trim()))?user.getSelectedCostCenter():selectedCC);
-	//	gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
-		//LOGGER.log(Level.INFO, "gtfReports from cache"+gtfReports);
-		//List<GtfReport> gtfReportList = getReportList(gtfReports,BudgetConstants.USER_ROLE_PRJ_OWNER,email);
-		List<GtfReport> gtfReportList = null;
-		//gtfReports = util.getAllReportDataFromCache(user.getCostCenter());
-		// for project owner role
-		System.out.println(":::"+selectedBrand+":::::"+selectedView+"::::"+selectedCC);
-		Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
-		Object[] myBrands = {}; 
-		if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && !user.getRole().contains("Admin")){
-			gtfReports = util.getAllReportDataFromCache(user.getSelectedCostCenter());
-			if(gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())){
-				selectedView = "gMemori";
+		if (user == null) {
+			userService = UserServiceFactory.getUserService();
+			String requestUri = req.getRequestURI();
+			Principal userPrincipal = req.getUserPrincipal();
+			String loginLink = userService.createLoginURL(requestUri);
+			if (userPrincipal == null) {
+				resp.sendRedirect(loginLink);
+				return;
 			}
-			gtfReportList = getRptListForLoggedInUser(user,selectedView,selectedBrand,gtfReports, gMemoriId, req);
+			costCenter = "";
+			email = userService.getCurrentUser().getEmail();
+			user = util.readUserRoleInfo(email);
+			if (user == null || user.getUserName() == null) {
+				resp.sendRedirect("/unautherizedUser.jsp");
+				return;
+			}
+		} else {
+			email = user.getEmail();
 		}
-		// for admin role
-		else if(user.getRole()!=null && !"".equalsIgnoreCase(user.getRole().trim()) && user.getRole().contains("Admin")){
-			if(selectedView==null || "".equalsIgnoreCase(selectedView.trim()) 
-					|| selectedCC==null || "".equalsIgnoreCase(selectedCC.trim())){
+		user.setSelectedCostCenter((selectedCC == null || ""
+				.equalsIgnoreCase(selectedCC.trim())) ? user
+				.getSelectedCostCenter() : selectedCC);
+		List<GtfReport> gtfReportList = null;
+		Map<String, Double> userBrandMap = new LinkedHashMap<String, Double>();
+		Object[] myBrands = {};
+
+		gtfReports = util.getAllReportDataFromCache(user
+				.getSelectedCostCenter());
+
+		if (user.getRole() != null
+				&& !"".equalsIgnoreCase(user.getRole().trim())
+				&& user.getRole().contains("Admin")
+				&& !(gMemoriId != null && !""
+						.equalsIgnoreCase(gMemoriId.trim()))) {
+			if (selectedView == null
+					|| "".equalsIgnoreCase(selectedView.trim())
+					|| selectedCC == null
+					|| "".equalsIgnoreCase(selectedCC.trim())) {
 				selectedView = "My Brands";
 				selectedCC = "7135";
 				user.setSelectedCostCenter(selectedCC);
-				user.setCostCenter("7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138");
+				user.setCostCenter("7527:7034:7035:7121:7712:7135:7713:7428:7512:7574:7136:7138:7004");
 			}
-			if(!Util.isNullOrEmpty(selectedBrand)){
+			if (!Util.isNullOrEmpty(selectedBrand)) {
 				CostCenter_Brand ccBrandMap = new CostCenter_Brand();
-				 List<CostCenter_Brand> costCenterList =util.readCostCenterBrandMappingData();
-				for(CostCenter_Brand ccBrand : costCenterList){
-					if(selectedCC.equalsIgnoreCase(ccBrand.getCostCenter().trim())){
+				List<CostCenter_Brand> costCenterList = util
+						.readCostCenterBrandMappingData();
+				for (CostCenter_Brand ccBrand : costCenterList) {
+					if (selectedCC.equalsIgnoreCase(ccBrand.getCostCenter()
+							.trim())) {
 						ccBrandMap = ccBrand;
 						break;
 					}
 				}
-				if(ccBrandMap.getBrandFromDB().contains("Avastin")){
+				if (ccBrandMap.getBrandFromDB().contains("Avastin")) {
 					selectedBrand = "Avastin";
-				}else{
-					userBrandMap = util.getBrandMap(ccBrandMap.getBrandFromDB());
-					Map<String,Double> sortedMap = new TreeMap<String,Double>(userBrandMap);
+				} else {
+					userBrandMap = util
+							.getBrandMap(ccBrandMap.getBrandFromDB());
+					Map<String, Double> sortedMap = new TreeMap<String, Double>(
+							userBrandMap);
 					myBrands = sortedMap.keySet().toArray();
-					selectedBrand =myBrands[0].toString();
+					selectedBrand = myBrands[0].toString();
 				}
-			}	
-		//user.setCostCenter(selectedCC);
-			//}
-		gtfReports = util.getAllReportDataFromCache(selectedCC);
-		if(gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())){
-			selectedView  =  "gMemori";
+			}
 		}
-		gtfReportList = getRptListForLoggedInUser(user, selectedView, selectedBrand, gtfReports, gMemoriId, req);
+		gtfReportList = getRptListForLoggedInUser(user, selectedView,
+				selectedBrand, gtfReports, gMemoriId, req);
+
+		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
+		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
+			req.setAttribute("accessreq", "external");
+			req.setAttribute("selectedView", "My Projects");
+			if (costCenter != null && !"".equalsIgnoreCase(costCenter)) {
+				req.setAttribute("getCCValue", costCenter);
+			}
 		}
 		req.setAttribute("selectedView", selectedView);
 		req.setAttribute("brandValue", selectedBrand);
 		req.setAttribute("getCCValue", selectedCC);
-		List<GtfReport> queryGtfRptList = new ArrayList<GtfReport>();
-		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
-			//req.setAttribute("accessreq", "external");
-			req.setAttribute("selectedView", "My Projects");
-			if(costCenter != null && !"".equalsIgnoreCase(costCenter)){
-				req.setAttribute("getCCValue", costCenter);
-			}
-		} else {
-			//req.setAttribute("accessreq", "internal");
-		}
 		req.setAttribute("accessreq", "internal");
 		queryGtfRptList = gtfReportList;
-			
-		//LOGGER.log(Level.INFO, "gtfReportList from cache based on email"+gtfReportList);
-		//String qParam = req.getParameter("gMemoriId");
-		if(queryGtfRptList!=null && !queryGtfRptList.isEmpty()){
-		Collections.sort( queryGtfRptList, new Comparator<GtfReport>()
-		        {
-		            public int compare( GtfReport o1, GtfReport o2 )
-		            {
-		            	if(o1.getFlag() == o2.getFlag()) {
-		            		if((o1.getProjectName()).compareTo(o2.getProjectName()) ==0){
-		            			return (o1.getgMemoryId()).compareTo(o2.getgMemoryId());
-		            		}
-		            		return (o1.getProjectName()).compareTo(o2.getProjectName());
-		            	}
-		            	return o1.getFlag() - o2.getFlag();
-		            }
-		        } );
-		queryGtfRptList = util.calculateVarianceMap(queryGtfRptList);
+
+		if (queryGtfRptList != null && !queryGtfRptList.isEmpty()) {
+			Collections.sort(queryGtfRptList, new Comparator<GtfReport>() {
+				public int compare(GtfReport o1, GtfReport o2) {
+					if (o1.getFlag() == o2.getFlag()) {
+						if ((o1.getProjectName()).compareTo(o2.getProjectName()) == 0) {
+							return (o1.getgMemoryId()).compareTo(o2
+									.getgMemoryId());
+						}
+						return (o1.getProjectName()).compareTo(o2
+								.getProjectName());
+					}
+					return o1.getFlag() - o2.getFlag();
+				}
+			});
+			queryGtfRptList = util.calculateVarianceMap(queryGtfRptList);
 		}
-		
-		//LOGGER.log(Level.INFO, "gtfReportList from after calculating variance map"+gtfReportList);
-		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports, queryGtfRptList);
+
+		req.setAttribute(BudgetConstants.REQUEST_ATTR_GTFReports,
+				queryGtfRptList);
 		DBUtil util = new DBUtil();
-		//UserRoleInfo user = util.readUserRoleInfo(email);
-		//BudgetSummary summary = util.readBudgetSummary(email,BudgetConstants.costCenter,gtfReportList,user);
-		BudgetSummary summary = util.readBudgetSummary(user.getSelectedCostCenter());
-		//LOGGER.log(Level.INFO, "summary from util.readBudgetSummary(user.getCostCenter())"+summary);
+		BudgetSummary summary = util.readBudgetSummary(user
+				.getSelectedCostCenter());
 		req.setAttribute("user", user);
 		session.setAttribute(BudgetConstants.REQUEST_ATTR_SUMMARY, summary);
-		RequestDispatcher rd = req.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);
+		RequestDispatcher rd = req
+				.getRequestDispatcher(BudgetConstants.GetReport_REDIRECTURL);
 		try {
 			rd.forward(req, resp);
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -211,7 +198,8 @@ public class GetReport extends HttpServlet {
 
 	public List<GtfReport> getRptListForLoggedInUser(UserRoleInfo user,
 			String selectedView, String selectedBrand,
-			Map<String, GtfReport> gtfReports, String gMemoriId, HttpServletRequest req ) {
+			Map<String, GtfReport> gtfReports, String gMemoriId,
+			HttpServletRequest req) {
 		boolean found = false;
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		if (selectedView == null || "".equalsIgnoreCase(selectedView.trim())) {
@@ -238,25 +226,26 @@ public class GetReport extends HttpServlet {
 			gtfReportList = getReportListCC(gtfReports);
 			break;
 		case "gMemori":
-			if(user.getCostCenter().contains(":")){
-			for (String cc : user.getCostCenter().split(":")) {
-				Map<String, GtfReport> gtfReportMap = util
-						.getAllReportDataFromCache(cc);
-				if (gtfReportMap.containsKey(gMemoriId)) {
-					gtfReportList = getReportList(gtfReportMap,
-							BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
-					costCenter = cc;
-					user.setSelectedCostCenter(costCenter);
-					found =true;
-					break;
+			if (user.getCostCenter().contains(":")) {
+				for (String cc : user.getCostCenter().split(":")) {
+					Map<String, GtfReport> gtfReportMap = util
+							.getAllReportDataFromCache(cc);
+					if (gtfReportMap.containsKey(gMemoriId)) {
+						gtfReportList = getReportList(gtfReportMap,
+								BudgetConstants.USER_ROLE_PRJ_OWNER,
+								user.getEmail());
+						costCenter = cc;
+						user.setSelectedCostCenter(costCenter);
+						found = true;
+						break;
+					}
 				}
-			}
-			}else{
+			} else {
 				gtfReportList = getReportList(gtfReports,
 						BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
-				found =true;
+				found = true;
 			}
-			if(!found){
+			if (!found) {
 				costCenter = user.getSelectedCostCenter();
 				gtfReportList = getReportList(gtfReports,
 						BudgetConstants.USER_ROLE_PRJ_OWNER, user.getEmail());
@@ -270,88 +259,23 @@ public class GetReport extends HttpServlet {
 		return gtfReportList;
 	}
 
-	public List<GtfReport> getRptListForAdmin(UserRoleInfo user,
-			String selectedView, String selectedBrand,
-			Map<String, GtfReport> gtfReports) {
-		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
-		gtfReportList = getReportListCC(gtfReports);
-		return gtfReportList;
-	}
-	
-	public List<GtfReport> getReportList(Map<String,GtfReport>gtfReports,String userType,String email){
+	public List<GtfReport> getReportList(Map<String, GtfReport> gtfReports,
+			String userType, String email) {
 		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
 		GtfReport gtfReport = null;
-		
-		if(gtfReports!=null){
-			
-			for(Map.Entry<String, GtfReport> gtfEntry:gtfReports.entrySet()){
+
+		if (gtfReports != null) {
+
+			for (Map.Entry<String, GtfReport> gtfEntry : gtfReports.entrySet()) {
 				gtfReport = gtfEntry.getValue();
-				if((email !=null && !"".equals(email.trim())) && (gtfReport.getEmail().trim().toLowerCase()).contains(email.toLowerCase())){
-				gtfReportList.add(gtfReport);
-			}}
-		}
-		return gtfReportList;
-	}
-	public List<GtfReport> getQueryGtfReportList(List<GtfReport>gtfReports,String gMemoriId, HttpServletRequest req, UserRoleInfo user){
-		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
-		GtfReport gtfReport = null;
-		gtfReportList =	util.readProjectDataById(gMemoriId,user);
-		if(gtfReportList==null){
-			gtfReportList = new ArrayList<GtfReport>();
-			System.out.println("gtfReportList = "+gtfReportList.isEmpty());
-		}else if(gtfReportList!=null && !gtfReportList.isEmpty()){
-			gtfReport = gtfReportList.get(0);
-			System.out.println("gtfReport = "+gtfReport.getPlannedMap());
-			req.setAttribute("selectedView", "My Projects");
-			req.setAttribute("getCCValue", gtfReport.getCostCenter());
-			user.setSelectedCostCenter(gtfReport.getCostCenter());
-			//gtfReports.add(gtfReport);
-		}
-		
-		/*String qParam = ""; 
-		Iterator<GtfReport> iter = null;
-			if(gtfReports!=null){
-				iter = gtfReports.iterator();
-				
-				qParam = req.getParameter("gMemoriId");
-				//int dotpos = qParam.indexOf(".");
-				if(dotpos>0){
-				qParam = qParam.substring(0,dotpos);
+				if ((email != null && !"".equals(email.trim()))
+						&& (gtfReport.getEmail().trim().toLowerCase())
+								.contains(email.toLowerCase())) {
+					gtfReportList.add(gtfReport);
 				}
-			while(iter.hasNext()){
-			if(queryString.contains("gMemoriId")) {
-				
-					gtfReport = iter.next();
-					if(gtfReport.getgMemoryId().contains(qParam)) {
-					gtfReportList.add(gtfReport);
-					}
-			}else if(queryString.contains("projectName")){
-				qParam = req.getParameter("projectName");
-					gtfReport = iter.next();
-					if(qParam.equalsIgnoreCase(gtfReport.getProjectName())) {
-					gtfReportList.add(gtfReport);
-					}
-			}else if(queryString.contains("brand")){
-				qParam = req.getParameter("brand");
-					gtfReport = iter.next();
-					if(qParam.equalsIgnoreCase(gtfReport.getBrand())) {
-					gtfReportList.add(gtfReport);
-					}
 			}
-	}}*/
+		}
 		return gtfReportList;
 	}
-	/*public List<GtfReport> getRptListByGmemId(List<GtfReport>gtfReports,String qParam){
-		GtfReport gtfReport = null;
-		List<GtfReport> gtfReportList = new ArrayList<GtfReport>();
-	if(gtfReports!=null){
-		Iterator<GtfReport> iter = gtfReports.iterator();
-		while(iter.hasNext()){
-			gtfReport = iter.next();
-			if(qParam.equalsIgnoreCase(gtfReport.getgMemoryId())) {
-			gtfReportList.add(gtfReport);
-			}
-		}}
-	return gtfReportList;
-	}*/
+
 }

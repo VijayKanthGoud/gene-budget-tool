@@ -49,16 +49,17 @@ public class StoreReport extends HttpServlet {
 	String gMemoriId = "";
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		LOGGER.log(Level.INFO, "Inside store report");
+		LOGGER.log(Level.INFO, "Inside store report :::" + System.currentTimeMillis());
 		HttpSession session = req.getSession();
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
 		resp.setContentType(BudgetConstants.contentType);
 		String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		String costCenter = req.getParameter("costCenter").toString();
 		user.setSelectedCostCenter(costCenter);
-		LOGGER.log(Level.INFO, "objarray : " + objarray +"\nUser is : "+user);
+		LOGGER.log(Level.INFO, "Received objarray : " + objarray +"\nUser is : "+user);
 		storeProjectData(objarray, user, req, resp);
 		session.setAttribute("userInfo", user);
+		LOGGER.log(Level.INFO, "End of storeReport :::" + System.currentTimeMillis());
 	}
 
 	public void storeProjectData(String objarray, UserRoleInfo user, HttpServletRequest req,
@@ -74,6 +75,7 @@ public class StoreReport extends HttpServlet {
 		String status = "";
 		String poNum = "";
 		int flag = 0;
+		LOGGER.log(Level.INFO, "Before JDO :::" + System.currentTimeMillis());
 		try {
 			jsonArray = new JSONArray(objarray);
 			for (int count = 0; count < jsonArray.length(); count++) {
@@ -168,9 +170,19 @@ public class StoreReport extends HttpServlet {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}*/
-				util.generateProjectIdUsingJDOTxn(gtfReports);
-				util.storeProjectsToCache(gtfReports, user.getSelectedCostCenter(),
-						BudgetConstants.NEW);
+				LOGGER.log(Level.INFO, "Before JDO :::" + System.currentTimeMillis());
+				 final String url = req.getRequestURL().toString();
+	             final String baseURL = url.substring(0, url.length()
+	                                - req.getRequestURI().length())
+	                                + req.getContextPath() + "/";
+
+				util.generateProjectIdUsingJDOTxn(gtfReports,"",baseURL,user.getSelectedCostCenter());
+				LOGGER.log(Level.INFO, "After JDO :::" + System.currentTimeMillis());
+//				util.storeProjectsToCache(gtfReports, user.getSelectedCostCenter(),
+//						BudgetConstants.NEW);
+				LOGGER.log(Level.INFO, "Before cache :::" + System.currentTimeMillis());
+				//util.addProjectsToCache(gtfReports, user.getSelectedCostCenter());
+				LOGGER.log(Level.INFO, "After cache :::" + System.currentTimeMillis());
 			}
 		} catch (JSONException e1) {
 			e1.printStackTrace();

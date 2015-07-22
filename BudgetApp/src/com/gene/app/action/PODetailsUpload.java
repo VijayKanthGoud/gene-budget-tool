@@ -56,6 +56,10 @@ public class PODetailsUpload extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		LOGGER.log(Level.INFO, "inside fileupload...");
+		 final String url = req.getRequestURL().toString();
+         final String baseURL = url.substring(0, url.length()
+                            - req.getRequestURI().length())
+                            + req.getContextPath() + "/";
 		HttpSession session = req.getSession();
 		UserRoleInfo user = (UserRoleInfo) session.getAttribute("userInfo");
 		if(user != null && !user.getRole().equalsIgnoreCase("admin")){
@@ -96,7 +100,7 @@ public class PODetailsUpload extends HttpServlet {
 			costCenterWiseGtfRptMap = util
 					.getAllReportDataFromCache(costCenter);
 			createOrUpdateGTFReports(user, rowList, gtfReports,
-					costCenterWiseGtfRptMap, costCenter);
+					costCenterWiseGtfRptMap, costCenter,baseURL);
 		} catch (JSONException exception) {
 			System.out.println(exception + "");
 			LOGGER.log(Level.SEVERE,
@@ -107,7 +111,7 @@ public class PODetailsUpload extends HttpServlet {
 
 	private void createOrUpdateGTFReports(UserRoleInfo user,
 			List<List<String>> rowList, List<GtfReport> gtfReports,
-			Map<String, GtfReport> costCenterWiseGtfRptMap, String costCentre) {
+			Map<String, GtfReport> costCenterWiseGtfRptMap, String costCentre,String baseURL) {
 		Set<String> completeGMemoriIds = costCenterWiseGtfRptMap.keySet();
 
 		Map<String, GtfReport> poMap = util
@@ -280,8 +284,8 @@ public class PODetailsUpload extends HttpServlet {
 		changeForAddedMultiBrand(addedPOs, gtfReports, costCenterWiseGtfRptMap);
 		changeForAddedMultiBrand(addedWithOutPos, gtfReports,
 				costCenterWiseGtfRptMap);
-		util.generateProjectIdUsingJDOTxn(gtfReports);
-		util.storeProjectsToCache(gtfReports, costCentre, BudgetConstants.NEW);
+		util.generateProjectIdUsingJDOTxn(gtfReports,"",baseURL,costCentre);
+		//util.storeProjectsToCache(null,gtfReports, costCentre);
 	}
 
 	private void updateAccrual(List rcvdRow, UserRoleInfo user,

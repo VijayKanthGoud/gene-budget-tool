@@ -44,6 +44,10 @@ public class DisableProjectServlet extends HttpServlet {
 		String unixId = "";
 		Gson gson = new Gson();
 		DBUtil util = new DBUtil();
+		 final String url = req.getRequestURL().toString();
+         final String baseURL = url.substring(0, url.length()
+                            - req.getRequestURI().length())
+                            + req.getContextPath() + "/";
 		if(Util.isNullOrEmpty(req.getParameter("gMem"))){
 			gMemoriId = req.getParameter("gMem");
 		}if(Util.isNullOrEmpty(req.getParameter("costCenter"))){
@@ -54,7 +58,7 @@ public class DisableProjectServlet extends HttpServlet {
 		}
 		LOGGER.log(Level.INFO, "Request received to disable: " + gMemoriId);
 		if(gMemoriId.length()==10){
-			util.disableProject(gMemoriId, costCenter);
+			util.disableProject(gMemoriId, costCenter,baseURL);
 			ErrorObject respFrmStudy = new ErrorObject();
 			respFrmStudy.setStatusCode(200);
 			respFrmStudy.setStatusMessage("Project deleted Successfully !!!");
@@ -68,7 +72,7 @@ public class DisableProjectServlet extends HttpServlet {
 			prjParam.setUnixId(unixId);
 			ErrorObject respFrmStudy = deleteProjectFromStudy(req,resp,prjParam);
 			if(respFrmStudy.getStatusCode()==200){
-			util.disableProject(gMemoriId, costCenter);			
+			util.disableProject(gMemoriId, costCenter,baseURL);			
 		}
 	}
 	}
@@ -85,7 +89,7 @@ public class DisableProjectServlet extends HttpServlet {
 		Gson gson = new Gson();
 		String request = gson.toJson(prjParam);
 		URL url = new URL(
-				"https://memori-qa.appspot.com/web-service/project/deactivate");
+				"https://memori-dev.appspot.com/web-service/project/deactivate");
 		HttpURLConnection connection = (HttpURLConnection) url
 				.openConnection();
 		connection.setDoOutput(true);
