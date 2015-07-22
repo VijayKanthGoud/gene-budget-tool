@@ -65,23 +65,24 @@
     	  var bucket = '<%= BudgetConstants.BUCKET_NAME%>';
           var filename =  document.getElementById("fileName").value;
     	  $('#submtButton').prop("disabled",true);
-    	  $("#submtButton").attr('value', 'Restoring...');
+    	  $("#submtButton").attr('value', 'Initiating Restore...');
           if (bucket == null || bucket == "" || filename == null || filename == "") {
               alert("FileName is required");
               return false;
           } else {
 		  $.ajax({
-				url : "/gcs/" + bucket + "/" + filename,
+				url : "/recoverDataServlet",
+				data : {bucket:bucket,filename:filename},
 				type : 'GET',
 				async: true,
 				dataType : 'text',
 				success : function(result) {
-					alert("Success");
+					alert("Restore initiated.");
 					$('#submtButton').prop("disabled",false);
 					$("#submtButton").attr('value', 'Restore Data');
 				},
 				error : function(result){
-					alert("Error");
+					alert("Restore failed");
 					$('#submtButton').prop("disabled",false);
 					$("#submtButton").attr('value', 'Restore Data');
 				}
