@@ -106,6 +106,7 @@ public class CostCenterCacheUtil {
 				// LOGGER.log(Level.INFO, "gtfReportMap : "+gtfReportMap);
 			} catch (Exception e) {
 				e.printStackTrace(System.out);
+				return null;
 			}
 		}
 		// LOGGER.log(Level.INFO,
@@ -126,7 +127,7 @@ public class CostCenterCacheUtil {
 			// LOGGER.log(Level.INFO, "Data Size: " + baos.size());
 			long sizeOfDataInKB = baos.size() / 1024;
 			// LOGGER.log(Level.INFO, "sizeOfDataInKB : "+sizeOfDataInKB);
-			long noOfChunks = (sizeOfDataInKB / 1000) + 1;
+			long noOfChunks = (sizeOfDataInKB / 800) + 1;
 			// LOGGER.log(Level.INFO, "noOfChunks : "+noOfChunks);
 			long numberOfEntitiesInOneMap = data.size() / noOfChunks;
 			// LOGGER.log(Level.INFO,

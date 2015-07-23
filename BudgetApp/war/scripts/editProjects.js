@@ -655,9 +655,9 @@ function updateMemCache(e, args, tempKey) {
 			}
 		}
 	//	console.log(JSON.stringify(aSaveData));
-		$('#statusMessage').text("Saving data...").fadeIn(200);
 	$.ajax({
 		beforeSend: function(msg){
+			 $('#statusMessage').text("Saving data...").fadeIn(200);
 			 if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>'){
 				$('#back').addClass('black_overlay').fadeIn(100);
 				$('#loader_image').show().fadeIn(100);

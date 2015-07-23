@@ -1284,6 +1284,11 @@ String ccView="";
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
+			//Stop auto saving data until completed
+			if($('#statusMessage').text() == "Saving data..."){
+				return false;
+			}
+			//Stop editing while screen is disabled
 			if($('#back').attr('class') != 'undefined' && $('#back').attr('class') == 'black_overlay'){
 				return false;
 			}
