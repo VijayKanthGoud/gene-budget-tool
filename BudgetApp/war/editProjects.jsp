@@ -1284,6 +1284,9 @@ String ccView="";
 		// make the current and future month cells editable
 		grid.onBeforeEditCell
 				.subscribe(function(e, args) {
+			if($('#back').attr('class') != 'undefined' && $('#back').attr('class') == 'black_overlay'){
+				return false;
+			}
 			var monthArray = ["JAN", "FEB","MAR","APR","MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV","DEC"];
 			var cell = args.cell;
 			var row = args.row;
