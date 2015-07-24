@@ -1770,6 +1770,9 @@ function deleteCurrentProject(delBtnClicked){
 			var obj = $.parseJSON(result);
 			//alert(result+"::::::::::"+obj);
 			if(obj.statusCode==200){
+				if(gmemId.length>=10){
+					gmemId="#";
+				}
 			alert('Project ' + gmemId + ' successfully deleted.');
 			window.location.reload(true);
 			}else{
