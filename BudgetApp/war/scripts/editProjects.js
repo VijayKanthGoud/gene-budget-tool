@@ -806,6 +806,10 @@ function createIntProjects(){
 			,21:"",22:"",23:"",24:"",25:"",26:"New",27:"",28:"",29:"",30:""
 				,31:"",32:"",33:"New",34:"New projects",35:"NewProjects",37:false,38:"",39:"",40:"<%=BudgetConstants.FORECAST%>"};
 	dataView.insertItem(0,item);
+
+	//Project Name Field highlighted when user clicks on Create a Project Button
+	grid.gotoCell(2, "<%=BudgetConstants.PROJECT_NAME_CELL%>", false);
+	
 	if(addsave ==0){
 	    var saveClose ={id:"id_"+length+2,indent:0,0:"",1:"",2:"",3:"",4:"",5:"",6:"Save",7:"",8:"",9:"",10:""
 					,11:"Cancel",12:"",13:"",14:"",15:"",16:"",17:"",18:"",19:"",20:""
