@@ -194,13 +194,7 @@ public class MultiBrandServlet extends HttpServlet {
 						childGtfReport.setPoDesc(gtfRpt.getPoDesc());
 						childGtfReport.setPoNumber(gtfRpt.getPoNumber());
 						childGtfReport.setProject_WBS(gtfRpt.getProject_WBS());
-						String remarks = gtfRpt.getRemarks();
-						if (remarks.contains("\"")) {
-							remarks = remarks.replace("\\", "\\\\")
-									.replace("\"", "\\\"")
-									.replace("\'", "\\\'");
-						}
-						childGtfReport.setRemarks(remarks);
+						childGtfReport.setRemarks("");
 						childGtfReport.setRequestor(projectOwner + ":"
 								+ user.getUserName());
 						childGtfReport.setStatus(gtfRpt.getStatus());
