@@ -243,7 +243,10 @@ public class DownloadFileServlet extends HttpServlet {
 			}
 			row.createCell(cellCount++).setCellValue(total);
 			row.createCell(cellCount++).setCellValue(gtfReport.getUnits());
-			row.createCell(cellCount+2).setCellValue(StringEscapeUtils.unescapeHtml(gtfReport.getRemarks()));
+			String remarks = gtfReport.getRemarks();
+			remarks = remarks.replace("\\\\", "\\").replace("\\\"", "\"")
+					.replace("\\\'", "\'");
+			row.createCell(cellCount+2).setCellValue(StringEscapeUtils.unescapeHtml(remarks));
 			cellCount = 0;
 		}
 		
