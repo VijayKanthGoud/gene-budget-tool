@@ -108,6 +108,13 @@ public class GetReport extends HttpServlet {
 					selectedBrand = myBrands[0].toString();
 				}
 			}
+		}else if(user.getRole() != null
+				&& !"".equalsIgnoreCase(user.getRole().trim())
+				&& user.getRole().contains("Project Owner")){
+			if(!Util.isNullOrEmpty(selectedView)){
+			selectedView = "My Projects";
+			selectedCC = user.getSelectedCostCenter();
+			}
 		}
 		gtfReports = util.getAllReportDataFromCache(selectedCC);
 		if (gMemoriId != null && !"".equalsIgnoreCase(gMemoriId.trim())) {
