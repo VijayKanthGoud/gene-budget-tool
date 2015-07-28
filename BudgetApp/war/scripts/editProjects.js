@@ -1729,6 +1729,7 @@ function deleteCurrentProject(delBtnClicked){
 	var projectOwner = delBtnClicked.value.split('~')[1];
 	var projectCreateDate = new Date(delBtnClicked.value.split('~')[2].split("_"));
 	var projStatus = delBtnClicked.value.split('~')[3];
+	var project_Name = delBtnClicked.value.split('~')[4];
 	if('<%=userInfo.getRole().contains("Project Owner")%>' == 'true'){
 		console.log("Not an admin...");
 		if(projectOwner != '<%=userInfo.getUserName()%>'){
@@ -1777,7 +1778,7 @@ function deleteCurrentProject(delBtnClicked){
 				if(gmemId.length>=10){
 					gmemId="#";
 				}
-			alert('Project ' + gmemId + ' successfully deleted.');
+			alert('Project ' + gmemId + ' ('+ project_Name +') successfully deleted.');
 			window.location.reload(true);
 			}else{
 				$('#back').removeClass('black_overlay').fadeIn(100);

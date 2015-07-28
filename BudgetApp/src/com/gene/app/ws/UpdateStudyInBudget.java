@@ -85,6 +85,7 @@ public class UpdateStudyInBudget {
 		List<GtfReport>	gtfRptlst = new ArrayList<GtfReport>();
 		String selectedCostCenter = "";
 		String gMemoriId = prjParam.getgMemoriId();
+		List<String> gMemIdlst = new ArrayList<String>();
 		if(prjParam.getgMemoriId()!=null && !"".equals(prjParam.getgMemoriId())){
 			gtfRptlst = util.readProjectDataByGMemId(prjParam.getgMemoriId());
 			//LOGGER.log(Level.INFO, gtfRptlst + "selectedCC = "+selectedCC);
@@ -108,7 +109,16 @@ public class UpdateStudyInBudget {
 				LOGGER.log(Level.INFO, "status Message"+eObj.getStatusMessage());
 				return eObj;
 			}else if("Closed".equalsIgnoreCase(prjParam.getpStatus().toLowerCase())){
-				for( GtfReport gtfEntry: gtfRptlst){
+				Map<String,GtfReport> gtfRptMap = util.getAllReportDataFromCache(selectedCostCenter);
+				GtfReport gtfEntry = new GtfReport();
+				if(gtfRpt!=null && gtfRpt.getMultiBrand()){
+					gMemIdlst = gtfRpt.getChildProjectList();
+				}else{
+					gMemIdlst = new ArrayList<String>();
+					gMemIdlst.add(gtfRpt.getgMemoryId());
+				}
+				for( String gMemoriIdEntry: gMemIdlst){
+					gtfEntry = gtfRptMap.get(gMemoriIdEntry);
 					if(Util.isNullOrEmpty(gtfEntry.getgMemoryId()) && gtfEntry.getgMemoryId().length()<10){
 						if((gtfEntry.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfEntry.getRequestor().split(":")[1]) ) ||
 								(!gtfEntry.getRequestor().contains(":") && !prjParam.getProjectOwner().equalsIgnoreCase(gtfEntry.getRequestor()))){

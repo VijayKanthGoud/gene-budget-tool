@@ -330,7 +330,7 @@ public class PODetailsUpload extends HttpServlet {
 		if(receivedGtfReport.getProjectName() != null && receivedGtfReport.getProjectName().trim().equalsIgnoreCase("")){
 			receivedGtfReport.setProjectName(poDesc);
 		}
-		receivedGtfReport.setSubActivity("");
+		//receivedGtfReport.setSubActivity("");
 		Map<String, Double> receivedAccrualMap = receivedGtfReport
 				.getAccrualsMap();
 		Map<String, Double> receivedPlannedMap = receivedGtfReport
@@ -504,7 +504,7 @@ public class PODetailsUpload extends HttpServlet {
 		}
 
 
-		gtfReport.setSubActivity("");
+		//gtfReport.setSubActivity("");
 		uploadedGMems.put(gtfReport.getgMemoryId(), gtfReport);
 
 		if(pGtf ==null){
