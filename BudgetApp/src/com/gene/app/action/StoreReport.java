@@ -328,6 +328,7 @@ public class StoreReport extends HttpServlet {
 										.getString(BudgetConstants.New_GTFReport_ProjectOwner));
 				email = gtfReport.getEmail();
 				gtfReport.setEmail(prj_owner_email + ":" + email);
+				gtfReport.setRemarks("");
 				try {
 					gtfReport.setPercent_Allocation(Double
 							.parseDouble(multiBrandObject.getString("2")));
