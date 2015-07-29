@@ -23,6 +23,7 @@ import com.gene.app.dao.DBUtil;
 import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
+import com.gene.app.util.Util;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
@@ -146,9 +147,17 @@ public class MultiBrandServlet extends HttpServlet {
 					break;
 				}
 			}
-
-			// Loop for child projects
+			int sizeOfArray = 0;
+			Map<String, Double> childsPlannedSumMap = new HashMap<String, Double>();
 			for (int i = 0; i < jsonArray.length(); i++) {
+				rprtObject = jsonArray.getJSONObject(i);
+				if (!Util.isNullOrEmpty(rprtObject.getString("1").trim())) {
+					sizeOfArray=i;
+					break;
+				}
+			}
+			// Loop for child projects
+			for (int i = 0; i < sizeOfArray; i++) {
 				rprtObject = jsonArray.getJSONObject(i);
 				if ("".equals(rprtObject.getString("3").trim())) {
 					break;
@@ -214,9 +223,14 @@ public class MultiBrandServlet extends HttpServlet {
 								value = roundDoubleValue(
 										parentPlannedMap.get(BudgetConstants.months[cnt])
 												* percentageAllocation / 100,
-										5);
+										2);
 								plannedMap.put(BudgetConstants.months[cnt],
 										value);
+								if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){
+									childsPlannedSumMap.put(BudgetConstants.months[cnt], childsPlannedSumMap.get(BudgetConstants.months[cnt]) + value);
+									}else{
+										childsPlannedSumMap.put(BudgetConstants.months[cnt], value);
+									}
 							} catch (Exception e) {
 								plannedMap
 										.put(BudgetConstants.months[cnt], 0.0);
@@ -271,16 +285,31 @@ public class MultiBrandServlet extends HttpServlet {
 						}
 						for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+							if(i < sizeOfArray-1){
 							try {
 								value = roundDoubleValue(
 										parentPlannedMap.get(BudgetConstants.months[cnt])
 												* percentageAllocation / 100,
-										5);
+										2);
 								plannedMap.put(BudgetConstants.months[cnt],
 										value);
+								if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){
+									childsPlannedSumMap.put(BudgetConstants.months[cnt], childsPlannedSumMap.get(BudgetConstants.months[cnt]) + value);
+									}else{
+										childsPlannedSumMap.put(BudgetConstants.months[cnt], value);
+									}
 							} catch (NumberFormatException e) {
 								plannedMap
 										.put(BudgetConstants.months[cnt], 0.0);
+							}
+							}else{
+								try {
+									value = parentPlannedMap.get(BudgetConstants.months[cnt])
+													- childsPlannedSumMap.get(BudgetConstants.months[cnt]);
+									plannedMap.put(BudgetConstants.months[cnt], value);
+								} catch (NumberFormatException e) {
+									plannedMap.put(BudgetConstants.months[cnt], 0.0);
+								}
 							}
 						}
 						plannedMap
