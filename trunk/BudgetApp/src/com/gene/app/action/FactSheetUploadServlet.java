@@ -305,7 +305,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 					for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
 						calVarianceMap.put(BudgetConstants.months[cnt],plannedMap.get(BudgetConstants.months[cnt]) - gtfReport.getAccrualsMap().get(BudgetConstants.months[cnt]));
 					}
-					gtfReport.setVariancesMap(plannedMap);
+					gtfReport.setVariancesMap(calVarianceMap);
 					}else{
 						gtfReport.setAccrualsMap(setZeroMap);
 						gtfReport.setVariancesMap(plannedMap);
