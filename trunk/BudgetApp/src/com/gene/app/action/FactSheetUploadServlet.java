@@ -1,14 +1,10 @@
 package com.gene.app.action;
 
 import java.io.IOException;
-import java.sql.Array;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,33 +32,47 @@ public class FactSheetUploadServlet extends HttpServlet {
 	private final static Logger LOGGER = Logger.getLogger(FactSheetUploadServlet.class.getName());
 	DBUtil util = new DBUtil();
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
+	UserService userService = UserServiceFactory.getUserService();
+	
+	// Map of Project Name ~ Projects
 	Map<String, ArrayList<GtfReport>> uploadWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
+	// Map of PO Number ~ Projects
 	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
 
 	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		
 		LOGGER.log(Level.INFO, "inside fileupload...");
-		UserService userService = UserServiceFactory.getUserService();
+		
 		User userLoggedIn = userService.getCurrentUser();
 		UserRoleInfo user = util.readUserRoleInfo(userLoggedIn.getEmail());
+		
+		// Handle unauthorized access
 		if(user != null && !user.getRole().equalsIgnoreCase("admin")){
 			resp.sendError(411, "User doesn't have permission to upload.");
 			return;
 		}
+		
 		final String url = req.getRequestURL().toString();
         final String baseURL = url.substring(0, url.length()
                            - req.getRequestURI().length())
                            + req.getContextPath() + "/";
-		String objarray = req.getParameter(BudgetConstants.objArray).toString();
+		
+        String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		String [] objArrayStr = objarray.split("],");
-		System.out.println("objArrayStr = "+objArrayStr.length);
+		LOGGER.log(Level.INFO, "Received JSON String = "+ objArrayStr.length);
+		
 		String costCentre = req.getParameter("costCenter");
-		uploadedPOs = new HashMap();
-		uploadWithOutPos = new HashMap();
+		LOGGER.log(Level.INFO, "Received Cost Center = "+ costCentre);
+		
+		uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
+		uploadWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
+		
 		int fromLine = Integer.parseInt(req.getParameter("inputFrom"));
 		int toLine = Integer.parseInt(req.getParameter("inputTo"));
-		List<List<String>> rowList = new ArrayList();
+		
+		List<List<String>> rowList = new ArrayList<List<String>>();
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
 			for (int count = fromLine-1; count < toLine; count++) {
@@ -81,8 +91,8 @@ public class FactSheetUploadServlet extends HttpServlet {
 						Util.isNullOrEmpty(list.get(5).toString()) || Util.isNullOrEmpty(list.get(6).toString()) ||
 						Util.isNullOrEmpty(list.get(7).toString()) || Util.isNullOrEmpty(list.get(8).toString()) ||
 						Util.isNullOrEmpty(list.get(9).toString()) || Util.isNullOrEmpty(list.get(10).toString()) ){
-					if(list.get(9).toString().indexOf("_")!= 6 && list.get(8).toString().equals("#") ||
-							(!Util.isNullOrEmpty(list.get(9).toString())) && !Util.isNullOrEmpty(list.get(8).toString())){
+					// Skip if no PO number and PO Description
+					if((!Util.isNullOrEmpty(list.get(9).toString())) && !Util.isNullOrEmpty(list.get(8).toString())){
 						continue;
 					}else{
 						rowList.add(list);
@@ -98,25 +108,28 @@ public class FactSheetUploadServlet extends HttpServlet {
 
 	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
 		List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre,String baseURL) {
+		
 		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
+		
 		boolean isMultibrand = false;
-		Map<String,UserRoleInfo> userMap = util.readAllUserInfo();
-		List<GtfReport> removeGtfReports = new ArrayList<>();
-		HashMap<String,String> removeGmemoriIds = new HashMap<>();
-		Map<String, GtfReport> costCenterWiseGtfRptMap = util
-				.getAllReportDataFromCache(costCentre);
+		
+		List<GtfReport> removeGtfReports = new ArrayList<GtfReport>();
+		
+		Map<String, GtfReport> costCenterWiseGtfRptMap = util.getAllReportDataFromCache(costCentre);
+		
 		for (List recvdRow : rowList) {
 			try{
 				GtfReport gtfReport = new GtfReport();
-				if (recvdRow.get(5) != null && !recvdRow.get(5).toString().equals("#")
-						&& !recvdRow.get(5).toString().trim().equals("")) {
+				
+				// Skip project if there is no Sub activity
+				if (recvdRow.get(5) != null	&& !recvdRow.get(5).toString().trim().equals("")) {
 					gtfReport.setSubActivity(recvdRow.get(5).toString());
 				} else {
 					gtfReport.setSubActivity("");
 					continue;
 				}
-				if (recvdRow.get(11) != null && !recvdRow.get(11).toString().equals("#")
-						&& !recvdRow.get(11).toString().trim().equals("")) {
+				
+				if (recvdRow.get(11) != null && !recvdRow.get(11).toString().trim().equals("")) {
 					if(util.readUserRoleInfoByFName(recvdRow.get(11).toString()) != null && 
 							util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getUserName() != null){
 						gtfReport.setRequestor(util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getUserName());
@@ -129,50 +142,34 @@ public class FactSheetUploadServlet extends HttpServlet {
 					gtfReport.setRequestor(orgUser.getUserName());
 					gtfReport.setEmail(orgUser.getEmail());
 				}
+				
 				gtfReport.setCostCenter(costCentre);
 
-				if (recvdRow.get(3) != null && !recvdRow.get(3).toString().equals("#")
-						&& !recvdRow.get(3).toString().trim().equals("")) {
+				if (recvdRow.get(3) != null && !recvdRow.get(3).toString().trim().equals("")) {
 					gtfReport.setProject_WBS(recvdRow.get(3).toString());
 				} else {
 					gtfReport.setProject_WBS("");
 				}
 
-				if (recvdRow.get(4) != null && !recvdRow.get(4).toString().equals("#")
-						&& !recvdRow.get(4).toString().toString().trim().equals("")) {
+				if (recvdRow.get(4) != null && !recvdRow.get(4).toString().toString().trim().equals("")) {
 					gtfReport.setWBS_Name(recvdRow.get(4).toString());
 				} else {
 					gtfReport.setWBS_Name("");
 				}
 
-
-
-				if (recvdRow.get(6) != null && !recvdRow.get(6).toString().equals("#")
-						&& !recvdRow.get(6).toString().trim().equals("")) {
+				if (recvdRow.get(6) != null && !recvdRow.get(6).toString().trim().equals("")) {
 					if("Total Products".equalsIgnoreCase(recvdRow.get(6).toString())){
 						gtfReport.setBrand(gtfReport.getWBS_Name());	
 					}else{
 						gtfReport.setBrand(recvdRow.get(6).toString());
 					}
-
 				} else {
 					gtfReport.setBrand("No brand");
 				}
 
-				if (recvdRow.get(7) != null && !recvdRow.get(7).toString().equals("#")
-						&& !recvdRow.get(7).toString().trim().equals("")) {
-					try {
-						gtfReport.setPercent_Allocation(Double.parseDouble(recvdRow
-								.get(7).toString()));
-					} catch (NumberFormatException ne) {
-						gtfReport.setPercent_Allocation(100);
-					}
-				} else {
-					gtfReport.setPercent_Allocation(100);
-				}
+				gtfReport.setPercent_Allocation(100);
 
-				if (recvdRow.get(8) != null && !recvdRow.get(8).toString().equals("#")
-						&& !recvdRow.get(8).toString().trim().equals("")) {
+				if (recvdRow.get(8) != null && !recvdRow.get(8).toString().trim().equals("")) {
 					gtfReport.setPoNumber(recvdRow.get(8).toString());
 					gtfReport.setStatus("Active");
 					gtfReport.setFlag(2);
@@ -182,30 +179,19 @@ public class FactSheetUploadServlet extends HttpServlet {
 					gtfReport.setFlag(1);
 				}
 
-				if (recvdRow.get(9) != null && !recvdRow.get(9).toString().equals("#")
-						&& !recvdRow.get(9).toString().trim().equals("")) {
+				if (recvdRow.get(9) != null && !recvdRow.get(9).toString().trim().equals("")) {
 					gtfReport.setPoDesc(recvdRow.get(9).toString());
 				} else {
 					gtfReport.setPoDesc("Not Available");
 				}
 
-				if (recvdRow.get(10) != null && !recvdRow.get(10).toString().equals("#")
-						&& !recvdRow.get(10).toString().trim().equals("")) {
+				if (recvdRow.get(10) != null && !recvdRow.get(10).toString().trim().equals("")) {
 					gtfReport.setVendor(recvdRow.get(10).toString());
 				} else {
-
 					gtfReport.setVendor("");
 				}
 
-				/*if (recvdRow.get(8) != null && !recvdRow.get(8).equals("#")
-					&& !recvdRow.get(8).toString().trim().equals("")) {
-				gtfReport.setRequestor(util.readUserRoleInfoByFName(recvdRow.get(8).toString()).getUserName());
-			} else {
-				gtfReport.setRequestor("");
-			}*/
-
-				String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
-				.format(Calendar.getInstance().getTime());
+				String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
 				gtfReport.setCreateDate(timeStamp);
 				gtfReport.setYear(BudgetConstants.dataYEAR);
 				gtfReport.setQual_Quant("Qual_Quant");
@@ -220,60 +206,27 @@ public class FactSheetUploadServlet extends HttpServlet {
 				}else{
 					gtfReport.setUnits(0);
 				}
-				Map<String, Double> plannedMap = new HashMap<String, Double>();
-				Map<String, Double> setZeroMap = new HashMap<String, Double>();
-				for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
-					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
-					try {
-
-						if (recvdRow.get(cnt + 12) != null
-								&& !recvdRow.get(cnt + 12).toString().trim()
-								.equals("")) {
-							String value = "0.0";
-							if (recvdRow.get(cnt + 12).toString().contains("(")) {
-								value = "-" + recvdRow.get(cnt + 12).toString().replaceAll("[^\\d.]", "");
-							}else{
-								value = recvdRow.get(cnt + 12).toString();
-							}
-							plannedMap.put(BudgetConstants.months[cnt], Double.parseDouble(value));
-						} else {
-							plannedMap.put(BudgetConstants.months[cnt], 0.0);
-						}
-					} catch (Exception e1) {
-						System.out.println(e1);
-						plannedMap.put(BudgetConstants.months[cnt], 0.0);
-					}
-				}
-				gtfReport.setPlannedMap(plannedMap);
-				gtfReport.setBenchmarkMap(plannedMap);
-				gtfReport.setAccrualsMap(setZeroMap);
-				gtfReport.setVariancesMap(plannedMap);
-				gtfReport.setMultiBrand(isMultibrand);
-				gtfReport.setRemarks("   ");
-
-				if (recvdRow.get(2) != null && !recvdRow.get(2).toString().equals("#")
-						&& !recvdRow.get(2).toString().trim().equals("")) {
+				// Set project name from PO description by removing gmemori Id which is separated by '_'
+				// Else set project name as PO description 
+				if (recvdRow.get(2) != null && !recvdRow.get(2).toString().trim().equals("")) {
 					gtfReport.setProjectName((recvdRow.get(2).toString()));
 				} else {
-					if(gtfReport.getPoDesc().indexOf("_")==6){
+					if(gtfReport.getPoDesc().indexOf("_") == 6){
 						gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
 					}else{
 						gtfReport.setProjectName(gtfReport.getPoDesc());
 					}
 				}
+				
 				if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
 					gtfReport.setBrand(gtfReport.getWBS_Name());
 				}
 
+				
 				// Update existing reports
 				StringBuilder gtfParam = new StringBuilder("");
 				if(Util.isNullOrEmpty(gtfReport.getBrand())){
 					gtfParam = gtfParam.append(gtfReport.getBrand() + ":");
-				}else{
-					gtfParam = gtfParam.append(":");
-				}
-				if(Util.isNullOrEmpty(gtfReport.getRequestor())){
-					gtfParam = gtfParam.append(gtfReport.getRequestor() + ":");
 				}else{
 					gtfParam = gtfParam.append(":");
 				}
@@ -287,6 +240,13 @@ public class FactSheetUploadServlet extends HttpServlet {
 				//	removeGtfReports.add(gtfRpt);
 					gtfReport.setId(gtfRpt.getId());
 					gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
+					if("".equalsIgnoreCase(gtfReport.getPoNumber().trim())){
+						gtfReport.setPoNumber(gtfRpt.getPoNumber());
+						if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
+							gtfReport.setStatus("Active");
+							gtfReport.setFlag(2);
+						}
+					}
 				}else{
 					String gMemoriId;
 					try {
@@ -308,9 +268,59 @@ public class FactSheetUploadServlet extends HttpServlet {
 					gtfReport.setgMemoryId(gMemoriId);
 				}
 
+				Map<String, Double> plannedMap = new HashMap<String, Double>();
+				Map<String, Double> setZeroMap = new HashMap<String, Double>();
+				
+				// Overrides and sets received value to planned, Benchmark and variance
+				for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
+					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
+					try {
+						if (recvdRow.get(cnt + 12) != null
+								&& !recvdRow.get(cnt + 12).toString().trim()
+								.equals("")) {
+							String value = "0.0";
+							if (recvdRow.get(cnt + 12).toString().contains("(")) {
+								value = "-" + recvdRow.get(cnt + 12).toString().replaceAll("[^\\d.]", "");
+							}else{
+								value = recvdRow.get(cnt + 12).toString();
+							}
+							plannedMap.put(BudgetConstants.months[cnt], Double.parseDouble(value));
+						} else {
+							plannedMap.put(BudgetConstants.months[cnt], 0.0);
+						}
+					} catch (Exception e1) {
+						System.out.println(e1);
+						plannedMap.put(BudgetConstants.months[cnt], 0.0);
+					}
+				}
+				gtfReport.setPlannedMap(plannedMap);
+				gtfReport.setBenchmarkMap(plannedMap);
+				if(gtfRpt ==null){
+				gtfReport.setAccrualsMap(setZeroMap);
+				gtfReport.setVariancesMap(plannedMap);
+				}else{
+					if(gtfRpt.getAccrualsMap()!=null){
+					gtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
+					Map<String, Double> calVarianceMap = new HashMap<String, Double>();
+					for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
+						calVarianceMap.put(BudgetConstants.months[cnt],plannedMap.get(BudgetConstants.months[cnt]) - gtfReport.getAccrualsMap().get(BudgetConstants.months[cnt]));
+					}
+					gtfReport.setVariancesMap(plannedMap);
+					}else{
+						gtfReport.setAccrualsMap(setZeroMap);
+						gtfReport.setVariancesMap(plannedMap);
+					}
+					
+				}
+				
+				gtfReport.setMultiBrand(isMultibrand);
+				gtfReport.setRemarks("");
+
+				
+				
 
 
-				if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
+				if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !gtfReport.getPoNumber().equalsIgnoreCase("#")){
 					ArrayList<GtfReport> poUpdated = new ArrayList<>();
 					if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
 						poUpdated = uploadedPOs.get(gtfReport.getPoNumber());
@@ -319,7 +329,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 
 					uploadedPOs.put(gtfReport.getPoNumber(), poUpdated);
 				}else{
-
+					
 					ArrayList<GtfReport> noPoUpdated = new ArrayList<>();
 					if(uploadWithOutPos.get(gtfReport.getProjectName())!=null){
 						noPoUpdated = uploadWithOutPos.get(gtfReport.getProjectName());

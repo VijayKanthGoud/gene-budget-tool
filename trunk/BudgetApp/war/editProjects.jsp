@@ -1341,7 +1341,7 @@ String ccView="";
 					return true;
 				}
 				if (args.item["11"] == "<%=BudgetConstants.FORECAST%>"
-					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && args.item["26"] =="New") {
+					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["8"].toString().startsWith('1'))) {
 					return true;
 				}
 				var isAnEditableId = false;

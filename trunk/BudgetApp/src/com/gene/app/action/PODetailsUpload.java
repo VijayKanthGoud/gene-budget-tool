@@ -168,7 +168,7 @@ public class PODetailsUpload extends HttpServlet {
 
 			// Check by matching PO number
 			if (!Util.isNullOrEmpty(receivedGmemoriId)
-					&& Util.isNullOrEmpty(rcvdRow.get(5).toString())) {
+					&& Util.isNullOrEmpty(rcvdRow.get(5).toString()) && !"#".equalsIgnoreCase(rcvdRow.get(5).toString())) {
 				if (poMap.get(rcvdRow.get(5).toString()) != null) {
 					receivedGmemoriId = poMap.get(rcvdRow.get(5).toString())
 							.getgMemoryId();
@@ -360,7 +360,7 @@ public class PODetailsUpload extends HttpServlet {
 								Double.parseDouble(val), 5));
 				
 				// updates the future month values
-				if(cnt <=  curMonth){
+				if(cnt <  curMonth){
 					receivedPlannedMap.put(
 							BudgetConstants.months[cnt],
 							roundDoubleValue(
@@ -373,7 +373,7 @@ public class PODetailsUpload extends HttpServlet {
 									Double.parseDouble(val), 5));
 					
 					// updates the future month values
-					if(cnt <=  curMonth){
+					if(cnt <  curMonth){
 						receivedParentPlannedMap.put(BudgetConstants.months[cnt],
 							receivedParentPlannedMap.get(BudgetConstants.months[cnt]) - prevPlannedVal + roundDoubleValue(
 									Double.parseDouble(val), 5));
@@ -508,7 +508,7 @@ public class PODetailsUpload extends HttpServlet {
 		uploadedGMems.put(gtfReport.getgMemoryId(), gtfReport);
 
 		if(pGtf ==null){
-			if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())){
 				ArrayList<GtfReport> poUpdated = new ArrayList<>();
 				if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
 					poUpdated = uploadedPOs.get(gtfReport.getPoNumber());
@@ -530,7 +530,7 @@ public class PODetailsUpload extends HttpServlet {
 			}
 		}else{
 
-			if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())){
 				ArrayList<GtfReport> poUpdated = new ArrayList<>();
 				if (addedPOs.get(gtfReport.getPoNumber()) != null) {
 					poUpdated = addedPOs.get(gtfReport.getPoNumber());
