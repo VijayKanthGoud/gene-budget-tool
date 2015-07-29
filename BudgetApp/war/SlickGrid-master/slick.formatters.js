@@ -227,6 +227,10 @@
   }
   
   function poFieldFormatter(row, cell, value, columnDef, dataContext) {
+	  if(typeof value != 'undefined' && value != '' && value.toString().startsWith('1') &&
+			  (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total")){
+		  return "<div width = '100%' style='background:#C0CCED; color:red'>"+value+"&nbsp;</div>";
+	  }
 	  if((dataContext["26"] != "Closed") && (dataContext[35] == "NewProjects" || (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total"  && dataContext["26"] != "Active" ))){
 		return "<div width = '100%' style='background:#C0CCED'>"+value+"&nbsp;</div>";
 	  }

@@ -971,13 +971,13 @@ public class DBUtil {
 	public String createKeyForXlPrjUpload(GtfReport report) {
 		String brand = Util.isNullOrEmpty(report.getBrand()) ? report
 				.getBrand() : "";
-		String requestor = Util.isNullOrEmpty(report.getRequestor()) ? report
-				.getRequestor() : "";
+		/*String requestor = Util.isNullOrEmpty(report.getRequestor()) ? report
+				.getRequestor() : "";*/
 		// String poDesc =
 		// Util.isNullOrEmpty(report.getPoDesc())?report.getPoDesc():"";
 		String projectName = Util.isNullOrEmpty(report.getProjectName()) ? report
 				.getProjectName() : "";
-		return brand + ":" + requestor + /* ":"+poDesc+ */":" + projectName;
+		return brand + ":"/* + requestor +  ":"+poDesc+ */+":" + projectName;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1058,10 +1058,10 @@ public class DBUtil {
 				if (Util.isNullOrEmpty(gtfReport.getBrand())) {
 					uniqueGtfRptKey = gtfReport.getBrand() + ":";
 				}
-				if (Util.isNullOrEmpty(gtfReport.getRequestor())) {
+				/*if (Util.isNullOrEmpty(gtfReport.getRequestor())) {
 					uniqueGtfRptKey = uniqueGtfRptKey
 							+ gtfReport.getRequestor() + ":";
-				}/*
+				}*//*
 				 * if(Util.isNullOrEmpty(gtfReport.getPoDesc())){
 				 * uniqueGtfRptKey = uniqueGtfRptKey + gtfReport.getPoDesc() +
 				 * ":"; }
@@ -1137,7 +1137,7 @@ public class DBUtil {
 		Map<String, GtfReport> poMap = new HashMap<String, GtfReport>();
 		for (Map.Entry<String, GtfReport> gtfEntry : costCenterWiseGtfRptMap
 				.entrySet()) {
-			if (!gtfEntry.getValue().getStatus().equalsIgnoreCase("new")) {
+			if (!gtfEntry.getValue().getStatus().equalsIgnoreCase("new") && !"#".equalsIgnoreCase(gtfEntry.getValue().getPoNumber())) {
 				poMap.put(gtfEntry.getValue().getPoNumber(),
 						gtfEntry.getValue());
 			}
