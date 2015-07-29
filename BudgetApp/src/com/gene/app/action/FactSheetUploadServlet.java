@@ -320,7 +320,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 				
 
 
-				if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !gtfReport.getPoNumber().equalsIgnoreCase("#")){
+				if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !gtfReport.getPoNumber().equalsIgnoreCase("#") && !gtfReport.getPoNumber().startsWith("1")){
 					ArrayList<GtfReport> poUpdated = new ArrayList<>();
 					if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
 						poUpdated = uploadedPOs.get(gtfReport.getPoNumber());
