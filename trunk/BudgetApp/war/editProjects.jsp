@@ -1298,9 +1298,9 @@ String ccView="";
 			var cols = grid.getColumns();
 			args.item[46]=JSON.parse(JSON.stringify(args.item));
 			var fixedCell = cell;
-			if(args.item["26"]=="Closed"){
+			/* if(args.item["26"]=="Closed"){
 				return false;
-			}
+			} */
 			if ($('#hideColumns').is(":checked")) {
 				fixedCell = cell + numHideColumns;
 			} else {
@@ -1314,7 +1314,7 @@ String ccView="";
 			/* if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin" ){
 				return false;
 			} */ 
-			if( /* (role!='Admin') &&  */ (args.item["26"]=="Active" || args.item["26"]=="New") && 
+			if( /* (role!='Admin') &&  */ (args.item["26"]=="Active" || args.item["26"]=="New" || args.item["26"]=="Closed") && 
 					(args.item["11"] == "<%=BudgetConstants.ACCRUAL%>" <%-- || args.item["11"] == "<%=BudgetConstants.FORECAST%>" --%>) && 
 					(args.item["48"]!=null && args.item["48"]!=''/*   && args.item["48"] != userName*/ ) ){
 				alert("You are not authorised to edit this project !!!");
@@ -1351,7 +1351,7 @@ String ccView="";
 				if (args.item["11"] == "<%=BudgetConstants.FORECAST%>"
 									&& (cols[cell].name == "Project Name" || cols[cell].name == "Project WBS" || 
 											cols[cell].name == "SubActivity"  || cols[cell].name == "Vendor" || cols[cell].name == "Units" || isAnEditableId ) &&  
-											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active")) {
+											args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["26"] =="Active" || args.item["26"] == "Closed")) {
 					return true;
 				}
 				var newYear =args.item["39"];

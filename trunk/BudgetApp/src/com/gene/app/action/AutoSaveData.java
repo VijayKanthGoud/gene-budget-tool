@@ -273,7 +273,11 @@ public class AutoSaveData extends HttpServlet {
 										|| gtfReportObj
 												.getStatus()
 												.equalsIgnoreCase(
-														BudgetConstants.status_Active)) {
+														BudgetConstants.status_Active)
+										|| gtfReportObj
+												.getStatus()
+												.equalsIgnoreCase(
+														BudgetConstants.status_Closed)) {
 									if (qtr != (Integer.parseInt(cellNum) / 3)
 											|| cutOfDate.after(new Date())) {
 										benchMarkMap.put(

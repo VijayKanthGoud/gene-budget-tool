@@ -24,6 +24,7 @@ public interface BudgetConstants {
 	public static final String loggedInUser = "loggedInUser";
 	public static final String status_New = "New";
 	public static final String status_Active = "Active";
+	public static final String status_Closed = "Closed";
 	public static final String GTFReport_ProjectWBS = "4";
 	public static final String GTFReport_ProjectName = "1";
 	public static final String GTFReport_Status = "2";

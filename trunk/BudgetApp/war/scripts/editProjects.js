@@ -595,7 +595,7 @@ function updateMemCache(e, args, tempKey) {
 					}
 					//aSave[2] = d["47"];
 					iCnt++;
-				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") && 
+				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active" || d[26]=="Closed") && 
 						((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
 					d[itemCell]=parseFloat(cellValue).toFixed(2);
 					varTotal = 0.0;
@@ -607,7 +607,7 @@ function updateMemCache(e, args, tempKey) {
 					}	
 					d[24]= parseFloat(varTotal);
 				}
-				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
+				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active" || d[26]=="Closed"))){
 					quarterly_tar_cur = d[itemCell];
 				}
 				if(key== d[34] && d[11]=="<%=BudgetConstants.ACCRUAL%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
@@ -617,7 +617,7 @@ function updateMemCache(e, args, tempKey) {
 					d[<%=BudgetConstants.PROJECT_NAME_SEARCH_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
 					d[<%=BudgetConstants.PROJECT_NAME_GID_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>] + " :: " + d[<%=BudgetConstants.PROJECT_NAME_GID_FIELD%>].split("::")[1]; 
 				}								
-				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active") )){
+				if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"  || d[26]=="Closed") )){
 					d[itemCell]= parseFloat(quarterly_tar_cur - accrual_cur);
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {
