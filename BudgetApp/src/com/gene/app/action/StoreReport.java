@@ -282,19 +282,29 @@ public class StoreReport extends HttpServlet {
 		String email = "";
 		ArrayList<String> gmultiIdList= new ArrayList<>();
 		gmultiIdList.add(gtfReport1.getgMemoryId());
+		Map<String, Double> childsPlannedSumMap = new HashMap<String, Double>();
+		int sizeOfArray = 0;
 		try {
 			String mutliBrandArray = rprtObject
 					.getString(BudgetConstants.multiBrandInput);
 			jsonArray = new JSONArray(mutliBrandArray);
 			for (int i = 0; i < jsonArray.length(); i++) {
+				multiBrandObject = jsonArray.getJSONObject(i);
+				if (multiBrandObject.getString("1") == null
+						|| "".equals(multiBrandObject.getString("1").trim())) {
+					sizeOfArray = i;
+					break;
+				}
+			}
+			for (int i = 0; i < sizeOfArray; i++) {
 				try {
 					gtfReport = (GtfReport) gtfReport1.clone();
 				} catch (CloneNotSupportedException e1) {
 					e1.printStackTrace();
 				}
 				multiBrandObject = jsonArray.getJSONObject(i);
-				if (multiBrandObject.getString("4") == null
-						|| "".equals(multiBrandObject.getString("4").trim())) {
+				if (multiBrandObject.getString("1") == null
+						|| "".equals(multiBrandObject.getString("1").trim())) {
 					break;
 				}
 				gtfReport.setCreateDate(timeStamp);
@@ -346,13 +356,29 @@ public class StoreReport extends HttpServlet {
 					setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 				}
 				for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
+					if(i < sizeOfArray-1){
 					try {
 						value = roundDoubleValue(
 								parentPlannedMap.get(BudgetConstants.months[cnt])
 										* percent_allocation / 100, 2);
 						plannedMap.put(BudgetConstants.months[cnt], value);
+						if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){
+						childsPlannedSumMap.put(BudgetConstants.months[cnt], childsPlannedSumMap.get(BudgetConstants.months[cnt]) + value);
+						}else{
+							childsPlannedSumMap.put(BudgetConstants.months[cnt], value);
+						}
 					} catch (NumberFormatException e) {
 						plannedMap.put(BudgetConstants.months[cnt], 0.0);
+					}
+					}
+					else{
+						try {
+							value = parentPlannedMap.get(BudgetConstants.months[cnt])
+											- childsPlannedSumMap.get(BudgetConstants.months[cnt]);
+							plannedMap.put(BudgetConstants.months[cnt], value);
+						} catch (NumberFormatException e) {
+							plannedMap.put(BudgetConstants.months[cnt], 0.0);
+						}
 					}
 				}
 				plannedMap
