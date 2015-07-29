@@ -508,7 +508,8 @@ public class PODetailsUpload extends HttpServlet {
 		uploadedGMems.put(gtfReport.getgMemoryId(), gtfReport);
 
 		if(pGtf ==null){
-			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())){
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())
+					&& !gtfReport.getPoNumber().startsWith("1")){
 				ArrayList<GtfReport> poUpdated = new ArrayList<>();
 				if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
 					poUpdated = uploadedPOs.get(gtfReport.getPoNumber());
@@ -530,7 +531,8 @@ public class PODetailsUpload extends HttpServlet {
 			}
 		}else{
 
-			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())){
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())
+					&& !gtfReport.getPoNumber().startsWith("1")){
 				ArrayList<GtfReport> poUpdated = new ArrayList<>();
 				if (addedPOs.get(gtfReport.getPoNumber()) != null) {
 					poUpdated = addedPOs.get(gtfReport.getPoNumber());
