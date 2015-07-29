@@ -147,13 +147,18 @@
 			<ul>
                         <li class='last'> <a href ="/admin?tab_sel=1" id="tabs-1">FACT</a></li>
                         <li class='last'><a href ="/admin?tab_sel=2" id="#tabs-2">PO Details</a></li>
+                          <%
+				if (email!=null && !"".equalsIgnoreCase(email) && ("kaviv@gene.com".equals(email) || "siddagov@gene.com".equals(email) /*|| "sreedhac@gene.com".equals(email) || "nellurks@gene.com".equals(email)*/)) {
+			%> 
+                        <li class='last'><a href ="/admin?tab_sel=3" id="#tabs-3">Benchmark Details</a></li>
+                        <% } %>
                        <%
 				if (email!=null && !"".equalsIgnoreCase(email) && ("kaviv@gene.com".equals(email) || "siddagov@gene.com".equals(email) /*|| "sreedhac@gene.com".equals(email) || "nellurks@gene.com".equals(email)*/)) {
 			%> 
-                        <li class='last'><a href ="/admin?tab_sel=3" id="#tabs-2">User Details</a></li>
+                        <li class='last'><a href ="/admin?tab_sel=4" id="#tabs-4">User Details</a></li>
                         <% } %>
                         <% if(email!=null && !"".equalsIgnoreCase(email) && "kaviv@gene.com".equals(email) || "siddagov@gene.com".equals(email)){ %>
-                         <li class='last'><a href ="/recovery_conversion.jsp" id="#tabs-2">Recover Data from CS</a></li>
+                         <li class='last'><a href ="/recovery_conversion.jsp" id="#tabs-5">Recover Data from CS</a></li>
                          <% }%>
                     </ul>  
                     </li>  

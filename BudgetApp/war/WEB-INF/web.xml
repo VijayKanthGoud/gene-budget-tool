@@ -167,6 +167,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>BenchmarkUpload</servlet-name>
+		<servlet-class>com.gene.app.action.BenchMarkUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BenchmarkUpload</servlet-name>
+		<url-pattern>/benchmarkupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>FactSheetUpload</servlet-name>
 		<servlet-class>com.gene.app.action.FactSheetUploadServlet</servlet-class>
 	</servlet>
