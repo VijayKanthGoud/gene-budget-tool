@@ -210,8 +210,7 @@ String ccView="";
 						</tr>
 						<tr> 
 						<td style="padding-left: 21.5%; padding-top: 20px;" colspan='2'>
-								<input type=text style="float: left; width: 150px;"
-								id="txtSearch"> <img src="images/search.png" height="20"
+								<input type=text autocomplete = "off"; style="float: left; width: 150px;"
 								width="20" align="bottom" style="float: left;"
 								title="Search in Project Name, gMemori Id, Brand and Comments.">
 							</td>
