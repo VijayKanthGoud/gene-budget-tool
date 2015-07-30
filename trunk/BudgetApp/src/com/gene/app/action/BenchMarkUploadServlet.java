@@ -326,7 +326,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 						gtfReport.setBenchmarkMap(benchmarkMap);
 						Map<String, Double> calVarianceMap = new HashMap<String, Double>();
 						for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
-							calVarianceMap.put(BudgetConstants.months[cnt], benchmarkMap.get(BudgetConstants.months[cnt]) - gtfRpt.getAccrualsMap().get(BudgetConstants.months[cnt]));
+							calVarianceMap.put(BudgetConstants.months[cnt], gtfReport.getPlannedMap().get(BudgetConstants.months[cnt]) - gtfRpt.getAccrualsMap().get(BudgetConstants.months[cnt]));
 						}
 						gtfReport.setVariancesMap(calVarianceMap);
 					}else{
