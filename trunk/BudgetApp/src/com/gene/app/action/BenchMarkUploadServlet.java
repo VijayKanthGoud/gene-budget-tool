@@ -34,12 +34,24 @@ public class BenchMarkUploadServlet extends HttpServlet {
 	ProjectSequenceGeneratorUtil generator = new ProjectSequenceGeneratorUtil();
 	UserService userService = UserServiceFactory.getUserService();
 	
+	
+	final int colProjectWBS = 3;
+	final int colWBSName = 4;
+	final int colSubActivity = 5;
+	final int colBrand = 6;
+	final int colAllocPerc = 7;
+	final int colPONum = 8;
+	final int colPODesc = 9;
+	final int colVendor = 10;
+	final int colRequestor = 11;
+	
+	
+	
 	// Map of Project Name ~ Projects
-	Map<String, ArrayList<GtfReport>> uploadWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
+	Map<String, ArrayList<GtfReport>> uploadWithOutPos;
 	// Map of PO Number ~ Projects
-	Map<String, ArrayList<GtfReport>> uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
+	Map<String, ArrayList<GtfReport>> uploadedPOs;
 
-	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
@@ -76,23 +88,24 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		try {
 			JSONArray jsonArray = new JSONArray(objarray);
 			for (int count = fromLine-1; count < toLine; count++) {
-				List list = new ArrayList();
-				for (int k = 0; k < jsonArray.getJSONArray(count).length(); k++) {
-					String varCol = jsonArray.getJSONArray(count).get(k)
+				List<String> list = new ArrayList<String>();
+				for (int cnt = 0; cnt < jsonArray.getJSONArray(count).length(); cnt++) {
+					String varCol = jsonArray.getJSONArray(count).get(cnt)
 							.toString();
 					if (!varCol.equalsIgnoreCase("null")) {
-						list.add(jsonArray.getJSONArray(count).get(k));
+						list.add(jsonArray.getJSONArray(count).get(cnt).toString());
 					} else {
 						list.add("");
 					}
 				}
+				
 				if(Util.isNullOrEmpty(list.get(1).toString()) || Util.isNullOrEmpty(list.get(2).toString()) ||
-						Util.isNullOrEmpty(list.get(3).toString()) || Util.isNullOrEmpty(list.get(4).toString()) ||
-						Util.isNullOrEmpty(list.get(5).toString()) || Util.isNullOrEmpty(list.get(6).toString()) ||
-						Util.isNullOrEmpty(list.get(7).toString()) || Util.isNullOrEmpty(list.get(8).toString()) ||
-						Util.isNullOrEmpty(list.get(9).toString()) || Util.isNullOrEmpty(list.get(10).toString()) ){
+						Util.isNullOrEmpty(list.get(colProjectWBS).toString()) || Util.isNullOrEmpty(list.get(colWBSName).toString()) ||
+						Util.isNullOrEmpty(list.get(colSubActivity).toString()) || Util.isNullOrEmpty(list.get(colBrand).toString()) ||
+						Util.isNullOrEmpty(list.get(colAllocPerc).toString()) || Util.isNullOrEmpty(list.get(colPONum).toString()) ||
+						Util.isNullOrEmpty(list.get(colPODesc).toString()) || Util.isNullOrEmpty(list.get(colVendor).toString()) ){
 					// Skip if no PO number and PO Description
-					if((!Util.isNullOrEmpty(list.get(9).toString())) && !Util.isNullOrEmpty(list.get(8).toString())){
+					if((!Util.isNullOrEmpty(list.get(colPODesc).toString())) && !Util.isNullOrEmpty(list.get(colPONum).toString())){
 						continue;
 					}else{
 						rowList.add(list);
@@ -117,23 +130,24 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		
 		Map<String, GtfReport> costCenterWiseGtfRptMap = util.getAllReportDataFromCache(costCentre);
 		
-		for (List recvdRow : rowList) {
+		for (List<String> recvdRow : rowList) {
 			try{
 				GtfReport gtfReport = new GtfReport();
 				
 				// Skip project if there is no Sub activity
-				if (recvdRow.get(5) != null	&& !recvdRow.get(5).toString().trim().equals("")) {
-					gtfReport.setSubActivity(recvdRow.get(5).toString());
+				if (recvdRow.get(colSubActivity) != null	&& !recvdRow.get(colSubActivity).toString().trim().equals("")) {
+					gtfReport.setSubActivity(recvdRow.get(colSubActivity).toString());
 				} else {
 					gtfReport.setSubActivity("");
 					continue;
 				}
 				
-				if (recvdRow.get(11) != null && !recvdRow.get(11).toString().trim().equals("")) {
-					if(util.readUserRoleInfoByFName(recvdRow.get(11).toString()) != null && 
-							util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getUserName() != null){
-						gtfReport.setRequestor(util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getUserName());
-						gtfReport.setEmail(util.readUserRoleInfoByFName(recvdRow.get(11).toString()).getEmail());
+				// Add Project Owner from Requestor if not found read from details of user uploaded the fact sheet
+				if (recvdRow.get(colRequestor) != null && !recvdRow.get(colRequestor).toString().trim().equals("")) {
+					if(util.readUserRoleInfoByFName(recvdRow.get(colRequestor).toString()) != null && 
+							util.readUserRoleInfoByFName(recvdRow.get(colRequestor).toString()).getUserName() != null){
+						gtfReport.setRequestor(util.readUserRoleInfoByFName(recvdRow.get(colRequestor).toString()).getUserName());
+						gtfReport.setEmail(util.readUserRoleInfoByFName(recvdRow.get(colRequestor).toString()).getEmail());
 					}else{
 						gtfReport.setRequestor(orgUser.getUserName());
 						gtfReport.setEmail(orgUser.getEmail());
@@ -143,25 +157,27 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					gtfReport.setEmail(orgUser.getEmail());
 				}
 				
+
 				gtfReport.setCostCenter(costCentre);
 
-				if (recvdRow.get(3) != null && !recvdRow.get(3).toString().trim().equals("")) {
-					gtfReport.setProject_WBS(recvdRow.get(3).toString());
+				if (recvdRow.get(colProjectWBS) != null && !recvdRow.get(colProjectWBS).toString().trim().equals("")) {
+					gtfReport.setProject_WBS(recvdRow.get(colProjectWBS).toString());
 				} else {
 					gtfReport.setProject_WBS("");
 				}
 
-				if (recvdRow.get(4) != null && !recvdRow.get(4).toString().toString().trim().equals("")) {
-					gtfReport.setWBS_Name(recvdRow.get(4).toString());
+				if (recvdRow.get(colWBSName) != null && !recvdRow.get(colWBSName).toString().toString().trim().equals("")) {
+					gtfReport.setWBS_Name(recvdRow.get(colWBSName).toString());
 				} else {
 					gtfReport.setWBS_Name("");
 				}
 
-				if (recvdRow.get(6) != null && !recvdRow.get(6).toString().trim().equals("")) {
-					if("Total Products".equalsIgnoreCase(recvdRow.get(6).toString())){
+				// if brand name contains 'Total Product' replace it with WBS name
+				if (recvdRow.get(colBrand) != null && !recvdRow.get(colBrand).toString().trim().equals("")) {
+					if("Total Products".equalsIgnoreCase(recvdRow.get(colBrand).toString())){
 						gtfReport.setBrand(gtfReport.getWBS_Name());	
 					}else{
-						gtfReport.setBrand(recvdRow.get(6).toString());
+						gtfReport.setBrand(recvdRow.get(colBrand).toString());
 					}
 				} else {
 					gtfReport.setBrand("No brand");
@@ -169,8 +185,8 @@ public class BenchMarkUploadServlet extends HttpServlet {
 
 				gtfReport.setPercent_Allocation(100);
 
-				if (recvdRow.get(8) != null && !recvdRow.get(8).toString().trim().equals("")) {
-					gtfReport.setPoNumber(recvdRow.get(8).toString());
+				if (recvdRow.get(colPONum) != null && !recvdRow.get(colPONum).toString().trim().equals("")) {
+					gtfReport.setPoNumber(recvdRow.get(colPONum).toString());
 					gtfReport.setStatus("Active");
 					gtfReport.setFlag(2);
 				} else {
@@ -179,14 +195,15 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					gtfReport.setFlag(1);
 				}
 
-				if (recvdRow.get(9) != null && !recvdRow.get(9).toString().trim().equals("")) {
-					gtfReport.setPoDesc(recvdRow.get(9).toString());
+				if (recvdRow.get(colPODesc) != null && !recvdRow.get(colPODesc).toString().trim().equals("")) {
+					gtfReport.setPoDesc(recvdRow.get(colPODesc).toString().replace("\\", "\\\\")
+							.replace("\"", "\\\"").replace("\'", "\\\'"));
 				} else {
 					gtfReport.setPoDesc("Not Available");
 				}
 
-				if (recvdRow.get(10) != null && !recvdRow.get(10).toString().trim().equals("")) {
-					gtfReport.setVendor(recvdRow.get(10).toString());
+				if (recvdRow.get(colVendor) != null && !recvdRow.get(colVendor).toString().trim().equals("")) {
+					gtfReport.setVendor(recvdRow.get(colVendor).toString());
 				} else {
 					gtfReport.setVendor("");
 				}
@@ -206,24 +223,21 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				}else{
 					gtfReport.setUnits(0);
 				}
-				// Set project name from PO description by removing gmemori Id which is separated by '_'
-				// Else set project name as PO description 
-				/*if (recvdRow.get(2) != null && !recvdRow.get(2).toString().trim().equals("")) {
-					gtfReport.setProjectName((recvdRow.get(2).toString()));
-				} else {*/
-					if(gtfReport.getPoDesc().indexOf("_") == 6){
-						gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
-					}else{
-						gtfReport.setProjectName(gtfReport.getPoDesc());
-					}
-				/*}*/
 				
+				// Set project name from PO description by removing gmemori Id which is separated by '_'
+				if (gtfReport.getPoDesc().indexOf("_") == 6) {
+					gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
+				} else {
+					gtfReport.setProjectName(gtfReport.getPoDesc());
+				}
+				
+				// Set brand from WBS name if no po number 
 				if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
 					gtfReport.setBrand(gtfReport.getWBS_Name());
 				}
 
 				
-				// Update existing reports
+				// Create gtfParam to get previously existing project from unique Gtf report map
 				StringBuilder gtfParam = new StringBuilder("");
 				if(Util.isNullOrEmpty(gtfReport.getBrand())){
 					gtfParam = gtfParam.append(gtfReport.getBrand() + ":");
@@ -233,11 +247,12 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				if(Util.isNullOrEmpty(gtfReport.getProjectName())){
 					gtfParam = gtfParam.append(gtfReport.getProjectName());
 				}
+				
+				
 				GtfReport gtfRpt = uniqueGtfRptMap.get(gtfParam.toString());
 
-				// Update if gmemori id already exists else create a new gmemori id either from poDesc or generate new
+				// Update if gtfReport already exists else create a new gtfReport
 				if(gtfRpt != null){
-				//	removeGtfReports.add(gtfRpt);
 					gtfReport.setId(gtfRpt.getId());
 					gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
 					gtfReport.setChildProjectList(gtfRpt.getChildProjectList());
@@ -256,7 +271,6 @@ public class BenchMarkUploadServlet extends HttpServlet {
 									Math.min(gtfReport.getPoDesc().length(), 6)))
 									+ "";
 							gtfReport.setDummyGMemoriId(false);
-							gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
 						}else{
 							gMemoriId = "" + generator.nextValue();
 							gtfReport.setDummyGMemoriId(true);
@@ -290,7 +304,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 							benchmarkMap.put(BudgetConstants.months[cnt], 0.0);
 						}
 					} catch (Exception e1) {
-						System.out.println(e1);
+						LOGGER.log(Level.WARNING, "Error" + e1);
 						benchmarkMap.put(BudgetConstants.months[cnt], 0.0);
 					}
 				}
@@ -322,24 +336,17 @@ public class BenchMarkUploadServlet extends HttpServlet {
 						gtfReport.setVariancesMap(benchmarkMap);
 					}
 				}
-				
 				gtfReport.setMultiBrand(isMultibrand);
 				gtfReport.setRemarks("");
 
-				
-				
-
-
-				if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !gtfReport.getPoNumber().equalsIgnoreCase("#") && !gtfReport.getPoNumber().startsWith("1")){
-					ArrayList<GtfReport> poUpdated = new ArrayList<>();
+				if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !gtfReport.getPoNumber().equalsIgnoreCase("#") && !gtfReport.getPoNumber().equalsIgnoreCase("blank") && !gtfReport.getPoNumber().startsWith("1")){
+					ArrayList<GtfReport> poUpdated = new ArrayList<GtfReport>();
 					if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
 						poUpdated = uploadedPOs.get(gtfReport.getPoNumber());
 					}
 					poUpdated.add(gtfReport);
-
 					uploadedPOs.put(gtfReport.getPoNumber(), poUpdated);
 				}else{
-					
 					ArrayList<GtfReport> noPoUpdated = new ArrayList<>();
 					if(uploadWithOutPos.get(gtfReport.getProjectName())!=null){
 						noPoUpdated = uploadWithOutPos.get(gtfReport.getProjectName());
@@ -352,7 +359,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					}
 				}
 			}catch(Exception e){
-				System.out.println(recvdRow);
+				LOGGER.log(Level.WARNING, "Exception occured while uploading..." + recvdRow + e);
 			}
 		}
 
@@ -369,6 +376,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		}
 	}
 
+	// Creates parent gtfReport
 	private void changeForMultiBrand(Map<String, ArrayList<GtfReport>> uploadedPOs, List<GtfReport> gtfReports,Map<String, GtfReport> costCenterWiseGtfRptMap) {
 		Map<String, Double> setZeroMap = new HashMap<String, Double>();
 		Map<String, Double> benchMrkMap = null;
@@ -401,10 +409,10 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
-		    	benchMrkMap = new HashMap(setZeroMap);
-		    	plannedMap = new HashMap(setZeroMap);
-		    	accrualMap = new HashMap(setZeroMap);
-		    	varianceMap = new HashMap(setZeroMap);
+		    	benchMrkMap = new HashMap<String, Double>(setZeroMap);
+		    	plannedMap = new HashMap<String, Double>(setZeroMap);
+		    	accrualMap = new HashMap<String, Double>(setZeroMap);
+		    	varianceMap = new HashMap<String, Double>(setZeroMap);
 		    	
 		    	String gMemoriId = nwParentGtfReport.getgMemoryId();
 		    	int count = 1;
@@ -415,25 +423,25 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				}
 		    	childProjList.add(gMemoriId);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
-		    		Map<String, Double> receivedChildBenchMrkMap = new HashMap(gtfRpt.getBenchmarkMap());
+		    		Map<String, Double> receivedChildBenchMrkMap = new HashMap<String, Double>(gtfRpt.getBenchmarkMap());
 		    		for (Entry<String, Double> entryMap : receivedChildBenchMrkMap.entrySet()){
 		    			benchMrkMap.put(entryMap.getKey(), benchMrkMap.get(entryMap.getKey()) + entryMap.getValue());
 		    		}
 		    		nwParentGtfReport.setBenchmarkMap(benchMrkMap);
 		    		
-		    		Map<String, Double> receivedChildPlannedMap = new HashMap(gtfRpt.getPlannedMap());
+		    		Map<String, Double> receivedChildPlannedMap = new HashMap<String, Double>(gtfRpt.getPlannedMap());
 		    		for (Entry<String, Double> entryMap : receivedChildPlannedMap.entrySet()){
 		    			plannedMap.put(entryMap.getKey(), plannedMap.get(entryMap.getKey()) + entryMap.getValue());
 		    		}
 		    		nwParentGtfReport.setPlannedMap(plannedMap);
 		    		
-		    		Map<String, Double> receivedChildAccrualMap = new HashMap(gtfRpt.getAccrualsMap());
+		    		Map<String, Double> receivedChildAccrualMap = new HashMap<String, Double>(gtfRpt.getAccrualsMap());
 		    		for (Entry<String, Double> entryMap : receivedChildAccrualMap.entrySet()){
 		    			accrualMap.put(entryMap.getKey(), accrualMap.get(entryMap.getKey()) + entryMap.getValue());
 		    		}
 		    		nwParentGtfReport.setAccrualsMap(accrualMap);
 		    		
-		    		Map<String, Double> receivedChildVarianceMap = new HashMap(gtfRpt.getVariancesMap());
+		    		Map<String, Double> receivedChildVarianceMap = new HashMap<String, Double>(gtfRpt.getVariancesMap());
 		    		for (Entry<String, Double> entryMap : receivedChildVarianceMap.entrySet()){
 		    			varianceMap.put(entryMap.getKey(), varianceMap.get(entryMap.getKey()) + entryMap.getValue());
 		    		}

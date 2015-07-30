@@ -111,7 +111,8 @@ public class StoreReport extends HttpServlet {
 						.getString(BudgetConstants.New_GTFReport_SubActivity));
 				gtfReport.setPoNumber(poNum);
 				String poDesc = rprtObject
-						.getString(BudgetConstants.New_GTFReport_PoDesc);
+						.getString(BudgetConstants.New_GTFReport_PoDesc).replace("\\", "\\\\")
+						.replace("\"", "\\\"").replace("\'", "\\\'");
 				gtfReport.setPoDesc(poDesc);
 				gtfReport.setVendor(rprtObject
 						.getString(BudgetConstants.New_GTFReport_Vendor));

@@ -168,7 +168,7 @@ public class PODetailsUpload extends HttpServlet {
 
 			// Check by matching PO number
 			if (!Util.isNullOrEmpty(receivedGmemoriId)
-					&& Util.isNullOrEmpty(rcvdRow.get(5).toString()) && !"#".equalsIgnoreCase(rcvdRow.get(5).toString())) {
+					&& Util.isNullOrEmpty(rcvdRow.get(5).toString()) && !"#".equalsIgnoreCase(rcvdRow.get(5).toString()) && !"blank".equalsIgnoreCase(rcvdRow.get(5).toString())) {
 				if (poMap.get(rcvdRow.get(5).toString()) != null) {
 					receivedGmemoriId = poMap.get(rcvdRow.get(5).toString())
 							.getgMemoryId();
@@ -324,7 +324,8 @@ public class PODetailsUpload extends HttpServlet {
 			receivedGtfReport.setRemarks("Error with project data : PO# is blank");
 		}
 			
-		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString());
+		receivedGtfReport.setPoDesc(rcvdRow.get(6).toString().replace("\\", "\\\\")
+				.replace("\"", "\\\"").replace("\'", "\\\'"));
 		receivedGtfReport.setVendor(rcvdRow.get(7).toString());
 		String poDesc = receivedGtfReport.getPoDesc();
 		if(receivedGtfReport.getProjectName() != null && receivedGtfReport.getProjectName().trim().equalsIgnoreCase("")){
@@ -404,7 +405,8 @@ public class PODetailsUpload extends HttpServlet {
 		// no parent gtf report
 		if(pGtf==null){
 			try {
-				gtfReport.setPoDesc(rcvdRow.get(6).toString());
+				gtfReport.setPoDesc(rcvdRow.get(6).toString().replace("\\", "\\\\")
+						.replace("\"", "\\\"").replace("\'", "\\\'"));
 				if(rcvdRow.get(6).toString().indexOf("_")==6){
 
 					gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
@@ -508,7 +510,7 @@ public class PODetailsUpload extends HttpServlet {
 		uploadedGMems.put(gtfReport.getgMemoryId(), gtfReport);
 
 		if(pGtf ==null){
-			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber()) && !"blank".equalsIgnoreCase(gtfReport.getPoNumber())
 					&& !gtfReport.getPoNumber().startsWith("1")){
 				ArrayList<GtfReport> poUpdated = new ArrayList<>();
 				if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
@@ -531,7 +533,7 @@ public class PODetailsUpload extends HttpServlet {
 			}
 		}else{
 
-			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber())
+			if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"#".equalsIgnoreCase(gtfReport.getPoNumber()) && !"blank".equalsIgnoreCase(gtfReport.getPoNumber())
 					&& !gtfReport.getPoNumber().startsWith("1")){
 				ArrayList<GtfReport> poUpdated = new ArrayList<>();
 				if (addedPOs.get(gtfReport.getPoNumber()) != null) {
