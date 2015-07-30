@@ -133,7 +133,7 @@ public class MultiBrandServlet extends HttpServlet {
 					paretnGtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
 					plannedMap = gtfRpt.getPlannedMap();
 					plannedMap.put(BudgetConstants.total,
-							roundDoubleValue(Double.parseDouble(sumTotal), 5));
+							roundDoubleValue(Double.parseDouble(sumTotal), 2));
 					parentPlannedMap = new LinkedHashMap<String, Double>(
 							plannedMap);
 					paretnGtfReport.setPlannedMap(parentPlannedMap);

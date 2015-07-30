@@ -138,8 +138,10 @@ public class AutoSaveData extends HttpServlet {
 							LOGGER.log(Level.INFO, "Changing PO NUMBER ... : "
 									+ poNumber);
 							gtfReportObj.setPoNumber(poNumber);
-							gtfReportObj.setStatus("Active");
-							gtfReportObj.setFlag(2);
+							if(gtfReportObj.getStatus().equalsIgnoreCase("new")){
+								gtfReportObj.setStatus("Active");
+								gtfReportObj.setFlag(2);
+							}
 							gtfReportMap.put(keyNum, gtfReportObj);
 						} 
 						// on change of others

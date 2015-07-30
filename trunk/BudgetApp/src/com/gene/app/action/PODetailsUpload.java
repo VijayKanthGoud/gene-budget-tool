@@ -358,26 +358,26 @@ public class PODetailsUpload extends HttpServlet {
 				receivedAccrualMap.put(
 						BudgetConstants.months[cnt],
 						roundDoubleValue(
-								Double.parseDouble(val), 5));
+								Double.parseDouble(val), 2));
 				
 				// updates the future month values
 				if(cnt <  curMonth){
 					receivedPlannedMap.put(
 							BudgetConstants.months[cnt],
 							roundDoubleValue(
-									Double.parseDouble(val), 5));
+									Double.parseDouble(val), 2));
 				}
 				
 				if(isMultiBrand){
 					receivedParentAccrualMap.put(BudgetConstants.months[cnt],
 							receivedParentAccrualMap.get(BudgetConstants.months[cnt]) - prevVal + roundDoubleValue(
-									Double.parseDouble(val), 5));
+									Double.parseDouble(val), 2));
 					
 					// updates the future month values
 					if(cnt <  curMonth){
 						receivedParentPlannedMap.put(BudgetConstants.months[cnt],
 							receivedParentPlannedMap.get(BudgetConstants.months[cnt]) - prevPlannedVal + roundDoubleValue(
-									Double.parseDouble(val), 5));
+									Double.parseDouble(val), 2));
 					}
 					
 				}
@@ -477,7 +477,7 @@ public class PODetailsUpload extends HttpServlet {
 				/*}*/
 				receivedMap.put(
 						BudgetConstants.months[cnt],
-						roundDoubleValue(Double.parseDouble(val), 5) );
+						roundDoubleValue(Double.parseDouble(val), 2) );
 
 			} catch (NumberFormatException e1) {
 				receivedMap.put(BudgetConstants.months[cnt], 0.0);
