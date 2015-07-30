@@ -208,15 +208,15 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				}
 				// Set project name from PO description by removing gmemori Id which is separated by '_'
 				// Else set project name as PO description 
-				if (recvdRow.get(2) != null && !recvdRow.get(2).toString().trim().equals("")) {
+				/*if (recvdRow.get(2) != null && !recvdRow.get(2).toString().trim().equals("")) {
 					gtfReport.setProjectName((recvdRow.get(2).toString()));
-				} else {
+				} else {*/
 					if(gtfReport.getPoDesc().indexOf("_") == 6){
 						gtfReport.setProjectName(gtfReport.getPoDesc().split("_")[1]);
 					}else{
 						gtfReport.setProjectName(gtfReport.getPoDesc());
 					}
-				}
+				/*}*/
 				
 				if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
 					gtfReport.setBrand(gtfReport.getWBS_Name());
@@ -240,6 +240,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				//	removeGtfReports.add(gtfRpt);
 					gtfReport.setId(gtfRpt.getId());
 					gtfReport.setgMemoryId(gtfRpt.getgMemoryId());
+					gtfReport.setChildProjectList(gtfRpt.getChildProjectList());
 					if("".equalsIgnoreCase(gtfReport.getPoNumber().trim())){
 						gtfReport.setPoNumber(gtfRpt.getPoNumber());
 						if(Util.isNullOrEmpty(gtfReport.getPoNumber())){
@@ -301,10 +302,17 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					gtfReport.setVariancesMap(benchmarkMap);
 				}else{
 					if(gtfRpt.getBenchmarkMap() !=null){
+						gtfReport.setPlannedMap(gtfRpt.getPlannedMap());
+						gtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
+						for( Entry<String, Double> monthWiseVal : gtfRpt.getBenchmarkMap().entrySet()){
+							if(monthWiseVal.getValue() != 0.0){
+								benchmarkMap.put(monthWiseVal.getKey(), monthWiseVal.getValue());
+							}
+						}
 						gtfReport.setBenchmarkMap(benchmarkMap);
 						Map<String, Double> calVarianceMap = new HashMap<String, Double>();
 						for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
-							calVarianceMap.put(BudgetConstants.months[cnt], benchmarkMap.get(BudgetConstants.months[cnt]) - gtfReport.getAccrualsMap().get(BudgetConstants.months[cnt]));
+							calVarianceMap.put(BudgetConstants.months[cnt], benchmarkMap.get(BudgetConstants.months[cnt]) - gtfRpt.getAccrualsMap().get(BudgetConstants.months[cnt]));
 						}
 						gtfReport.setVariancesMap(calVarianceMap);
 					}else{
@@ -363,7 +371,11 @@ public class BenchMarkUploadServlet extends HttpServlet {
 
 	private void changeForMultiBrand(Map<String, ArrayList<GtfReport>> uploadedPOs, List<GtfReport> gtfReports,Map<String, GtfReport> costCenterWiseGtfRptMap) {
 		Map<String, Double> setZeroMap = new HashMap<String, Double>();
+		Map<String, Double> benchMrkMap = null;
 		Map<String, Double> plannedMap = null;
+		Map<String, Double> accrualMap = null;
+		Map<String, Double> varianceMap = null;
+		
 		for (int cnt = 0; cnt <= BudgetConstants.months.length - 1; cnt++) {
 			setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 		}
@@ -389,7 +401,11 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
+		    	benchMrkMap = new HashMap(setZeroMap);
 		    	plannedMap = new HashMap(setZeroMap);
+		    	accrualMap = new HashMap(setZeroMap);
+		    	varianceMap = new HashMap(setZeroMap);
+		    	
 		    	String gMemoriId = nwParentGtfReport.getgMemoryId();
 		    	int count = 1;
 				double total = 0.0;
@@ -399,14 +415,32 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				}
 		    	childProjList.add(gMemoriId);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
-		    		Map<String, Double> receivedChildMap = new HashMap(gtfRpt.getPlannedMap());
-		    		for (Entry<String, Double> entryMap : receivedChildMap.entrySet()){
+		    		Map<String, Double> receivedChildBenchMrkMap = new HashMap(gtfRpt.getBenchmarkMap());
+		    		for (Entry<String, Double> entryMap : receivedChildBenchMrkMap.entrySet()){
+		    			benchMrkMap.put(entryMap.getKey(), benchMrkMap.get(entryMap.getKey()) + entryMap.getValue());
+		    		}
+		    		nwParentGtfReport.setBenchmarkMap(benchMrkMap);
+		    		
+		    		Map<String, Double> receivedChildPlannedMap = new HashMap(gtfRpt.getPlannedMap());
+		    		for (Entry<String, Double> entryMap : receivedChildPlannedMap.entrySet()){
 		    			plannedMap.put(entryMap.getKey(), plannedMap.get(entryMap.getKey()) + entryMap.getValue());
 		    		}
 		    		nwParentGtfReport.setPlannedMap(plannedMap);
+		    		
+		    		Map<String, Double> receivedChildAccrualMap = new HashMap(gtfRpt.getAccrualsMap());
+		    		for (Entry<String, Double> entryMap : receivedChildAccrualMap.entrySet()){
+		    			accrualMap.put(entryMap.getKey(), accrualMap.get(entryMap.getKey()) + entryMap.getValue());
+		    		}
+		    		nwParentGtfReport.setAccrualsMap(accrualMap);
+		    		
+		    		Map<String, Double> receivedChildVarianceMap = new HashMap(gtfRpt.getVariancesMap());
+		    		for (Entry<String, Double> entryMap : receivedChildVarianceMap.entrySet()){
+		    			varianceMap.put(entryMap.getKey(), varianceMap.get(entryMap.getKey()) + entryMap.getValue());
+		    		}
+		    		nwParentGtfReport.setVariancesMap(varianceMap);
+		    		
 		    		gtfRpt.setgMemoryId(gMemoriId +"."+ (count));
 					childProjList.add(gMemoriId + "." + (count++));
-		    		//childProjList.add(gMemoriId +"."+ (count++));
 		    	}
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		total += gtfRpt.getPlannedMap().get("TOTAL");
@@ -415,7 +449,6 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		    	nwParentGtfReport.setBrand("Smart WBS");
 		    	nwParentGtfReport.setPercent_Allocation(100.0);
 		    	nwParentGtfReport.setRemarks("   ");
-		    	nwParentGtfReport.setBenchmarkMap(nwParentGtfReport.getPlannedMap());
 		    	receivedGtfReports.add(nwParentGtfReport);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		gtfRpt.setMultiBrand(true);
@@ -430,14 +463,11 @@ public class BenchMarkUploadServlet extends HttpServlet {
 						gtfRpt.setPercent_Allocation(100.0);
 					}
 		    		gtfReports.add(gtfRpt);
-		    		
 		    	}
-		    	//uploadedPOs.put(entry.getKey(), receivedGtfReports);
 		    }else{
 		    	try {
 					gtfReports.add((GtfReport) receivedGtfReports.get(0).clone());
 				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    }
