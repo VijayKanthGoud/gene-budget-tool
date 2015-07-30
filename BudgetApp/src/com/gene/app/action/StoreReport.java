@@ -241,7 +241,7 @@ public class StoreReport extends HttpServlet {
 											Double.parseDouble(rprtObject.getString(Integer
 													.toString(cnt
 															+ BudgetConstants.months.length
-															- 1))), 5));
+															- 1))), 2));
 				} catch (NumberFormatException e) {
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}
@@ -250,7 +250,7 @@ public class StoreReport extends HttpServlet {
 				try {
 					plannedMap
 					.put(BudgetConstants.months[12],
-							roundDoubleValue(Double.parseDouble(rprtObject.getString("51")),5));
+							roundDoubleValue(Double.parseDouble(rprtObject.getString("51")),2));
 				} catch (NumberFormatException e) {
 					plannedMap.put(BudgetConstants.months[12], 0.0);
 				}
