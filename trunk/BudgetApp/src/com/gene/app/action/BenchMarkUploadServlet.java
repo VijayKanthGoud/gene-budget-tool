@@ -126,8 +126,6 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		
 		boolean isMultibrand = false;
 		
-		List<GtfReport> removeGtfReports = new ArrayList<GtfReport>();
-		
 		Map<String, GtfReport> costCenterWiseGtfRptMap = util.getAllReportDataFromCache(costCentre);
 		
 		for (List<String> recvdRow : rowList) {
@@ -267,9 +265,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					String gMemoriId;
 					try {
 						if(gtfReport.getPoDesc().indexOf("_")==6){
-							gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
-									Math.min(gtfReport.getPoDesc().length(), 6)))
-									+ "";
+							gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,	Math.min(gtfReport.getPoDesc().length(), 6))) + "";
 							gtfReport.setDummyGMemoriId(false);
 						}else{
 							gMemoriId = "" + generator.nextValue();
@@ -326,7 +322,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 						gtfReport.setBenchmarkMap(benchmarkMap);
 						Map<String, Double> calVarianceMap = new HashMap<String, Double>();
 						for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
-							calVarianceMap.put(BudgetConstants.months[cnt], gtfReport.getPlannedMap().get(BudgetConstants.months[cnt]) - gtfRpt.getAccrualsMap().get(BudgetConstants.months[cnt]));
+							calVarianceMap.put(BudgetConstants.months[cnt], benchmarkMap.get(BudgetConstants.months[cnt]) - gtfRpt.getAccrualsMap().get(BudgetConstants.months[cnt]));
 						}
 						gtfReport.setVariancesMap(calVarianceMap);
 					}else{
@@ -367,12 +363,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		changeForMultiBrand(uploadWithOutPos, gtfReports,costCenterWiseGtfRptMap);
 		
 		if (gtfReports!=null && !gtfReports.isEmpty() && gtfReports.size() != 0) {
-			if(removeGtfReports!=null && !removeGtfReports.isEmpty() && removeGtfReports.size() >0){
-			//	util.removeExistingProject(removeGtfReports,baseURL);
-			}
 			util.generateProjectIdUsingJDOTxn(gtfReports,"",baseURL,costCentre);
-			//util.storeProjectsToCache(removeGtfReports,gtfReports, costCentre);
-
 		}
 	}
 
