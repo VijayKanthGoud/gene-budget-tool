@@ -126,8 +126,6 @@ public class FactSheetUploadServlet extends HttpServlet {
 		
 		boolean isMultibrand = false;
 		
-		List<GtfReport> removeGtfReports = new ArrayList<GtfReport>();
-		
 		Map<String, GtfReport> costCenterWiseGtfRptMap = util.getAllReportDataFromCache(costCentre);
 		
 		for (List<String> recvdRow : rowList) {
@@ -267,9 +265,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 					String gMemoriId;
 					try {
 						if(gtfReport.getPoDesc().indexOf("_")==6){
-							gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,
-									Math.min(gtfReport.getPoDesc().length(), 6)))
-									+ "";
+							gMemoriId = Integer.parseInt(gtfReport.getPoDesc().substring(0,	Math.min(gtfReport.getPoDesc().length(), 6))) + "";
 							gtfReport.setDummyGMemoriId(false);
 						}else{
 							gMemoriId = "" + generator.nextValue();
@@ -308,6 +304,8 @@ public class FactSheetUploadServlet extends HttpServlet {
 						plannedMap.put(BudgetConstants.months[cnt], 0.0);
 					}
 				}
+				
+				// always updates the planned-map and bechmark-map without modifying accrual-map
 				gtfReport.setPlannedMap(plannedMap);
 				gtfReport.setBenchmarkMap(plannedMap);
 				if(gtfRpt ==null){
@@ -318,7 +316,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 						gtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 						Map<String, Double> calVarianceMap = new HashMap<String, Double>();
 						for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
-							calVarianceMap.put(BudgetConstants.months[cnt],plannedMap.get(BudgetConstants.months[cnt]) - gtfReport.getAccrualsMap().get(BudgetConstants.months[cnt]));
+							calVarianceMap.put(BudgetConstants.months[cnt], plannedMap.get(BudgetConstants.months[cnt]) - gtfReport.getAccrualsMap().get(BudgetConstants.months[cnt]));
 						}
 						gtfReport.setVariancesMap(calVarianceMap);
 					}else{
@@ -329,6 +327,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 				gtfReport.setMultiBrand(isMultibrand);
 				gtfReport.setRemarks("");
 
+				// If PO number contains # or Blank map with uploadWithOutPos map
 				if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !gtfReport.getPoNumber().equalsIgnoreCase("#") && !gtfReport.getPoNumber().equalsIgnoreCase("blank") && !gtfReport.getPoNumber().startsWith("1")){
 					ArrayList<GtfReport> poUpdated = new ArrayList<GtfReport>();
 					if (uploadedPOs.get(gtfReport.getPoNumber()) != null) {
@@ -357,12 +356,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		changeForMultiBrand(uploadWithOutPos, gtfReports,costCenterWiseGtfRptMap);
 		
 		if (gtfReports!=null && !gtfReports.isEmpty() && gtfReports.size() != 0) {
-			if(removeGtfReports!=null && !removeGtfReports.isEmpty() && removeGtfReports.size() >0){
-			//	util.removeExistingProject(removeGtfReports,baseURL);
-			}
 			util.generateProjectIdUsingJDOTxn(gtfReports,"",baseURL,costCentre);
-			//util.storeProjectsToCache(removeGtfReports,gtfReports, costCentre);
-
 		}
 	}
 
