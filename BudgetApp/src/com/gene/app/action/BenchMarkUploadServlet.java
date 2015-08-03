@@ -70,13 +70,16 @@ public class BenchMarkUploadServlet extends HttpServlet {
         final String baseURL = url.substring(0, url.length()
                            - req.getRequestURI().length())
                            + req.getContextPath() + "/";
-		
+        
         String objarray = req.getParameter(BudgetConstants.objArray).toString();
 		String [] objArrayStr = objarray.split("],");
 		LOGGER.log(Level.INFO, "Received JSON String = "+ objArrayStr.length);
 		
 		String costCentre = req.getParameter("costCenter");
 		LOGGER.log(Level.INFO, "Received Cost Center = "+ costCentre);
+		
+		int uploadedType = Integer.parseInt(req.getParameter("uploadType"));
+		LOGGER.log(Level.INFO, "Received uploadedType = "+ uploadedType);
 		
 		uploadedPOs = new HashMap<String, ArrayList<GtfReport>>();
 		uploadWithOutPos = new HashMap<String, ArrayList<GtfReport>>();
@@ -116,11 +119,11 @@ public class BenchMarkUploadServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		List<GtfReport> gtfReports = new ArrayList<GtfReport>();
-		createGTFReports(user, user,rowList, gtfReports,costCentre,baseURL);
+		createGTFReports(user, user,rowList, gtfReports,costCentre,baseURL, uploadedType);
 	}
 
 	private void createGTFReports(UserRoleInfo user,UserRoleInfo orgUser,
-		List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre,String baseURL) {
+		List<List<String>> rowList, List<GtfReport> gtfReports,String costCentre,String baseURL, int uploadedType) {
 		
 		Map<String,GtfReport> uniqueGtfRptMap = util.prepareUniqueGtfRptMap(costCentre);
 		
@@ -311,25 +314,29 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					gtfReport.setAccrualsMap(setZeroMap);
 					gtfReport.setVariancesMap(benchmarkMap);
 				}else{
-					if(gtfRpt.getBenchmarkMap() !=null){
-						gtfReport.setPlannedMap(gtfRpt.getPlannedMap());
-						gtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
-						for( Entry<String, Double> monthWiseVal : gtfRpt.getBenchmarkMap().entrySet()){
-							if(monthWiseVal.getValue() != 0.0){
-								benchmarkMap.put(monthWiseVal.getKey(), monthWiseVal.getValue());
+					if( benchmarkMap != null){
+						for( Entry<String, Double> monthWiseVal : benchmarkMap.entrySet()){
+							if(monthWiseVal.getValue() == 0.0){
+								if(gtfRpt.getBenchmarkMap()!=null && gtfRpt.getBenchmarkMap().get(monthWiseVal.getKey())!=null){
+								benchmarkMap.put(monthWiseVal.getKey(), gtfRpt.getBenchmarkMap().get(monthWiseVal.getKey()));
+								}else{
+									break;
+								}
 							}
+						}
+						if(uploadedType == 2){
+							gtfReport.setPlannedMap(benchmarkMap);
+							gtfReport.setAccrualsMap(benchmarkMap);
+						}else{
+							gtfReport.setPlannedMap(gtfRpt.getPlannedMap());
+							gtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 						}
 						gtfReport.setBenchmarkMap(benchmarkMap);
 						Map<String, Double> calVarianceMap = new HashMap<String, Double>();
 						for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
-							calVarianceMap.put(BudgetConstants.months[cnt], benchmarkMap.get(BudgetConstants.months[cnt]) - gtfRpt.getAccrualsMap().get(BudgetConstants.months[cnt]));
+							calVarianceMap.put(BudgetConstants.months[cnt], benchmarkMap.get(BudgetConstants.months[cnt]) - gtfReport.getAccrualsMap().get(BudgetConstants.months[cnt]));
 						}
 						gtfReport.setVariancesMap(calVarianceMap);
-					}else{
-						gtfReport.setPlannedMap(benchmarkMap);
-						gtfReport.setBenchmarkMap(benchmarkMap);
-						gtfReport.setAccrualsMap(setZeroMap);
-						gtfReport.setVariancesMap(benchmarkMap);
 					}
 				}
 				gtfReport.setMultiBrand(isMultibrand);

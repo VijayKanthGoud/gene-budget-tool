@@ -35,6 +35,7 @@ ng\:form {
 			selectedTab=3;
 			document.getElementById("costCenter").style.display = "Benchmark Details";
 			document.getElementById("headerid").innerHTML="Benchmark Details";
+			$('#uploadTypeDiv').show();
 		}else if(document.URL.split("?")[1].toString().split("=")[1] == 4){
 			selectedTab=4;
 			document.getElementById("costCenter").style.display = "none";
@@ -113,7 +114,15 @@ ng\:form {
 						<%} } }%>
 						</select>
 			</div>
-			<!-- </br></br> -->
+			
+			<div id = "uploadTypeDiv" class="form-group" style="display: none;">
+				<span style="font-size: 14px; font-weight: bold">Type :</span>
+				<select id="uploadType" class="form-control ng-pristine ng-invalid ng-invalid-required" name="type_sel" style="width: 160px;">
+						<option value="1" selected>Only Benchmark</option>
+						<option value="2" >All</option>
+				</select>
+			</div>
+			
 			<div class="form-group">
 			<span style="font-size: 14px; font-weight: bold"> From Line number: </span><input  class="form-control-textbox" type="number" min="0" onkeypress='return event.charCode >= 48 && event.charCode <= 57' name="frmLine" id="From"><br>
   			<span style="font-size: 14px; font-weight: bold">To Line number: </span> <input class="form-control-textbox" type="number" min="0" onkeypress='return event.charCode >= 48 && event.charCode <= 57' name="toLine" id="To"><br>
@@ -132,8 +141,7 @@ ng\:form {
 </table>
 
 
-<%-- <%@ include file="uploadpopUp.jsp" %>
- --%><script>
+<script>
  
 	function uploadData(){
 	
@@ -207,6 +215,7 @@ ng\:form {
 					dataType : 'text',
 					data : {objarray: JSON.stringify(excelValue.sheets[$('#sheet_name').val()].data),
 						costCenter : $('#getCostCenter').val(),
+						uploadType : $('#uploadType').val(),
 						inputFrom :  $('#From').val(),
 						inputTo :  $('#To').val()},
 					success : function(result) {
