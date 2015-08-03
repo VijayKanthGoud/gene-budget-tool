@@ -49,9 +49,25 @@ function OpenInNewTab(url) {
 	  var win = window.open(url, 'initiate');
 	  win.focus();
 	}
+
+function refreshSummary(){
+	var val = $('#selectedUserView').val();
+	var ccVal = $('#getCostCenter').val();
+	selectedBrandValue = document.getElementById("brandType").value;
+	$.ajax({
+		url : '/GetSummaryFromCache',
+		type : 'POST',
+		dataType : 'text',
+		data : {costCentre: ccVal,
+			brand : selectedBrandValue},
+		success : function(result) {
+			summaryResult = result;
+			getSummaryValues();
+		}
+	});
+}
 function getBrandTotals(){
-	selectUserView1();
-	/*if($('#selectedUserView').val() == 'My Brands'){
+	if($('#selectedUserView').val() == 'My Brands'){
 		$("#dropdown").show();
 	}else{
 		$("#dropdown").hide();	
@@ -78,7 +94,7 @@ function getBrandTotals(){
 			summaryResult = result;
 			getSummaryValues();
 		}
-	});*/
+	});
 } 
 /*function ValidateGMemoriId(gMemoriId){
 	//var gMemoriId = document.getElementById("brandType").value; 
@@ -1648,33 +1664,7 @@ function selectUserView(){
 	}
 }
 
-function selectUserView1(){
-	var val = $('#selectedUserView').val();
-	var ccVal = $('#getCostCenter').val();
-	selectedBrandValue = document.getElementById("brandType").value;
-	if($('#selectedUserView').val()=='My Brands'){
-		$('#selectedView3').val(val);
-		$('#getCostCenter3').val(ccVal);
-		$('#dropdown').show();
-		
-		$('#getBrand3').val(selectedBrandValue);
-		$('#getBrand').submit();
-		
-	}else if($('#selectedUserView').val()=='My Projects'){
-		$('#selectedView2').val(val);
-		$('#getCostCenter2').val(ccVal);
-		$('#getBrand2').val(selectedBrandValue);
-		$('#dropdown').hide();
-		$('#getProjects').submit();
-		
-	}else if($('#selectedUserView').val()=='My Cost Center'){
-		$('#selectedView1').val(val);
-		$('#getCostCenter1').val(ccVal);
-		$('#getBrandCC').val(selectedBrandValue);
-		$('#dropdown').hide();
-		$('#getCostCentre').submit();
-	}
-}
+
 
 function closepopup(){
 	$('#selectthebrand').hide();

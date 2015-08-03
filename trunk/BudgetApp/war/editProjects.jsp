@@ -300,7 +300,7 @@ String ccView="";
 
 						<tr align='center'>
 							<td colspan=2>Annual Brand Summary &nbsp;($ in 1000's) <img alt="" src="images/refresh.png" height="25"
-								width="25" align='left' onclick="getBrandTotals()"></td>
+								width="25" align='left' onclick="refreshSummary()"></td>
 						</tr>
 						<tr>
 						<tr>
