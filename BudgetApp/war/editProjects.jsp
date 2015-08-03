@@ -1207,11 +1207,7 @@ String ccView="";
 			}
 		});
 		
-		var errExist = false;
 		grid.onValidationError.subscribe(function(e, args) {
-			if(errExist){
-				return;
-			}
 	        var validationResult = args.validationResults;
 	        var activeCellNode = args.cellNode;
 	        var editor = args.editor;
@@ -1219,7 +1215,6 @@ String ccView="";
 	        var valid_result = validationResult.valid;
 	        if (!valid_result) {
 	        	alert(errorMessage);
-	        	errExist = true;
 	          	$(activeCellNode).attr("title", errorMessage);
 	        }
 	        else {
