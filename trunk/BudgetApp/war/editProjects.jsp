@@ -42,7 +42,7 @@ String ccView="";
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
 <html>
-<body onload="getAvailableTags();">
+<body onload="getAvailableTags(); refreshSummary();">
 	<div align="center">
 		<table
 			style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
@@ -336,12 +336,12 @@ String ccView="";
 						</tr>
 						<tr>
 							<td><span  title="Current Overall Budget">Budget:</span></td>
-							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 10.0) / 10.0%></span></td>
+							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 100.0) / 100.0%></span></td>
 						</tr>
 
 						<tr>
 							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
-							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 10.0) / 10.0%></span></td>
+							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 100.0) / 100.0%></span></td>
 						</tr>
 						<tr>
 							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
@@ -350,12 +350,12 @@ String ccView="";
 						<tr>
 							<!-- td style="padding-left: 20px;">2017</td> -->
 							<td><span title = "Total Dollars Spent" >Total Accrual:</td>
-							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 10.0) / 10.0%></span></td>
+							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 100.0) / 100.0%></span></td>
 						</tr>
 						<tr>
 							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 10.0) / 10.0%></span></span>
+									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 100.0) / 100.0%></span></span>
 							</td>
 						</tr>
 					</table>
