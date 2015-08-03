@@ -211,10 +211,8 @@
 		  return "<button class='myButton' style='margin-left:auto;margin-right:auto;display:block;' type='button' id='delPrjBtn' value="+val+" onClick = 'deleteCurrentProject(this)'>Delete</button>";
 	  }
 	  if((dataContext["26"] == "Closed")){
-		  if((typeof value != 'undefined' && value != '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
-			     return "<div width = '100%' style='background:#C0CCED'>"+value+"</div>";
-		  }else if((typeof value == 'undefined' || value == '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
-			     return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
+		  if((typeof value != 'undefined' || value != '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
+			     return "<div width = '100%'>"+value+"</div>";
 		  }else{
 		 		return "<div width = '100%'>&nbsp;</div>";
 		  }
@@ -229,7 +227,7 @@
   }
   
   function poFieldFormatter(row, cell, value, columnDef, dataContext) {
-	  if(typeof value != 'undefined' && value != '' && value.toString().startsWith('1') &&
+	  if(typeof value != 'undefined' && value != '' && value.toString().indexOf('1') == 0 &&
 			  (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total")){
 		  return "<div width = '100%' style='background:#C0CCED; color:red'>"+value+"&nbsp;</div>";
 	  }
