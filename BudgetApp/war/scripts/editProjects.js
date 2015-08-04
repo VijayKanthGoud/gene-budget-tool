@@ -363,9 +363,16 @@ function updateMemCache(e, args, tempKey) {
 	var itemCell = fixedCell;
 	
 	if(fixedCell == <%=BudgetConstants.PO_NUMBER_CELL%>){
+		
+		if(args.item["8"] == 0 || args.item["8"]==''){
+			alert("PO# is Blank");
+			args.item["8"]=args.item["55"];
+			grid.invalidate();
+			return;
+		}
 		var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
 		if (!userAccepted) {
-			args.item["8"]="";
+			args.item["8"]=args.item["55"];
 			grid.invalidate();
 	        grid.gotoCell(row, fixedCell, true);
 	        $('#statusMessage').text("")
