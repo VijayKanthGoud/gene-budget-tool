@@ -123,13 +123,13 @@
 				</td>
 				<td style="padding-left: 1.5%; width: 50%; text-align: center;">
 				 <form method="GET" id="getDataForm" action="/getreport">
-					<table align="center" Style="border-top-left-radius: 3px;background-color: white;width: 351px;padding-left: 3px;border-radius: 5px; border: 1px solid #105596;">
+					<table align="center" Style="border-top-left-radius: 3px;background-color: white;width: 351px;padding-left: 3px;border-radius: 5px; border: 1px solid #105596; padding-top: 2%">
 						<tr>
 							<td width="100px">
-								<span style="font-size: 12px; font-weight: bold; color: #105596;">Select View : </span>
+								<span style="font-size: 12px; font-weight: bold; color: #105596; float: right">Select View : </span>
 							</td>
 							<td>
-							   <select id="selectedUserView" name="selectedView" onchange="selectUserView()" autofocus style="width: 150px; color: #105596;">
+							   <select id="selectedUserView" name="selectedView" onchange="selectUserView()" autofocus style="width: 120px; color: #105596;">
 									<option <%=prjView%>>My Projects</options>
 									<option <%=brandView%>>My Brands</options>
 									<option <%=ccView%>>My Cost Center</options>
@@ -138,12 +138,12 @@
 						</tr>
 						<tr>
 							<td>
-								<span style="font-size: 12px; font-weight: bold;  color: #105596;">
+								<span style="font-size: 12px; font-weight: bold;  color: #105596; float: right">
 									Select Cost Center :
 								</span>
 							</td>
 							<td>
-								<select id="getCostCenter" name="getCCValue" style="width: 102px; height: 23px; color: #105596;" onchange="getCostCenterDetails()">
+								<select id="getCostCenter" name="getCCValue" style="width: 55px; height: 23px; color: #105596;" onchange="getCostCenterDetails()">
 									<%
 									   	if(costcenter_list != null){
 											for(int k=0; k < costcenter_list.length; k++){
@@ -162,12 +162,12 @@
 							</td>
 						</tr>
 						<tr id="dropdown">
-							<td><span style="font-size: 12px; font-weight: bold; color: #105596;">
-									Select Brand :&nbsp;&nbsp; </span></td>
+							<td><span style="font-size: 12px; font-weight: bold; color: #105596; float: right">
+									Select Brand : </span></td>
 							<td>
-								<select id="getBrand1" name="brandValue"
+								<select id="getBrand" name="brandValue"
 									onchange="getProjectsBrandwise()"
-									style="width: 190px; color: #105596;">
+									style="width: 120px; color: #105596;">
 										<%
 												if(userBrandMap!=null && !userBrandMap.isEmpty()){
 													myBrands = userBrandMap.keySet().toArray();
@@ -191,7 +191,7 @@
 						</tr>
 						<tr> 
 							<td style="padding-left: 21.5%; padding-top: 20px;" colspan='2'>
-								<input placeholder="Search" type=text autocomplete = "off" style="float: left; width: 150px;  background: url('images/search30-30px.png') top right no-repeat; background-size: 19px 19px; height:20px; padding-right:2px;border: 1px solid #105596;width: 180px;  color: #333333;  margin-bottom: 8px;  border-radius: 2px;"
+								<input placeholder="Search" type=text autocomplete = "off" style="float: left; width: 150px;  background: url('images/search30-30px.png') top right no-repeat; background-size: 19px 19px; height:21px; padding-right:2px;border: 1px solid #105596;width: 180px;  color: #333333;  margin-bottom: 8px;  border-radius: 2px;"
 								id="txtSearch" title="Search in Project name, gMemori Id, Brand and Comments.">
 							</td>
 						</tr>
@@ -235,20 +235,20 @@
 						</tr>
 						<tr>
 							<td><span  title="Current Overall Budget">Budget:</span></td>
-							<td style="text-align: right;"><span id="totalBudget"  > <%=new DecimalFormat("#.00").format(Math.round(budgetSummary.getTotalBudget() * 100.0) / 100.0)%></span></td>
+							<td style="text-align: right;"><span id="totalBudget"  > <%=new DecimalFormat("0.00").format(Math.round(budgetSummary.getTotalBudget() * 100.0) / 100.0)%></span></td>
 						</tr>
 
 						<tr>
 							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
-							<td style="text-align: right;"><span id="plannedTotal"  ><%=new DecimalFormat("#.00").format(Math.round(budgetSummary.getPlannedTotal() * 100.0) / 100.0)%></span></td>
+							<td style="text-align: right;"><span id="plannedTotal"  ><%=new DecimalFormat("0.00").format(Math.round(budgetSummary.getPlannedTotal() * 100.0) / 100.0)%></span></td>
 						</tr>
 						<tr>
 							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
-							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=new DecimalFormat("#.00").format(Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*100.0)/100.0))%></span></td>
+							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=new DecimalFormat("0.00").format(Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*100.0)/100.0))%></span></td>
 						</tr>
 						<tr>
 							<td><span title = "Total Dollars Spent">Total Accrual:</td>
-							<td style="text-align: right;"><span id="accrualTotal"><%=new DecimalFormat("#.00").format(Math.round(budgetSummary.getAccrualTotal() * 100.0) / 100.0)%></span></td>
+							<td style="text-align: right;"><span id="accrualTotal"><%=new DecimalFormat("0.00").format(Math.round(budgetSummary.getAccrualTotal() * 100.0) / 100.0)%></span></td>
 						</tr>
 						<tr>
 							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
@@ -1495,7 +1495,7 @@
 		function ServletCall(i){
 			console.log("Downloading data...");
 			var viewVal = $('#selectedUserView').val();
-			var brandValue = $('#getBrand1').val();
+			var brandValue = $('#getBrand').val();
 			$('#objArrayId').val('');
 			$('#ccId').val(i);
 			$('#viewSelected').val(viewVal);

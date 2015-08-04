@@ -1,4 +1,3 @@
-<!-- Add whatever you like to the footer -->
 <div id="footer" style="position: fixed; bottom: 0px; width: 100%; z-index: 2;">
 	<table width="100%">
 		<tr>
@@ -13,5 +12,3 @@
 		</tr>
 	</table>
 </div>
-</body>
-</html>
