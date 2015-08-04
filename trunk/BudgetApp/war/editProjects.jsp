@@ -665,6 +665,7 @@ String ccView="";
 					d[54] = "<%=gReport.getRequestor()%>";
 				<%}
 				%>
+				d[55] = "<%=gReport.getPoNumber()%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
