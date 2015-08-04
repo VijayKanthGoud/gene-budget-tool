@@ -211,8 +211,10 @@
 		  return "<button class='myButton' style='margin-left:auto;margin-right:auto;display:block;' type='button' id='delPrjBtn' value="+val+" onClick = 'deleteCurrentProject(this)'>Delete</button>";
 	  }
 	  if((dataContext["26"] == "Closed")){
-		  if((typeof value != 'undefined' || value != '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
-			     return "<div width = '100%'>"+value+"</div>";
+		  if((typeof value != 'undefined' && value != '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
+			     return "<div width = '100%' style='background:#C0CCED'>"+value+"</div>";
+		  }else if((typeof value == 'undefined' || value == '') && (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1 )){
+			     return "<div width = '100%' style='background:#C0CCED'>&nbsp;</div>";
 		  }else{
 		 		return "<div width = '100%'>&nbsp;</div>";
 		  }
