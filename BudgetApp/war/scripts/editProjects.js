@@ -1660,6 +1660,7 @@ function displayMultibrandGrid() {
 			for (var count = 0; count < m_data.length; count++) {
 				if(( m_data[count]["3"] != "" )
 						&&   m_data[count]["3"] != "undefined"){
+					m_data[count]["3"] = parseFloat(m_data[count]["3"]).toFixed(2);
 					sum = sum + parseFloat(m_data[count]["3"]);
 					index = count;
 				}
@@ -1671,7 +1672,6 @@ function displayMultibrandGrid() {
 				else if(!isNaN(m_data[count]["3"] / sum * 100)){
 					if(count < numOfBrands-1){
 					m_data[count]["2"] = parseFloat((m_data[count]["3"] / sum * 100)).toFixed(2);
-														;
 					}else{
 						for(var count = 0;count < numOfBrands-1; count++){
 							if(( m_data[count]["3"] != "" )
@@ -1680,6 +1680,10 @@ function displayMultibrandGrid() {
 							}
 						}
 						m_data[count]["2"] = (100 - parseFloat(percentSum)).toFixed(2);
+						if(m_data[count]["3"]==0){
+							m_data[count]["2"] = 0.0;
+							m_data[count-1]["2"] = (100 - (parseFloat(percentSum)- parseFloat(m_data[count-1]["2"]))).toFixed(2);
+						}
 					}
 				}else{
 					m_data[count]["2"] = "0";
