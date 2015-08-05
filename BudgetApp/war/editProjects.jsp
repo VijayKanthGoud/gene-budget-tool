@@ -961,8 +961,9 @@
 				if(cell == "<%=BudgetConstants.BRAND_CELL%>" && args.item["11"] == "<%=BudgetConstants.FORECAST%>"  && args.item["26"] =="New" ){
 					return true;
 				}
+				
 				if (args.item["11"] == "<%=BudgetConstants.FORECAST%>"
-					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && (args.item["26"] == "New" || args.item["8"].toString().indexOf('1') == 0)) {
+					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && (args.item["26"] == "New" || args.item["8"].toString().indexOf('1') == 0 || args.item["8"].toString() == '#' || (args.item["8"].toString() == "Blank"))) {
 					return true;
 				}
 				var isAnEditableId = false;
