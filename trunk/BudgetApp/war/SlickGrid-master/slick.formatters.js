@@ -229,7 +229,7 @@
   }
   
   function poFieldFormatter(row, cell, value, columnDef, dataContext) {
-	  if(typeof value != 'undefined' && value != '' && value.toString().indexOf('1') == 0 &&
+	  if(typeof value != 'undefined' && value != '' && (value.toString().indexOf('1') == 0 || value.toString().indexOf('#') == 0 || (value.toString() == "Blank")) &&
 			  (dataContext["11"] == "Forecast" && dataContext["0"].toString().indexOf(".") == -1  && dataContext["26"] != "Total")){
 		  return "<div width = '100%' style='background:#C0CCED; color:red'>"+value+"&nbsp;</div>";
 	  }
