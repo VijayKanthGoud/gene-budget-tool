@@ -969,15 +969,15 @@ public class DBUtil {
 	}
 
 	public String createKeyForXlPrjUpload(GtfReport report) {
-		String brand = Util.isNullOrEmpty(report.getBrand()) ? report
-				.getBrand() : "";
+		/*String brand = Util.isNullOrEmpty(report.getBrand()) ? report
+				.getBrand() : "";*/
 		/*String requestor = Util.isNullOrEmpty(report.getRequestor()) ? report
 				.getRequestor() : "";*/
 		// String poDesc =
 		// Util.isNullOrEmpty(report.getPoDesc())?report.getPoDesc():"";
 		String projectName = Util.isNullOrEmpty(report.getProjectName()) ? report
 				.getProjectName() : "";
-		return brand + ":"/* + requestor +  ":"+poDesc+ */+":" + projectName;
+		return /*brand + ":" + requestor +  ":"+poDesc+ +":" + */ projectName;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1055,9 +1055,9 @@ public class DBUtil {
 			for (Map.Entry<String, GtfReport> gtfMapEntry : gtfRptMap
 					.entrySet()) {
 				gtfReport = gtfMapEntry.getValue();
-				if (Util.isNullOrEmpty(gtfReport.getBrand())) {
+				/*if (Util.isNullOrEmpty(gtfReport.getBrand())) {
 					uniqueGtfRptKey = gtfReport.getBrand() + ":";
-				}
+				}*/
 				/*if (Util.isNullOrEmpty(gtfReport.getRequestor())) {
 					uniqueGtfRptKey = uniqueGtfRptKey
 							+ gtfReport.getRequestor() + ":";
@@ -1067,8 +1067,7 @@ public class DBUtil {
 				 * ":"; }
 				 */
 				if (Util.isNullOrEmpty(gtfReport.getProjectName())) {
-					uniqueGtfRptKey = uniqueGtfRptKey
-							+ gtfReport.getProjectName();
+					uniqueGtfRptKey = gtfReport.getProjectName();
 				}
 				gtfReportMap.put(uniqueGtfRptKey, gtfReport);
 			}

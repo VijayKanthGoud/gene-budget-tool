@@ -135,10 +135,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 				// Skip project if there is no Sub activity
 				if (recvdRow.get(colSubActivity) != null	&& !recvdRow.get(colSubActivity).toString().trim().equals("")) {
 					gtfReport.setSubActivity(recvdRow.get(colSubActivity).toString());
-				} /*else {
-					gtfReport.setSubActivity("");
-				//	continue;
-				}*/
+				} 
 				
 				// Add Project Owner from Requestor if not found read from details of user uploaded the fact sheet
 				if (recvdRow.get(colRequestor) != null && !recvdRow.get(colRequestor).toString().trim().equals("")) {
@@ -236,14 +233,14 @@ public class FactSheetUploadServlet extends HttpServlet {
 
 				
 				// Create gtfParam to get previously existing project from unique Gtf report map
-				StringBuilder gtfParam = new StringBuilder("");
-				if(Util.isNullOrEmpty(gtfReport.getBrand())){
+				String gtfParam = "";
+				/*if(Util.isNullOrEmpty(gtfReport.getBrand())){
 					gtfParam = gtfParam.append(gtfReport.getBrand() + ":");
 				}else{
 					gtfParam = gtfParam.append(":");
-				}
+				}*/
 				if(Util.isNullOrEmpty(gtfReport.getProjectName())){
-					gtfParam = gtfParam.append(gtfReport.getProjectName());
+					gtfParam =gtfReport.getProjectName();
 				}
 				
 				
@@ -448,7 +445,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    		try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
 						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-								.get("TOTAL") / total) * 100 , 2));
+								.get("TOTAL") / total) * 100 ));
 					}}catch(NumberFormatException nfe){
 						gtfRpt.setPercent_Allocation(100.0);
 					}catch(ArithmeticException ae){
