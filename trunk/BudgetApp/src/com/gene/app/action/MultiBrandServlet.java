@@ -336,7 +336,7 @@ public class MultiBrandServlet extends HttpServlet {
 			LOGGER.log(Level.INFO,
 					"Number of reports removed from the datastore : "
 							+ oldGtfReportList.size());
-			util.removeExistingProject(oldGtfReportList,baseURL,costCenter);
+			//util.removeExistingProject(oldGtfReportList,baseURL,costCenter);
 			LOGGER.log(Level.INFO,
 					"Number of reports new report(s) inserted in to the datastore : "
 							+ masterGtfReportList.size());
