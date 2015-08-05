@@ -135,10 +135,10 @@ public class FactSheetUploadServlet extends HttpServlet {
 				// Skip project if there is no Sub activity
 				if (recvdRow.get(colSubActivity) != null	&& !recvdRow.get(colSubActivity).toString().trim().equals("")) {
 					gtfReport.setSubActivity(recvdRow.get(colSubActivity).toString());
-				} else {
+				} /*else {
 					gtfReport.setSubActivity("");
-					continue;
-				}
+				//	continue;
+				}*/
 				
 				// Add Project Owner from Requestor if not found read from details of user uploaded the fact sheet
 				if (recvdRow.get(colRequestor) != null && !recvdRow.get(colRequestor).toString().trim().equals("")) {
