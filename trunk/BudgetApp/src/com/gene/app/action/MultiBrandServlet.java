@@ -101,13 +101,14 @@ public class MultiBrandServlet extends HttpServlet {
 			ArrayList<String> gmultiIdList= new ArrayList<>();
 			gmultiIdList.add(gMemoriId);
 			// Inserts parent
+			GtfReport paretnGtfReport = new GtfReport();
 			for (int par = 0; par < oldGtfReportList.size(); par++) {
 				try {
 					gtfRpt = (GtfReport) oldGtfReportList.get(par).clone();
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
-				GtfReport paretnGtfReport = new GtfReport();
+				
 				if (gtfRpt.getgMemoryId().equalsIgnoreCase(gMemoriId)) {
 					LOGGER.log(Level.INFO, "Parent project is : " + gMemoriId);
 					paretnGtfReport.setId(gtfRpt.getId());
@@ -335,7 +336,7 @@ public class MultiBrandServlet extends HttpServlet {
 			LOGGER.log(Level.INFO,
 					"Number of reports removed from the datastore : "
 							+ oldGtfReportList.size());
-			//util.removeExistingProject(oldGtfReportList,baseURL);
+			util.removeExistingProject(oldGtfReportList,baseURL,costCenter);
 			LOGGER.log(Level.INFO,
 					"Number of reports new report(s) inserted in to the datastore : "
 							+ masterGtfReportList.size());
