@@ -241,7 +241,7 @@ public class StoreReport extends HttpServlet {
 											Double.parseDouble(rprtObject.getString(Integer
 													.toString(cnt
 															+ BudgetConstants.months.length
-															- 1))), 2));
+															- 1)))));
 				} catch (NumberFormatException e) {
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}
@@ -250,7 +250,7 @@ public class StoreReport extends HttpServlet {
 				try {
 					plannedMap
 					.put(BudgetConstants.months[12],
-							roundDoubleValue(Double.parseDouble(rprtObject.getString("51")),2));
+							roundDoubleValue(Double.parseDouble(rprtObject.getString("51"))));
 				} catch (NumberFormatException e) {
 					plannedMap.put(BudgetConstants.months[12], 0.0);
 				}
@@ -361,7 +361,7 @@ public class StoreReport extends HttpServlet {
 					try {
 						value = roundDoubleValue(
 								parentPlannedMap.get(BudgetConstants.months[cnt])
-										* percent_allocation / 100, 2);
+										* percent_allocation / 100);
 						plannedMap.put(BudgetConstants.months[cnt], value);
 						if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){
 						childsPlannedSumMap.put(BudgetConstants.months[cnt], childsPlannedSumMap.get(BudgetConstants.months[cnt]) + value);
