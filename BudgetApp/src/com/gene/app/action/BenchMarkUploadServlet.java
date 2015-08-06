@@ -281,11 +281,15 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				// Update if gtfReport already exists else create a new gtfReport
 				if(gtfRpt != null){
 					GtfReport existingParentGtfReport = costCenterWiseGtfRptMap.get(gtfRpt.getgMemoryId().split("\\.")[0]);
+					boolean isSameBrand = false;
+					if(!existingParentGtfReport.getMultiBrand()){
+						isSameBrand = (existingParentGtfReport.getBrand().equalsIgnoreCase(gtfReport.getBrand()));
+					}
 					boolean brandExits = false;
 					if(existingParentGtfReport!=null && existingParentGtfReport.getMultiBrand()){
 						gtfReport.setChildProjectList(existingParentGtfReport.getChildProjectList());
 						for(String childList : existingParentGtfReport.getChildProjectList() ){
-							if(gtfReport.getBrand().equalsIgnoreCase(costCenterWiseGtfRptMap.get(childList).getBrand())){
+							if(costCenterWiseGtfRptMap.get(childList) != null && gtfReport.getBrand().equalsIgnoreCase(costCenterWiseGtfRptMap.get(childList).getBrand())){
 								GtfReport receivedRpt = costCenterWiseGtfRptMap.get(childList);
 								gtfReport.setId(receivedRpt.getId());
 								gtfReport.setgMemoryId(receivedRpt.getgMemoryId());
@@ -316,6 +320,33 @@ public class BenchMarkUploadServlet extends HttpServlet {
 							}
 							gtfRpt=null;
 						}
+					}else if (!isSameBrand && !existingParentGtfReport.getMultiBrand()){
+						
+						gtfReport.setId(null);
+						String childGMemoriId = "";
+						if(existingParentGtfReport.getChildProjectList()==null || existingParentGtfReport.getChildProjectList().isEmpty()){
+							ArrayList<String> cList = new ArrayList<>();
+							cList.add(existingParentGtfReport.getgMemoryId());
+							childGMemoriId = existingParentGtfReport.getgMemoryId() + "." + cList.size() ;
+							existingParentGtfReport.setgMemoryId(childGMemoriId);
+							cList.add(childGMemoriId);
+							existingParentGtfReport.setChildProjectList(cList);
+							existingParentGtfReport.setMultiBrand(true);
+							gtfReport.setChildProjectList(cList);
+						}
+						childGMemoriId = existingParentGtfReport.getgMemoryId() + "." + existingParentGtfReport.getChildProjectList().size() ;
+						gtfReport.setgMemoryId(childGMemoriId);
+						gtfReport.getChildProjectList().add(childGMemoriId);
+						gtfReport.setMultiBrand(true);
+						if("".equalsIgnoreCase(gtfReport.getPoNumber().trim())){
+							gtfReport.setPoNumber(existingParentGtfReport.getPoNumber());
+							if(Util.isNullOrEmpty(gtfReport.getPoNumber()) && !"closed".equalsIgnoreCase(existingParentGtfReport.getStatus())){
+								gtfReport.setStatus("Active");
+								gtfReport.setFlag(2);
+							}
+						}
+						costCenterWiseGtfRptMap.put(existingParentGtfReport.getgMemoryId(), existingParentGtfReport);
+						gtfRpt=null;
 					}else{
 						gtfReport.setId(gtfRpt.getId());
 						String gMemoriId="";
@@ -523,7 +554,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 								break;
 							}
 						}*/
-						if(costCenterWiseGtfRptMap.get(parentGmemId) != null){
+						if(costCenterWiseGtfRptMap.get(parentGmemId) != null && "smart wbs".equalsIgnoreCase(costCenterWiseGtfRptMap.get(parentGmemId).getBrand())){
 							nwParentGtfReport = costCenterWiseGtfRptMap.get(parentGmemId);
 						}else {
 							nwParentGtfReport = (GtfReport) receivedGtfReports.get(0).clone();
@@ -558,6 +589,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 
 				}
 		    	childProjList.add(gMemoriId);
+		    	nwParentGtfReport.setgMemoryId(gMemoriId);
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		Map<String, Double> receivedChildBenchMrkMap = new HashMap<String, Double>(gtfRpt.getBenchmarkMap());
 		    		for (Entry<String, Double> entryMap : receivedChildBenchMrkMap.entrySet()){
