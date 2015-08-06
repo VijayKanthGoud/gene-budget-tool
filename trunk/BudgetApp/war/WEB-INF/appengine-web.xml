@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-	<application>gene.com:gmbt-qa-sp2b01</application>
-	<version>r5-v04</version>
+	<application></application>
+	<version></version>
 
 	<!-- Allows App Engine to send multiple requests to one instance in parallel: -->
 	<threadsafe>true</threadsafe>
