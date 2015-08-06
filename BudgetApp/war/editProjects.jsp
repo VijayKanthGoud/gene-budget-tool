@@ -7,90 +7,31 @@
 
 <%@ include file="header.jsp"%>
 
-<%
-	String prjView = "";
-	String brandView = "";
-	String ccView = "";
-	String color = "";
-	ArrayList<Object> userlist;
 
-	List<GtfReport> gtfReports = (List<GtfReport>) request.getAttribute("gtfreports");
-	
+<%
+String prjView="";
+String brandView="";
+String ccView="";
+	String color ="";
+	ArrayList<Object> userlist;
+	List<GtfReport> gtfReports = (List<GtfReport>) request
+			.getAttribute("gtfreports");
 	for (GtfReport report : gtfReports) {
 		LOGGER.log(Level.INFO, "Reports received : " + report.getgMemoryId());
 	}
-	
 	Calendar cal = Calendar.getInstance();
-	
 	int year = cal.get(Calendar.YEAR);
 	int month = cal.get(Calendar.MONTH);
 	int qtr = month / 3;
+	session = request.getSession();
+	String key = (String) session.getAttribute("key");
+	if (key == null) {
+		key = "";
+	}
 	
 	Map<String, Date> cutofDates = util.getCutOffDates();
 	Date cutOfDate = cutofDates.get(qtr+"");
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-	String viewSelected = (String)request.getAttribute("selectedView");
-	System.out.println("View Selected : "+viewSelected);
-	
-	if(viewSelected==null || "".equalsIgnoreCase(viewSelected.trim())){
-		viewSelected = "My Projects";
-	}if("My Projects".equalsIgnoreCase(viewSelected)){
-		prjView = "selected";
-	}else if("My Brands".equalsIgnoreCase(viewSelected)){
-		brandView = "selected";
-	}else{
-		ccView = "selected";
-	}
-	
-	String ccSelected = (String)request.getAttribute("getCCValue");
-	UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo");
-	String[] costcenter_list = userInfo.getCostCenter().split(":");
-	Arrays.sort(costcenter_list);
-	String costcenter_selected;
-	
-	String selectedView = (String)request.getAttribute("selectedView");
-	String selectedBrand = (String)request.getAttribute("brandValue");
-	String selectedCostCenter = (String)request.getAttribute("getCCValue");
-	
-	if(selectedCostCenter==null || "".equals(selectedCostCenter)){
-		selectedCostCenter = userInfo.getSelectedCostCenter();
-	}
-	Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
-	List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
-	ccList = util.readCostCenterBrandMappingData();
-	for(CostCenter_Brand cc: ccList){
-		if(cc!=null && cc.getCostCenter()!=null && !"".equalsIgnoreCase(cc.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc.getCostCenter())){
-			userBrandMap = util.getBrandMap(cc.getBrandFromDB());
-		}
-	}
-		
-	Object[] myBrands = {}; 
-	String brandValue1="";
-	String brandValue=(String)request.getAttribute("brandValue");
-	
-	BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
-	Map<String, BudgetSummary> budgetMap = Util.sortCaseInsensitive(summary.getBudgetMap());
-	BudgetSummary budgetSummary = new BudgetSummary();
-	UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
-	String cc = user.getSelectedCostCenter();
-	Map<String,Double> brandMap= new LinkedHashMap<String,Double>();
-	for(CostCenter_Brand cc1: ccList){
-		if(cc1!=null && cc1.getCostCenter()!=null && !"".equalsIgnoreCase(cc1.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc1.getCostCenter())){
-			brandMap = util.getBrandMap(cc1.getBrandFromDB());
-		}
-	}
-	LOGGER.log(Level.INFO, "brandMaps received : " + brandMap);
-	Object[] brands = {}; 
-	if(brandMap!=null && !brandMap.isEmpty()){
-		brands = brandMap.keySet().toArray();
-	}
-	
-	String option = "";
-    if(brandValue==null || brandValue==""){
-		brandValue = "Avastin";
-	} 
-    budgetSummary = budgetMap.get(brandValue);
 %>
 
 <link rel="stylesheet" href="SlickGrid-master/slick.grid.css"
@@ -100,11 +41,11 @@
 	type="text/css" />
 <link rel="stylesheet" href="SlickGrid-master/examples/examples.css"
 	type="text/css" />
-
 <html>
 <body onload="getAvailableTags(); refreshSummary();">
 	<div align="center">
-		<table style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
+		<table
+			style="border: 1px solid gray; background: #EAF4FD; width: 100%; font-weight: normal; color: #2271B0; float: left;">
 			<tr>
 				<td style="width: 20%; padding-bottom: 2%;  padding-top: 2%" rowspan="2">
 					<table class="summarytable"
@@ -121,88 +62,243 @@
 						</tr>
 					</table>
 				</td>
-				<td style="padding-left: 1.5%; width: 50%; text-align: center;">
-				 <form method="GET" id="getDataForm" action="/getreport">
-					<table align="center" Style="border-top-left-radius: 3px;background-color: white;width: 351px;padding-left: 3px;border-radius: 5px; border: 1px solid #105596; padding-top: 2%">
+				<%
+					UserRoleInfo userInfo = (UserRoleInfo)session.getAttribute("userInfo");
+				%>
+				<td
+					style="padding-left: 1.5%; width: 50%; text-align: center;">
+					<table align="center">
 						<tr>
-							<td width="100px">
-								<span style="font-size: 12px; font-weight: bold; color: #105596; float: right">Select View : </span>
-							</td>
-							<td>
-							   <select id="selectedUserView" name="selectedView" onchange="selectUserView()" autofocus style="width: 120px; color: #105596;">
-									<option <%=prjView%>>My Projects</options>
-									<option <%=brandView%>>My Brands</options>
-									<option <%=ccView%>>My Cost Center</options>
-								</select>
-							</td>
+							<td width="100px"><span
+								style="color: #105596; font-size: 22px; font-weight: bold; letter-spacing: 5px; padding-top: 8px;">
+									<%
+										String viewSelected = (String)request.getAttribute("selectedView");
+													System.out.println("viewSelected = "+viewSelected);
+														if(viewSelected==null || "".equalsIgnoreCase(viewSelected.trim())){
+															viewSelected = "My Projects";
+														}if("My Projects".equalsIgnoreCase(viewSelected)){
+															prjView = "selected";
+														}else if("My Brands".equalsIgnoreCase(viewSelected)){
+															brandView = "selected";
+														}else{
+															ccView = "selected";
+														}
+									%>
+							</span> <span
+								style="font-size: 14px; font-weight: bold; color: #105596;">Select
+									View : </span></td>
+							<td><select id="selectedUserView" name="selectedUserView"
+								onchange="selectUserView()" autofocus
+								style="width: 150px; color: #105596;">
+									<option <%=prjView%>>My Projects
+										</options>
+									<option <%=brandView%>>My Brands
+										</options>
+									<option <%=ccView%>>My Cost Center
+										</options>
+							</select></td>
 						</tr>
 						<tr>
-							<td>
-								<span style="font-size: 12px; font-weight: bold;  color: #105596; float: right">
-									Select Cost Center :
-								</span>
-							</td>
-							<td>
-								<select id="getCostCenter" name="getCCValue" style="width: 55px; height: 23px; color: #105596;" onchange="getCostCenterDetails()">
+							<%-- <%
+								if(!userInfo.getRole().contains("Admin")) {
+							%> --%><td><span
+								style="font-size: 14px; font-weight: bold;  color: #105596;">Select
+									Cost Center :</span></td>
+							<td><select id="getCostCenter" name="ccValue"
+								style="width: 102px; height: 23px; color: #105596;"
+								onchange="getCostCenterDetails()">
+									<%-- <option> <%=userInfo.getCostCenter() %> </option>  --%>
 									<%
-									   	if(costcenter_list != null){
-											for(int k=0; k < costcenter_list.length; k++){
-												costcenter_selected = costcenter_list[k];
-												if(costcenter_selected != null && !"".equals(costcenter_selected) && ccSelected!=null && !"".equals(ccSelected) && ccSelected.equalsIgnoreCase(costcenter_selected)){
+										String ccSelected = (String)request.getAttribute("getCCValue");
+													String[] costcenter1= userInfo.getCostCenter().split(":");
+													Arrays.sort(costcenter1);
+													String costc;
+												   	if(costcenter1!=null){
+														for(int k=0;k<costcenter1.length;k++){
+															costc = costcenter1[k];
+															if(costc!=null && !"".equals(costc) && ccSelected!=null && !"".equals(ccSelected) && ccSelected.equalsIgnoreCase(costc)){
 									%>
-													<option value="<%=costcenter_selected%>" selected><%=costcenter_selected%></option>
-														<%
-															} else if((costcenter_selected)!=null && !"".equals(costcenter_selected)){
-														%>
-														<option value="<%=costcenter_selected%>"><%=costcenter_selected%></option>
+									<option value="<%=costc%>" selected><%=costc%></option>
 									<%
-															}}}
+										} else if((costc)!=null && !"".equals(costc)){
 									%>
-								</select>
-							</td>
+									<option value="<%=costc%>"><%=costc%></option>
+									<%
+										} } }
+									%>
+							</select></td>
+							<%-- <%
+								} else{
+							%> --%>
+							<%-- <td><span
+								style="font-size: 14px; font-weight: bold; color: #105596;">Select
+									Cost Center : </span></td>
+							<td><select id="getCostCenter" name="ccValue"
+								style="width: 100px; height: 23px; color: #105596;"
+								onchange="getCostCenterDetails()">
+									<%
+										List<CostCenter_Brand> cc_brandList = util.readCostCenterBrandMappingData();
+													String ccSelected = (String)request.getAttribute("getCCValue");
+													CostCenter_Brand cc_brand = new CostCenter_Brand();
+														if(cc_brandList!=null && !cc_brandList.isEmpty()){
+															for(int i=0;i<cc_brandList.size();i++){
+																cc_brand = cc_brandList.get(i);
+																if(cc_brand.getCostCenter()!=null 
+																		&& !"".equals(cc_brand.getCostCenter()) 
+																		&& ccSelected.equalsIgnoreCase(cc_brand.getCostCenter())){
+									%>
+									<option value="<%=cc_brand.getCostCenter()%>" selected><%=cc_brand.getCostCenter()%></option>
+									<%
+										} else if(cc_brand.getCostCenter()!=null 
+															&& !"".equals(cc_brand.getCostCenter())){
+									%>
+									<option value="<%=cc_brand.getCostCenter()%>"><%=cc_brand.getCostCenter()%></option>
+									<%
+										} } }
+									%>
+							</select> --%> <%
+ 	//}
+				String selectedView = (String)request.getAttribute("selectedView");
+ 				String selectedBrand = (String)request.getAttribute("brandValue");
+ %><!-- </td> -->
 						</tr>
 						<tr id="dropdown">
-							<td><span style="font-size: 12px; font-weight: bold; color: #105596; float: right">
-									Select Brand : </span></td>
-							<td>
-								<select id="getBrand" name="brandValue"
-									onchange="getProjectsBrandwise()"
-									style="width: 120px; color: #105596;">
-										<%
-												if(userBrandMap!=null && !userBrandMap.isEmpty()){
-													myBrands = userBrandMap.keySet().toArray();
-												    for(int i=0;i<myBrands.length;i++){ 
-												    	if(brandValue==null || brandValue==""){
-															brandValue =  myBrands[0].toString();
-														} 
-										                brandValue1 = myBrands[i].toString();
-										                if(brandValue.equals(brandValue1)){
-										%>
-										<option value="<%=brandValue1%>" selected><%=brandValue1%></option>
-										<%
-											}else{
-										%>
-										<option value="<%=brandValue1%>"><%=brandValue1%></option>
-										<%
-											}}}
-										%>
-								</select>
-							</td>
+							<td><span
+								style="font-size: 14px; font-weight: bold; color: #105596;">
+									Select Brand :&nbsp;&nbsp; </span></td>
+							<td><select id="getBrand1" name="brandValue"
+								onchange="getProjectsBrandwise()"
+								style="width: 190px; color: #105596;">
+									<%
+										String selectedCostCenter = (String)request.getAttribute("getCCValue");
+											if(selectedCostCenter==null || "".equals(selectedCostCenter)){
+											selectedCostCenter = userInfo.getSelectedCostCenter();
+											}
+											Map<String,Double> userBrandMap= new LinkedHashMap<String,Double>();
+											List<CostCenter_Brand> ccList = new ArrayList<CostCenter_Brand>();
+											ccList = util.readCostCenterBrandMappingData();
+											for(CostCenter_Brand cc: ccList){
+												if(cc!=null && cc.getCostCenter()!=null && !"".equalsIgnoreCase(cc.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc.getCostCenter())){
+													userBrandMap = util.getBrandMap(cc.getBrandFromDB());
+												}
+											}
+											//Map<String,Double> userBrandMap= userInfo.getCCBrandMap().get(selectedCostCenter); 
+											
+											Object[] myBrands = {}; 
+											String brandValue1="";
+											String brandValue=(String)request.getAttribute("brandValue");
+											
+											if(userBrandMap!=null && !userBrandMap.isEmpty()){
+												myBrands = userBrandMap.keySet().toArray();
+											    for(int i=0;i<myBrands.length;i++){ 
+											    	if(brandValue==null || brandValue==""){
+														brandValue =  myBrands[0].toString();
+													} 
+									                        brandValue1 = myBrands[i].toString();
+									                        if(brandValue.equals(brandValue1)){
+									%>
+									<option value="<%=brandValue1%>" selected><%=brandValue1%></option>
+									<%
+										}else{
+									%>
+									<option value="<%=brandValue1%>"><%=brandValue1%></option>
+									<%
+										}}
+											}
+									%>
+							</select></td>
 						</tr>
 						<tr> 
-							<td style="padding-left: 21.5%; padding-top: 20px;" colspan='2'>
-								<input placeholder="Search" type=text autocomplete = "off" style="float: left; width: 150px;  background: url('images/search30-30px.png') top right no-repeat; background-size: 19px 19px; height:21px; padding-right:2px;border: 1px solid #105596;width: 180px;  color: #333333;  margin-bottom: 8px;  border-radius: 2px;"
-								id="txtSearch" title="Search in Project name, gMemori Id, Brand and Comments.">
+						<td style="padding-left: 21.5%; padding-top: 20px;" colspan='2'>
+								<input type="text" style="float: left; width: 150px;"
+								 autocomplete = "off" id="txtSearch"> <img src="images/search.png" height="20"
+								width="20" align="bottom" style="float: left;"
+								title="Search in Project Name, gMemori Id, Brand and Comments.">
 							</td>
 						</tr>
-				</table>
-			</form>
-		</td>
-			
 
+
+			</table>
+			<div id="selectthebrand">
+				
+				<div id="header"
+			    style="width: 100%; height: 26px; background-color: #005691; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>Export CostCenter  
+		     </div><br>
+		     <div align="center">
+		     <span id="brandVal"  style="font-size:15;">
+		     Brand : <span id="selectedBrandValue"> </span>
+		     &nbsp;&nbsp;
+		     </br>
+		     </span>
+		     </br>
+				<input type="radio" value="0" id="selectCC" name="selectCC" > <span id = "selectedCCValue" style="font-size:15;">Current View(<%=(String)request.getAttribute("getCCValue")%>)</span></input>&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;
+				<input type="radio" value="1" id="selectCC" name="selectCC" > <span style="font-size:15;">Total MA&S Cost Centers</span></input><br><br>
+				</div>
+				<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
+				<button class="myButton" value="" onclick="closepopup();" style="height: 25px; letter-spacing:1px;" align= 'right'> Cancel</button>
+				
+				</div>
+	<div id="getCostCentreProjects">
+		
+			<form method="GET" id="getCostCentre" action="/getreport">
+			<input type="hidden" name="selectedView" id="selectedView1"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter1"/>
+			<input type="hidden" name="brandValue" id="getBrandCC"/>	
+			</form>
+			
+		</div>
+	<div id="getMyProjects">
+		
+			<form method="GET" id="getProjects" action="/getreport">
+			<input type="hidden" name="selectedView" id="selectedView2"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter2"/>
+			<input type="hidden" name="brandValue" id="getBrand2"/>		
+			</form>
+			
+		</div>	
+		
+	
+		<div align='center' style='padding-right: 50px;'>
+			<form method="GET" id="getBrand" action="/getreport" >
+			<input type="hidden" name="selectedView" id="selectedView3"/>
+			<input type="hidden" name="getCCValue" id="getCostCenter3"/>
+			<input type="hidden" name="brandValue" id="getBrand3"/>
+				<br/>
+			
+			</form>
+			
+		</div>
 	 	<td style="width: 1%;" rowspan="2">
 					<table class="summarytable"
 						style="color: #2271B0; white-space: nowrap; font-weight: bold;">
+						<%
+							BudgetSummary summary = (BudgetSummary) session.getAttribute("summary");
+											Map<String, BudgetSummary> budgetMap = Util.sortCaseInsensitive(summary.getBudgetMap());
+											BudgetSummary budgetSummary = new BudgetSummary();
+											UserRoleInfo user = (UserRoleInfo) request.getAttribute("user");
+											String cc = user.getSelectedCostCenter();
+											Map<String,Double> brandMap= new LinkedHashMap<String,Double>();
+											/* ccList = new ArrayList<CostCenter_Brand>();
+											ccList = util.readCostCenterBrandMappingData();
+											 */for(CostCenter_Brand cc1: ccList){
+												if(cc1!=null && cc1.getCostCenter()!=null && !"".equalsIgnoreCase(cc1.getCostCenter()) && selectedCostCenter.equalsIgnoreCase(cc1.getCostCenter())){
+													brandMap = util.getBrandMap(cc1.getBrandFromDB());
+												}
+											}
+											//Map<String,Double> brandMap = user.getCCBrandMap().get(cc);
+											LOGGER.log(Level.INFO, "brandMaps received : " + brandMap);
+											Object[] brands = {}; 
+											if(brandMap!=null && !brandMap.isEmpty()){
+												brands = brandMap.keySet().toArray();
+											}
+											//System.out.println(":::::::"+brands[0]);
+						%>
+						<script>
+					<%@ include file="scripts/editProjects.js"%>
+						 
+					</script>
+
 						<tr align='center'>
 							<td colspan=2>Annual Brand Summary &nbsp;($ in 1000's) <img alt="" src="images/refresh.png" height="25"
 								width="25" align='left' onclick="refreshSummary()"></td>
@@ -210,50 +306,56 @@
 						<tr>
 						<tr>
 							<td>Select Brand:</td>
-							<td><select id="brandType" name="brandValue"
+							<td><select id="brandType"
 								onchange="getBrandTotals()"
 								style="color: #2271B0;">
 									<%
-										if(budgetMap!=null && !budgetMap.isEmpty()){
-								    		Object[] budgets = budgetMap.keySet().toArray();
-									    	if(budgetSummary == null){
-									        	budgetSummary = budgetMap.get(budgets[0]);
-									        }
-										   for(int i=0;i<budgets.length;i++){ 
-										      option = budgets[i].toString();
-										      if(brandValue.equals(option)){
+										String option = "";
+									                            if(brandValue==null || brandValue==""){
+									            					brandValue = "Avastin";
+									            				} 
+									                            budgetSummary = budgetMap.get(brandValue);
+									                            if(budgetMap!=null && !budgetMap.isEmpty()){
+									                            	Object[] budgets = budgetMap.keySet().toArray();
+									                            	if(budgetSummary == null){
+										                            	budgetSummary = budgetMap.get(budgets[0]);
+										                            }
+									                            for(int i=0;i<budgets.length;i++){ 
+									                            option = budgets[i].toString();
+									                            if(brandValue.equals(option)){
 									%>
 									<option value="<%=option%>" selected><%=option%></option>
 									<%
-											}else{
+										}else{
 									%>
 									<option value="<%=option%>"><%=option%></option>
 									<%
-											}}}
+										}}}
 									%>
 							</select></td>
 						</tr>
 						<tr>
 							<td><span  title="Current Overall Budget">Budget:</span></td>
-							<td style="text-align: right;"><span id="totalBudget"  > <%=new DecimalFormat("0.00").format(Math.round(budgetSummary.getTotalBudget() * 100.0) / 100.0)%></span></td>
+							<td style="text-align: right;"><span id="totalBudget"  > <%=Math.round(budgetSummary.getTotalBudget() * 100.0) / 100.0%></span></td>
 						</tr>
 
 						<tr>
 							<td><span  title="Total Overall Forecast">Total Forecast:</span></td>
-							<td style="text-align: right;"><span id="plannedTotal"  ><%=new DecimalFormat("0.00").format(Math.round(budgetSummary.getPlannedTotal() * 100.0) / 100.0)%></span></td>
+							<td style="text-align: right;"><span id="plannedTotal"  ><%=Math.round(budgetSummary.getPlannedTotal() * 100.0) / 100.0%></span></td>
 						</tr>
 						<tr>
 							<td><span title="= Budget - Total Forecast">Unallocated Forecast:</span></td>
-							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=new DecimalFormat("0.00").format(Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*100.0)/100.0))%></span></td>
+							<td style="text-align: right;"><span id="budgetLeftToSpend"><%=Math.round(((budgetSummary.getTotalBudget() - budgetSummary.getPlannedTotal())*10.0)/10.0)%></span></td>
 						</tr>
 						<tr>
-							<td><span title = "Total Dollars Spent">Total Accrual:</td>
-							<td style="text-align: right;"><span id="accrualTotal"><%=new DecimalFormat("0.00").format(Math.round(budgetSummary.getAccrualTotal() * 100.0) / 100.0)%></span></td>
+							<!-- td style="padding-left: 20px;">2017</td> -->
+							<td><span title = "Total Dollars Spent" >Total Accrual:</td>
+							<td style="text-align: right;"><span id="accrualTotal"><%=Math.round(budgetSummary.getAccrualTotal() * 100.0) / 100.0%></span></td>
 						</tr>
 						<tr>
 							<td><span id = "varTotalLabel" title = "= Budget - Total Accrual" >Budget LTS:</span></td>
 							<td style="text-align: right;"> <span id="varTotalText" ><span
-									id="varianceTotal"><%=new DecimalFormat("#.00").format(Math.round(budgetSummary.getBudgetLeftToSpend() * 100.0) / 100.0)%></span></span>
+									id="varianceTotal"><%=Math.round(budgetSummary.getBudgetLeftToSpend() * 100.0) / 100.0%></span></span>
 							</td>
 						</tr>
 					</table>
@@ -261,11 +363,31 @@
 			</tr>
 		</table>
 	</div>
-	
 	<div id="statusMessage"></div>
-	
-	<div id="displayGrid" style="width: 100%; height: 44.5%; min-height: 200px;"></div>
-
+	<div id="displayGrid"
+		style="width: 100%; height: 44.5%; min-height: 200px;"></div>
+	<div id="multibrandEdit">
+		<div id="header"
+			style="width: 100%; height: 26px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; letter-spacing: 5px; padding-top: 8px;"
+			align=center>Multi-brand</div>
+		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
+		<div align='center'>
+		<button id="addRow" class="myButton1" value="" onclick="addNewRow();"
+				style="height: 20px;  letter-spacing: 1px;">
+				+</button>
+			<button id="deleteSel" class="myButton" value="" onclick="deleteSelectedProjects();"
+				style="height: 20px;  letter-spacing: 1px;">
+				Delete selected</button>
+			<button id="saveClose" class="myButton" value=""
+				onclick="saveAndClose();"
+				style="height: 20px; letter-spacing: 1px;">Save
+				and close</button>
+			<button class="myButton" value="" onclick="closeWithoutSave();"
+				style="height: 20px; letter-spacing: 1px;">
+				Cancel</button>
+		</div>
+	</div>
+	<div id="back"></div>
 
 	<script src="SlickGrid-master/lib/firebugx.js"></script>
 	<script src="SlickGrid-master/lib/jquery-1.7.min.js"></script>
@@ -284,28 +406,172 @@
 	<script src="SlickGrid-master/plugins/slick.autotooltips.js"></script>
 	<script src="SlickGrid-master/slick.groupitemmetadataprovider.js"></script>
 	<script src="scripts/fileHandle.js"></script>
-	<script src="scripts/editProjects.js"></script>
-	
 	<script>
+	var map = {};
+	var idBrandMap = {}
+    // rdoSelectedmode holds the radio(Planned/All) button object
+	var rdoSelectedmode = $('input[name="selectedmode"]');
+	
+    // chkBoxHideColumns holds the checkbox(Hide Columns) object
+	var chkBoxHideColumns = $('input[name="hideColumns"]');
+	
+    //External wrapper for data grid with advance functionalities 
+	var dataView;
+    
+    // It is the actual displayed table on the UI
+	var grid;
+    
+	var addsave=0;
+	
+	// data is the original grid data array containing objects representing each line in the edit project grid
+	var data = [];
+	
+	// m_data is the popup grid data array 
+	var m_data = [];
+	
+	// itemclicked global variable is take to use the clicked row (in the grid) data in other methods
+	var itemClicked;
+	
+	var popUpWindow;
+	
+	// initializing the multi-brand popup data with five blank rows for intial display 
+	 for (var i = 0; i < 5; i++) {
+		var d = (m_data[i] = {});
+		d[0] = "";
+		d[1] = "";
+		d[2] = "";
+		d[3] = "";
+		d[4] = "";
+		d[5] = "";
+		d[6] = "";
+		d[7] = "";
+ 	} 
+	var multiBrandToSingle = false;
+	var radioString = "All";
+	var totalSize = 0;
+	var numHideColumns = <%=BudgetConstants.NUMBER_OF_HDN_COLS%>;
+	var columnNames = [ "Status", "Project Name", "Brand", "$ in 1000's", "gMemori Id", "Project Owner",
+	        			"Project WBS", "SubActivity", "Allocation %", "PO Number", "Vendor", "Units",
+	        			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV",
+	        			"DEC", "Total", "Comments"];
+	var noOfNew = 0;
+	var noOfActive = 0;
+	var noOfClosed = 0;
+	var newExist=false;
+	var activeExist=false;
+	var closedExist=false;
+	var frmStudy=false;
+	var columnValiation=false;
+	var lastKeyPressed;
+	
+	function specialCharValidator(value) {
+		  if ((!/[^a-zA-Z0-9. -]/.test(value))) {
+			  return {valid: true, msg: null};
+		  }
+		  else {
+			  return {valid: false, msg: "Please enter valid characters."};
+		  }
+	}
+	
+	function projectWBSValidator(value) {
+		  if ((!/[^a-zA-Z0-9.]/.test(value))) {
+			  return {valid: true, msg: null};
+		  }
+		  else {
+			  return {valid: false, msg: "Please enter valid characters."};
+		  }
+	}
+	
+	// Columns displayed when hide columns is unchecked
+	var columns = [ 
+		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[1], field : <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
+		{ id : 3, name : columnNames[2], field :  <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
+		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
+		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
+		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: projectWBSValidator},
+		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
+		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text},
+		{ id : 10, name : columnNames[9], field : <%=BudgetConstants.PO_NUMBER_FIELD%>, width : 90, editor : Slick.Editors.PONumberText, formatter : Slick.Formatters.poField},
+		{ id : 11, name : columnNames[10], field : <%=BudgetConstants.VENDOR_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
+		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.UNIT_FIELD%>, width : 90, editor : Slick.Editors.Integer, formatter : Slick.Formatters.editableField},
+		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	}];
+
+	//Columns displayed when hide columns is checked
+	var hidecolumns = [ 
+		{ id : 1, name : columnNames[0], field : <%=BudgetConstants.STATUS_FIELD%>, width : 120, editor : Slick.Editors.Text}, 
+		{ id : 2, name : columnNames[1], field :  <%=BudgetConstants.PROJECT_NAME_FIELD%>, width : 150, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField},
+		{ id : 3, name : columnNames[2], field : <%=BudgetConstants.BRAND_FIELD%>, width : 90, formatter : Slick.Formatters.HyperLink, editor : Slick.Editors.Auto},
+		{ id : 4, name : columnNames[3], field : <%=BudgetConstants.$_IN_1000_FIELD%>, width : 110, formatter : Slick.Formatters.cancelButton, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 5, name : columnNames[4], field : <%=BudgetConstants.GMEMORI_ID_FIELD%>, width : 90, formatter : Slick.Formatters.gMemoriHyperLink },
+		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
+		{ id : 13, name : columnNames[12], field : <%=BudgetConstants.JAN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 14, name : columnNames[13], field : <%=BudgetConstants.FEB_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 15, name : columnNames[14], field : <%=BudgetConstants.MAR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 16, name : columnNames[15], field : <%=BudgetConstants.APR_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 17, name : columnNames[16], field : <%=BudgetConstants.MAY_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 18, name : columnNames[17], field : <%=BudgetConstants.JUN_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 19, name : columnNames[18], field : <%=BudgetConstants.JUL_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 20, name : columnNames[19], field : <%=BudgetConstants.AUG_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 21, name : columnNames[20], field : <%=BudgetConstants.SEP_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 22, name : columnNames[21], field : <%=BudgetConstants.OCT_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 23, name : columnNames[22], field : <%=BudgetConstants.NOV_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 24, name : columnNames[23], field : <%=BudgetConstants.DEC_FIELD%>, width : 90, editor : Slick.Editors.FloatText, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 25, name : columnNames[24], field : <%=BudgetConstants.TOTAL_FIELD%>, width : 90, formatter : Slick.Formatters.DollarSymbol, groupTotalsFormatter : sumTotalsFormatter},
+		{ id : 26, name : columnNames[25], field : <%=BudgetConstants.REMARK_FIELD%>, width : 200, editor : Slick.Editors.LongText, formatter : Slick.Formatters.Remark
+	}]
+	var searchString = "";
+	
+	// Grouping columns acording to status(New, Active, Closed)
+	
+
+	
+
+	var options = {
+		editable : true,
+		enableAddRow : true,
+		enableCellNavigation : true,
+		asyncEditorLoading : false,
+		autoEdit : true,
+		frozenColumn : 3,
+		enableColumnReorder: false
+	};
+
+
+	// Display total for active new and closed projects (roll up total)
+	
+
+
+
+    // Method called to store changed value in to memcache
 	
 	
-	function getAvailableTags(){
-		if($('#selectedUserView').val() == 'My Brands'){
-			$("#dropdown").show();
-		}else{
-			$("#dropdown").hide();	
-		}
-		availableTags[0] = "Smart WBS";
-		var j;
-		<%for(int i=0;i<myBrands.length;i++){%>
-			j=<%= i+1%>;
-			availableTags[j] = '<%= myBrands[i]%>';
-		<%}%>
-	} 
-	
-	
-	// ON PAGE LOAD
 	$(function() {
+		
+		if($(window).width() < 900){
+			$('#cautionWindow').show().fadeIn(100);
+			$('#back').addClass('black_overlay').fadeIn(100);
+		}else{
+			$('#cautionWindow').hide();
+			$('#back').removeClass('black_overlay').fadeIn(100);
+		}
+		
+		
 		var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
 		dataView = new Slick.Data.DataView({
 			groupItemMetadataProvider : groupItemMetadataProvider,
@@ -314,7 +580,6 @@
 
 		var indent = 0;
 		var parents = [];
-		
 		if(frmStudy==false){
 		<%if(gtfReports == null || gtfReports.isEmpty()) {%>
 		createNewProjects();
@@ -331,13 +596,13 @@
 			
 		<%}
 		}%>
+		
 			if(newExist ==false){
 				dummyNewProjects();		
 			}
 		}
 		var jsId = -1;
 		var dLength= data.length;
-		
 		// prepare the data
 		<%String requestor = "";
 		String role="";
@@ -400,6 +665,7 @@
 					d[54] = "<%=gReport.getRequestor()%>";
 				<%}
 				%>
+				d[55] = "<%=gReport.getPoNumber()%>";
         		<%if(isFirst){
     				isFirst = false;
     				requestor = gReport.getRequestor();
@@ -614,7 +880,6 @@
 				d[40] = d[11];
 				 
 			var compareString = "";
-			
 			for (var j = 0; j < totalSize ; j++) {
 				if(data[j][11] == "<%=BudgetConstants.QUARTERLY_TARGET%>"){
 					compareString =  "<%=BudgetConstants.ANNUAL_TARGET%>"
@@ -687,7 +952,6 @@
 		groupByStatus();
 		
 		var isSearch = false;
-		
 		if(document.URL.toString().indexOf("gMemoriId=") != -1){
 			if("<%=request.getParameter("gMemoriId") != null %>" == "true"){
 				searchString = "<%=request.getParameter("gMemoriId")%>" ; 
@@ -712,17 +976,19 @@
 		}
 		
 		<%if(request.getAttribute("accessreq").toString().equalsIgnoreCase("external") && gtfReports.isEmpty()){%>
-				$('#displayGrid').css("align","center");
-				$('#displayGrid').html('<div style = "font-size:16px; line-height: 50px; margin-left: auto; margin-right: auto; width: 10%; ">No Project found.</div>');
-		<%}else{%>
-	   			grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
-		<%}%>
+		$('#displayGrid').css("align","center");
+		$('#displayGrid').html('<div style = "font-size:16px; line-height: 50px; margin-left: auto; margin-right: auto; width: 10%; ">No Project found.</div>');
+	<%}else{%>
+	    grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);	
+	<%}%>
 	
 		if(isSearch && isMatchPresent){
 			calculateTotal();
 		}
 		
 		// initialize the grid
+		//grid = new Slick.Grid("#displayGrid", dataView, hidecolumns, options);
+		//register the group item metadata provider to add expand/collapse group handlers
 		grid.registerPlugin(groupItemMetadataProvider);
 		grid.setSelectionModel(new Slick.CellSelectionModel());
 
@@ -800,9 +1066,37 @@
 								item[itemCell]=args.item[45][itemCell-12];
 								grid.invalidate();
 								return;
-							}
+							}/*else if(calculatedPlannedTotal < actualPlannedTotal){
+								alert("Sum of the entered budget of months is less than Total specified for Multi brand project !!!");	
+							} */
 							
 						}
+						<%-- if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){ 
+						var interimTotal=0.0;
+						var actualPlannedTotal=parseFloat(data[temp][24]).toFixed();
+						var calculatedPlannedTotal=0.0;
+						if(data[temp][11] == 'Accrual'){
+							for (var j = 0; j < data.length - 1; j++) {
+								if (data[j][27] == args.item[27] && data[j][11]=="<%=BudgetConstants.FORECAST%>") {
+									actualPlannedTotal=data[j][24];
+									break;
+								}
+							}
+						}
+						for (var j = 12; j < 24; j++) {
+							if(data[temp][j] == "" || data[temp][j] == "undefined"){
+								data[temp][j] = 0.0;
+							}
+							interimTotal = parseFloat(interimTotal)
+										+ parseFloat(data[temp][j]);
+						}
+						if(interimTotal>actualPlannedTotal ){
+							alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");
+							data[temp][itemCell]=args.item[45][itemCell-12];
+							grid.invalidate();
+							return;
+						}
+					} --%>
 					grid.invalidate();
 			
 
@@ -816,7 +1110,51 @@
 						dataView.refresh();
 					}
 		});
-		
+		function do_the_ajax_call(){
+			var gMemoriId ;
+			$.ajax({
+				beforeSend: function(msg){
+					$('#back').addClass('black_overlay').fadeIn(100);
+					$('#loader_image').show().fadeIn(100);
+				},
+				url : '/initiateProject',
+				type : 'GET',
+				async: true,
+				dataType : 'text',
+				data : {ccId: itemClicked[47],
+					unixId: itemClicked[48],
+					prj_name:itemClicked[2],
+					dummyGMemId:itemClicked[0]
+				},
+				success : function(result) {
+					var obj = $.parseJSON(result);
+					var statusCode = obj.statusCode;
+					if(statusCode == 200){
+						
+						gMemoriId = obj.newGMemId;
+						openPopUp =  true;
+						window.location.reload(true);
+						window.open ("https://memori-dev.appspot.com/initiateProject?gMemoriId="+gMemoriId,'gmemori','');
+						
+					}else{
+						if(obj!=null && obj.statusMessage!=null){
+						alert("Error occured during synchronization with Study : \n"+obj.statusMessage);
+						}else{
+							alert("Error occured during synchronization with Study : \n Internal error occured.");
+						}
+						$('#back').removeClass('black_overlay').fadeIn(100);
+						$('#loader_image').hide();
+					}
+					
+				},
+				error : function(result){
+					alert("Error occured during synchronization with Study : \n Internal error occured.");
+					$('#back').removeClass('black_overlay').fadeIn(100);
+					$('#loader_image').hide();
+				}
+			});
+					
+		}
 		
 		grid.onClick.subscribe(function(e, args) {
 				grid.gotoCell(args.row, args.cell, false);
@@ -887,6 +1225,37 @@
 
 	    }); 
 		
+		// Handeler for Create New Project button
+		$(document).on('click', '#crtNewProjBtn',
+			    function() {
+					createIntProjects();
+			    }
+		);
+		
+		
+		
+		
+		// Handeler for click on submit and cancel button under new project creation
+		$(document).on('click', '#submitProjBtn',
+		    function() {
+			if(columnValiation==false){
+				$('#submitProjBtn').prop("disabled",true);
+			 	submitProjects();
+			}else{
+				columnValiation=false;
+			}
+		    }
+		);
+		
+		$(document).on('click', '#cnclProjBtn',
+			function() {
+				cancelProjects();
+			}
+		);
+
+		
+		
+		
 		
 		// brand select using arrow keys
 		grid.onKeyDown.subscribe(function(e, args) {
@@ -925,6 +1294,9 @@
 			var cols = grid.getColumns();
 			args.item[46]=JSON.parse(JSON.stringify(args.item));
 			var fixedCell = cell;
+			/* if(args.item["26"]=="Closed"){
+				return false;
+			} */
 			if ($('#hideColumns').is(":checked")) {
 				fixedCell = cell + numHideColumns;
 			} else {
@@ -935,7 +1307,10 @@
 			if((args.item["27"].toString().indexOf(".") != -1 && args.item["37"] == true && args.item["11"] == "<%=BudgetConstants.ACCRUAL%>") ){
 				args.item[50]=args.item[fixedCell];
 			}
-			if((args.item["26"]=="Active" || args.item["26"]=="New" || args.item["26"]=="Closed") && 
+			/* if(	(!($('#selectedUserView').val().toLowerCase() == "my projects")) && (args.item["34"] != "New projects") && role != "Admin" ){
+				return false;
+			} */ 
+			if( /* (role!='Admin') &&  */ (args.item["26"]=="Active" || args.item["26"]=="New" || args.item["26"]=="Closed") && 
 					(args.item["11"] == "<%=BudgetConstants.ACCRUAL%>" <%-- || args.item["11"] == "<%=BudgetConstants.FORECAST%>" --%>) && 
 					(args.item["48"]!=null && args.item["48"]!=''/*   && args.item["48"] != userName*/ ) ){
 				alert("You are not authorised to edit this project !!!");
@@ -961,9 +1336,9 @@
 				if(cell == "<%=BudgetConstants.BRAND_CELL%>" && args.item["11"] == "<%=BudgetConstants.FORECAST%>"  && args.item["26"] =="New" ){
 					return true;
 				}
-				
 				if (args.item["11"] == "<%=BudgetConstants.FORECAST%>"
-					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && (args.item["26"] == "New" || args.item["8"].toString().indexOf('1') == 0 || args.item["8"].toString() == '#' || (args.item["8"].toString() == "Blank"))) {
+					&& cols[cell].name == "PO Number" &&  args.item["26"] !="Total" && (args.item["26"] =="New" || args.item["8"].toString().indexOf('1') == 0 || args.item["8"].toString() == '#' 
+							|| (args.item["8"].toString() == "Blank" || ((args.item["8"].toString().trim() == ""))))) {
 					return true;
 				}
 				var isAnEditableId = false;
@@ -1020,16 +1395,448 @@
 			grid.invalidateRows(args.rows);
 			grid.render();
 		});
+
+		// Handeling search textbox 
+		$("#txtSearch").keyup(function(e) {
+			map = {};
+			Slick.GlobalEditorLock.cancelCurrentEdit();
+			// clear on Esc
+			if (e.which == 27) {
+				this.value = "";
+			}
+			searchString = this.value;
+			searchString = searchString.replace(/</g, "&lt;");
+			searchString = searchString.replace(/>/g, "&gt;");
+			
+		    if (searchString != "") {
+				dataView.expandGroup("Active");
+				dataView.expandGroup("Closed");
+				dataView.expandGroup("New");
+			} else {
+				
+				dataView.collapseGroup("New");
+				dataView.collapseGroup("Active");
+				dataView.collapseGroup("Closed");
+			}
+			dataView.refresh();
+			if(!isMatchPresent && searchString != ""){
+				alert("No Search Results Found!");	
+			}
+			calculateTotal();
+		});
+
 		
+		// Handeling radio button "Forecast" and "All"
+		rdoSelectedmode.change(function(e) {
+			Slick.GlobalEditorLock.cancelCurrentEdit();
+			var choice = this.value;
+			if (choice == 'planned') {
+				radioString = 'Forecast'
+			} else {
+				radioString = "All";
+			}
+			dataView.refresh();
+		});
+
+		// Handeling hide column check box
+		chkBoxHideColumns.change(function(e) {
+			Slick.GlobalEditorLock.cancelCurrentEdit();
+			if (this.checked) {
+				grid.setColumns(hidecolumns);
+			} else {
+				grid.setColumns(columns);
+			}
+			dataView.refresh();
+		});
+
 		// Display details on mouse over a cell while the details exceeds the cell size
 		grid.registerPlugin(new Slick.AutoTooltips({
 			enableForHeaderCells : true
 		}));
 		grid.render();
+		
+		$('input[name=file]').change(function() {
+			if($(this).val.toString().trim() != ""){
+				$("#fileUploadBtn").prop('disabled', false);
+	        }
+		});
+		
+		if($('#selectedUserView').val() == 'My Projects' || '<%=user.getRole()%>'=="Admin"){
+			$('#exportButton').show();
+		}else{
+			$('#exportButton').hide();
+		}
+		$('#selectedUserView').change(function() {
+			if($('#selectedUserView').val() == 'My Projects'  || '<%=user.getRole()%>'=="Admin"){
+				$('#exportButton').show();
+			}else{
+				$('#exportButton').hide();
+			}
+		});
 	})
 
-	var disableGrid = false;
+	// Persist the data to datastore while moving to other page or closing the application
+	/* $(window).bind(
+			'beforeunload',
+			function(e) {
+				$('#statusMessage').text("Saving data...").fadeIn(200);
+				$.ajax({
+					url : '/AutoSaveData',
+					type : 'POST',
+					dataType : 'text',
+					data : {
+						key : "",
+						cellValue : "",
+						celNum : "",
+						mapType: ""
+					},
+					success : function(result) {
+						$('#statusMessage').text(
+								"All changes saved successfully!").fadeIn(200);
+						$("#statusMessage").fadeOut(400);
+					}
+				});
+			}); */
 	
+	
+	  var m_grid;
+	  
+	  var m_options = {
+	    editable: true,
+	    enableAddRow: true,
+	    enableCellNavigation: true,
+	    asyncEditorLoading: false,
+	    autoEdit: true,
+	    enableColumnReorder: false
+	  };
+	  var sum = 0.0;
+	  var m_columns = [
+	 	{
+			id : 1,
+			name : "",
+			field : 8,
+			width : 25,
+			formatter : Slick.Formatters.checkbox
+		},
+		/* {
+			id : 2,
+			name : "Project name",
+			field : 4,
+			width : 160,
+			editor : Slick.Editors.Text
+		}, {
+			id : 3,
+			name : "Project Owner",
+			field : 7,
+			width : 125,
+			editor : Slick.Editors.Auto
+		},
+		 {
+			id : 4,
+			name : "gmemori id",
+			field : 5,
+			width : 100,
+			editor : Slick.Editors.Text
+		}, */
+	    {
+			id : 5,
+			name : "Brand",
+			field : 1,
+			width : 160,
+			editor : Slick.Editors.Auto
+		}, {
+			id : 6,
+			name : "Total($ in 1000's)",
+			field : 3,
+			width : 140,
+			editor : Slick.Editors.FloatText
+		}, {
+			id : 7,
+			name : "Allocation %",
+			field : 2,
+			width : 125
+		}
+	  ];
+		
+
+	
+	
+	
+	
+
+	// Multibrand popup window
+	function displayMultibrandGrid() {
+		m_grid = new Slick.Grid("#multibrandGrid", m_data, m_columns, m_options);
+		m_grid.setSelectionModel(new Slick.CellSelectionModel());
+		m_grid.registerPlugin(new Slick.AutoTooltips());
+		m_grid.getCanvasNode().focus();
+
+		m_grid.onClick.subscribe(function(e, args) {
+			
+			m_grid.gotoCell(args.row, args.cell, false);
+			if (args.cell == <%=BudgetConstants.MB_CHECKBOX_CELL%>) {
+				initDeletionCell(args.row);
+			}
+		})
+		
+		
+
+		m_grid.onAddNewRow.subscribe(function(e, args) {
+			var item = args.item;
+			var column = args.column;
+			var row = args.row;
+			m_grid.invalidateRow(m_data.length);
+			m_data.push(item);
+			m_grid.updateRowCount();
+			m_grid.render();
+		});
+
+		m_grid.onValidationError.subscribe(function(e, args) {
+			var validationResult = args.validationResults;
+			var activeCellNode = args.cellNode;
+			var editor = args.editor;
+			var errorMessage = validationResult.msg;
+			var valid_result = validationResult.valid;
+
+			if (!valid_result) {
+				alert(errorMessage);
+				$(activeCellNode).attr("title", errorMessage);
+			} else {
+				$(activeCellNode).attr("title", "");
+			}
+
+		});
+		
+		m_grid.onKeyDown.subscribe(function(e, args) {
+			var cell = args.cell;
+			var row = args.row - 1;
+			var fixedCell = cell;
+			if (e.which == 38 || e.which == 40 || e.which == 13) {
+				if ($('#hideColumns').is(":checked")) {
+					fixedCell = cell + numHideColumns;
+				}
+				data[row][fixedCell] = 0.0;
+				updateTotals(cell, row, fixedCell, args);
+				if (!m_grid.getEditorLock().commitCurrentEdit()) {
+					return;
+				}
+				m_grid.invalidate();
+				e.stopPropagation();
+			}
+		}); 
+
+		m_grid.onBeforeEditCell
+				.subscribe(function(e, args) {
+			var cell = args.cell;
+			var row = args.row;
+			var pRow = row + 1;
+			if(itemClicked[26] == "Closed"){
+				return false;
+			}
+			if((m_data[row]["7"] .toString().trim() == "" || m_data[row]["1"] .toString().trim() == "") && cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>){
+				return false;
+			}
+			<%-- if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
+				return false ;
+			} --%>
+			<%-- if((itemClicked[1]!='<%=user.getUserName()%>' && '<%=user.getRole()%>'!="Admin" )){
+				return false ;
+			} --%>
+			if ((args.item[0].toString().trim() != "" && itemClicked[26] == "Active")
+					|| (itemClicked[26] == "Closed")) {
+				return false;
+			}
+			if (row != 0) {
+				<%-- if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>) {
+					m_data[row]["7"] = m_data[row - 1]["7"];
+					m_grid.invalidate();
+					return false;
+				} --%>
+				if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+					m_data[row]["4"]=itemClicked[2];
+					if (m_data[row]["5"] == "") {
+						m_data[row]["5"] = m_data[row - 1]["5"]
+								.split(".")[0]
+								+ "."
+								+ (parseInt(m_data[row - 1]["5"]
+										.split(".")[1]) + 1);
+						m_grid.invalidate();
+					}
+				//	return false;
+				}
+				if ((m_data[row]["7"] == 'undefined' || m_data[row]["7"] == "")
+						&& cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+					m_data[row]["7"] = m_data[row - 1]["7"];
+					m_grid.invalidate();
+					//return false;
+				}
+			}
+			<%-- if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+				availableTags = [];
+				
+				for (var j = 0; j < ccUsersVar.length; j++) {
+					if (ccUsersVar[j][0] == m_data[row]["7"]) {
+						var res = ccUsersVar[j][1].substring(1,
+								ccUsersVar[j][1].length - 1);
+						availableTags = res.split(",");
+						break;
+					}
+				}
+			} --%>
+			<%-- if (row == 0){
+				if(cell == <%=BudgetConstants.MB_GMEMORI_ID_CELL%>){
+					return false
+				}
+				return true;
+			} --%>
+			//alert(row+"::::"+JSON.stringify(m_data));
+			
+			return true;
+		});
+
+		
+
+		m_grid.onCellChange
+				.subscribe(function(e, args) {
+					var cell = args.cell;
+					var row = args.row;
+					var isValidBrand = false;
+					sum = 0.0;
+					index = 0;
+					percentSum = 0.0;
+					var numOfBrands = 0;
+					//alert(cell);
+					for (var count = 0; count < m_data.length; count++) {
+						if(( m_data[count]["1"] != "" )
+								&&   m_data[count]["1"] != "undefined"){
+							numOfBrands=numOfBrands+1;
+						}
+					}
+					if (cell == <%=BudgetConstants.MB_$_IN_THOUSAND_CELL%>) {
+							if(( args.item[3] != "" )
+									&&   args.item[3] != "undefined"){
+								if(parseFloat(args.item[3]) <=0 ){
+									if(args.item[10]=="" || args.item[10] == undefined){
+										args.item[3] = 0;
+										args.item[2] = 0.0;
+									}else{
+									args.item[3] = args.item[10];
+									args.item[2] = args.item[11];
+									}
+									alert("MB Total cannot be less than or equal to zero.");
+									m_grid.invalidate();
+									return;
+								}
+							}
+							//alert("hi");
+						for (var count = 0; count < m_data.length; count++) {
+							if(( m_data[count]["3"] != "" )
+									&&   m_data[count]["3"] != "undefined"){
+								m_data[count]["3"] = parseFloat(m_data[count]["3"]).toFixed(2);
+								sum = sum + parseFloat(m_data[count]["3"]);
+								index = count;
+							}
+						}
+						for (var count = 0; count < m_data.length; count++) {
+							if(isNaN(parseFloat(m_data[count]["3"]))){
+								m_data[count]["2"]="";
+							}
+							else if(!isNaN(m_data[count]["3"] / sum * 100)){
+								if(count < numOfBrands-1){
+								m_data[count]["2"] = parseFloat((m_data[count]["3"] / sum * 100)).toFixed(2);
+																	;
+								}else{
+									for(var count = 0;count < numOfBrands-1; count++){
+										if(( m_data[count]["3"] != "" )
+												&&   m_data[count]["3"] != "undefined"){
+											percentSum = parseFloat(percentSum) + parseFloat(m_data[count]["2"]);
+										}
+									}
+									m_data[count]["2"] = (100 - parseFloat(percentSum)).toFixed(2);
+									if(m_data[count]["3"]==0){
+										m_data[count]["2"] = 0.0;
+										m_data[count-1]["2"] = (100 - (parseFloat(percentSum)- parseFloat(m_data[count-1]["2"]))).toFixed(2);
+									}
+								}
+							}else{
+								m_data[count]["2"] = "0";
+							}
+						}
+						/* console.log("m_data[index][2]"+ index +":::::"+ m_data[index]["2"]);
+						console.log("m_data[index][3]"+m_data[index]["3"] + ""+percentSum);
+						console.log(m_data);  */
+ 						 if (row + 1 >= 5 && m_grid.getDataLength() == row + 1) {
+							var initMData = (m_data[m_grid.getDataLength()] = {});
+							initMData[0] = "";
+							initMData[1] = "";
+							initMData[2] = "";
+							initMData[3] = "";
+							initMData[4] = "";
+							initMData[5] = "";
+							initMData[6] = "";
+							initMData[7] = "";
+							initMData[8] = false;
+							initMData[9] = "";
+							m_grid.invalidate();
+							m_grid.invalidateRow(m_grid.getSelectedRows());
+							m_grid.updateRowCount();
+							m_grid.render();
+						} 
+						m_grid.invalidate(); 
+					}
+					<%-- if (cell == <%=BudgetConstants.MB_PROJECT_OWNER_CELL%>
+							&& poOwners.toString().indexOf(m_data[row][7]) == -1) {
+						for (var i = 0; i < poOwners.length; i++) {
+							if (poOwners[i] === m_data[row][1]) {
+								isValidBrand = true;
+								break;
+							}
+						}
+						if (isValidBrand == false) {
+							m_data[row][7] = "";
+							alert("Please choose a valid project owner.");
+							m_grid.invalidate();
+							return;
+						}
+					} --%>
+					if (cell == <%=BudgetConstants.MB_BRAND_CELL%>) {
+						for (var i = 0; i < availableTags.length; i++) {
+							if (availableTags[i].toString().trim()
+									.toLowerCase() === m_data[row][1]
+									.toString().trim().toLowerCase()) {
+								m_data[row][1] = availableTags[i].toString();
+								isValidBrand = true;
+								break;
+							}
+						}
+						if (isValidBrand == false) {
+							m_data[row][1] = "";
+							alert("Enter a valid brand.");
+							m_grid.gotoCell(row, <%=BudgetConstants.MB_BRAND_CELL%>, true);
+						}
+						m_grid.invalidate();
+					}
+
+				});
+
+	}
+	
+	var resized = false;
+	$(window).resize(function() {
+		grid.resizeCanvas();
+		if($(window).width() < 900){
+			$('#cautionWindow').show().fadeIn(100);
+			$('#back').addClass('black_overlay').fadeIn(100);
+			resized = true;
+		}else{
+			$('#cautionWindow').hide();
+			if(resized){
+				$('#back').removeClass('black_overlay').fadeIn(100);
+				resized = false;
+			}
+		}
+	});
+	var disableGrid = false;
 	function addMultiBrandPopUp(){
 		if(itemClicked[35] != "NewProjects"){
 			disableGrid = true;
@@ -1094,7 +1901,11 @@
 				}
 					
 			<%}%>
-			
+			<%-- System.out.println("user.getUserName() = "+user.getUserName());
+				System.out.println("requestor = "+requestor);
+			if((!user.getUserName().equalsIgnoreCase(requestor) && !"Admin".equalsIgnoreCase(user.getRole()) )){%>
+			return;
+			<%}else{%> --%>
 			if(itemClicked[26]=='Closed'){
 				$('#deleteSel').attr("disabled", true);
 				$('#saveClose').attr("disabled", true);
@@ -1106,7 +1917,7 @@
 			displayMultibrandGrid();
 			$('#back').addClass('black_overlay').fadeIn(100);
 			// End : For Multibrand projects on click of brand (with mb) display pop-up conatining sub-projects
-
+			<%-- <%}%> --%>
 			var index = availableTags.indexOf("Smart WBS");
 			if (index > -1) {
 				availableTags.splice(index, 1);
@@ -1114,14 +1925,19 @@
 		}
 		//code for newly added projects 
 		else if(itemClicked[34]=="New projects"){
+			// Start : Code for newly added projects
 			var error=0;
 			var errStrng="";
+			//alert("itemClicked = "+JSON.stringify(itemClicked));
 			if(itemClicked[2]=='' || itemClicked[0]=='' || itemClicked[1]=='' || 
 				itemClicked[2]=='undefined' || itemClicked[0]=='undefined' || itemClicked[1]=='undefined'){
 		
 				if(itemClicked[2]=='' || itemClicked[2]=='undefined'){
 					error=error+1;
 				}
+				/* if(itemClicked[0]=='' || itemClicked[0]=='undefined'){
+					error=error+3;
+				} */
 				if(itemClicked[1]=='' || itemClicked[1]=='undefined'){
 					error=error+5;
 				}
@@ -1131,6 +1947,12 @@
 	    			case 1:
 	    				errStrng="Project name can not be blank."
 	        			break;
+	    			/* case 3:
+	    				errStrng="gMemoriID can not be blank."
+	        			break;
+	    			case 4:
+	    				errStrng="gMemoriID or Project name can not be blank."
+	        			break; */
 	    			case 5:
 	    				errStrng="Project Owner can not be blank."
 	        			break;
@@ -1163,447 +1985,60 @@
 			}
 		}
 	}
-	
-	var USER_ROLE = '<%=userInfo.getRole()%>';
-	var USER_NAME = '<%=userInfo.getUserName()%>';
-
-	var cutOffDate = new  Date('<%=sdf.format(cutOfDate)%>');
-	
-	
-	var summaryResult = "";
-	var availableTags = [];
-	var poOwners=[];
-	var ccUsersVar=[];
-
-	// USED FOR SAVING DATA ON CHANGE OF GRID CELLS (AUTO SAVE)
-
-	var forecast_cur = 0.0;
-	var accrual_cur = 0.0;
-	var quarterly_tar_cur = 0.0;
-
-	function updateMemCache(e, args, tempKey) {
-		
-		var cell = args.cell;
-		var item = args.item;
-		var fixedCell = cell;
-		var row = args.row;
-		var poNum = 0;
-		var projName = "";
-		var projWBS = "";
-		var subactivity = "";
-		var costCenter = item["47"];
-
-		if ($('#hideColumns').is(":checked")) {
-			fixedCell = cell + numHideColumns;
-		} else {
-			fixedCell = cell;
-		}
-		
-		if(cell <= PROJECT_OWNER_CELL){
-			fixedCell = cell;
-		}
-		var itemCell = fixedCell;
-		
-		if(fixedCell == PO_NUMBER_CELL){
-			var userAccepted = confirm("You have entered PO Number "+ args.item["8"] +". Want to continue?");
-			if (!userAccepted) {
-				args.item["8"]="";
-				grid.invalidate();
-		        grid.gotoCell(row, fixedCell, true);
-		        $('#statusMessage').text("")
-				.fadeOut(100);
-			    return;
-			}
-			poNum = args.item["8"];
-		}
-		
-		if (fixedCell == REMARK_CELL) {
-			for (var i = 0; i < totalSize; i++) {
-				if (data[i][31] == item[31]) {
-					data[i][32] = item[itemCell];
-				}
-			}
-		}
-		
-		var qtrEditing =  Math.floor((fixedCell - 12) / 3);
-		
-		var cellValue ;
-		if(cell == BRAND_CELL){
-		cellValue = item[6];
-		}else{
-			cellValue = item[itemCell];
-		}
-		var cellNum = fixedCell - 12;
-		if(item[37]==true && item["11"] == "Accrual" && item[27].toString().indexOf(".") != -1){
-			key = item[27];
-		}else{
-			key = item[34];
-		}
-		var aSaveData=[];
-		var iCnt=0;
-		var varTotal = 0.0;
-		var singleBrandToMulti = false;
-		if( fixedCell == REMARK_CELL){
-				var aSave = (aSaveData[0] = {});
-				aSave[0] = key;
-				aSave[1] = cellValue;
-			}else if(cell == BRAND_CELL){
-				if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1 && lastKeyPressed == 9){
-					<%
-					Map<String,ArrayList<String>> ccUsersJs = util.getCCUsersList(user.getSelectedCostCenter());%>
-					
-					var usr=0;
-					var userCnt=0;
-					<% 
-					
-					for(Map.Entry<String,ArrayList<String>> userMapDetails: ccUsersJs.entrySet()){%>
-					 poOwners[userCnt] = "<%=userMapDetails.getKey()%>";
-					 var d = (ccUsersVar[userCnt] = {});
-					 d[0]=   poOwners[userCnt];
-					 d[1] = "<%=userMapDetails.getValue()%>";
-					 
-					 userCnt++;
-					<%}%>
-					if(args.item[37] == false){
-						var index = availableTags.indexOf("Smart WBS");
-						if (index > -1) {
-							availableTags.splice(index, 1);
-						}
-						m_data[0][1]=itemClicked[44];
-						m_data[0][3]=itemClicked[24];
-						m_data[0][2]=100.0;
-						m_data[0][4]=itemClicked[2];
-					 	m_data[0][5]=itemClicked[0]+'.1';
-					 	m_data[0][7]=itemClicked[1];
-					 	singleBrandToMulti=true;
-					 	$('#multibrandEdit').show().fadeIn(100);
-						displayMultibrandGrid();
-						$('#back').addClass('black_overlay').fadeIn(100);
-					}
-				}else if(cellValue.toString().toLowerCase().indexOf("smart wbs")!=-1){
-					alert('Click on "Smart WBS" to add sub projects.');
-					return;
-				}else{
-					var aSave = (aSaveData[0] = {});
-					aSave[0] = key;
-					aSave[1] = cellValue;
-				}
-				for(var i=0;i<data.length;i++){
-					var d = data[i];
-					if(key== d[34] && !singleBrandToMulti && (fixedCell ==  BRAND_CELL) && ((d[26]=="New" || d[26]=="Active") )){
-						d[<%=BudgetConstants.BRAND_SEARCH_FIELD%>] = args.item[<%=BudgetConstants.BRAND_FIELD%>];
-						d[<%=BudgetConstants.BRAND_DUPLICATE_FIELD%>] = args.item[<%=BudgetConstants.BRAND_FIELD%>]; 
-					}
-				}
-			}else{
-				for(var i=0;i<data.length;i++){
-					var d = data[i];
-					
-					if(key== d[34] && d[11]=="Forecast" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
-						forecast_cur =  d[itemCell];
-						var aSave = (aSaveData[iCnt] = {});
-						aSave[0] = d[27];
-						if(d[7] == 0.0){
-							d[7]=100.0;
-						}
-						aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
-						d[itemCell]=aSave[1];
-							varTotal = 0.0;
-							for (var j = 12; j < 24; j++) {
-								if(d[j] == "" || d[j] == "undefined"){
-									d[j] = 0.0;
-								}
-								varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
-							}
-							d[24]= parseFloat(varTotal);
-						iCnt++;
-					}else if(key== d[34] && d[11]=="Forecast" && ( fixedCell == PROJECT_NAME_CELL || fixedCell == PO_NUMBER_CELL || fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%> || fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	|| fixedCell == <%=BudgetConstants.VENDOR_CELL%> || fixedCell == <%=BudgetConstants.UNIT_CELL%> /*|| fixedCell == BRAND_CELL*/)){
-						var aSave = (aSaveData[iCnt] = {});
-						aSave[0] = d[27];
-						if(fixedCell == <%=BudgetConstants.VENDOR_CELL%>){
-							d[<%=BudgetConstants.VENDOR_FIELD%>] = args.item[<%=BudgetConstants.VENDOR_FIELD%>];
-							aSave[1] = d[<%=BudgetConstants.VENDOR_FIELD%>];
-						}else if(fixedCell == <%=BudgetConstants.SUBACTIVITY_CELL%>	){
-							d[<%=BudgetConstants.SUBACTIVITY_FIELD%>] = args.item[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
-							aSave[1] = d[<%=BudgetConstants.SUBACTIVITY_FIELD%>];
-						}else if(fixedCell == <%=BudgetConstants.PROJECT_WBS_CELL%>){
-							d[<%=BudgetConstants.PROJECT_WBS_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
-							aSave[1] = d[<%=BudgetConstants.PROJECT_WBS_FIELD%>];
-						}else if(fixedCell == PO_NUMBER_CELL){
-							d[<%=BudgetConstants.PO_NUMBER_FIELD%>] = args.item[<%=BudgetConstants.PO_NUMBER_FIELD%>];
-							aSave[1] = d[<%=BudgetConstants.PO_NUMBER_FIELD%>];
-						}else if(fixedCell == PROJECT_NAME_CELL){
-							d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
-							if(d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] != 'undefined' && d[<%=BudgetConstants.PROJECT_NAME_FIELD%>].trim() != ""){
-								aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
-							}else{
-								alert("Project name can not be blank!!!");
-								d[<%=BudgetConstants.PROJECT_NAME_FIELD%>] = d[<%=BudgetConstants.PROJECT_NAME_SEARCH_FIELD%>];
-								return;
-							}
-							aSave[1] = d[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
-						}else if(fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>){
-							if(d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().indexOf(".")!=-1){
-								d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>] +"." +d[<%=BudgetConstants.GMEMORI_ID_FIELD%>].toString().split(".")[1]
-							}else{
-								d[<%=BudgetConstants.GMEMORI_ID_FIELD%>] = args.item[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
-							}
-							aSave[1] = d[<%=BudgetConstants.GMEMORI_ID_FIELD%>];
-						}else if(fixedCell == <%=BudgetConstants.UNIT_CELL%>){
-							d[<%=BudgetConstants.UNIT_FIELD%>] = args.item[<%=BudgetConstants.UNIT_FIELD%>];
-							aSave[1] = d[<%=BudgetConstants.UNIT_FIELD%>];
-						}
-						iCnt++;
-					}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active" || d[26]=="Closed") && 
-							((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
-						d[itemCell]=parseFloat(cellValue).toFixed(2);
-						varTotal = 0.0;
-						for (var j = 12; j < 24; j++) {
-							if(d[j] == "" || d[j] == "undefined"){
-								d[j] = 0.0;
-							}
-							varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
-						}	
-						d[24]= parseFloat(varTotal);
-					}
-					if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active" || d[26]=="Closed"))){
-						quarterly_tar_cur = d[itemCell];
-					}
-					if(key== d[34] && d[11]=="Accrual" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"))){
-						accrual_cur = d[itemCell];
-					}
-					if(key== d[34] && (fixedCell ==  PROJECT_NAME_CELL) && ((d[26]=="New" || d[26]=="Active") )){
-						d[<%=BudgetConstants.PROJECT_NAME_SEARCH_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>];
-						d[<%=BudgetConstants.PROJECT_NAME_GID_FIELD%>] = args.item[<%=BudgetConstants.PROJECT_NAME_FIELD%>] + " :: " + d[<%=BudgetConstants.PROJECT_NAME_GID_FIELD%>].split("::")[1]; 
-					}								
-					if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active"  || d[26]=="Closed") )){
-						d[itemCell]= parseFloat(quarterly_tar_cur - accrual_cur);
-						varTotal = 0.0;
-						for (var j = 12; j < 24; j++) {
-							if(d[j] == "" || d[j] == "undefined"){
-								d[j] = 0.0;
-							}
-							varTotal = parseFloat(varTotal)	+ parseFloat(d[j]);
-						}	
-						d[24]= parseFloat(varTotal);
-						
-					}
-				}
-			}
-			
-		if(singleBrandToMulti!=true){
-			if(item[37] == true && item[11]=="Forecast" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
-				var mTotal =0.0;
-				var iTotal =0.0;
-				for(var j=0;j<aSaveData.length;j++){
-					var mSave = aSaveData[j];
-					if(mSave[0].toString().indexOf(".") == -1){
-						mTotal = parseFloat(mSave[1]).toFixed(2);
-					}else if(j < aSaveData.length-1){
-						iTotal= (parseFloat(iTotal)+ parseFloat(mSave[1])).toFixed(2);
-					}else if(j==aSaveData.length-1){
-						mSave[1] = (parseFloat(mTotal) - parseFloat(iTotal)).toFixed(2);
-						for(var i=0;i<data.length;i++){
-							var d = data[i];
-							if(d[27] == mSave[0]){
-								d[itemCell] = mSave[1];
-							}
-						}
-					}
-
-				}
-			}
-
-		$.ajax({
-			beforeSend: function(msg){
-				 $('#statusMessage').text("Saving data...").fadeIn(200);
-				 if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>'){
-					$('#back').addClass('black_overlay').fadeIn(100);
-					$('#loader_image').show().fadeIn(100);
-				 }
-			},
-			url : '/AutoSaveData',
-			type : 'POST',
-			dataType : 'text',
-			data : {
-				celNum : cellNum,
-				objarray : JSON.stringify(aSaveData),
-				costCenter : costCenter,
-				mapType : item[11]
-			},
-			success : function(result) {
-				if(JSON.stringify(result).indexOf("<poError>")!=-1){
-					alert("PO Number already exists !!!");
-					window.location.reload(true);
-				}
-				$('#statusMessage').text("All changes saved successfully!")
-						.fadeIn(200);
-				$("#statusMessage");
-				summaryResult = result;
-				getSummaryValues();
-				if(cellNum == '<%=BudgetConstants.CELL_PONUMBER%>' || (cellNum == '<%=BudgetConstants.CELL_BRAND%>' && (singleBrandToMulti || multiBrandToSingle) /*|| cellNum == '<%=BudgetConstants.CELL_PNAME%>'*/)){
-					window.location.reload(true);
-				}
-			},
-			error : function(result){
-				$('#statusMessage').text("")
-				.fadeIn(200);
-				$('#statusMessage');
-				for(var i=0;i<data.length;i++){
-					var d = data[i];
-					if(key== d[34] && d[11]=="Forecast" && ( fixedCell == <%=BudgetConstants.GMEMORI_ID_CELL%>)){
-					d["0"] = d["27"];
-				}}
-				grid.invalidate();
-			}
-		});
-		}
-		singleBrandToMulti=false;
-	}
-
-	// USED FOR EXPORTING PROJECT DATA / DOWNLOAD DATA IN EXCEL FORMAT
-
-	function onClickAsynch(){
-		var num=1;
-		function async(callback) {
-		    var z;
-		    <%
-		    	HashSet hs = new HashSet();
-		    	ArrayList<String> costcentreAry = new ArrayList<String>();
-		    	for(int j=0; j<ccList.size();j++){
-		    		costcentreAry.add(ccList.get(j).getCostCenter());
-		    	}
-		    	hs.addAll(costcentreAry);
-		    	costcentreAry.clear();
-		    	costcentreAry.addAll(hs);
-		    %>
-		    <%
-		    	for (int i=0; i < costcentreAry.size();i++){%>
-		    	CostCenterApperance(<%=costcentreAry.get(i)%>);
-		    <%
-		    	}
-		    %>
-		}
-
-		function CostCenterApperance(i) {
-		    setTimeout(function() {
-		    	ServletCall(i);
-		    	callback();
-		    }, 3500*num);
-		    num++;
-		}
-
-		function ServletCall(i){
-			console.log("Downloading data...");
-			var viewVal = $('#selectedUserView').val();
-			var brandValue = $('#getBrand').val();
-			$('#objArrayId').val('');
-			$('#ccId').val(i);
-			$('#viewSelected').val(viewVal);
-			$('#brandSelected').val(brandValue);
-		    document.getElementById('exportExcel').submit();
-		}	
-		async(function(){ 
-
-		});
-
-	}
 </script>
-<%-- *****************************  EXPORT BUTTON ***************************** --%>
-
-<div width='100%' align=right>
+	<!-- to be removed after uat 2 -->
+	<div width='100%' align=right>
 		<button id="exportButton" class="myButton" value=""
 			onclick="openDownloadPopUp();"
 			style="height: 25px; letter-spacing: 1px;"
 			align='right'>Export data as excel</button>
-</div>
-<br>
-	
-<%@ include file="footer.jsp"%>
-
-<%-- *****************************  MULTIBRAND DIV ***************************** --%>
-
-	<div id="multibrandEdit">
-	
+	</div>
+	</br>
+	<!-- <div>
+	<button class="myButton" value="" onclick="onClickAsynch();" style="height: 25px; letter-spacing:1px;" align= 'left'>Download All CostCenters</button>
+	</div>
+	 -->
+	<div id="uploadWindow">
 		<div id="header"
-			style="width: 100%; height: 26px; background-color: #2271B0; color: white; 
-			border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 20px; 
-			letter-spacing: 5px; padding-top: 8px;"	align=center>Multi-brand</div>
-		
-		<div id="multibrandGrid" style="width: 100%; height: 200px;"></div>
-	
-		<div align='center'>
-			<button id="addRow" class="myButton1" value="" onclick="addNewRow();"
-				style="height: 20px;  letter-spacing: 1px;">
-				+</button>
-			<button id="deleteSel" class="myButton" value="" onclick="deleteSelectedProjects();"
-				style="height: 20px;  letter-spacing: 1px;">
-				Delete selected</button>
-			<button id="saveClose" class="myButton" value=""
-				onclick="saveAndClose();"
-				style="height: 20px; letter-spacing: 1px;">Save
-				and close</button>
-			<button class="myButton" value="" onclick="closeWithoutSave();"
-				style="height: 20px; letter-spacing: 1px;">
-				Cancel</button>
+			style="width: 100%; height: 20px; background-color: #2271B0; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"
+			align=center>File Upload</div>
+		<div align='right' style='padding-right: 100px;'>
+			<form action="/userupload" method="post"
+				enctype="multipart/form-data">
+				<br /> <span style="font-size: 14px; font-weight: bold;">
+					Select File to Upload : &nbsp;&nbsp;&nbsp; </span> <input type="file"
+					name="file"
+					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+				<br /> <input class='myButton' id="fileUploadBtn" type="submit"
+					value="Upload" disabled="true"> <input class='myButton'
+					type="button" value="Cancel" onclick="closeUploadWindow();">
+			</form>
+
 		</div>
 	</div>
-	<div id="back"></div>
-	
-<%-- ***************************** EXPORT COSTCENTER DIV ***************************** --%>
-
-	<form id="exportExcel" name="exportExcel" method="post"
-		action="/download" target="myIFrm">
-		<input type="hidden" name="objarray" id="objArrayId" /> <input
-			type="hidden" name="costCenter" id="ccId" /> <input type="hidden"
-			name="viewSelected" id="viewSelected" /> <input type="hidden"
-			name="brandSelected" id="brandSelected" />
-	</form>
-	
-	<iframe id="myIFrm" name="myIFrm" src="" style="visibility: hidden; display:none">
-	
-	</iframe>
-
-	<div id="selectthebrand">
-			
-		<div id="header" style="width: 100%; height: 26px; background-color: #005691; 
-		color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; 
-		font-size: 20px; letter-spacing: 2px; padding-top: 4px;"  align = center>
-			Export CostCenter  
-	    </div>
-	    <br>
-	    <div align="center">
-	     <span id="brandVal"  style="font-size:15;">Brand : <span id="selectedBrandValue"> </span>
-	     	&nbsp;&nbsp; <br>
-	     </span>
-	     <br>
-			<input type="radio" value="0" id="selectCC" name="selectCC" > 
-			<span id = "selectedCCValue" style="font-size:15;">Current View(<%=(String)request.getAttribute("getCCValue")%>)</span>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="radio" value="1" id="selectCC" name="selectCC" > 
-			<span style="font-size:15;">Total MA&S Cost Centers</span>
-			<br><br>
-			<button class="myButton" value="" onclick="exportExcelData();" style="height: 25px; letter-spacing:1px;" align= 'right'> Ok</button>&nbsp;
-			<button class="myButton" value="" onclick="closepopup();" style="height: 25px; letter-spacing:1px;" align= 'right'> Cancel</button>
-		</div>
-	</div>
-
-<%-- ***************************** CAUTION WINDOW DIV *****************************  --%>
 
 	<div id="cautionWindow">
 		<div id="header"
 			style="width: 100%; height: 20px; background-color: red; color: white; border-top-left-radius: 0.7em; border-top-right-radius: 0.7em; font-size: 17px; letter-spacing: 3px;"
 			align=center>Caution!</div>
-		<div style="font-size: 12px">Window width is not sufficient
+		<div style="font-size: 14px">Window width is not sufficient
 			enough for application to be viewed. Please increase the window
 			width.</div>
 	</div>
-
-<%-- ***************************** LOADER DIV *****************************  --%>
-
-	<div id="loader_image" style="vertical-align: middle;">
-            <img src="images/loading.gif" width="35px" height='35px'/>
-	</div>
-	
+	<%@ include file="footer.jsp"%>
 </body>
+<form id="exportExcel" name="exportExcel" method="post"
+	action="/download" target="myIFrm">
+	<input type="hidden" name="objarray" id="objArrayId" /> <input
+		type="hidden" name="costCenter" id="ccId" /> <input type="hidden"
+		name="viewSelected" id="viewSelected" /> <input type="hidden"
+		name="brandSelected" id="brandSelected" />
+</form>
+<iframe id="myIFrm" name="myIFrm" src="" style="visibility: hidden">
+
+</iframe>
+<div id="loader_image" style="vertical-align: middle;">
+            <img src="images/loading.gif" width="35px" height='35px'/>
+</div>
+
 </html>
