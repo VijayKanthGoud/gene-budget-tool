@@ -27,10 +27,19 @@
         "gMemoriHyperLink":gMemoriHyperLinkFormatter,
         "editableField":editableFieldFormatter,
         "cancelButton":cancelButtonFormatter,
-        "poField":poFieldFormatter
+        "poField":poFieldFormatter,
+        "twoDecimal":twoDecimalFormatter
       }
     }
   });
+  
+  function twoDecimalFormatter(row, cell, value, columnDef, dataContext) {
+	    if (value != null && value != "") {
+	    		return parseFloat(value).toFixed(2);
+	    }
+	    return "";
+  }
+  
   
   function PercentCompleteFormatter(row, cell, value, columnDef, dataContext) {
     if (value == null || value === "") {

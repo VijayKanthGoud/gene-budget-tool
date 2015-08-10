@@ -492,7 +492,7 @@ String ccView="";
 		{ id : 6, name : columnNames[5], field : <%=BudgetConstants.PROJECT_OWNER_FIELD%>, width : 90},
 		{ id : 7, name : columnNames[6], field : <%=BudgetConstants.PROJECT_WBS_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: projectWBSValidator},
 		{ id : 8, name : columnNames[7], field : <%=BudgetConstants.SUBACTIVITY_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
-		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text},
+		{ id : 9, name : columnNames[8], field : <%=BudgetConstants.ALLOCATION_PERCENTAGE_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.twoDecimal},
 		{ id : 10, name : columnNames[9], field : <%=BudgetConstants.PO_NUMBER_FIELD%>, width : 90, editor : Slick.Editors.PONumberText, formatter : Slick.Formatters.poField},
 		{ id : 11, name : columnNames[10], field : <%=BudgetConstants.VENDOR_FIELD%>, width : 90, editor : Slick.Editors.Text, formatter : Slick.Formatters.editableField, validator: specialCharValidator},
 		{ id : 12, name : columnNames[11], field : <%=BudgetConstants.UNIT_FIELD%>, width : 90, editor : Slick.Editors.Integer, formatter : Slick.Formatters.editableField},
@@ -1063,9 +1063,9 @@ String ccView="";
 							 if(calculatedPlannedTotal > actualPlannedTotal){
 								columnValiation=true;
 								alert("Sum of the entered budget of months exceeds Total specified for Multi brand project !!!");	
-								item[itemCell]=args.item[45][itemCell-12];
-								grid.invalidate();
-								return;
+								//item[itemCell]=args.item[45][itemCell-12];
+								//grid.invalidate();
+								//return;
 							}/*else if(calculatedPlannedTotal < actualPlannedTotal){
 								alert("Sum of the entered budget of months is less than Total specified for Multi brand project !!!");	
 							} */
@@ -1313,7 +1313,7 @@ String ccView="";
 			if( /* (role!='Admin') &&  */ (args.item["26"]=="Active" || args.item["26"]=="New" || args.item["26"]=="Closed") && 
 					(args.item["11"] == "<%=BudgetConstants.ACCRUAL%>" <%-- || args.item["11"] == "<%=BudgetConstants.FORECAST%>" --%>) && 
 					(args.item["48"]!=null && args.item["48"]!=''/*   && args.item["48"] != userName*/ ) ){
-				alert("You are not authorised to edit this project !!!");
+				//alert("You are not authorised to edit this project !!!");
 				return false;
 			}
 			if(fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>){
@@ -1549,12 +1549,14 @@ String ccView="";
 			name : "Total($ in 1000's)",
 			field : 3,
 			width : 140,
-			editor : Slick.Editors.FloatText
+			editor : Slick.Editors.FloatText,
+			formatter : Slick.Formatters.twoDecimal
 		}, {
 			id : 7,
 			name : "Allocation %",
 			field : 2,
-			width : 125
+			width : 125,
+		    formatter : Slick.Formatters.twoDecimal
 		}
 	  ];
 		
