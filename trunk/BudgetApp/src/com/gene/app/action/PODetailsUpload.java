@@ -1,7 +1,5 @@
 package com.gene.app.action;
 
-import static com.gene.app.util.Util.roundDoubleValue;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -355,29 +353,21 @@ public class PODetailsUpload extends HttpServlet {
 				double prevVal = receivedAccrualMap.get(BudgetConstants.months[cnt]);
 				double prevPlannedVal = receivedPlannedMap.get(BudgetConstants.months[cnt]);
 				
-				receivedAccrualMap.put(
-						BudgetConstants.months[cnt],
-						roundDoubleValue(
-								Double.parseDouble(val)));
+				receivedAccrualMap.put(	BudgetConstants.months[cnt], Util.getDoubleValue(val, 8));
 				
 				// updates the future month values
 				if(cnt <  curMonth){
-					receivedPlannedMap.put(
-							BudgetConstants.months[cnt],
-							roundDoubleValue(
-									Double.parseDouble(val)));
+					receivedPlannedMap.put(BudgetConstants.months[cnt],	Util.getDoubleValue(val, 8));
 				}
 				
 				if(isMultiBrand){
 					receivedParentAccrualMap.put(BudgetConstants.months[cnt],
-							receivedParentAccrualMap.get(BudgetConstants.months[cnt]) - prevVal + roundDoubleValue(
-									Double.parseDouble(val)));
+							receivedParentAccrualMap.get(BudgetConstants.months[cnt]) - prevVal + Util.getDoubleValue(val, 8));
 					
 					// updates the future month values
 					if(cnt <  curMonth){
 						receivedParentPlannedMap.put(BudgetConstants.months[cnt],
-							receivedParentPlannedMap.get(BudgetConstants.months[cnt]) - prevPlannedVal + roundDoubleValue(
-									Double.parseDouble(val)));
+							receivedParentPlannedMap.get(BudgetConstants.months[cnt]) - prevPlannedVal + Util.getDoubleValue(val, 8));
 					}
 					
 				}
@@ -473,11 +463,9 @@ public class PODetailsUpload extends HttpServlet {
 				/*if(cnt < curMonth ){
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}else{*/
-					plannedMap.put(BudgetConstants.months[cnt], roundDoubleValue(Double.parseDouble(val)));
+					plannedMap.put(BudgetConstants.months[cnt], Util.getDoubleValue(val, 8));
 				/*}*/
-				receivedMap.put(
-						BudgetConstants.months[cnt],
-						roundDoubleValue(Double.parseDouble(val)) );
+				receivedMap.put(BudgetConstants.months[cnt],Util.getDoubleValue(val, 8));
 
 			} catch (NumberFormatException e1) {
 				receivedMap.put(BudgetConstants.months[cnt], 0.0);
@@ -619,8 +607,7 @@ public class PODetailsUpload extends HttpServlet {
 					gtfRpt.setChildProjectList(childProjList);
 					try{
 						if (gtfRpt.getgMemoryId().contains(".")) {
-							gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-									.get("TOTAL") / total) * 100 ));
+							gtfRpt.setPercent_Allocation((gtfRpt.getPlannedMap().get("TOTAL") / total) * 100);
 						}}catch(NumberFormatException nfe){
 							gtfRpt.setPercent_Allocation(100.0);
 						}catch(ArithmeticException ae){
@@ -706,8 +693,7 @@ public class PODetailsUpload extends HttpServlet {
 				gtfRpt.setChildProjectList(childProjList);
 				try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
-						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-								.get("TOTAL") / total) * 100 ));
+						gtfRpt.setPercent_Allocation((gtfRpt.getPlannedMap().get("TOTAL") / total) * 100 );
 					}
 					else{
 						gtfRpt.setRemarks("Note: Brand accrual distribution different from original forecast.");

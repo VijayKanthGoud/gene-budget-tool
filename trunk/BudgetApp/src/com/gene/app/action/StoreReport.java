@@ -1,6 +1,5 @@
 package com.gene.app.action;
 
-import static com.gene.app.util.Util.roundDoubleValue;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -29,6 +28,7 @@ import com.gene.app.model.GtfReport;
 import com.gene.app.model.UserRoleInfo;
 import com.gene.app.util.BudgetConstants;
 import com.gene.app.util.ProjectSequenceGeneratorUtil;
+import com.gene.app.util.Util;
 import com.google.appengine.api.appidentity.AppIdentityService;
 import com.google.appengine.api.appidentity.AppIdentityServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
@@ -237,11 +237,8 @@ public class StoreReport extends HttpServlet {
 				try {
 					plannedMap
 							.put(BudgetConstants.months[cnt],
-									roundDoubleValue(
-											Double.parseDouble(rprtObject.getString(Integer
-													.toString(cnt
-															+ BudgetConstants.months.length
-															- 1)))));
+									Util.getDoubleValue(rprtObject.getString(Integer.toString(cnt
+															+ BudgetConstants.months.length - 1)), 8));
 				} catch (NumberFormatException e) {
 					plannedMap.put(BudgetConstants.months[cnt], 0.0);
 				}
@@ -249,8 +246,7 @@ public class StoreReport extends HttpServlet {
 			if(isMultibrand){
 				try {
 					plannedMap
-					.put(BudgetConstants.months[12],
-							roundDoubleValue(Double.parseDouble(rprtObject.getString("51"))));
+					.put(BudgetConstants.months[12], Util.getDoubleValue(rprtObject.getString("51"), 8));
 				} catch (NumberFormatException e) {
 					plannedMap.put(BudgetConstants.months[12], 0.0);
 				}
@@ -359,9 +355,8 @@ public class StoreReport extends HttpServlet {
 				for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
 					if(i < sizeOfArray-1){
 					try {
-						value = roundDoubleValue(
-								parentPlannedMap.get(BudgetConstants.months[cnt])
-										* percent_allocation / 100);
+						value = parentPlannedMap.get(BudgetConstants.months[cnt])
+										* percent_allocation / 100;
 						plannedMap.put(BudgetConstants.months[cnt], value);
 						if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){
 						childsPlannedSumMap.put(BudgetConstants.months[cnt], childsPlannedSumMap.get(BudgetConstants.months[cnt]) + value);

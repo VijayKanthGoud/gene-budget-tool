@@ -528,7 +528,7 @@ function updateMemCache(e, args, tempKey) {
 
 				if(key== d[34] && fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && item[11]=='Accrual'){
 					if(d[11]=="<%=BudgetConstants.ACCRUAL%>"){
-						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(2);
+						d[itemCell]=parseFloat( parseFloat(d[41]) * parseFloat(cellValue) /100).toFixed(8);
 					}else if(d[11]=="<%=BudgetConstants.QUARTERLY_LTS%>"){
 						if( item[43]=='undefined' ||item[43]=="" ){
 							item[43]=0.0;
@@ -563,9 +563,9 @@ function updateMemCache(e, args, tempKey) {
 					}
 					// Commented as Accrual is not editable as per current bussiness case
 					/*if(item[11]=='Accrual'){
-						d[itemCell]=parseFloat(cellValue).toFixed(2);
+						d[itemCell]=parseFloat(cellValue).toFixed(8);
 					}*/
-					aSave[1] = parseFloat( parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(2);
+					aSave[1] = parseFloat( (parseFloat(d[7]) * parseFloat(cellValue) /100).toFixed(8));
 					//aSave[2] = d["47"];
 					d[itemCell]=aSave[1];
 					// Commented to remove restriction of calculating total for multibrand.
@@ -620,7 +620,7 @@ function updateMemCache(e, args, tempKey) {
 					iCnt++;
 				}else if(key== d[34] && d[11]=="<%=BudgetConstants.QUARTERLY_TARGET%>" &&  fixedCell >= <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%> && ((d[26]=="New" || d[26]=="Active" || d[26]=="Closed") && 
 						((qtrEditing != '<%=qtr%>' ) || ( qtrEditing == '<%=qtr%>' && '<%=cutOfDate.after(new Date()) %>' =='true')  ))){
-					d[itemCell]=parseFloat(cellValue).toFixed(2);
+					d[itemCell]=parseFloat(parseFloat(cellValue).toFixed(8));
 					varTotal = 0.0;
 					for (var j = 12; j < 24; j++) {
 						if(d[j] == "" || d[j] == "undefined"){
@@ -662,11 +662,11 @@ function updateMemCache(e, args, tempKey) {
 			for(var j=0;j<aSaveData.length;j++){
 				var mSave = aSaveData[j];
 				if(mSave[0].toString().indexOf(".") == -1){
-					mTotal = parseFloat(mSave[1]).toFixed(2);
+					mTotal = parseFloat(parseFloat(mSave[1]).toFixed(8));
 				}else if(j < aSaveData.length-1){
-					iTotal= (parseFloat(iTotal)+ parseFloat(mSave[1])).toFixed(2);
+					iTotal= parseFloat((parseFloat(iTotal)+ parseFloat(mSave[1])).toFixed(8));
 				}else if(j==aSaveData.length-1){
-					mSave[1] = (parseFloat(mTotal) - parseFloat(iTotal)).toFixed(2);
+					mSave[1] = parseFloat((parseFloat(mTotal) - parseFloat(iTotal)).toFixed(8));
 					for(var i=0;i<data.length;i++){
 						var d = data[i];
 						if(d[27] == mSave[0]){
@@ -899,6 +899,7 @@ function dummyClosedProjects(){
 }
 
 function saveAndClose() {
+	console.log(m_data);
 	var errStr = "";
 	var i = 0;
 	for (i = 0; i < m_data.length; i++) {
@@ -1009,7 +1010,7 @@ function saveAndClose() {
 	
 	itemClicked[51] = total;
 	for(i = 12 + currentMonth; i<24; i++){
-		itemClicked[i] = 0.0;//parseFloat(total/(12-currentMonth)).toFixed(2);
+		itemClicked[i] = 0.0;//parseFloat(total/(12-currentMonth)).toFixed(8);
 	}
 	grid.invalidate();
 	var costCenter = $('#getCostCenter').val();
@@ -1231,12 +1232,12 @@ function deleteSelectedProjects() {
 	}
 	for (var count = 0; count < m_data.length && m_data[count]["3"] != ""
 			&& m_data[count]["3"] != "undefined"; count++) {
-		m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(2);
+		m_data[count]["2"] = (m_data[count]["3"] / sum * 100).toFixed(8);
 	}*/
 	for (var count = 0; count < m_data.length; count++) {
 		if(( m_data[count]["3"] != "" )
 				&&   m_data[count]["3"] != "undefined"){
-			m_data[count]["3"] = parseFloat(m_data[count]["3"]).toFixed(2);
+			m_data[count]["3"] = parseFloat(parseFloat(m_data[count]["3"]).toFixed(8));
 			sum = sum + parseFloat(m_data[count]["3"]);
 			index = count;
 		}
@@ -1247,7 +1248,7 @@ function deleteSelectedProjects() {
 		}
 		else if(!isNaN(m_data[count]["3"] / sum * 100)){
 			if(count < numOfBrands-1){
-			m_data[count]["2"] = parseFloat((m_data[count]["3"] / sum * 100)).toFixed(2);
+			m_data[count]["2"] = parseFloat(parseFloat((m_data[count]["3"] / sum * 100)).toFixed(8));
 			}else{
 				for(var count = 0;count < numOfBrands-1; count++){
 					if(( m_data[count]["3"] != "" )
@@ -1255,10 +1256,10 @@ function deleteSelectedProjects() {
 						percentSum = parseFloat(percentSum) + parseFloat(m_data[count]["2"]);
 					}
 				}
-				m_data[count]["2"] = (100 - parseFloat(percentSum)).toFixed(2);
+				m_data[count]["2"] = (100 - parseFloat(parseFloat(percentSum).toFixed(8)));
 				if(m_data[count]["3"]==0){
 					m_data[count]["2"] = 0.0;
-					m_data[count-1]["2"] = (100 - (parseFloat(percentSum)- parseFloat(m_data[count-1]["2"]))).toFixed(2);
+					m_data[count-1]["2"] = (100 - parseFloat((parseFloat(percentSum)- parseFloat(m_data[count-1]["2"])).toFixed(8)));
 				}
 			}
 		}else{
