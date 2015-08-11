@@ -292,7 +292,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 							}else{
 								value = recvdRow.get(cnt + 12).toString();
 							}
-							plannedMap.put(BudgetConstants.months[cnt], Double.parseDouble(value));
+							plannedMap.put(BudgetConstants.months[cnt],  Util.getDoubleValue(value, 8));
 						} else {
 							plannedMap.put(BudgetConstants.months[cnt], 0.0);
 						}
@@ -444,8 +444,7 @@ public class FactSheetUploadServlet extends HttpServlet {
 		    		gtfRpt.setChildProjectList(childProjList);
 		    		try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
-						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-								.get("TOTAL") / total) * 100 ));
+						gtfRpt.setPercent_Allocation((gtfRpt.getPlannedMap().get("TOTAL") / total) * 100 );
 					}}catch(NumberFormatException nfe){
 						gtfRpt.setPercent_Allocation(100.0);
 					}catch(ArithmeticException ae){

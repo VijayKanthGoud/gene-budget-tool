@@ -5,10 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -334,7 +332,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 							existingParentGtfReport.setMultiBrand(true);
 							gtfReport.setChildProjectList(cList);
 						}
-						childGMemoriId = existingParentGtfReport.getgMemoryId() + "." + existingParentGtfReport.getChildProjectList().size() ;
+						childGMemoriId = existingParentGtfReport.getgMemoryId().split("\\.")[0] + "." + existingParentGtfReport.getChildProjectList().size() ;
 						gtfReport.setgMemoryId(childGMemoriId);
 						gtfReport.getChildProjectList().add(childGMemoriId);
 						gtfReport.setMultiBrand(true);
@@ -349,6 +347,8 @@ public class BenchMarkUploadServlet extends HttpServlet {
 						gtfRpt=null;
 					}else{
 						gtfReport.setId(gtfRpt.getId());
+						/*costCenterWiseGtfRptMap.remove(gtfRpt.getgMemoryId());
+						CostCenterCacheUtil.putCostCenterDataToCache(costCentre, costCenterWiseGtfRptMap);*/
 						String gMemoriId="";
 						try {
 							if(gtfReport.getPoDesc().indexOf("_")==6){
@@ -412,7 +412,7 @@ public class BenchMarkUploadServlet extends HttpServlet {
 							}else{
 								value = recvdRow.get(cnt + 12).toString();
 							}
-							benchmarkMap.put(BudgetConstants.months[cnt], Double.parseDouble(value));
+							benchmarkMap.put(BudgetConstants.months[cnt], Util.getDoubleValue(value, 8));
 						} else {
 							benchmarkMap.put(BudgetConstants.months[cnt], 0.0);
 						}
@@ -429,15 +429,6 @@ public class BenchMarkUploadServlet extends HttpServlet {
 					gtfReport.setVariancesMap(setZeroMap);
 				}else{
 					if( benchmarkMap != null){
-						/*for( Entry<String, Double> monthWiseVal : benchmarkMap.entrySet()){
-							if(monthWiseVal.getValue() == 0.0){
-								if(gtfRpt.getBenchmarkMap()!=null && gtfRpt.getBenchmarkMap().get(monthWiseVal.getKey())!=null){
-								benchmarkMap.put(monthWiseVal.getKey(), gtfRpt.getBenchmarkMap().get(monthWiseVal.getKey()));
-								}else{
-									break;
-								}
-							}
-						}*/
 						if(uploadedType == 2){
 							gtfReport.setPlannedMap(benchmarkMap);
 							gtfReport.setAccrualsMap(benchmarkMap);
@@ -521,12 +512,14 @@ public class BenchMarkUploadServlet extends HttpServlet {
 				searchString = receivedGtfReports.get(0).getProjectName();
 			}
 			if(existingProjects.get(searchString) != null && existingProjects.get(searchString).getMultiBrand()){
+				if(receivedGtfReports.get(0).getChildProjectList() != null ){
 				List<String> childList = receivedGtfReports.get(0).getChildProjectList();
 				for(String child : childList){
 					if(!receivedReportIds.contains(child) && child.contains(".")){
 						receivedGtfReports.add(costCenterWiseGtfRptMap.get(child));
 					}
 				}
+			}
 			}
 		}
 		
@@ -539,7 +532,6 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		    	
 		    	GtfReport nwParentGtfReport = new GtfReport();
 		    	ArrayList<String> childProjList = new ArrayList<String>();
-		    	System.out.println(childProjList);
 		    	
 		    	try {
 					if (receivedGtfReports.get(0).getgMemoryId() != null
@@ -558,10 +550,12 @@ public class BenchMarkUploadServlet extends HttpServlet {
 							nwParentGtfReport = costCenterWiseGtfRptMap.get(parentGmemId);
 						}else {
 							nwParentGtfReport = (GtfReport) receivedGtfReports.get(0).clone();
+							nwParentGtfReport.setId(null);
 							
 						}
 					}else{
 		    			nwParentGtfReport = (GtfReport) receivedGtfReports.get(0).clone();
+		    			nwParentGtfReport.setId(null);
 		    		}
 					/*if(costCenterWiseGtfRptMap!=null && costCenterWiseGtfRptMap.get(nwParentGtfReport.getgMemoryId())!=null){
 						for(String cList : costCenterWiseGtfRptMap.get(nwParentGtfReport.getgMemoryId()).getChildProjectList()){
@@ -620,20 +614,50 @@ public class BenchMarkUploadServlet extends HttpServlet {
 		    	}
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		total += gtfRpt.getPlannedMap().get("TOTAL");
+		    		if(gtfRpt.getPlannedMap().get("TOTAL") == null || gtfRpt.getPlannedMap().get("TOTAL") == 0.0){
+						for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
+							total += gtfRpt.getPlannedMap().get(BudgetConstants.months[cnt]);
+						}
+						
+					}
 		    	}
 		    	nwParentGtfReport.setChildProjectList(childProjList);
 		    	nwParentGtfReport.setBrand("Smart WBS");
 		    	nwParentGtfReport.setPercent_Allocation(100.0);
 		    	nwParentGtfReport.setRemarks("   ");
 		    	receivedGtfReports.add(nwParentGtfReport);
+		    	double childTotal = 0.0;
+		    	double percentTotal = 0.0;
+		    	double childPercentTotal = 0.0;
+		    	int childSize = receivedGtfReports.size() - 1;
+		    	int currChildIndex;
 		    	for(GtfReport gtfRpt : receivedGtfReports){
 		    		gtfRpt.setMultiBrand(true);
 		    		gtfRpt.setChildProjectList(childProjList);
+		    		childTotal = 0.0;
+		    		childPercentTotal = 0.0;
+		    		currChildIndex = 0;
 		    		try{
 					if (gtfRpt.getgMemoryId().contains(".")) {
-						gtfRpt.setPercent_Allocation(Util.roundDoubleValue((gtfRpt.getPlannedMap()
-								.get("TOTAL") / total) * 100 ));
-					}}catch(NumberFormatException nfe){
+						if(gtfRpt.getPlannedMap().get("TOTAL") == null || gtfRpt.getPlannedMap().get("TOTAL") == 0.0){
+							for (int cnt = 0; cnt < BudgetConstants.months.length; cnt++) {
+								childTotal += gtfRpt.getPlannedMap().get(BudgetConstants.months[cnt]);
+							}
+							
+						}else{
+							childTotal = gtfRpt.getPlannedMap().get("TOTAL");
+						}
+						childPercentTotal = Util.getDoubleValue((childTotal / total * 100) + "", 8);
+						gtfRpt.setPercent_Allocation(childPercentTotal);
+						if(currChildIndex == childSize-1 ){
+							 childPercentTotal = Util.getDoubleValue(100 - percentTotal + "" , 8);
+						}else{
+							percentTotal += childPercentTotal;
+						}
+						currChildIndex++;
+						
+					}
+					}catch(NumberFormatException nfe){
 						gtfRpt.setPercent_Allocation(100.0);
 					}catch(ArithmeticException ae){
 						gtfRpt.setPercent_Allocation(100.0);

@@ -1,6 +1,5 @@
 package com.gene.app.action;
 
-import static com.gene.app.util.Util.roundDoubleValue;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -133,10 +132,8 @@ public class MultiBrandServlet extends HttpServlet {
 					paretnGtfReport.setProjectName(projectName);
 					paretnGtfReport.setBenchmarkMap(gtfRpt.getBenchmarkMap());
 					plannedMap = gtfRpt.getPlannedMap();
-					plannedMap.put(BudgetConstants.total,
-							roundDoubleValue(Double.parseDouble(sumTotal)));
-					parentPlannedMap = new LinkedHashMap<String, Double>(
-							plannedMap);
+					plannedMap.put(BudgetConstants.total, Util.getDoubleValue(sumTotal, 8));
+					parentPlannedMap = new LinkedHashMap<String, Double>(plannedMap);
 					paretnGtfReport.setPlannedMap(parentPlannedMap);
 					paretnGtfReport.setAccrualsMap(gtfRpt.getAccrualsMap());
 					paretnGtfReport.setVariancesMap(gtfRpt.getVariancesMap());
@@ -221,11 +218,8 @@ public class MultiBrandServlet extends HttpServlet {
 						for (int cnt = 0; cnt < BudgetConstants.months.length - 1; cnt++) {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							try {
-								value = roundDoubleValue(
-										parentPlannedMap.get(BudgetConstants.months[cnt])
-												* percentageAllocation / 100);
-								plannedMap.put(BudgetConstants.months[cnt],
-										value);
+								value = parentPlannedMap.get(BudgetConstants.months[cnt]) * percentageAllocation / 100;
+								plannedMap.put(BudgetConstants.months[cnt], value);
 								if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){
 									childsPlannedSumMap.put(BudgetConstants.months[cnt], childsPlannedSumMap.get(BudgetConstants.months[cnt]) + value);
 									}else{
@@ -287,9 +281,7 @@ public class MultiBrandServlet extends HttpServlet {
 							setZeroMap.put(BudgetConstants.months[cnt], 0.0);
 							if(i < sizeOfArray-1){
 							try {
-								value = roundDoubleValue(
-										parentPlannedMap.get(BudgetConstants.months[cnt])
-												* percentageAllocation / 100);
+								value = parentPlannedMap.get(BudgetConstants.months[cnt]) * percentageAllocation / 100;
 								plannedMap.put(BudgetConstants.months[cnt],
 										value);
 								if(childsPlannedSumMap.get(BudgetConstants.months[cnt]) !=null){

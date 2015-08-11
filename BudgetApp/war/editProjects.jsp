@@ -686,24 +686,24 @@ String ccView="";
     				d[10]="<%=gReport.getVendor()%>";
     				d[49]="<%=gReport.getUnits()%>";
     				d[11]="<%=BudgetConstants.FORECAST%>";
-    				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
-    				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
-    				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
-    				d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
-    				d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
-    				d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
-    				d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
-    				d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
-    				d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
-    				d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
-    				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
-    				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
+    				d[12]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("JAN"))%>";
+    				d[13]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("FEB"))%>";
+    				d[14]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("MAR"))%>";
+    				d[15]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("APR"))%>";
+    				d[16]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("MAY"))%>";
+    				d[17]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("JUN"))%>";
+    				d[18]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("JUL"))%>";
+    				d[19]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("AUG"))%>";
+    				d[20]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("SEP"))%>";
+    				d[21]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("OCT"))%>";
+    				d[22]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("NOV"))%>";
+    				d[23]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("DEC"))%>";
     				d[41]="<%=gReport.getPercent_Allocation()%>";
     				d[51]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				<%-- if(<%=gReport.getMultiBrand()%> == true){
     					d[24]="<%=new DecimalFormat("#.####").format(gtfReports.get(i).getPlannedMap().get("TOTAL"))%>";
     				}else{ --%>
-    					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
+    					d[24]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getPlannedMap().get("JAN") + 
 						gtfReports.get(i).getPlannedMap().get("FEB") + 
 						gtfReports.get(i).getPlannedMap().get("MAR") + 
 						gtfReports.get(i).getPlannedMap().get("APR") + 
@@ -725,19 +725,19 @@ String ccView="";
    				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
    				if((d[26] == "New" && (gmemoriID.indexOf(".") == -1)) || (d[26] !="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") ))){ 
    				d[11]="<%=BudgetConstants.QUARTERLY_TARGET%>";
-				d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
-				d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
-				d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
-				d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
-				d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
-				d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
-				d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
-				d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
-				d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
-				d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
-				d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
-				d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
-				d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
+				d[12]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("JAN"))%>";
+				d[13]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("FEB"))%>";
+				d[14]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("MAR"))%>";
+				d[15]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("APR"))%>";
+				d[16]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("MAY"))%>";
+				d[17]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("JUN"))%>";
+				d[18]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("JUL"))%>";
+				d[19]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("AUG"))%>";
+				d[20]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("SEP"))%>";
+				d[21]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("OCT"))%>";
+				d[22]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("NOV"))%>";
+				d[23]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("DEC"))%>";
+				d[24]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getBenchmarkMap().get("JAN") + 
 						gtfReports.get(i).getBenchmarkMap().get("FEB") + 
     					gtfReports.get(i).getBenchmarkMap().get("MAR") + 
     					gtfReports.get(i).getBenchmarkMap().get("APR") + 
@@ -760,19 +760,19 @@ String ccView="";
 				d[11]="<%=BudgetConstants.ACCRUAL%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
-					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
-					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
-					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
-					d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
-					d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
-					d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
-					d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
-					d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
-					d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
-					d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
-					d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
-					d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
-					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
+					d[12]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("JAN"))%>";
+					d[13]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("FEB"))%>";
+					d[14]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("MAR"))%>";
+					d[15]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("APR"))%>";
+					d[16]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("MAY"))%>";
+					d[17]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("JUN"))%>";
+					d[18]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("JUL"))%>";
+					d[19]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("AUG"))%>";
+					d[20]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("SEP"))%>";
+					d[21]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("OCT"))%>";
+					d[22]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("NOV"))%>";
+					d[23]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("DEC"))%>";
+					d[24]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getAccrualsMap().get("JAN") + 
 							gtfReports.get(i).getAccrualsMap().get("FEB") + 
     				gtfReports.get(i).getAccrualsMap().get("MAR") + 
     				gtfReports.get(i).getAccrualsMap().get("APR") + 
@@ -795,19 +795,19 @@ String ccView="";
 				d[11]="<%=BudgetConstants.QUARTERLY_LTS%>";
 				d[41]="<%=gtfReports.get(i).getPercent_Allocation()%>";
 				if(d[26]!="New"  && ( (gmemoriID.indexOf(".") == -1) || (gmemoriID.indexOf(".") != -1  && '<%=viewSelected%>' == "My Brands") )){
-					d[12]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
-					d[13]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
-					d[14]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
-					d[15]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
-					d[16]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
-					d[17]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
-					d[18]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
-					d[19]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
-					d[20]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
-					d[21]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
-					d[22]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
-					d[23]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
-					d[24]="<%=new DecimalFormat("#.##").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
+					d[12]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("JAN"))%>";
+					d[13]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("FEB"))%>";
+					d[14]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("MAR"))%>";
+					d[15]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("APR"))%>";
+					d[16]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("MAY"))%>";
+					d[17]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("JUN"))%>";
+					d[18]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("JUL"))%>";
+					d[19]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("AUG"))%>";
+					d[20]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("SEP"))%>";
+					d[21]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("OCT"))%>";
+					d[22]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("NOV"))%>";
+					d[23]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("DEC"))%>";
+					d[24]="<%=new DecimalFormat("#.########").format(gtfReports.get(i).getVariancesMap().get("JAN") + 
 						gtfReports.get(i).getVariancesMap().get("FEB") + 
     					gtfReports.get(i).getVariancesMap().get("MAR") + 
     					gtfReports.get(i).getVariancesMap().get("APR") + 
@@ -918,7 +918,7 @@ String ccView="";
 				}
 			}
 			for (var j = 12; j < 25; j++) {
-				d[j] = d[j].toFixed(2);
+				d[j] = parseFloat(d[j].toFixed(8));
 			}
 			d[25] = "";
 			d[26] = "Total";
@@ -1051,7 +1051,7 @@ String ccView="";
 						
 						if(item[37]!='undefined' && item[37]==true && fixedCell >=  <%=BudgetConstants.JAN_CELL%> && fixedCell <= <%=BudgetConstants.DEC_CELL%>
 						&& item[51]!='undefined' && item[11] == "<%=BudgetConstants.FORECAST%>"){
-							var actualPlannedTotal=parseFloat(item[51]).toFixed(2);
+							var actualPlannedTotal=parseFloat(parseFloat(item[51]).toFixed(8));
 							var calculatedPlannedTotal=0.0;
 							for (var j = 12; j < 24; j++) {
 								if(item[j] == "" || item[j] == "undefined"){
@@ -1734,7 +1734,7 @@ String ccView="";
 						for (var count = 0; count < m_data.length; count++) {
 							if(( m_data[count]["3"] != "" )
 									&&   m_data[count]["3"] != "undefined"){
-								m_data[count]["3"] = parseFloat(m_data[count]["3"]).toFixed(2);
+								m_data[count]["3"] = parseFloat(parseFloat(m_data[count]["3"]).toFixed(8));
 								sum = sum + parseFloat(m_data[count]["3"]);
 								index = count;
 							}
@@ -1745,7 +1745,7 @@ String ccView="";
 							}
 							else if(!isNaN(m_data[count]["3"] / sum * 100)){
 								if(count < numOfBrands-1){
-								m_data[count]["2"] = parseFloat((m_data[count]["3"] / sum * 100)).toFixed(2);
+								m_data[count]["2"] = parseFloat(parseFloat((m_data[count]["3"] / sum * 100)).toFixed(8));
 																	;
 								}else{
 									for(var count = 0;count < numOfBrands-1; count++){
@@ -1754,10 +1754,10 @@ String ccView="";
 											percentSum = parseFloat(percentSum) + parseFloat(m_data[count]["2"]);
 										}
 									}
-									m_data[count]["2"] = (100 - parseFloat(percentSum)).toFixed(2);
+									m_data[count]["2"] = parseFloat((100 - parseFloat(percentSum)).toFixed(8));
 									if(m_data[count]["3"]==0){
 										m_data[count]["2"] = 0.0;
-										m_data[count-1]["2"] = (100 - (parseFloat(percentSum)- parseFloat(m_data[count-1]["2"]))).toFixed(2);
+										m_data[count-1]["2"] = parseFloat((100 - (parseFloat(percentSum)- parseFloat(m_data[count-1]["2"]))).toFixed(8));
 									}
 								}
 							}else{
