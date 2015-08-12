@@ -241,6 +241,7 @@ public class DownloadFileServlet extends HttpServlet {
 				row.createCell(cellCount++).setCellValue(map.get(BudgetConstants.months[count]));
 				total += map.get(BudgetConstants.months[count]);
 			}
+			total = Util.getDoubleValue(total + "", 8);
 			row.createCell(cellCount++).setCellValue(total);
 			row.createCell(cellCount++).setCellValue(gtfReport.getUnits());
 			String remarks = gtfReport.getRemarks();
