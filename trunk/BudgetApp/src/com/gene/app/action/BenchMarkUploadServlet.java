@@ -647,6 +647,8 @@ public class BenchMarkUploadServlet extends HttpServlet {
 						}else{
 							childTotal = gtfRpt.getPlannedMap().get("TOTAL");
 						}
+						total = Util.getDoubleValue(total + "", 8);
+						childTotal = Util.getDoubleValue(childTotal + "", 8);
 						childPercentTotal = Util.getDoubleValue((childTotal / total * 100) + "", 8);
 						gtfRpt.setPercent_Allocation(childPercentTotal);
 						if(currChildIndex == childSize-1 ){
