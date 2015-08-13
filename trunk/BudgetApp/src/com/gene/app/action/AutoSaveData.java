@@ -350,12 +350,12 @@ public class AutoSaveData extends HttpServlet {
 				gtfRpt = gtfReportMap.get(childId);
 				if (gtfRpt.getgMemoryId().contains(".")) {
 					gtfPrjList.add(gtfRpt);
+					gtfReportMap.remove(gtfRpt.getgMemoryId());
 				}
 			}
 		}
 		util.removeExistingProject(gtfPrjList,baseURL,costCenter);
-		gtfReportMap = util
-				.getAllReportDataFromCache(gtfReport.getCostCenter());
+		gtfReportMap.put(gtfReport.getgMemoryId(), gtfReport);
 		return gtfReportMap;
 	}
 	
