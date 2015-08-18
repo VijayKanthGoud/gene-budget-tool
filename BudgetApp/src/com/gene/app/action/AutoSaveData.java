@@ -197,14 +197,12 @@ public class AutoSaveData extends HttpServlet {
 								budgetMap.put(strValue, newSummaryObj);
 								summary.setBudgetMap(budgetMap);
 								util.putSummaryToCache(summary, costCenter);
+								gtfReportObj.setBrand(strValue);
 								if (gtfReportObj.getMultiBrand()) {
 									gtfReportMap = deleteChildProjects(
 											gtfReportObj, gtfReportMap,baseURL,costCenter);
-									gtfReportObj.setMultiBrand(false);
-									gtfReportObj
-											.setChildProjectList(new ArrayList<String>());
 								}
-								gtfReportObj.setBrand(strValue);
+								
 								break;
 							case BudgetConstants.CELL_UNIT:
 								try {
@@ -354,8 +352,11 @@ public class AutoSaveData extends HttpServlet {
 				}
 			}
 		}
-		util.removeExistingProject(gtfPrjList,baseURL,costCenter);
+		gtfReport.setMultiBrand(false);
+		gtfReport.setChildProjectList(new ArrayList<String>());
 		gtfReportMap.put(gtfReport.getgMemoryId(), gtfReport);
+		costCenterCacheUtil.putCostCenterDataToCache(costCenter, gtfReportMap);
+		util.removeExistingProject(gtfPrjList,baseURL,costCenter);
 		return gtfReportMap;
 	}
 	
